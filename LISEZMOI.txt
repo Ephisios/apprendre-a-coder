@@ -1,0 +1,161 @@
+APPRENDRE À CODER — de A à Z
+=============================
+
+Pour démarrer : double-clique sur le raccourci « Apprendre à coder » du bureau,
+ou sur le fichier  index.html
+(il s'ouvre dans ton navigateur — aucune installation, aucune connexion internet nécessaire)
+
+Ce que contient ce logiciel :
+- 165 leçons progressives en français, pensées pour un vrai débutant
+- 481 exercices corrigés automatiquement : exercices guidés, entraînements,
+  défis, chasses aux bugs et QCM — dans un éditeur de code intégré
+- 12 modules, SEPT langages :
+    1. Bienvenue (comprendre ce qu'est le code)
+    2. HTML — 22 leçons (structure, formulaires, sémantique, médias, SEO,
+       tableaux structurés, accessibilité, images modernes, débogage)
+    3. CSS — 25 leçons (couleurs, Flexbox, Grid, position, animations,
+       variables, sélecteurs avancés, :has, spécificité, z-index, transform,
+       clamp et aspect-ratio)
+    4. JavaScript (variables, conditions, boucles, fonctions, objets, DOM)
+    5. JavaScript — La suite (switch, tri, reduce, dates, clavier, jeu complet)
+    6. JavaScript avancé — 19 leçons (méthodes modernes, DOM dynamique,
+       localStorage, portée, destructuration, spread, closures, classes,
+       asynchrone, JSON)
+    7. Projets guidés (to-do list, quiz, jeu, carnet persistant)
+    8. Python — 26 leçons (bases, indentation, listes, dictionnaires,
+       f-strings, compréhensions, découpage, tuples et ensembles, lambda,
+       héritage, générateurs, dates, projets)
+    9. SQL — 16 leçons (SELECT, WHERE, tri, agrégats, GROUP BY, HAVING,
+       sous-requêtes, jointures, LEFT JOIN, UNION, CASE WHEN, conception)
+   10. C — 14 leçons (types, printf, boucles, tableaux, fonctions, chaînes,
+       POINTEURS, tableaux 2D, structures, récursion, mini-projet)
+   11. Java — 14 leçons (types, méthodes, String, tableaux, CLASSES ET OBJETS,
+       constructeurs, encapsulation, héritage, tableaux d'objets, mini-projet)
+   12. Et après ? (les autres langages, apprendre en autonomie)
+- Une ENCYCLOPÉDIE consultable à tout moment (bouton en bas à gauche),
+  avec une BARRE DE RECHERCHE qui fouille les mémos ET les titres de leçons
+  (accents et majuscules sans importance ; Échap efface la recherche) :
+  mémos HTML/CSS/JavaScript/Python/SQL/C/Java, SOS erreurs, glossaire du métier,
+  comment marche le web, les outils du développeur (VS Code, Git, terminal),
+  panorama des langages, et les bonnes pratiques du code propre.
+
+LE BAC À SABLE (bouton 🧪 en bas à gauche)
+------------------------------------------
+Un éditeur libre, sans correction et sans objectif : l'endroit où tu construis
+ce que TU veux. C'est un ATELIER, pas une page de cours : il occupe tout
+l'écran, ton code à gauche, ce qu'il produit à droite.
+- Onglet « Page web » : un grand éditeur, avec trois onglets de fichier
+  HTML / CSS / JavaScript au-dessus. Tu passes de l'un à l'autre sans rien
+  perdre — les trois forment une seule page. À droite, l'aperçu en direct et
+  une console qui affiche tes console.log et tes erreurs.
+- Onglet « Python » : un éditeur et sa console.
+- Onglet « SQL » : une vraie base de cinéma que tu peux interroger librement.
+  Tes INSERT, UPDATE et DELETE restent en place tant que tu ne cliques pas sur
+  « Réinitialiser la base ».
+- Onglets « C » et « Java » : un éditeur et sa console, pour écrire de vrais
+  petits programmes compilés-comme-il-faut (pointeurs et objets compris).
+- Plusieurs projets, nommés et sauvegardés automatiquement.
+- Bouton « Nouveau » : cinq modèles de départ (page perso, carte de visite,
+  mini-jeu du compteur, page vide, script Python) — jamais de page blanche.
+- Bouton « Exporter » : télécharge ton projet en fichier .html (ou .py) que tu
+  peux ouvrir et partager tout seul.
+- REPÉRAGE CODE ↔ PAGE (onglet « Page web ») : promène ta souris sur une ligne
+  de ton HTML, et l'élément qu'elle fabrique s'entoure de bleu dans l'aperçu,
+  avec son nom de balise. Fais l'inverse — survole un endroit de l'aperçu — et
+  la ligne de code qui l'a écrit s'allume dans la marge de l'éditeur.
+  Sur une règle CSS, ce sont TOUS les éléments qu'elle touche qui s'entourent
+  (l'étiquette indique combien : « <li> × 3 »). C'est le meilleur moyen de
+  comprendre ce que fait un sélecteur.
+- Bouton « ⛶ Plein écran » : masque le menu de gauche, tu codes sur toute la
+  largeur de l'écran. Échap pour revenir.
+- Lien « ⤢ Ouvrir dans un onglet » (au-dessus de l'aperçu) : ta page s'ouvre en
+  grand, telle qu'elle serait publiée. Si ton navigateur bloque les nouveaux
+  onglets, l'aperçu s'agrandit sur place — un second clic revient au code.
+- Ctrl + Entrée lance ton code depuis n'importe quel éditeur.
+- Depuis n'importe quel exercice, le bouton « 🧪 Continuer dans le bac à sable »
+  y recopie ton code pour que tu puisses le pousser plus loin.
+
+COMMENT TOURNENT PYTHON, SQL, C ET JAVA ?
+-----------------------------------------
+Tous les quatre s'exécutent réellement dans ce logiciel, hors ligne.
+- Python : un interpréteur est embarqué dans le dossier (fichiers
+  skulpt.min.js et skulpt-stdlib.js — ne les supprime pas). Pour aller plus
+  loin (fichiers, bibliothèques, IA), installe le vrai Python depuis python.org.
+- SQL : le moteur sql-moteur.js exécute pour de vrai tes requêtes sur une base
+  de cinéma. Dans la vraie vie tu rencontreras PostgreSQL, MySQL ou SQLite :
+  les mots-clés vus ici y fonctionnent à l'identique.
+- C et Java : le moteur moteur-cj.js interprète un sous-ensemble de ces deux
+  langages — assez large pour tout le programme, pointeurs et objets compris.
+  Les règles qui comptent sont respectées : les types sont réels, la division
+  entre deux entiers tronque (7/2 = 3), le point-virgule est obligatoire, et une
+  variable non déclarée est une erreur. Pour compiler pour de vrai, installe
+  gcc (pour le C) ou le JDK (pour Java).
+
+Dans les quatre cas, ce que tu apprends ici est directement transposable :
+c'est la même syntaxe, les mêmes règles et les mêmes pièges.
+
+Dans les leçons, le code et son résultat sont CÔTE À CÔTE : tu écris à gauche,
+tu vois l'effet à droite, sans avoir à faire défiler.
+
+UN SEUL BOUTON À CONNAÎTRE : "Vérifier ma réponse". Il lance ton code, affiche
+le résultat, et te dit ce qui va ou ne va pas. En HTML et en CSS, un bouton
+"Exécuter" s'ajoute pour voir ta page sans être corrigé.
+L'aide, elle, monte avec les essais : après un premier essai raté, "Indice"
+apparaît (il dit OÙ regarder, pas quoi écrire) ; après un deuxième, "Solution"
+s'ajoute. Le bouton "..." range ce qui sert rarement : remettre le code de
+départ, ou reprendre son code dans le bac à sable.
+(Dans une fenêtre étroite, les deux colonnes s'empilent automatiquement.)
+
+Dans l'éditeur, la touche Tab décale ton code au lieu de changer de champ.
+Pour en sortir au clavier : appuie sur Échap, puis sur Tab. La mention en haut
+à droite de l'éditeur te rappelle toujours où tu en es. Ctrl+Entrée vérifie
+sans quitter le clavier.
+
+À DROITE DU COURS, un petit panneau te dit où tu en es : le module, le numéro
+de la leçon, la liste de ses exercices avec ceux que tu as déjà réussis. Clique
+sur l'un d'eux pour y aller directement, sans faire défiler tout le cours.
+
+QUAND TU FINIS UNE LEÇON, un récapitulatif apparaît en bas : il reprend, une
+par une, les phrases qui t'ont été dites à chaque réussite — c'est-à-dire ce
+que tu sais faire maintenant. Puis il t'emmène à la leçon suivante.
+
+Confort de lecture :
+- Thème clair et thème sombre : le bouton ☀️ / 🌙 en bas de la barre de gauche.
+  Au premier lancement, le logiciel suit le réglage de Windows, puis retient ton choix.
+- TON CODE EST COLORIÉ, dans les sept langages, partout (leçons et bac à sable).
+  Les couleurs ne décorent pas, elles montrent la structure : en HTML, le nom
+  de balise, l'attribut et sa valeur ont trois couleurs différentes — c'est
+  précisément ce qu'on confond au début. En CSS, le sélecteur (QUI on vise)
+  et la propriété (QUOI on change) ne sont pas de la même couleur non plus.
+  Et ce qui est cassé apparaît en ROUGE SOULIGNÉ avant même d'exécuter :
+  une chaîne dont tu as oublié le guillemet fermant, un commentaire laissé
+  ouvert, une balise sans son chevron final.
+  IMPORTANT : la ligne où se trouve ton curseur n'est JAMAIS marquée en rouge.
+  Pour écrire "bonjour", il faut bien passer par "bonjour sans son guillemet
+  fermant — te le reprocher à cet instant n'aurait aucun sens. L'éditeur ne
+  parle que de ce que tu as déjà fini d'écrire ailleurs.
+  Et il ne signale jamais l'erreur d'un exercice « chasse au bug » : la
+  trouver, c'est justement l'exercice.
+  (Tout ça vient du fichier editeur.js — c'est une brique indépendante.)
+- L'éditeur affiche les numéros de ligne, comme un vrai éditeur de code.
+  Il grandit tout seul avec ton code (jamais en dessous d'une bonne dizaine de
+  lignes visibles), et les lignes trop longues reviennent à la ligne au lieu
+  d'être coupées — le numéro s'étire alors sur toute la hauteur de sa ligne.
+- Chaque bloc de code a un bouton « Copier » qui apparaît au survol.
+
+REFAIRE UN EXERCICE OU UNE LEÇON
+--------------------------------
+- Le bouton « ↺ Recommencer » d'un exercice le remet vraiment à zéro : le code
+  de départ revient ET la réussite est effacée, donc tu peux le refaire pour de
+  bon (avant, le ✔ restait et l'exercice comptait toujours comme fait).
+- Sous le dernier exercice d'une leçon, le bouton « ↺ Remettre les exercices à
+  zéro » efface d'un coup ton code et tes réussites sur CETTE leçon seulement.
+  Il demande confirmation, et le reste de ta progression n'est pas touché.
+  Il n'apparaît que si tu as écrit ou réussi quelque chose dans la leçon.
+
+Ta progression, ton code et tes projets du bac à sable sont sauvegardés
+automatiquement dans le navigateur : tu peux fermer et reprendre quand tu veux.
+
+(Attention : si tu vides l'historique/données de ton navigateur,
+la progression repart à zéro — les leçons, elles, restent intactes.
+Pense à exporter les projets du bac à sable auxquels tu tiens.)

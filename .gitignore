@@ -1,0 +1,8 @@
+# Dépendances de DÉVELOPPEMENT uniquement : le logiciel lui-même (index.html)
+# n'a besoin d'aucune installation. Ce dossier se recrée avec « npm install ».
+node_modules/
+
+# Fichiers que Windows et les éditeurs laissent traîner
+Thumbs.db
+desktop.ini
+*.tmp

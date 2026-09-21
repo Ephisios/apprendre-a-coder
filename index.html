@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apprendre à coder — de A à Z</title>
+  <link rel="icon" href="icone.ico">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Thème appliqué avant le premier affichage : évite l'éclair blanc au chargement.
+    (function () {
+      var choix = null;
+      try { choix = localStorage.getItem('aac-theme'); } catch (e) {}
+      if (!choix) {
+        choix = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'sombre' : 'clair';
+      }
+      document.documentElement.setAttribute('data-theme', choix);
+    })();
+  </script>
+</head>
+<body>
+
+  <a class="lien-evitement" href="#contenu">Aller directement au contenu</a>
+
+  <aside id="sidebar">
+    <div class="logo-rangee">
+      <button type="button" class="logo" onclick="allerAccueil()"
+              aria-label="Apprendre à coder — revenir à l'accueil">
+        <span class="logo-icone" aria-hidden="true">&lt;/&gt;</span>
+        <span class="logo-texte">
+          <span class="logo-titre">Apprendre à coder</span>
+          <span class="logo-sous">de A à Z, sans internet</span>
+        </span>
+      </button>
+      <div id="repere-module" class="repere-module"></div>
+      <button type="button" id="btn-sommaire" class="btn-sommaire" onclick="basculerSommaire()"
+              aria-expanded="false" aria-controls="nav-modules">
+        <span aria-hidden="true">☰</span> Sommaire
+      </button>
+    </div>
+    <nav id="nav-modules" aria-label="Sommaire du cours"></nav>
+    <div class="sidebar-bas">
+      <div class="rangee-outils">
+        <button class="btn-memo" onclick="allerMemos()" title="Encyclopédie"><span class="btn-emoji" aria-hidden="true">📚</span><span class="btn-mot">Encyclopédie</span></button>
+        <div class="bascule-theme" role="group" aria-label="Thème de l'interface">
+          <button id="theme-clair" onclick="choisirTheme('clair')" title="Thème clair" aria-label="Thème clair" aria-pressed="false">☀️</button>
+          <button id="theme-sombre" onclick="choisirTheme('sombre')" title="Thème sombre" aria-label="Thème sombre" aria-pressed="false">🌙</button>
+        </div>
+      </div>
+      <button class="btn-memo btn-atelier" onclick="allerBac()" title="Bac à sable — éditeur libre"><span class="btn-emoji" aria-hidden="true">🧪</span><span class="btn-mot">Bac à sable — éditeur libre</span></button>
+      <div id="progression-globale"></div>
+    </div>
+  </aside>
+
+  <main id="contenu" tabindex="-1"></main>
+
+  <!-- Annonce les changements de vue à un lecteur d'écran : sans elle,
+       valider « leçon suivante » ne produit aucun retour audible. -->
+  <p id="annonce-vue" class="hors-ecran" role="status"></p>
+
+  <!-- Interpréteur Python embarqué (Skulpt) : aucune connexion requise -->
+  <script src="skulpt.min.js"></script>
+  <script src="skulpt-stdlib.js"></script>
+  <!-- Moteurs maison, écrits en JavaScript : SQL, puis C et Java -->
+  <script src="sql-moteur.js"></script>
+  <script src="moteur-cj.js"></script>
+  <!-- L'éditeur de code : coloration. Brique autonome, débranchable. -->
+  <script src="editeur.js"></script>
+
+  <script src="data-intro.js"></script>
+  <script src="data-html.js"></script>
+  <script src="data-html2.js"></script>
+  <script src="data-html3.js"></script>
+  <script src="data-css.js"></script>
+  <script src="data-css2.js"></script>
+  <script src="data-css3.js"></script>
+  <script src="data-js1.js"></script>
+  <script src="data-js2.js"></script>
+  <script src="data-js3.js"></script>
+  <script src="data-jsavance.js"></script>
+  <script src="data-js4.js"></script>
+  <script src="data-projets.js"></script>
+  <script src="data-python.js"></script>
+  <script src="data-python2.js"></script>
+  <script src="data-python3.js"></script>
+  <script src="data-sql.js"></script>
+  <script src="data-sql2.js"></script>
+  <script src="data-c.js"></script>
+  <script src="data-java.js"></script>
+  <script src="data-fin.js"></script>
+  <script src="data-memo.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+OUTILS — ce dossier ne sert PAS à faire tourner le logiciel
+==========================================================
+
+Le logiciel, c'est index.html : tu le double-cliques, il s'ouvre dans le
+navigateur, et il n'a besoin de rien d'autre (ni installation, ni internet).
+Tu peux supprimer ce dossier « outils », package.json et node_modules : le
+cours continuera de fonctionner exactement pareil.
+
+Ce qui est ici sert à VÉRIFIER LE CONTENU quand on modifie une leçon.
+
+
+verifier-contenu.js — le garde-fou du contenu
+---------------------------------------------
+
+À quoi ça sert : les 481 exercices sont corrigés automatiquement par du code
+(une fonction `verifier` écrite à côté de chaque solution). Si l'un des deux
+est faux, la page s'affiche quand même, sans le moindre message d'erreur :
+l'élève est félicité pour un mauvais code, ou bloqué sur une bonne réponse.
+Cet outil rejoue, pour chaque exercice, SA solution officielle dans le moteur
+que l'application utiliserait, et vérifie que le correcteur l'accepte. Il
+présente aussi des copies volontairement fausses, pour s'assurer que le
+correcteur les refuse.
+
+Comment le lancer (il faut Node.js installé sur la machine de développement
+seulement) :
+
+    ouvrir un terminal dans ce dossier (celui de index.html)
+    npm install            <- une seule fois : installe jsdom (dépendance de
+                              développement, utilisée pour juger les exercices
+                              HTML/CSS ; sans elle, tout le reste fonctionne)
+    npm run verifier
+
+Résultat attendu aujourd'hui : 359 exercices rejoués sur 481, 0 échec,
+0 problème. Code de sortie 0 si tout va bien, 1 sinon — utilisable dans un
+script, une tâche planifiée ou une intégration continue.
+
+Quand le lancer : après chaque séance d'écriture de leçons, et avant toute
+sauvegarde ou distribution du dossier.
+
+Ce qu'il ne peut pas juger (il l'affiche à chaque exécution, pour qu'on n'y
+croie pas aveuglément) :
+  - 63 exercices CSS qui mesurent la page (largeur, position, media queries) :
+    seul le navigateur en jugera ;
+  - 59 QCM : leur mécanique est contrôlée statiquement.
+
+Options :
+  node outils/verifier-contenu.js "C:\chemin\vers\un\autre\projet"
+  AAC_DEBUG=1 npm run verifier     <- affiche ce qui a été tenté contre
+                                      chaque correcteur douteux
+
+
+RAPPEL — avant de distribuer le logiciel
+----------------------------------------
+Le dossier à donner à un élève, c'est celui qui contient index.html et les
+fichiers .js, .css et .ico. Le dossier outils/, node_modules/, package.json
+et package-lock.json ne sont pas nécessaires : ce sont des fichiers de
+développement. Si tu copies tout, ça fonctionne aussi — c'est simplement
+plus gros.
