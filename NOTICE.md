@@ -1,4 +1,26 @@
-# Bibliothèques tierces embarquées
+# Licences et bibliothèques tierces
+
+## Quelle licence couvre quoi
+
+Ce projet en porte deux, parce qu'il contient deux choses différentes. Le
+fichier `LICENSE` ne contient que le texte MIT, sans un mot de plus : c'est à
+cette condition que GitHub le reconnaît. Le partage des rôles est donc écrit
+ici.
+
+| Ce que c'est | Fichiers | Licence |
+|---|---|---|
+| **Le logiciel** | `index.html`, `app.js`, `style.css`, `editeur.js`, `sql-moteur.js`, `moteur-cj.js`, `outils/`, `package.json`, `icone.ico` | MIT — voir `LICENSE` |
+| **Le cours** | les 22 fichiers `data-*.js` : 165 leçons, 481 exercices | CC BY-SA 4.0 — voir `LICENSE-COURS` |
+| **L'emprunté** | `skulpt.min.js`, `skulpt-stdlib.js` | MIT — voir ci-dessous |
+
+Le moteur est un outil : qu'on le reprenne et qu'on s'en serve ailleurs sans
+rien devoir, tant mieux. Le cours est un travail d'écriture : on peut le
+reprendre et même le vendre, à condition de dire d'où il vient et de laisser
+la suite aussi ouverte qu'on l'a trouvée.
+
+---
+
+## Bibliothèques tierces embarquées
 
 Ce projet fonctionne hors ligne : les bibliothèques dont il a besoin sont
 **copiées dans le dossier** plutôt que téléchargées. Elles gardent leur propre

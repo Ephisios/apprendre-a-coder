@@ -19,19 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------------------------------------
-
-PORTÉE DE CETTE LICENCE
-
-Cette licence MIT couvre le LOGICIEL, c'est-à-dire :
-
-    index.html      app.js          style.css
-    editeur.js      sql-moteur.js   moteur-cj.js
-    outils/         package.json    icone.ico
-
-Les LEÇONS ET EXERCICES (les fichiers data-*.js) ne sont PAS couverts ici :
-ils sont sous licence Creative Commons BY-SA 4.0. Voir LICENSE-COURS.
-
-Les bibliothèques tierces embarquées gardent leur propre licence.
-Voir NOTICE.md.
