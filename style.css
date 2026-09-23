@@ -1353,6 +1353,7 @@ h1.titre-lecon {
    Des cartes, pas une liste : chacune doit se cliquer d'un geste, et porter
    la couleur de son module pour qu'on reconnaisse d'où elle vient. */
 .revision-intro, .revision-vide {
+  margin-top: 14px;
   max-width: 62ch;
   color: var(--encre-2);
   line-height: 1.65;
@@ -1388,6 +1389,7 @@ h1.titre-lecon {
 .revision-puce { font-size: 22px; line-height: 1; }
 .revision-corps { display: grid; gap: 3px; min-width: 0; }
 .revision-titre { font-weight: 600; }
+.revision-rang { font-weight: 400; color: var(--encre-3); }
 .revision-detail { font-size: 13.5px; color: var(--encre-3); }
 
 /* Le genre de l'exercice — entraînement, défi, chasse au bug. Le pointillé

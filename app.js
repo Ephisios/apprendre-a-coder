@@ -411,12 +411,16 @@ function rendreRevision() {
       if (r.essais >= 1) raisons.push(r.essais === 1 ? '1 essai raté' : r.essais + ' essais ratés');
       if (r.jours >= 7) raisons.push(r.jours >= 999 ? 'de longue date' : 'il y a ' + r.jours + ' jours');
       if (!raisons.length) raisons.push('pour entretenir');
+      // Deux exercices d'une même leçon portent le même titre : sans son
+      // numéro, on ne sait pas lequel des deux la carte propose.
+      const combien = exercicesDe(r.lecon).length;
+      const rang = combien > 1 ? ' <span class="revision-rang">n° ' + (r.i + 1) + '</span>' : '';
 
       html += '<button type="button" class="revision-carte" style="--teinte:' + r.mod.teinte + '"' +
         ' onclick="allerLeconExo(\'' + r.lecon.id + '\', ' + r.i + ')">' +
         '<span class="revision-puce" aria-hidden="true">' + r.mod.icone + '</span>' +
         '<span class="revision-corps">' +
-        '<span class="revision-titre">' + echapper(r.lecon.titre) + '</span>' +
+        '<span class="revision-titre">' + echapper(r.lecon.titre) + rang + '</span>' +
         '<span class="revision-detail">' + g.icone + ' ' + g.mot + ' · ' + echapper(raisons.join(' · ')) + '</span>' +
         '</span></button>';
     }
