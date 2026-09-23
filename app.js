@@ -92,6 +92,107 @@ function sauverProgression() {
   try { localStorage.setItem(CLE_PROGRESSION, JSON.stringify(progression)); } catch (e) {}
 }
 
+/* ---- Sauvegarder et restaurer ------------------------------------------
+   Tout vit dans le localStorage du navigateur : la progression, le code écrit
+   dans chaque exercice, les projets du bac à sable. Vider les données du
+   navigateur efface l'ensemble, sans prévenir et sans retour possible. Ces
+   deux fonctions sont la seule porte de sortie.
+
+   On exporte TOUT ce qui porte le préfixe aac- plutôt qu'une liste de clés
+   écrite à la main : une clé oubliée ne se verrait qu'au moment de restaurer,
+   c'est-à-dire trop tard. */
+const MARQUE_SAUVEGARDE = 'apprendre-a-coder/sauvegarde';
+
+function clesSauvegardables() {
+  const cles = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const cle = localStorage.key(i);
+      if (cle && cle.indexOf('aac-') === 0) cles.push(cle);
+    }
+  } catch (e) { /* stockage indisponible */ }
+  return cles.sort();
+}
+
+function exporterProgression() {
+  const donnees = {};
+  for (const cle of clesSauvegardables()) {
+    try { donnees[cle] = localStorage.getItem(cle); } catch (e) {}
+  }
+  const { total, faits } = compter(MODULES.flatMap(m => m.lecons));
+  const sauvegarde = {
+    format: MARQUE_SAUVEGARDE,
+    version: 1,
+    date: new Date().toISOString(),
+    resume: faits + ' exercices réussis sur ' + total,
+    donnees: donnees
+  };
+  const jour = new Date().toISOString().slice(0, 10);
+  try {
+    const lien = document.createElement('a');
+    lien.href = URL.createObjectURL(new Blob([JSON.stringify(sauvegarde, null, 2)],
+      { type: 'application/json;charset=utf-8' }));
+    lien.download = 'apprendre-a-coder-' + jour + '.json';
+    document.body.appendChild(lien);
+    lien.click();
+    document.body.removeChild(lien);
+    setTimeout(() => URL.revokeObjectURL(lien.href), 4000);
+  } catch (e) {
+    alert('Le téléchargement a été refusé par le navigateur.');
+  }
+}
+
+// Un <input type="file"> jetable : rien à laisser traîner dans la page.
+function choisirSauvegarde() {
+  const champ = document.createElement('input');
+  champ.type = 'file';
+  champ.accept = 'application/json,.json';
+  champ.addEventListener('change', function () {
+    const fichier = champ.files && champ.files[0];
+    if (!fichier) return;
+    const lecteur = new FileReader();
+    lecteur.onload = () => restaurerProgression(lecteur.result);
+    lecteur.onerror = () => alert('Ce fichier n\'a pas pu être lu.');
+    lecteur.readAsText(fichier);
+  });
+  champ.click();
+}
+
+/* Restaurer REMPLACE ce qui est là. On le dit avant, en chiffrant les deux
+   côtés : ce qu'on a maintenant, et ce que la sauvegarde contient. */
+function restaurerProgression(texte) {
+  let sauvegarde;
+  try { sauvegarde = JSON.parse(texte); }
+  catch (e) { return alert('Ce fichier n\'est pas une sauvegarde : il n\'est même pas lisible.'); }
+
+  if (!sauvegarde || sauvegarde.format !== MARQUE_SAUVEGARDE || !sauvegarde.donnees) {
+    return alert('Ce fichier n\'est pas une sauvegarde d\'« Apprendre à coder ».\n\n' +
+      'Une sauvegarde se crée avec le bouton « Sauvegarder », juste à côté.');
+  }
+
+  const { total, faits } = compter(MODULES.flatMap(m => m.lecons));
+  const quand = sauvegarde.date ? new Date(sauvegarde.date).toLocaleDateString('fr-FR') : 'date inconnue';
+  const message = 'Restaurer la sauvegarde du ' + quand +
+    (sauvegarde.resume ? ' (' + sauvegarde.resume + ').' : '.') +
+    '\n\nTa progression actuelle — ' + faits + ' exercice' + (faits > 1 ? 's' : '') +
+    ' sur ' + total + ' — sera REMPLACÉE, ainsi que ton code et tes projets du bac à sable.' +
+    '\n\nContinuer ?';
+  if (!confirm(message)) return;
+
+  try {
+    for (const cle of clesSauvegardables()) localStorage.removeItem(cle);
+    for (const cle of Object.keys(sauvegarde.donnees)) {
+      if (cle.indexOf('aac-') !== 0) continue;        // on n'écrit que chez nous
+      localStorage.setItem(cle, String(sauvegarde.donnees[cle]));
+    }
+  } catch (e) {
+    return alert('L\'écriture a échoué : le stockage du navigateur est plein ou indisponible.');
+  }
+  // On recharge plutôt que de recoudre l'état en mémoire : la page entière
+  // repart de la sauvegarde, sans risque d'en oublier un morceau.
+  location.reload();
+}
+
 function exoFait(idLecon, i) {
   return !!(progression.exos[idLecon] && progression.exos[idLecon][i]);
 }
@@ -291,7 +392,14 @@ function rendreSidebar(idActive) {
     '<div class="prog-ligne"><span>' + faits + ' / ' + total + ' exercices</span><span class="prog-pct">' + pct + '%</span></div>' +
     '<div class="barre-prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"' +
     ' aria-label="Progression du cours : ' + faits + (faits > 1 ? ' exercices réussis' : ' exercice réussi') + ' sur ' + total + '">' +
-    '<div style="transform:scaleX(' + (pct / 100) + ')"></div></div>';
+    '<div style="transform:scaleX(' + (pct / 100) + ')"></div></div>' +
+    // Vider les données du navigateur efface tout : ces deux liens sont la
+    // seule porte de sortie, et leur place est sous ce qu'ils protègent.
+    '<div class="prog-sauvegarde">' +
+    '<button type="button" onclick="exporterProgression()" title="Enregistrer ta progression, ton code et tes projets dans un fichier">⬇ Sauvegarder</button>' +
+    '<span aria-hidden="true">·</span>' +
+    '<button type="button" onclick="choisirSauvegarde()" title="Recharger une sauvegarde faite depuis ce bouton">⬆ Restaurer</button>' +
+    '</div>';
 
   majRepereModule(idActive);
   majBoutonsTheme();

@@ -68,7 +68,10 @@ sources.push(`
     chercher: q => chercherDansMemos(q),
     poserProgression: p => { progression = p; },
     aReviser: n => aReviser(n),
-    rendreRevision: () => rendreRevision()
+    rendreRevision: () => rendreRevision(),
+    clesSauvegardables: () => clesSauvegardables(),
+    marque: () => MARQUE_SAUVEGARDE,
+    restaurer: t => restaurerProgression(t)
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -297,6 +300,77 @@ win.document.body.innerHTML = '<main id="contenu"></main><p id="annonce-vue"></p
 pont.rendreRevision();
 verifie('révision — la page vide explique quoi faire',
         /Rien à revoir/.test(win.document.getElementById('contenu').innerHTML), true);
+
+/* ======================================================================
+   La sauvegarde fait-elle vraiment l'aller-retour ?
+   ====================================================================== */
+console.log('\n=== Sauvegarder puis restaurer rend-il le même état ? ===\n');
+
+const LS = win.localStorage;
+LS.clear();
+LS.setItem('aac-progression', JSON.stringify({ exos: { 'js-1': { 0: true } } }));
+LS.setItem('aac-code-js-1-0', 'console.log("mon code");');
+LS.setItem('aac-bac', '{"projets":{"essai":{}}}');
+LS.setItem('aac-theme', 'sombre');
+LS.setItem('autre-appli', 'ne doit pas être touché');
+
+const cles = pont.clesSauvegardables();
+verifie('sauvegarde — toutes les clés aac- sont prises', cles.length, 4);
+verifie('sauvegarde — le code écrit dans les exercices en fait partie',
+        cles.indexOf('aac-code-js-1-0') !== -1, true);
+verifie('sauvegarde — les projets du bac à sable aussi',
+        cles.indexOf('aac-bac') !== -1, true);
+verifie('sauvegarde — les clés d\'une autre application sont laissées tranquilles',
+        cles.indexOf('autre-appli'), -1);
+
+// Le fichier tel que le bouton l'écrirait.
+const donnees = {};
+for (const c of cles) donnees[c] = LS.getItem(c);
+const fichier = JSON.stringify({ format: pont.marque(), version: 1,
+  date: new Date().toISOString(), resume: '1 exercice réussi sur 484', donnees });
+
+// Un fichier étranger doit être refusé, pas appliqué à moitié.
+let confirme = false, alerte = '';
+win.confirm = () => { confirme = true; return true; };
+win.alert = m => { alerte = m; };
+win.location.reload = () => {};
+
+alerte = '';
+pont.restaurer('{"format":"autre-chose","donnees":{}}');
+verifie('restauration — un fichier étranger est refusé',
+        /pas une sauvegarde/.test(alerte), true);
+verifie('restauration — et le refus explique où en fabriquer une',
+        /Sauvegarder/.test(alerte), true);
+
+alerte = '';
+pont.restaurer('ceci n\'est pas du JSON');
+verifie('restauration — un fichier illisible est refusé', alerte.length > 0, true);
+
+// Le vrai aller-retour : on saccage tout, puis on restaure.
+LS.clear();
+LS.setItem('aac-progression', '{"exos":{}}');
+LS.setItem('autre-appli', 'ne doit pas être touché');
+confirme = false;
+pont.restaurer(fichier);
+
+verifie('restauration — la confirmation est demandée AVANT d\'écrire', confirme, true);
+verifie('restauration — la progression est revenue',
+        JSON.parse(LS.getItem('aac-progression')).exos['js-1'][0], true);
+verifie('restauration — le code écrit est revenu',
+        LS.getItem('aac-code-js-1-0'), 'console.log("mon code");');
+verifie('restauration — les projets du bac à sable sont revenus',
+        LS.getItem('aac-bac'), '{"projets":{"essai":{}}}');
+verifie('restauration — les clés d\'une autre application ont survécu',
+        LS.getItem('autre-appli'), 'ne doit pas être touché');
+
+// Refuser la confirmation ne doit RIEN changer.
+LS.clear();
+LS.setItem('aac-progression', 'intact');
+win.confirm = () => false;
+pont.restaurer(fichier);
+verifie('restauration — refuser la confirmation ne touche à rien',
+        LS.getItem('aac-progression'), 'intact');
+LS.clear();
 
 console.log('\n' + ok + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
 process.exit(echecs ? 1 : 0);

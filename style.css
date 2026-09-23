@@ -1349,6 +1349,29 @@ h1.titre-lecon {
 .indice-bloc strong { color: inherit; }
 .indice-bloc code { background: rgba(128, 128, 128, .18); color: inherit; }
 
+/* Sauvegarder / restaurer : discret sous la barre de progression, mais
+   toujours visible. C'est la seule porte de sortie si le navigateur vide
+   ses données — la cacher dans un menu serait la condamner. */
+.prog-sauvegarde {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--encre-3);
+}
+.prog-sauvegarde button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+.prog-sauvegarde button:hover { color: var(--accent); border-bottom-color: currentColor; }
+.prog-sauvegarde button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 /* ---- Page « Réviser » ---------------------------------------------------
    Des cartes, pas une liste : chacune doit se cliquer d'un geste, et porter
    la couleur de son module pour qu'on reconnaisse d'où elle vient. */
