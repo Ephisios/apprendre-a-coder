@@ -95,9 +95,17 @@ function sauverProgression() {
 function exoFait(idLecon, i) {
   return !!(progression.exos[idLecon] && progression.exos[idLecon][i]);
 }
-function marquerExo(idLecon, i, acquis) {
+function marquerExo(idLecon, i, acquis, essais) {
   if (!progression.exos[idLecon]) progression.exos[idLecon] = {};
   progression.exos[idLecon][i] = true;
+  /* Ce qu'un exercice a COÛTÉ, et quand il a été réussi. Sans ces deux
+     nombres, la progression ne sait que « fait / pas fait » — impossible de
+     savoir ce qui mérite d'être revu. Un exercice réussi du premier coup il
+     y a une heure et un autre arraché en six essais le mois dernier ne se
+     valent pas, et c'est le second qu'on a oublié. */
+  if (!progression.effort) progression.effort = {};
+  if (!progression.effort[idLecon]) progression.effort[idLecon] = {};
+  progression.effort[idLecon][i] = { essais: Number(essais) || 0, quand: Date.now() };
   // La phrase de réussite est écrite à la main, exercice par exercice, et
   // elle dit ce qu'on vient d'apprendre. C'est la seule matière disponible
   // pour un bilan honnête de fin de leçon : on la garde au lieu de l'oublier
@@ -122,8 +130,45 @@ function acquisDe(idLecon, i) {
 function oublierExo(idLecon, i) {
   if (progression.exos[idLecon]) delete progression.exos[idLecon][i];
   if (progression.acquis && progression.acquis[idLecon]) delete progression.acquis[idLecon][i];
+  if (progression.effort && progression.effort[idLecon]) delete progression.effort[idLecon][i];
   delete progression.faits[idLecon];
   sauverProgression();
+}
+
+/* ---- Ce qui mérite d'être revu ----------------------------------------
+   Une progression qui ne connaît que « fait / pas fait » ne ramène jamais
+   sur rien : une notion arrachée en six essais est comptée comme acquise,
+   exactement comme celle qui est tombée du premier coup. C'est pourtant
+   celle-là qu'on a oubliée.
+
+   On classe donc les exercices déjà réussis par ce qu'ils ont coûté, puis
+   par leur ancienneté. Rien d'un algorithme de répétition espacée : juste
+   les deux seuls signaux que le logiciel possède honnêtement. */
+const JOUR = 86400000;
+
+function aReviser(combien) {
+  const effort = progression.effort || {};
+  const maintenant = Date.now();
+  const liste = [];
+
+  for (const mod of MODULES) {
+    for (const lecon of mod.lecons) {
+      exercicesDe(lecon).forEach((ex, i) => {
+        if (!exoFait(lecon.id, i)) return;             // jamais réussi : ce n'est pas une révision
+        if (ex.type === 'qcm') return;                 // relire quatre choix n'apprend rien
+        const e = (effort[lecon.id] || {})[i] || { essais: 0, quand: 0 };
+        const jours = e.quand ? Math.floor((maintenant - e.quand) / JOUR) : 999;
+        liste.push({
+          mod, lecon, ex, i,
+          essais: e.essais,
+          jours: jours,
+          // Ce qu'il a coûté pèse le plus ; l'ancienneté départage.
+          poids: e.essais * 10 + Math.min(jours, 60)
+        });
+      });
+    }
+  }
+  return liste.sort((a, b) => b.poids - a.poids).slice(0, combien || 8);
 }
 
 function sauverCode(idLecon, i, code) {
@@ -318,6 +363,11 @@ function allerMemos(onglet) {
   fermerNavMobile();
   rendreMemos(onglet || 'html');
 }
+function allerRevision() {
+  location.hash = 'reviser';
+  fermerNavMobile();
+  rendreRevision();
+}
 
 // Garde-fou : la navigation directe (allerLecon...) rend déjà la vue ;
 // hashchange ne re-rend que si la vue affichée est différente (boutons précédent/suivant du navigateur)
@@ -328,9 +378,65 @@ window.addEventListener('hashchange', () => {
   if (cible === vueCourante) return;
   if (!h) rendreAccueil();
   else if (h === 'memos') rendreMemos('html');
+  else if (h === 'reviser') rendreRevision();
   else if (h === 'atelier') rendreBac();
   else if (trouverLecon(h)) rendreLecon(h);
 });
+
+/* ---- Page « Réviser » --------------------------------------------------
+   Le cours ne ramenait jamais en arrière : une fois l'exercice coché, on ne
+   le revoyait plus. Or ce qu'on a arraché en six essais, on ne le sait pas
+   pour autant — on l'a franchi. Cette page repropose ce qui a coûté cher et
+   ce qui remonte à loin, sans rien effacer de la progression. */
+function rendreRevision() {
+  vueCourante = 'reviser';
+  rendreSidebar(null);
+  const choix = aReviser(8);
+
+  let html = '<h1>Réviser</h1>';
+
+  if (!choix.length) {
+    html += '<p class="revision-vide">Rien à revoir pour l\'instant : il faut d\'abord réussir ' +
+      'quelques exercices. Reviens ici quand tu en auras quelques-uns derrière toi — ' +
+      'cette page te reproposera ceux qui t\'ont donné du fil à retordre.</p>';
+  } else {
+    html += '<p class="revision-intro">Ces exercices sont déjà réussis. Ils reviennent ici parce ' +
+      'qu\'ils t\'ont coûté des essais, ou qu\'ils commencent à dater — et c\'est exactement ce ' +
+      'qu\'on oublie en premier. Les refaire ne touche pas à ta progression.</p>' +
+      '<div class="revision-liste">';
+
+    for (const r of choix) {
+      const g = GENRES[genreDe(r.ex)];
+      const raisons = [];
+      if (r.essais >= 1) raisons.push(r.essais === 1 ? '1 essai raté' : r.essais + ' essais ratés');
+      if (r.jours >= 7) raisons.push(r.jours >= 999 ? 'de longue date' : 'il y a ' + r.jours + ' jours');
+      if (!raisons.length) raisons.push('pour entretenir');
+
+      html += '<button type="button" class="revision-carte" style="--teinte:' + r.mod.teinte + '"' +
+        ' onclick="allerLeconExo(\'' + r.lecon.id + '\', ' + r.i + ')">' +
+        '<span class="revision-puce" aria-hidden="true">' + r.mod.icone + '</span>' +
+        '<span class="revision-corps">' +
+        '<span class="revision-titre">' + echapper(r.lecon.titre) + '</span>' +
+        '<span class="revision-detail">' + g.icone + ' ' + g.mot + ' · ' + echapper(raisons.join(' · ')) + '</span>' +
+        '</span></button>';
+    }
+    html += '</div>';
+  }
+
+  document.getElementById('contenu').className = '';
+  document.body.classList.remove('plein-ecran');
+  document.getElementById('contenu').innerHTML = html;
+  window.scrollTo(0, 0);
+  poserVue('Réviser', choix.length
+    ? 'Réviser — ' + choix.length + ' exercice' + (choix.length > 1 ? 's' : '') + ' à revoir'
+    : 'Réviser — rien à revoir pour l\'instant');
+}
+
+// Ouvrir une leçon directement sur l'un de ses exercices.
+function allerLeconExo(id, i) {
+  allerLecon(id);
+  setTimeout(() => allerExercice(i), 0);
+}
 
 // ---- Page d'accueil ----
 function rendreAccueil() {
@@ -1267,7 +1373,7 @@ function afficherVerdict(i, v) {
     const leconDejaFinie = !!progression.faits[leconCourante.id];
     fb.className = 'feedback ok';
     fb.innerHTML = '🎉 <strong>Bravo, c\'est réussi !</strong> ' + (v.message || '');
-    marquerExo(leconCourante.id, i, v.message);
+    marquerExo(leconCourante.id, i, v.message, nbEchecs(i));
     rendreSidebar(leconCourante.id);
     revelerRecommencerLecon();
     majEtabli();
@@ -2613,6 +2719,7 @@ function majZoneMemo() {
   majBoutonsTheme();
   const h = location.hash.replace('#', '');
   if (h === 'memos') rendreMemos('html');
+  else if (h === 'reviser') rendreRevision();
   else if (h === 'atelier') rendreBac();
   else if (h && trouverLecon(h)) rendreLecon(h);
   else rendreAccueil();

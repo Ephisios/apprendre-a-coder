@@ -65,7 +65,10 @@ sources.push(`
     modules: () => MODULES,
     colorier: (code, langue, muet) => colorierCode(code, langue, null, muet),
     index: () => construireIndex(),
-    chercher: q => chercherDansMemos(q)
+    chercher: q => chercherDansMemos(q),
+    poserProgression: p => { progression = p; },
+    aReviser: n => aReviser(n),
+    rendreRevision: () => rendreRevision()
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -245,6 +248,51 @@ verifie('« flex » ne remonte pas « réflexe » en tête',
 // Les accents et les majuscules ne doivent pas compter.
 verifie('la recherche ignore les accents',
         pont.chercher('elements').length > 0, true);
+
+/* ======================================================================
+   La révision repropose-t-elle ce qui a coûté cher ?
+   ====================================================================== */
+console.log('\n=== La révision choisit-elle bien quoi revoir ? ===\n');
+
+const JOURS = 86400000;
+const maintenant = Date.now();
+
+// Une progression fabriquée : trois exercices réussis, de coûts très
+// différents, plus un QCM qui ne doit jamais revenir.
+pont.poserProgression({
+  faits: {}, derniere: null,
+  exos:   { 'js-1': { 0: true, 1: true }, 'js-2': { 0: true }, 'intro-1': { 0: true } },
+  effort: {
+    'js-1': { 0: { essais: 0, quand: maintenant },             // sans peine, aujourd'hui
+              1: { essais: 6, quand: maintenant } },           // arraché
+    'js-2': { 0: { essais: 0, quand: maintenant - 40 * JOURS } }, // facile mais ancien
+    'intro-1': { 0: { essais: 9, quand: maintenant } }         // un QCM : hors sujet
+  }
+});
+
+const revoir = pont.aReviser(8);
+verifie('révision — seuls les exercices réussis sont proposés',
+        revoir.every(r => ['js-1', 'js-2'].indexOf(r.lecon.id) !== -1), true);
+verifie('révision — aucun QCM : relire quatre choix n\'apprend rien',
+        revoir.some(r => r.ex.type === 'qcm'), false);
+verifie('révision — le plus coûteux passe devant',
+        revoir[0].lecon.id + '#' + revoir[0].i, 'js-1#1');
+verifie('révision — l\'ancien passe devant le récent sans peine',
+        revoir.findIndex(r => r.lecon.id === 'js-2') <
+        revoir.findIndex(r => r.lecon.id === 'js-1' && r.i === 0), true);
+verifie('révision — on n\'en propose jamais plus que demandé',
+        pont.aReviser(2).length <= 2, true);
+
+// Rien de réussi : la page doit le dire, pas rester vide.
+pont.poserProgression({ faits: {}, exos: {}, effort: {}, derniere: null });
+verifie('révision — sans progression, rien à revoir', pont.aReviser(8).length, 0);
+
+win.document.body.innerHTML = '<main id="contenu"></main><p id="annonce-vue"></p>' +
+  '<aside id="sidebar"><div id="repere-module"></div><nav id="nav-modules"></nav>' +
+  '<div id="progression-globale"></div></aside>';
+pont.rendreRevision();
+verifie('révision — la page vide explique quoi faire',
+        /Rien à revoir/.test(win.document.getElementById('contenu').innerHTML), true);
 
 console.log('\n' + ok + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
 process.exit(echecs ? 1 : 0);

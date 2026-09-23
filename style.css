@@ -1349,6 +1349,47 @@ h1.titre-lecon {
 .indice-bloc strong { color: inherit; }
 .indice-bloc code { background: rgba(128, 128, 128, .18); color: inherit; }
 
+/* ---- Page « Réviser » ---------------------------------------------------
+   Des cartes, pas une liste : chacune doit se cliquer d'un geste, et porter
+   la couleur de son module pour qu'on reconnaisse d'où elle vient. */
+.revision-intro, .revision-vide {
+  max-width: 62ch;
+  color: var(--encre-2);
+  line-height: 1.65;
+}
+.revision-liste {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+  max-width: 72ch;
+}
+.revision-carte {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 1px solid var(--trait);
+  border-left: 4px solid var(--teinte, var(--accent));
+  border-radius: var(--r2);
+  background: var(--surface);
+  transition: border-color 140ms, transform 140ms, box-shadow 140ms;
+}
+.revision-carte:hover {
+  transform: translateX(3px);
+  border-color: var(--teinte, var(--accent));
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+}
+.revision-carte:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.revision-puce { font-size: 22px; line-height: 1; }
+.revision-corps { display: grid; gap: 3px; min-width: 0; }
+.revision-titre { font-weight: 600; }
+.revision-detail { font-size: 13.5px; color: var(--encre-3); }
+
 /* Le genre de l'exercice — entraînement, défi, chasse au bug. Le pointillé
    discret sous le mot annonce qu'une explication attend au survol : sans lui,
    personne ne penserait à y passer la souris. */
