@@ -1,0 +1,22 @@
+# Le dépôt mélangeait les fins de ligne : verifier-contenu.js en CRLF,
+# data-css3.js en LF. Résultat, git annonçait une réécriture complète du
+# fichier à la moindre modification d'une ligne, et le diff devenait
+# illisible. On fixe la règle une fois pour toutes.
+#
+# Chaque fichier texte est stocké en LF dans le dépôt. Sous Windows, git le
+# rend en CRLF dans le dossier de travail : rien ne change pour le Bloc-notes.
+* text=auto eol=lf
+
+# Ces fichiers sont binaires : git ne doit jamais y toucher aux octets.
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.gif   binary
+*.woff  binary
+*.woff2 binary
+
+# Bibliothèques tierces minifiées : elles ne sont pas de nous, on ne les
+# compte pas dans les statistiques de langage de GitHub et on ne les affiche
+# pas dans les diffs — 1 Mo sur une seule ligne n'apprend rien à personne.
+skulpt.min.js     linguist-vendored linguist-generated -diff
+skulpt-stdlib.js  linguist-vendored linguist-generated -diff

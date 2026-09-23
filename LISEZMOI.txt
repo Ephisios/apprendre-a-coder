@@ -159,3 +159,24 @@ automatiquement dans le navigateur : tu peux fermer et reprendre quand tu veux.
 (Attention : si tu vides l'historique/données de ton navigateur,
 la progression repart à zéro — les leçons, elles, restent intactes.
 Pense à exporter les projets du bac à sable auxquels tu tiens.)
+
+
+LICENCE — CE QUE TU PEUX EN FAIRE
+---------------------------------
+Ce projet en porte deux, parce qu'il contient deux choses différentes.
+
+LE LOGICIEL est sous licence MIT (fichier LICENSE). Prends-le, découpe-le,
+mets-le dans ton propre projet, vends-le si tu veux : la seule obligation est
+de garder la mention de copyright. Cela couvre index.html, app.js, style.css,
+editeur.js, sql-moteur.js, moteur-cj.js et le dossier outils/.
+
+LES LEÇONS ET LES EXERCICES (les fichiers data-*.js) sont sous licence
+Creative Commons BY-SA 4.0 (fichier LICENSE-COURS). Tu peux les partager, les
+traduire, les adapter, y compris commercialement — à deux conditions : citer
+d'où ça vient, et diffuser ta version sous la même licence. Ce qui est ouvert
+le reste.
+
+Les bibliothèques tierces embarquées (Skulpt, pour Python) gardent la leur :
+voir NOTICE.md.
+
+Le code source du projet : https://github.com/Ephisios/apprendre-a-coder

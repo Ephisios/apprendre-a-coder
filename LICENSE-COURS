@@ -1,0 +1,59 @@
+LICENCE DU CONTENU PÉDAGOGIQUE
+===============================
+
+Copyright (c) 2026 Ephisios
+
+Les leçons, exercices, corrigés, indices et mémos de ce projet — c'est-à-dire
+tous les fichiers data-*.js — sont mis à disposition sous licence
+
+    Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0
+    International  (CC BY-SA 4.0)
+
+    Identifiant SPDX : CC-BY-SA-4.0
+    Résumé lisible   : https://creativecommons.org/licenses/by-sa/4.0/deed.fr
+    Texte complet    : https://creativecommons.org/licenses/by-sa/4.0/legalcode.fr
+
+Le texte intégral de la licence fait foi. Le résumé ci-dessous n'a aucune
+valeur juridique : il est là pour que tu saches à quoi t'en tenir sans avoir
+à lire sept mille mots.
+
+
+CE QUE TU PEUX FAIRE
+--------------------
+
+- Partager le cours : le copier, le redistribuer, sur n'importe quel support.
+- L'adapter : le remixer, le transformer, le traduire, construire dessus.
+- Y compris pour un usage commercial.
+
+
+À DEUX CONDITIONS
+-----------------
+
+ATTRIBUTION — tu dois créditer l'auteur, indiquer un lien vers la licence, et
+signaler si tu as apporté des modifications. Tu peux le faire de toute manière
+raisonnable, mais pas d'une façon qui laisserait entendre que l'auteur te
+soutient ou approuve ton usage.
+
+PARTAGE DANS LES MÊMES CONDITIONS — si tu modifies ou adaptes le cours, tu dois
+diffuser ta version sous cette même licence CC BY-SA 4.0. Autrement dit : ce
+qui est ouvert le reste.
+
+
+CE QUI N'EST PAS COUVERT ICI
+----------------------------
+
+Le LOGICIEL qui affiche ces leçons (index.html, app.js, style.css, editeur.js,
+sql-moteur.js, moteur-cj.js, outils/) est sous licence MIT. Voir LICENSE.
+
+Les bibliothèques tierces embarquées gardent leur propre licence.
+Voir NOTICE.md.
+
+
+POURQUOI DEUX LICENCES
+----------------------
+
+Parce que ce sont deux choses différentes. Le moteur est un outil : qu'on le
+reprenne, qu'on le découpe, qu'on s'en serve ailleurs sans rien devoir, tant
+mieux — c'est à ça que sert le MIT. Le cours, lui, est un travail d'écriture :
+on peut le reprendre et même le vendre, à condition de dire d'où il vient et
+de laisser la suite aussi ouverte qu'on l'a trouvée.

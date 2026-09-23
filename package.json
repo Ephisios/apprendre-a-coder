@@ -2,6 +2,11 @@
   "name": "apprendre-a-coder",
   "version": "3.0.0",
   "private": true,
+  "license": "MIT AND CC-BY-SA-4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ephisios/apprendre-a-coder.git"
+  },
   "description": "Apprendre à coder de A à Z — cours hors ligne de 165 leçons et 481 exercices corrigés automatiquement. Le logiciel lui-même (index.html) n'a besoin d'AUCUNE installation : ce fichier ne sert qu'aux outils de développement rangés dans outils/.",
   "scripts": {
     "verifier": "node outils/verifier-contenu.js"
