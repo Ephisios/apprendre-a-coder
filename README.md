@@ -168,6 +168,11 @@ outils/             les harnais de vérification (développement)
 Le logiciel lui-même n'a **aucune dépendance**. `package.json` ne sert qu'aux outils : `jsdom`, pour
 rejouer les exercices HTML/CSS hors navigateur.
 
+## Ce qui a changé
+
+Le [journal des versions](CHANGELOG.md) dit quoi, et surtout **pourquoi** — y compris quand une
+mesure a démenti l'intention de départ.
+
 ## Licences
 
 Deux, parce qu'il y a deux choses dans ce dossier.
