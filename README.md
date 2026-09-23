@@ -154,7 +154,8 @@ style.css           thèmes clair et sombre
 editeur.js          coloration syntaxique des 7 langages — brique autonome
 sql-moteur.js       le moteur SQL et sa base de cinéma
 moteur-cj.js        l'interpréteur C et Java
-skulpt*.js          l'interpréteur Python (tiers — voir NOTICE.md)
+skulpt*.js          l'interpréteur Python, chargé au premier code Python
+                    seulement (tiers — voir NOTICE.md)
 data-*.js           les 165 leçons et 484 exercices
 outils/             les harnais de vérification (développement)
   verifier-contenu.js       rejoue les exercices et sabote les copies (Node)

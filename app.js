@@ -1313,10 +1313,49 @@ function traduirePython(message, code) {
 
 // Exécute du Python et renvoie {logs, erreur} — même contrat que executerJS,
 // pour que la console et les verifier des exercices ne changent pas.
+/* Skulpt, c'est un interpréteur Python complet avec sa bibliothèque standard :
+   944 Ko. Le charger au démarrage le fait payer à TOUT LE MONDE, y compris à
+   qui n'atteindra jamais le module Python.
+
+   Mesuré, le gain de démarrage est mince — 16 ms sur 194. Ce qu'on économise
+   vraiment, c'est la mémoire d'un interpréteur entier gardé pour rien, ce qui
+   compte sur une machine modeste. On va donc le chercher au premier code
+   Python, une seule fois, et toujours dans le dossier : rien n'est téléchargé.
+
+   Les deux fichiers se chargent DANS L'ORDRE : la bibliothèque standard a
+   besoin que l'interpréteur soit déjà là. */
+let skulptEnRoute = null;
+
+function chargerSkulpt() {
+  if (typeof Sk !== 'undefined') return Promise.resolve(true);
+  if (skulptEnRoute) return skulptEnRoute;
+
+  skulptEnRoute = ['skulpt.min.js', 'skulpt-stdlib.js']
+    .reduce((avant, fichier) => avant.then(() => new Promise((ok, ko) => {
+      const s = document.createElement('script');
+      s.src = fichier;
+      s.onload = ok;
+      s.onerror = () => ko(new Error(fichier));
+      document.head.appendChild(s);
+    })), Promise.resolve())
+    .then(() => typeof Sk !== 'undefined')
+    // Un échec ne doit pas condamner les essais suivants : on oublie la
+    // tentative ratée pour que le prochain clic puisse réessayer.
+    .catch(() => { skulptEnRoute = null; return false; });
+
+  return skulptEnRoute;
+}
+
 function executerPython(code, rappel) {
-  if (typeof Sk === 'undefined') {
-    return rappel({ logs: [], erreur: 'l\'interpréteur Python n\'a pas pu être chargé. Vérifie que les fichiers skulpt.min.js et skulpt-stdlib.js sont bien à côté de index.html.' });
-  }
+  chargerSkulpt().then(pret => {
+    if (!pret) {
+      return rappel({ logs: [], erreur: 'l\'interpréteur Python n\'a pas pu être chargé. Vérifie que les fichiers skulpt.min.js et skulpt-stdlib.js sont bien à côté de index.html.' });
+    }
+    lancerPython(code, rappel);
+  });
+}
+
+function lancerPython(code, rappel) {
   let sortie = '';
   const LIMITE = 400000;   // garde-fou : une boucle qui affiche sans fin ne doit pas figer la page
   try {

@@ -59,9 +59,11 @@
        valider « leçon suivante » ne produit aucun retour audible. -->
   <p id="annonce-vue" class="hors-ecran" role="status"></p>
 
-  <!-- Interpréteur Python embarqué (Skulpt) : aucune connexion requise -->
-  <script src="skulpt.min.js"></script>
-  <script src="skulpt-stdlib.js"></script>
+  <!-- L'interpréteur Python (Skulpt) n'est PAS chargé ici : il pèse 944 Ko,
+       et l'essentiel du cours n'en a jamais besoin. app.js va le chercher au
+       premier code Python exécuté, une seule fois, dans ce même dossier —
+       toujours aucune connexion requise. Ne supprime pas skulpt.min.js ni
+       skulpt-stdlib.js : ils restent indispensables. -->
   <!-- Moteurs maison, écrits en JavaScript : SQL, puis C et Java -->
   <script src="sql-moteur.js"></script>
   <script src="moteur-cj.js"></script>
