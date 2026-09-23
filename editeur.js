@@ -55,6 +55,12 @@
   let zoneSilencieuse = null;   // { debut, fin } : la ligne où est le curseur
   let curseurActuel = null;     // son indice exact dans le texte
 
+  /* Et il existe un second silence, celui-là voulu par l'exercice : dans une
+     CHASSE AU BUG, trouver l'erreur EST le travail. La souligner en rouge
+     donnerait la réponse avant même la première lecture. L'éditeur se tait
+     alors sur toutes les fautes, pas seulement sur la ligne du curseur. */
+  let sansFautes = false;
+
   function enCoursDEcriture(position, finDuMorceau) {
     if (zoneSilencieuse === null) return false;
     // Le morceau fautif commence sur la ligne où l'on écrit.
@@ -67,7 +73,7 @@
 
   function peindre(texte, classe, position, finDuMorceau) {
     if (!texte) return '';
-    if (classe === 'j-err' && enCoursDEcriture(position || 0, finDuMorceau)) classe = null;
+    if (classe === 'j-err' && (sansFautes || enCoursDEcriture(position || 0, finDuMorceau))) classe = null;
     return classe ? '<span class="' + classe + '">' + echapper(texte) + '</span>' : echapper(texte);
   }
 
@@ -271,8 +277,9 @@
         if (i < n && code[i] === ';') { sortie += peindre(';', 'j-op', decalage + i); i++; }
       } else {
         // Une propriété sans ses deux-points est laissée SANS couleur, jamais
-        // en rouge : c'est l'erreur qu'un exercice de la leçon css-1 demande
-        // justement de trouver, et la signaler reviendrait à donner la réponse.
+        // en rouge. Non pas parce qu'un exercice précis la cherche — ça, c'est
+        // le travail de `sansFautes` — mais parce qu'une propriété qu'on n'a
+        // pas fini de taper y ressemble exactement.
         sortie += echapper(code.slice(i, j));
         i = j;
         if (i < n && code[i] === ';') { sortie += peindre(';', 'j-op', decalage + i); i++; }
@@ -368,12 +375,13 @@
 
   // curseur : indice du caractère où se trouve le curseur, ou null si l'on
   // n'écrit pas dans cet éditeur (relecture, banc de test, encyclopédie).
-  function colorier(code, langage, curseur) {
+  function colorier(code, langage, curseur, muet) {
     curseurActuel = typeof curseur === 'number' ? curseur : null;
     zoneSilencieuse = ligneAutourDe(code, curseur);
+    sansFautes = !!muet;
     const f = COLORISTES[langage] || COLORISTES.js;
     try { return f(code, 0); } catch (e) { return echapper(code); }   // jamais de page cassée
-    finally { zoneSilencieuse = null; curseurActuel = null; }
+    finally { zoneSilencieuse = null; curseurActuel = null; sansFautes = false; }
   }
 
   function ligneAutourDe(code, curseur) {
@@ -387,8 +395,9 @@
   /* -----------------------------------------------------------------------
      Superposition des deux couches
      ----------------------------------------------------------------------- */
-  function attacherEditeur(zone, langage) {
+  function attacherEditeur(zone, langage, options) {
     if (!zone || zone.dataset.colorie === 'oui') return null;
+    const muet = !!(options && options.sansFautes);
 
     const parent = zone.parentElement;
     if (!parent) return null;
@@ -405,7 +414,7 @@
       const curseur = document.activeElement === zone ? zone.selectionStart : null;
       // Le saut de ligne final est mangé par <pre> : on en ajoute un pour que
       // la dernière ligne vide existe aussi dans la couche coloriée.
-      couche.innerHTML = colorier(zone.value, langage, curseur) + '\n';
+      couche.innerHTML = colorier(zone.value, langage, curseur, muet) + '\n';
       couche.scrollTop = zone.scrollTop;
     }
     function suivreLeDefilement() {

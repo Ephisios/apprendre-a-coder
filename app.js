@@ -16,6 +16,35 @@ const MODULES = [
   { id: 'fin',   icone: '🚀', teinte: 'var(--m-fin)',   titre: 'Et après ?', desc: 'Les autres langages, et comment continuer à apprendre seul.', lecons: DATA_FIN },
 ];
 
+/* ---- Le genre d'un exercice -------------------------------------------
+   `type` dit dans QUEL LANGAGE on écrit ; il ne dit pas ce qu'on attend de
+   l'élève. Or un entraînement, un défi et une chasse au bug ne se jouent pas
+   pareil — et la chasse au bug, en particulier, exige que l'éditeur se taise :
+   souligner l'erreur en rouge donnerait la réponse avant la première lecture.
+
+   Le genre était déjà écrit, mais en prose, en tête de consigne. Plutôt que
+   de retoucher 481 enregistrements, on le lit là où il se trouve déjà. Un
+   exercice peut toujours le déclarer franchement avec `genre:`, qui gagne. */
+const GENRES = {
+  guide:        { mot: 'Exercice',      icone: '💪', aide: 'On avance pas à pas avec toi.' },
+  entrainement: { mot: 'Entraînement',  icone: '🏋️', aide: 'À toi de jouer, sur le même modèle.' },
+  defi:         { mot: 'Défi',          icone: '🎯', aide: 'Plus difficile : on ne montre plus le chemin.' },
+  bug:          { mot: 'Chasse au bug', icone: '🐛', aide: 'Le code est cassé. Trouver la faute EST l\'exercice — l\'éditeur ne souligne donc rien.' },
+  etape:        { mot: 'Étape',         icone: '🧩', aide: 'Une pièce du projet en cours.' },
+  qcm:          { mot: 'Question',      icone: '❓', aide: 'Vérifie que la notion est comprise.' }
+};
+
+function genreDe(ex) {
+  if (ex.genre && GENRES[ex.genre]) return ex.genre;
+  if (ex.type === 'qcm') return 'qcm';
+  const c = ex.consigne || '';
+  if (/^<strong>\s*Chasse au bug/i.test(c)) return 'bug';
+  if (/^<strong>\s*D[ée]fi/i.test(c)) return 'defi';
+  if (/^<strong>\s*Entra[îi]nement/i.test(c)) return 'entrainement';
+  if (/^<strong>\s*[ÉE]tape/i.test(c)) return 'etape';
+  return 'guide';
+}
+
 // Compatibilité : une leçon peut définir `exercice` (v1, unique) ou `exercices` (v2, tableau)
 function exercicesDe(lecon) {
   if (lecon.exercices) return lecon.exercices;
@@ -386,8 +415,12 @@ function blocsJugement(i, ex) {
 
 function rendreExercice(lecon, ex, i, total) {
   const fait = exoFait(lecon.id, i);
-  const etiquettes = ['💪 Exercice', '🏋️ Entraînement', '🎯 Défi', '🚩 Bonus'];
-  const etiquette = ex.etiquette || (total === 1 ? '✏️ À toi de jouer !' : (etiquettes[Math.min(i, 3)] + ' ' + (i + 1) + '/' + total));
+  // L'étiquette suivait la POSITION : le troisième exercice s'appelait « Défi »
+  // même quand c'était une chasse au bug. Elle suit maintenant le genre réel.
+  const genre = GENRES[genreDe(ex)];
+  const etiquette = ex.etiquette || (total === 1 ? '✏️ À toi de jouer !'
+    : '<span class="etiquette-genre" title="' + echapperAttr(genre.aide) + '">' +
+      genre.icone + ' ' + genre.mot + '</span> ' + (i + 1) + '/' + total);
   // Nom parlé de l'exercice : sans emoji, et distinct des autres cartes de la
   // page — trois éditeurs nommés « Éditeur de code » sont trois inconnus.
   const nomExo = total === 1 ? 'l\'exercice' : 'l\'exercice ' + (i + 1) + ' sur ' + total;
@@ -675,7 +708,9 @@ function rendreLecon(id) {
       const g = document.getElementById('lignes-' + i);
       if (g) g.scrollTop = this.scrollTop;
     });
-    attacherEditeur(editeur, ex.type);
+    // Dans une chasse au bug, l'éditeur ne souligne rien : la faute à trouver
+    // est le sujet même de l'exercice.
+    attacherEditeur(editeur, ex.type, { sansFautes: genreDe(ex) === 'bug' });
     majLignes(i);
     if (ex.type === 'html') executer(i);
   });

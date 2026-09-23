@@ -1,11 +1,12 @@
-/* Vérifie l'escalade de l'aide, à l'échelle de l'interface.
+/* Vérifie ce que l'élève VOIT.
    ------------------------------------------------------------------------
-   verifier-contenu.js juge les CORRECTEURS. Ce script-ci juge ce que l'élève
-   VOIT : quel bouton d'aide apparaît, après combien d'essais ratés, et ce
-   qu'il découvre en cliquant. C'est l'endroit exact où l'on abandonne, donc
-   l'endroit qui mérite un test.
+   verifier-contenu.js juge les CORRECTEURS — acceptent-ils la bonne réponse,
+   refusent-ils les mauvaises. Ce script-ci juge l'autre moitié : quel bouton
+   d'aide apparaît et après combien d'essais ratés, et ce que l'éditeur
+   souligne ou choisit de taire. C'est là qu'on abandonne, donc là qu'il faut
+   des tests.
 
-   Usage :  node outils/test-indices.js
+   Usage :  node outils/test-interface.js
    Dépend de jsdom (dépendance de développement, npm install).
 
    Note sur le montage : app.js déclare son état en `let`. Ces déclarations
@@ -58,7 +59,11 @@ sources.push(`
     ouvrir: (cle, n) => { indicesOuverts[cle] = n; },
     recours: (i, ex, n) => contenuRecours(i, ex, n),
     montrer: i => montrerIndice(i),
-    indicesDe: ex => indicesDe(ex)
+    indicesDe: ex => indicesDe(ex),
+    genreDe: ex => genreDe(ex),
+    exercicesDe: l => exercicesDe(l),
+    modules: () => MODULES,
+    colorier: (code, langue, muet) => colorierCode(code, langue, null, muet)
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -142,6 +147,61 @@ verifie('affichage — les paliers sont numérotés', /Indice 2\/3/.test(zone.in
 pont.montrer(0); pont.montrer(0);      // on insiste au-delà du dernier
 verifie('affichage — on ne dépasse jamais le dernier palier',
         zone.querySelectorAll('.indice-palier').length, 3);
+
+/* ======================================================================
+   Le genre de l'exercice, et le silence qu'il impose à l'éditeur
+   ====================================================================== */
+console.log('\n=== Le genre est-il bien lu, et fait-il taire l\'éditeur ? ===\n');
+
+const g = c => pont.genreDe({ type: 'js', consigne: c });
+verifie('genre — sans préfixe, c\'est un exercice guidé', g('Affiche ton prénom.'), 'guide');
+verifie('genre — « Entraînement »', g('<strong>Entraînement :</strong> à toi.'), 'entrainement');
+verifie('genre — « Défi »', g('<strong>Défi :</strong> plus dur.'), 'defi');
+verifie('genre — « Chasse au bug »', g('<strong>Chasse au bug !</strong> Ce code est cassé.'), 'bug');
+verifie('genre — « Étape »', g('<strong>Étape 2 —</strong> la suite du projet.'), 'etape');
+verifie('genre — un QCM est reconnu par son type',
+        pont.genreDe({ type: 'qcm', consigne: 'Question 1.' }), 'qcm');
+verifie('genre — un champ genre explicite l\'emporte sur la prose',
+        pont.genreDe({ type: 'js', genre: 'defi', consigne: '<strong>Entraînement :</strong> …' }), 'defi');
+verifie('genre — un genre inconnu est ignoré, on retombe sur la prose',
+        pont.genreDe({ type: 'js', genre: 'farfelu', consigne: '<strong>Défi :</strong> …' }), 'defi');
+
+// Tous les exercices du cours doivent tomber dans un genre connu.
+const connus = ['guide', 'entrainement', 'defi', 'bug', 'etape', 'qcm'];
+const compte = {};
+let inconnus = 0, totalExos = 0;
+for (const mod of pont.modules()) {
+  for (const lecon of mod.lecons) {
+    pont.exercicesDe(lecon).forEach(ex => {
+      const genre = pont.genreDe(ex);
+      totalExos++;
+      compte[genre] = (compte[genre] || 0) + 1;
+      if (connus.indexOf(genre) === -1) inconnus++;
+    });
+  }
+}
+verifie('genre — aucun exercice ne tombe dans un genre inconnu', inconnus, 0);
+verifie('genre — les 481 exercices sont tous classés', totalExos, 481);
+console.log('         ' + connus.map(k => k + ' ' + (compte[k] || 0)).join('  ·  '));
+
+/* Une chasse au bug doit taire TOUTES les fautes, dans les sept langages :
+   souligner l'erreur en rouge donnerait la réponse avant la première
+   lecture. Hors chasse au bug, elle doit au contraire rester visible. */
+const CASSES = [
+  ['html', '<div class="carte\n<p>suite</p>', 'chevron fermant oublié'],
+  ['html', '<!-- commentaire jamais refermé\n<p>a</p>', 'commentaire laissé ouvert'],
+  ['js',   'const s = "bonjour;\nconsole.log(s);', 'guillemet non fermé'],
+  ['py',   'print("oups\nx = 1', 'guillemet non fermé'],
+  ['c',    'char *s = "abc;\nreturn 0;', 'guillemet non fermé'],
+  ['java', 'String s = "abc;\nint x;', 'guillemet non fermé'],
+  ['sql',  "SELECT 'abc FROM t;", 'apostrophe non fermée']
+];
+for (const [langue, code, quoi] of CASSES) {
+  verifie(langue + ' — ' + quoi + ' : souligné normalement',
+          /j-err/.test(pont.colorier(code, langue, false)), true);
+  verifie(langue + ' — ' + quoi + ' : tu en chasse au bug',
+          /j-err/.test(pont.colorier(code, langue, true)), false);
+}
 
 console.log('\n' + ok + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
 process.exit(echecs ? 1 : 0);

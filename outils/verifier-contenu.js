@@ -206,6 +206,14 @@ for (const item of lecons) {
 
     // L'aide peut s'écrire en un palier (indice, une chaine) ou plusieurs
     // (indices, un tableau range du plus discret au plus explicite).
+    // Un exercice peut declarer son genre ; sinon app.js le deduit du prefixe
+    // de la consigne. Un genre ecrit mais inconnu serait silencieusement
+    // ignore, donc on le signale ici.
+    const GENRES_CONNUS = ['guide', 'entrainement', 'defi', 'bug', 'etape', 'qcm'];
+    if (ex.genre !== undefined && GENRES_CONNUS.indexOf(ex.genre) === -1) {
+      pb.push(tag + ' : genre inconnu « ' + ex.genre + ' » — attendu ' + GENRES_CONNUS.join(', '));
+    }
+
     if (ex.indices !== undefined && !Array.isArray(ex.indices)) {
       pb.push(tag + ' : indices doit etre un tableau de chaines');
     }

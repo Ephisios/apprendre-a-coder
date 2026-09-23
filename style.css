@@ -1349,6 +1349,14 @@ h1.titre-lecon {
 .indice-bloc strong { color: inherit; }
 .indice-bloc code { background: rgba(128, 128, 128, .18); color: inherit; }
 
+/* Le genre de l'exercice — entraînement, défi, chasse au bug. Le pointillé
+   discret sous le mot annonce qu'une explication attend au survol : sans lui,
+   personne ne penserait à y passer la souris. */
+.etiquette-genre {
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+}
+
 /* Les paliers d'indices s'empilent : le précédent reste lisible pendant qu'on
    découvre le suivant. Un filet les sépare sans en faire une liste à puces —
    ce sont les étapes d'une même aide, pas des éléments indépendants. */
