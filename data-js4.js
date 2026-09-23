@@ -38,7 +38,11 @@ console.log(x);    // ERREUR : x n'existe pas ici</pre>
       type: 'js',
       consigne: 'Déclare une constante <code>pi</code> valant 3.14 et une variable modifiable <code>compteur</code> valant 0. Incrémente <code>compteur</code> deux fois, puis affiche les deux valeurs (une par ligne).',
       codeDepart: '',
-      indice: '<code>const</code> pour ce qui ne change pas, <code>let</code> pour ce qui change.',
+      indices: [
+        "Deux déclarations, et le choix du mot dépend d’une seule question : est-ce que cette valeur va changer ?",
+        "<code>const</code> interdit de réaffecter ; <code>let</code> l’autorise. Ici, l’une des deux valeurs est incrémentée deux fois.",
+        "<code>const pi = 3.14;</code> et <code>let compteur = 0;</code>, puis deux <code>compteur++;</code>"
+      ],
       solution: 'const pi = 3.14;\nlet compteur = 0;\ncompteur++;\ncompteur++;\nconsole.log(pi);\nconsole.log(compteur);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -54,7 +58,11 @@ console.log(x);    // ERREUR : x n'existe pas ici</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> montre qu\'un tableau <code>const</code> peut quand même être modifié. Déclare <code>const liste = [1, 2]</code>, ajoute 3 avec <code>push</code>, et affiche la liste.',
       codeDepart: '',
-      indice: '<code>const liste = [1, 2];</code> puis <code>liste.push(3);</code> — c\'est autorisé, car on ne remplace pas la liste, on la modifie.',
+      indices: [
+        "Le paradoxe de cet exercice : <code>const</code> n’empêche pas de modifier le <em>contenu</em> d’un tableau.",
+        "Ce que <code>const</code> interdit, c’est de faire pointer le nom vers un <strong>autre</strong> tableau. Ajouter un élément ne change pas le tableau désigné.",
+        "<code>const liste = [1, 2];</code> puis <code>liste.push(3);</code> — parfaitement autorisé."
+      ],
       solution: 'const liste = [1, 2];\nliste.push(3);\nconsole.log(liste);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -120,7 +128,11 @@ console.log("5" - 3);      // 2 — le - convertit en nombre !</pre>
       type: 'js',
       consigne: 'Affiche sur deux lignes le résultat de <code>5 == "5"</code> puis de <code>5 === "5"</code>, pour constater la différence.',
       codeDepart: '',
-      indice: '<code>console.log(5 == "5");</code> puis <code>console.log(5 === "5");</code>',
+      indices: [
+        "Deux comparaisons presque identiques, et deux résultats opposés. Toute la leçon tient dans ce signe en plus.",
+        "<code>==</code> convertit avant de comparer ; <code>===</code> compare aussi le type. Affiche les deux pour voir la différence de tes yeux.",
+        "<code>console.log(5 == \"5\");</code> puis <code>console.log(5 === \"5\");</code>"
+      ],
       solution: 'console.log(5 == "5");\nconsole.log(5 === "5");',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -135,7 +147,11 @@ console.log("5" - 3);      // 2 — le - convertit en nombre !</pre>
       type: 'js',
       consigne: '<strong>Chasse au bug :</strong> ce code additionne deux valeurs venant d\'un formulaire et affiche <code>105</code> au lieu de <code>15</code>. Répare-le sans changer les valeurs de départ.',
       codeDepart: 'const saisie1 = "10";\nconst saisie2 = "5";\n\nconsole.log(saisie1 + saisie2);',
-      indice: 'Les deux valeurs sont du TEXTE : le <code>+</code> les colle. Convertis-les avec <code>Number(...)</code> avant d\'additionner.',
+      indices: [
+        "105, ce n’est pas une addition ratée : c’est 10 et 5 mis bout à bout. Demande-toi de quel <strong>type</strong> sont les deux valeurs.",
+        "Le <code>+</code> entre deux textes colle au lieu d’additionner. Il faut convertir avant, sans toucher aux valeurs de départ.",
+        "<code>Number(saisie1) + Number(saisie2)</code>"
+      ],
       solution: 'const saisie1 = "10";\nconst saisie2 = "5";\n\nconsole.log(Number(saisie1) + Number(saisie2));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -151,7 +167,11 @@ console.log("5" - 3);      // 2 — le - convertit en nombre !</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> affiche le résultat de <code>"5" - 3</code> puis de <code>"5" + 3</code>, et constate que les deux opérateurs ne se comportent pas pareil.',
       codeDepart: '',
-      indice: 'Le <code>-</code> n\'a qu\'un usage possible, donc il convertit. Le <code>+</code> hésite entre addition et collage, et choisit le collage.',
+      indices: [
+        "Deux opérateurs, deux comportements. L’un n’a qu’un sens possible ; l’autre en a deux, et doit choisir.",
+        "Le <code>-</code> n’existe que pour les nombres : il convertit. Le <code>+</code> hésite entre additionner et coller — et devant un texte, il colle.",
+        "<code>console.log(\"5\" - 3);</code> puis <code>console.log(\"5\" + 3);</code>"
+      ],
       solution: 'console.log("5" - 3);\nconsole.log("5" + 3);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -201,7 +221,11 @@ Cordialement&#96;;</pre>
       type: 'js',
       consigne: 'Réécris cette phrase avec un <strong>gabarit</strong> (accents graves) pour afficher <code>Alex a 30 ans</code>.',
       codeDepart: 'const nom = "Alex";\nconst age = 30;\n\n',
-      indice: 'Entoure le texte d\'accents graves et mets les variables dans <code>${...}</code>.',
+      indices: [
+        "Plus de <code>+</code> ni de guillemets à jongler : on écrit la phrase telle quelle, et on désigne les variables dedans.",
+        "Le texte va entre accents graves, et chaque variable dans un <code>${…}</code>.",
+        "<code>console.log(`${nom} a ${age} ans`);</code>"
+      ],
       solution: 'const nom = "Alex";\nconst age = 30;\n\nconsole.log(`${nom} a ${age} ans`);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -216,7 +240,11 @@ Cordialement&#96;;</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> affiche <code>Total : 59.97 €</code> en calculant le prix dans le gabarit, avec deux décimales.',
       codeDepart: 'const prix = 19.99;\nconst quantite = 3;\n\n',
-      indice: 'On peut calculer dans les accolades : <code>${(prix * quantite).toFixed(2)}</code>.',
+      indices: [
+        "Le calcul peut se faire directement dans le gabarit — pas besoin d’une variable intermédiaire.",
+        "Mais attention aux parenthèses : <code>toFixed</code> s’applique au <strong>résultat</strong> du calcul, donc le calcul doit être entouré.",
+        "<code>${(prix * quantite).toFixed(2)}</code>"
+      ],
       solution: 'const prix = 19.99;\nconst quantite = 3;\n\nconsole.log(`Total : ${(prix * quantite).toFixed(2)} €`);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -231,7 +259,11 @@ Cordialement&#96;;</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> écris une fonction <code>carte(nom, ville)</code> qui renvoie un gabarit <strong>sur trois lignes</strong> : le nom, puis <code>Ville : ...</code>, puis <code>---</code>. Affiche le résultat pour Alex à Lyon.',
       codeDepart: '',
-      indice: 'Un gabarit peut contenir de vrais retours à la ligne : ouvre l\'accent grave, appuie sur Entrée, continue.',
+      indices: [
+        "Trois lignes à produire, mais une seule instruction : un gabarit peut contenir de vrais retours à la ligne.",
+        "Ouvre l’accent grave, appuie sur Entrée, continue d’écrire : le saut de ligne fait partie du texte.",
+        "La fonction renvoie <code>${nom}</code>, puis à la ligne <code>Ville : ${ville}</code>, puis à la ligne <code>---</code> — le tout entre deux accents graves."
+      ],
       solution: 'function carte(nom, ville) {\n  return `${nom}\nVille : ${ville}\n---`;\n}\n\nconsole.log(carte("Alex", "Lyon"));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -289,7 +321,11 @@ afficher(contact);</pre>
       type: 'js',
       consigne: 'Extrais <code>nom</code> et <code>ville</code> de l\'objet <strong>en une seule ligne</strong>, puis affiche-les séparés par un espace.',
       codeDepart: 'const contact = { nom: "Alex", ville: "Lyon", age: 30 };\n\n',
-      indice: '<code>const { nom, ville } = contact;</code> — les noms entre accolades doivent être ceux des clés.',
+      indices: [
+        "Extraire plusieurs valeurs d’un objet en une seule ligne, sans répéter son nom à chaque fois.",
+        "Les noms entre accolades doivent être <strong>exactement</strong> ceux des clés : c’est par le nom que la correspondance se fait.",
+        "<code>const { nom, ville } = contact;</code>"
+      ],
       solution: 'const contact = { nom: "Alex", ville: "Lyon", age: 30 };\n\nconst { nom, ville } = contact;\nconsole.log(nom, ville);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -303,7 +339,11 @@ afficher(contact);</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> extrais les deux premières couleurs du tableau par destructuration et affiche-les, une par ligne.',
       codeDepart: 'const couleurs = ["rouge", "vert", "bleu"];\n\n',
-      indice: 'Pour un tableau, on utilise des crochets et c\'est l\'ORDRE qui compte : <code>const [a, b] = couleurs;</code>',
+      indices: [
+        "Même idée, mais sur un tableau. Un tableau n’a pas de noms de clés : il faut donc autre chose pour savoir quoi extraire.",
+        "On utilise des crochets, et c’est la <strong>position</strong> qui décide : le premier nom reçoit le premier élément. Les noms, eux, sont libres.",
+        "<code>const [premiere, deuxieme] = couleurs;</code>"
+      ],
       solution: 'const couleurs = ["rouge", "vert", "bleu"];\n\nconst [premiere, deuxieme] = couleurs;\nconsole.log(premiere);\nconsole.log(deuxieme);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -317,7 +357,11 @@ afficher(contact);</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> écris une fonction <code>afficher({ nom, ville })</code> qui destructure <strong>directement dans ses paramètres</strong> et affiche <code>Alex habite à Lyon</code>.',
       codeDepart: 'const contact = { nom: "Alex", ville: "Lyon", age: 30 };\n\n',
-      indice: 'Les accolades se mettent à la place du nom du paramètre : <code>function afficher({ nom, ville }) { ... }</code>, puis on appelle <code>afficher(contact)</code>.',
+      indices: [
+        "La destructuration peut se faire dès la réception : à la place même du nom du paramètre.",
+        "Les accolades s’écrivent directement entre les parenthèses de la fonction. À l’appel, on passe l’objet entier.",
+        "<code>function afficher({ nom, ville }) { … }</code>, appelée avec <code>afficher(contact)</code>."
+      ],
       solution: 'const contact = { nom: "Alex", ville: "Lyon", age: 30 };\n\nfunction afficher({ nom, ville }) {\n  console.log(`${nom} habite à ${ville}`);\n}\n\nafficher(contact);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -365,7 +409,11 @@ console.log(additionner(1, 2, 3));    // 6</pre>
       type: 'js',
       consigne: 'Crée un nouveau tableau contenant les éléments de <code>a</code> suivis de 3 et 4, <strong>sans modifier</strong> <code>a</code>. Affiche le nouveau tableau puis <code>a</code>.',
       codeDepart: 'const a = [1, 2];\n\n',
-      indice: '<code>const b = [...a, 3, 4];</code> — les trois points étalent le contenu de a.',
+      indices: [
+        "Il ne faut pas modifier <code>a</code> : donc pas de <code>push</code>. Il s’agit de fabriquer un <strong>nouveau</strong> tableau.",
+        "Les trois points <strong>étalent</strong> le contenu d’un tableau à l’endroit où on les écrit. On peut ensuite ajouter ce qu’on veut derrière.",
+        "<code>const b = [...a, 3, 4];</code>"
+      ],
       solution: 'const a = [1, 2];\n\nconst b = [...a, 3, 4];\nconsole.log(b);\nconsole.log(a);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -380,7 +428,11 @@ console.log(additionner(1, 2, 3));    // 6</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> fusionne les deux objets en un seul (les clés de <code>base</code> plus <code>ville: "Lyon"</code>) et affiche le résultat.',
       codeDepart: 'const base = { nom: "Alex", age: 30 };\n\n',
-      indice: '<code>const complet = { ...base, ville: "Lyon" };</code>',
+      indices: [
+        "Même geste, mais sur un objet : on étale les clés existantes, puis on en ajoute une.",
+        "Les trois points fonctionnent aussi entre accolades. Ce qui vient après peut ajouter — ou écraser — une clé.",
+        "<code>const complet = { ...base, ville: \"Lyon\" };</code>"
+      ],
       solution: 'const base = { nom: "Alex", age: 30 };\n\nconst complet = { ...base, ville: "Lyon" };\nconsole.log(complet);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -397,7 +449,11 @@ console.log(additionner(1, 2, 3));    // 6</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> écris <code>additionner(...nombres)</code> qui accepte <strong>autant d\'arguments qu\'on veut</strong>, et teste-la avec 2 puis 4 nombres.',
       codeDepart: '',
-      indice: 'Les trois points dans les paramètres rassemblent : <code>function additionner(...nombres)</code>, et <code>nombres</code> est un vrai tableau.',
+      indices: [
+        "Les trois points changent de rôle selon l’endroit : dans un appel ils étalent, dans les <strong>paramètres</strong> ils rassemblent.",
+        "<code>...nombres</code> récupère tous les arguments dans un vrai tableau, qu’on peut ensuite parcourir normalement.",
+        "<code>function additionner(...nombres)</code> puis une boucle sur <code>nombres</code>."
+      ],
       solution: 'function additionner(...nombres) {\n  let total = 0;\n  for (const n of nombres) total += n;\n  return total;\n}\n\nconsole.log(additionner(1, 2));\nconsole.log(additionner(1, 2, 3, 4));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -454,7 +510,11 @@ console.log(trouve.nom);      // Bob</pre>
       type: 'js',
       consigne: 'Avec les méthodes du tableau, affiche sur trois lignes : la première note supérieure à 10, si <strong>au moins une</strong> note est en dessous de 10, et si <strong>toutes</strong> sont positives.',
       codeDepart: 'const notes = [12, 5, 18, 9];\n\n',
-      indice: '<code>find</code>, <code>some</code> et <code>every</code>, chacun avec une fonction fléchée : <code>notes.find(n => n > 10)</code>.',
+      indices: [
+        "Trois questions différentes : « laquelle ? », « au moins une ? », « toutes ? ». Trois méthodes, une par question.",
+        "<code>find</code> rend l’élément ; <code>some</code> et <code>every</code> rendent vrai ou faux. Toutes trois reçoivent une fonction qui teste un élément.",
+        "<code>notes.find(n =&gt; n &gt; 10)</code>, <code>notes.some(…)</code>, <code>notes.every(…)</code>"
+      ],
       solution: 'const notes = [12, 5, 18, 9];\n\nconsole.log(notes.find(n => n > 10));\nconsole.log(notes.some(n => n < 10));\nconsole.log(notes.every(n => n > 0));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -470,7 +530,11 @@ console.log(trouve.nom);      // Bob</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> retrouve le contact dont l\'<code>id</code> vaut 2 et affiche son nom.',
       codeDepart: 'const contacts = [\n  { id: 1, nom: "Alex" },\n  { id: 2, nom: "Bob" },\n  { id: 3, nom: "Chloé" }\n];\n\n',
-      indice: '<code>const trouve = contacts.find(c => c.id === 2);</code> puis <code>console.log(trouve.nom);</code>',
+      indices: [
+        "Chercher dans un tableau d’objets : la fonction de test reçoit l’objet entier, et doit regarder à l’intérieur.",
+        "<code>find</code> rend le <strong>premier</strong> objet qui satisfait le test — donc l’objet complet, dont on lit ensuite la clé voulue.",
+        "<code>const trouve = contacts.find(c =&gt; c.id === 2);</code> puis <code>trouve.nom</code>"
+      ],
       solution: 'const contacts = [\n  { id: 1, nom: "Alex" },\n  { id: 2, nom: "Bob" },\n  { id: 3, nom: "Chloé" }\n];\n\nconst trouve = contacts.find(c => c.id === 2);\nconsole.log(trouve.nom);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -484,7 +548,11 @@ console.log(trouve.nom);      // Bob</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> cherche le contact d\'id 99 (qui n\'existe pas) et affiche <code>introuvable</code> au lieu de planter.',
       codeDepart: 'const contacts = [\n  { id: 1, nom: "Alex" },\n  { id: 2, nom: "Bob" }\n];\n\n',
-      indice: '<code>find</code> renvoie <code>undefined</code> quand rien ne correspond : teste avant d\'utiliser le résultat, avec un <code>if</code>.',
+      indices: [
+        "Que rend <code>find</code> quand il ne trouve rien ? Ce n’est pas une erreur — et c’est justement le piège.",
+        "Il rend <code>undefined</code>. Lire une clé dessus fait planter : il faut donc tester le résultat avant de s’en servir.",
+        "<code>if (trouve) { … } else { console.log(\"introuvable\"); }</code>"
+      ],
       solution: 'const contacts = [\n  { id: 1, nom: "Alex" },\n  { id: 2, nom: "Bob" }\n];\n\nconst trouve = contacts.find(c => c.id === 99);\nif (trouve) {\n  console.log(trouve.nom);\n} else {\n  console.log("introuvable");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur + ' — c\'est exactement ce que l\'exercice demande d\'éviter. Vérifie le résultat de find avant de l\'utiliser.' };
@@ -533,7 +601,11 @@ console.log(u);              // [0, "a", "b", 3, 4]</pre>
       type: 'js',
       consigne: 'Avec <code>slice</code>, affiche les éléments d\'indice 1 et 2, puis le tableau d\'origine pour vérifier qu\'il n\'a pas bougé.',
       codeDepart: 'const t = [0, 1, 2, 3, 4];\n\n',
-      indice: '<code>t.slice(1, 3)</code> — le début est inclus, la fin exclue.',
+      indices: [
+        "<code>slice</code> découpe sans rien abîmer : il rend un morceau et laisse l’original intact.",
+        "Le premier nombre est inclus, le second <strong>exclu</strong>. Pour obtenir les indices 1 et 2, il faut donc aller jusqu’à 3.",
+        "<code>t.slice(1, 3)</code>"
+      ],
       solution: 'const t = [0, 1, 2, 3, 4];\n\nconsole.log(t.slice(1, 3));\nconsole.log(t);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -548,7 +620,11 @@ console.log(u);              // [0, "a", "b", 3, 4]</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> avec <code>splice</code>, supprime les 2 éléments à partir de l\'indice 1, puis affiche le tableau modifié.',
       codeDepart: 'const u = [0, 1, 2, 3, 4];\n\n',
-      indice: '<code>u.splice(1, 2);</code> — le premier nombre est la position, le second combien en supprimer.',
+      indices: [
+        "<code>splice</code> est le contraire de <code>slice</code> : il <strong>modifie</strong> le tableau sur place.",
+        "Ses deux nombres ne sont pas des bornes : le premier est la position de départ, le second le <strong>nombre</strong> d’éléments à retirer.",
+        "<code>u.splice(1, 2);</code>"
+      ],
       solution: 'const u = [0, 1, 2, 3, 4];\n\nu.splice(1, 2);\nconsole.log(u);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -562,7 +638,11 @@ console.log(u);              // [0, "a", "b", 3, 4]</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> trie une copie du tableau <strong>sans modifier l\'original</strong>. Affiche la copie triée puis l\'original intact.',
       codeDepart: 'const original = [3, 1, 2];\n\n',
-      indice: '<code>sort()</code> modifie le tableau : copie-le d\'abord avec <code>[...original]</code> ou <code>original.slice()</code>.',
+      indices: [
+        "<code>sort()</code> trie sur place : appelé directement, il détruirait l’ordre d’origine.",
+        "Il faut donc trier une copie. Deux façons d’en fabriquer une : le spread, ou un <code>slice()</code> sans argument.",
+        "<code>const trie = [...original].sort();</code>"
+      ],
       solution: 'const original = [3, 1, 2];\n\nconst trie = [...original].sort();\nconsole.log(trie);\nconsole.log(original);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -608,7 +688,11 @@ console.log(total);      // 47</pre>
       type: 'js',
       consigne: 'Affiche sur deux lignes la liste des <strong>clés</strong> puis celle des <strong>valeurs</strong> de l\'objet.',
       codeDepart: 'const stock = { pommes: 12, poires: 5, cerises: 30 };\n\n',
-      indice: '<code>Object.keys(stock)</code> et <code>Object.values(stock)</code>.',
+      indices: [
+        "Un objet n’est pas un tableau : pour le parcourir, il faut d’abord en extraire une liste.",
+        "<code>Object.keys()</code> rend le tableau des noms, <code>Object.values()</code> celui des valeurs.",
+        "<code>Object.keys(stock)</code> et <code>Object.values(stock)</code>"
+      ],
       solution: 'const stock = { pommes: 12, poires: 5, cerises: 30 };\n\nconsole.log(Object.keys(stock));\nconsole.log(Object.values(stock));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -623,7 +707,11 @@ console.log(total);      // 47</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> parcours l\'objet avec <code>Object.entries</code> et affiche une ligne par produit, sous la forme <code>pommes : 12</code>.',
       codeDepart: 'const stock = { pommes: 12, poires: 5, cerises: 30 };\n\n',
-      indice: '<code>for (const [produit, quantite] of Object.entries(stock)) { ... }</code> puis un gabarit dans le console.log.',
+      indices: [
+        "Il faut la clé <strong>et</strong> la valeur en même temps, à chaque tour. Une troisième méthode donne les deux.",
+        "<code>Object.entries()</code> rend un tableau de paires. La destructuration permet de récupérer les deux d’un coup dans la boucle.",
+        "<code>for (const [produit, quantite] of Object.entries(stock))</code>"
+      ],
       solution: 'const stock = { pommes: 12, poires: 5, cerises: 30 };\n\nfor (const [produit, quantite] of Object.entries(stock)) {\n  console.log(`${produit} : ${quantite}`);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -638,7 +726,11 @@ console.log(total);      // 47</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> calcule le <strong>total du stock</strong> (47) en une seule expression, avec <code>Object.values</code> et <code>reduce</code>.',
       codeDepart: 'const stock = { pommes: 12, poires: 5, cerises: 30 };\n\n',
-      indice: '<code>Object.values(stock).reduce((somme, n) => somme + n, 0)</code> — le 0 final est la valeur de départ.',
+      indices: [
+        "Une seule expression : extraire les valeurs, puis les additionner sans écrire de boucle.",
+        "<code>Object.values()</code> donne le tableau des nombres ; <code>reduce</code> les totalise. Le second argument de <code>reduce</code> est le point de départ.",
+        "<code>Object.values(stock).reduce((somme, n) =&gt; somme + n, 0)</code>"
+      ],
       solution: 'const stock = { pommes: 12, poires: 5, cerises: 30 };\n\nconsole.log(Object.values(stock).reduce((somme, n) => somme + n, 0));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -698,7 +790,11 @@ methode();      // ERREUR : this est perdu !</pre>
       type: 'js',
       consigne: 'Crée une classe <code>Chien</code> avec un constructeur prenant <code>nom</code>, et une méthode <code>aboyer()</code> renvoyant <code>« nom » dit Ouaf !</code>. Fabrique Rex et affiche son aboiement.',
       codeDepart: '',
-      indice: '<code>class Chien { constructor(nom) { this.nom = nom; } aboyer() { return `${this.nom} dit Ouaf !`; } }</code>',
+      indices: [
+        "Une classe décrit un moule ; <code>new</code> en tire un objet. Le constructeur reçoit ce qu’il faut pour le fabriquer.",
+        "Dans le constructeur, <code>this.nom = nom</code> range la valeur dans l’objet. Les méthodes s’écrivent ensuite, sans <code>function</code> devant.",
+        "<code>class Chien { constructor(nom) { this.nom = nom; } aboyer() { return `${this.nom} dit Ouaf !`; } }</code>"
+      ],
       solution: 'class Chien {\n  constructor(nom) {\n    this.nom = nom;\n  }\n  aboyer() {\n    return `${this.nom} dit Ouaf !`;\n  }\n}\n\nconst rex = new Chien("Rex");\nconsole.log(rex.aboyer());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -713,7 +809,11 @@ methode();      // ERREUR : this est perdu !</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> ajoute une classe <code>Chiot</code> qui hérite de <code>Chien</code> et dont <code>aboyer()</code> renvoie le cri du parent suivi de <code> (tout aigu)</code>.',
       codeDepart: 'class Chien {\n  constructor(nom) {\n    this.nom = nom;\n  }\n  aboyer() {\n    return `${this.nom} dit Ouaf !`;\n  }\n}\n\n',
-      indice: '<code>class Chiot extends Chien { aboyer() { return super.aboyer() + " (tout aigu)"; } }</code>',
+      indices: [
+        "La classe enfant reprend tout du parent. Il suffit de redéfinir la méthode qu’on veut changer.",
+        "<code>extends</code> établit le lien, et <code>super.methode()</code> appelle la version du parent — ce qui évite de la réécrire.",
+        "<code>class Chiot extends Chien { aboyer() { return super.aboyer() + \" (tout aigu)\"; } }</code>"
+      ],
       solution: 'class Chien {\n  constructor(nom) {\n    this.nom = nom;\n  }\n  aboyer() {\n    return `${this.nom} dit Ouaf !`;\n  }\n}\n\nclass Chiot extends Chien {\n  aboyer() {\n    return super.aboyer() + " (tout aigu)";\n  }\n}\n\nconsole.log(new Chiot("Bouba").aboyer());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -728,7 +828,11 @@ methode();      // ERREUR : this est perdu !</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> crée une classe <code>Compteur</code> avec une valeur interne à 0, une méthode <code>incrementer()</code> et une méthode <code>valeur()</code>. Incrémente trois fois et affiche <code>3</code>.',
       codeDepart: '',
-      indice: 'Dans le constructeur : <code>this.n = 0;</code>. Dans incrementer : <code>this.n++;</code>. Dans valeur : <code>return this.n;</code>',
+      indices: [
+        "Un état interne à l’objet, et deux méthodes pour agir dessus : l’une le change, l’autre le lit.",
+        "Le constructeur ne prend aucun paramètre : il initialise simplement la valeur à 0. Chaque méthode passe par <code>this.</code> pour l’atteindre.",
+        "<code>constructor() { this.n = 0; }</code> · <code>incrementer() { this.n++; }</code> · <code>valeur() { return this.n; }</code>"
+      ],
       solution: 'class Compteur {\n  constructor() {\n    this.n = 0;\n  }\n  incrementer() {\n    this.n++;\n  }\n  valeur() {\n    return this.n;\n  }\n}\n\nconst c = new Compteur();\nc.incrementer();\nc.incrementer();\nc.incrementer();\nconsole.log(c.valeur());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -784,7 +888,11 @@ console.log(b());    // 1 — b a son propre n</pre>
       type: 'js',
       consigne: 'Écris <code>creerCompteur()</code> qui renvoie une fonction. Chaque appel de cette fonction doit renvoyer un nombre plus grand. Appelle-la trois fois et affiche les trois résultats.',
       codeDepart: '',
-      indice: 'Déclare <code>let n = 0;</code> DANS creerCompteur, puis <code>return function () { n++; return n; };</code>',
+      indices: [
+        "La fonction renvoyée doit se souvenir d’un nombre entre deux appels. La vraie question est : <strong>où</strong> déclarer ce nombre ?",
+        "À l’intérieur de <code>creerCompteur</code>, mais en dehors de la fonction renvoyée. Celle-ci garde alors accès à cette variable, même après le retour.",
+        "<code>let n = 0;</code> puis <code>return function () { n++; return n; };</code>"
+      ],
       solution: 'function creerCompteur() {\n  let n = 0;\n  return function () {\n    n++;\n    return n;\n  };\n}\n\nconst compter = creerCompteur();\nconsole.log(compter());\nconsole.log(compter());\nconsole.log(compter());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -798,7 +906,11 @@ console.log(b());    // 1 — b a son propre n</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> crée <strong>deux</strong> compteurs indépendants. Incrémente le premier deux fois et le second une fois, puis affiche leurs valeurs (<code>3</code> puis <code>1</code>).',
       codeDepart: 'function creerCompteur() {\n  let n = 0;\n  return function () {\n    n++;\n    return n;\n  };\n}\n\n',
-      indice: 'Deux appels séparés : <code>const a = creerCompteur();</code> et <code>const b = creerCompteur();</code> — chacun a son propre <code>n</code>.',
+      indices: [
+        "Chaque appel à <code>creerCompteur()</code> refabrique tout — y compris la variable interne.",
+        "Deux appels séparés donnent donc deux variables indépendantes. Ce que fait l’un n’a aucun effet sur l’autre.",
+        "<code>const a = creerCompteur();</code> et <code>const b = creerCompteur();</code>"
+      ],
       solution: 'function creerCompteur() {\n  let n = 0;\n  return function () {\n    n++;\n    return n;\n  };\n}\n\nconst a = creerCompteur();\nconst b = creerCompteur();\na();\na();\nconsole.log(a());\nconsole.log(b());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -813,7 +925,11 @@ console.log(b());    // 1 — b a son propre n</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> écris <code>creerMultiplicateur(facteur)</code> qui renvoie une fonction multipliant par ce facteur. Crée un doubleur et un tripleur, puis affiche <code>doubler(5)</code> et <code>tripler(5)</code>.',
       codeDepart: '',
-      indice: '<code>function creerMultiplicateur(facteur) { return function (x) { return x * facteur; }; }</code> — la fonction renvoyée se souvient du facteur.',
+      indices: [
+        "Même mécanisme que le compteur, mais ce dont la fonction se souvient n’est plus une variable interne : c’est le <strong>paramètre</strong>.",
+        "La fonction renvoyée capture <code>facteur</code>. Deux appels avec 2 et 3 donnent deux fonctions qui n’oublieront jamais le leur.",
+        "<code>function creerMultiplicateur(facteur) { return function (x) { return x * facteur; }; }</code>"
+      ],
       solution: 'function creerMultiplicateur(facteur) {\n  return function (x) {\n    return x * facteur;\n  };\n}\n\nconst doubler = creerMultiplicateur(2);\nconst tripler = creerMultiplicateur(3);\nconsole.log(doubler(5));\nconsole.log(tripler(5));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -865,7 +981,11 @@ const id = setInterval(function () {
       type: 'js',
       consigne: 'Affiche <code>avant</code>, programme l\'affichage de <code>plus tard</code> dans 300 ms, puis affiche <code>apres</code>. Observe l\'ordre réel dans la console.',
       codeDepart: '',
-      indice: '<code>setTimeout(function () { console.log("plus tard"); }, 300);</code> entre les deux autres affichages.',
+      indices: [
+        "<code>setTimeout</code> ne met pas le programme en pause : il <strong>programme</strong> quelque chose pour plus tard, et passe immédiatement à la suite.",
+        "L’ordre affiché ne sera donc pas l’ordre écrit : « apres » sortira avant « plus tard », même avec un délai très court.",
+        "<code>setTimeout(function () { console.log(\"plus tard\"); }, 300);</code> entre les deux autres."
+      ],
       solution: 'console.log("avant");\nsetTimeout(function () {\n  console.log("plus tard");\n}, 300);\nconsole.log("apres");',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -882,7 +1002,11 @@ const id = setInterval(function () {
       type: 'js',
       consigne: '<strong>Entraînement :</strong> avec <code>setInterval</code>, affiche <code>tic 1</code>, <code>tic 2</code>, <code>tic 3</code> toutes les 100 ms, puis <strong>arrête la répétition</strong>.',
       codeDepart: 'let n = 0;\n\n',
-      indice: 'Garde l\'identifiant : <code>const id = setInterval(...)</code>, et à l\'intérieur, quand <code>n === 3</code>, appelle <code>clearInterval(id)</code>.',
+      indices: [
+        "<code>setInterval</code> répète sans fin. Pour l’arrêter, il faut avoir gardé de quoi le désigner.",
+        "Il rend un identifiant : range-le dans une variable. Quand le compteur atteint 3, passe cet identifiant à <code>clearInterval</code>.",
+        "<code>const id = setInterval(…)</code>, et dedans <code>if (n === 3) clearInterval(id);</code>"
+      ],
       solution: 'let n = 0;\n\nconst id = setInterval(function () {\n  n++;\n  console.log("tic " + n);\n  if (n === 3) {\n    clearInterval(id);\n  }\n}, 100);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -959,7 +1083,11 @@ console.log(port);                       // 3000</pre>
       type: 'js',
       consigne: 'Convertis l\'objet en texte JSON, affiche son <code>typeof</code>, puis reconvertis-le en objet et affiche son <code>nom</code>.',
       codeDepart: 'const contact = { nom: "Alex", ville: "Lyon" };\n\n',
-      indice: '<code>JSON.stringify(contact)</code> puis <code>JSON.parse(texte)</code>.',
+      indices: [
+        "Deux conversions opposées : un objet vers du texte, puis ce texte vers un objet. Le <code>typeof</code> entre les deux montre ce qui a changé.",
+        "<code>JSON.stringify</code> transforme en texte, <code>JSON.parse</code> reconstruit l’objet. Une fois reconstruit, on lit ses clés normalement.",
+        "<code>const texte = JSON.stringify(contact);</code> puis <code>JSON.parse(texte).nom</code>"
+      ],
       solution: 'const contact = { nom: "Alex", ville: "Lyon" };\n\nconst texte = JSON.stringify(contact);\nconsole.log(typeof texte);\nconst retour = JSON.parse(texte);\nconsole.log(retour.nom);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -974,7 +1102,11 @@ console.log(port);                       // 3000</pre>
       type: 'js',
       consigne: '<strong>Entraînement :</strong> protège un <code>JSON.parse</code> sur un texte invalide avec <code>try</code>/<code>catch</code>. Affiche <code>Données illisibles</code> puis <code>le programme continue</code>.',
       codeDepart: 'const mauvais = "ceci n\'est pas du JSON";\n\n',
-      indice: 'Mets le parse dans le <code>try</code>, le message d\'erreur dans le <code>catch</code>, et le dernier affichage APRÈS le bloc.',
+      indices: [
+        "Le parse va échouer, c’est voulu. Ce qui compte, c’est que le programme <strong>continue</strong> ensuite.",
+        "Ce qui peut planter va dans le <code>try</code>, le message dans le <code>catch</code>. Le dernier affichage, lui, se place après le bloc entier.",
+        "<code>try { JSON.parse(mauvais); } catch (erreur) { console.log(\"Données illisibles\"); }</code> puis la suite."
+      ],
       solution: 'const mauvais = "ceci n\'est pas du JSON";\n\ntry {\n  JSON.parse(mauvais);\n} catch (erreur) {\n  console.log("Données illisibles");\n}\nconsole.log("le programme continue");',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Le programme plante encore : ' + ctx.erreur + ' — c\'est justement ce que le try/catch doit éviter.' };
@@ -989,7 +1121,11 @@ console.log(port);                       // 3000</pre>
       type: 'js',
       consigne: '<strong>Défi :</strong> avec <code>?.</code> et <code>??</code>, affiche le port du serveur (<code>8080</code>) puis celui de la base — qui n\'existe pas et doit valoir <code>3000</code> par défaut.',
       codeDepart: 'const config = { serveur: { port: 8080 } };\n\n',
-      indice: '<code>config?.serveur?.port</code> pour le premier, et <code>config.base?.port ?? 3000</code> pour le second.',
+      indices: [
+        "Deux écritures modernes, pour deux problèmes différents : traverser une structure sans planter, et remplacer une absence par une valeur.",
+        "<code>?.</code> s’arrête proprement si le chemin est rompu. <code>??</code> fournit une valeur de repli quand on obtient <code>undefined</code> ou <code>null</code>.",
+        "<code>config?.serveur?.port</code> et <code>config.base?.port ?? 3000</code>"
+      ],
       solution: 'const config = { serveur: { port: 8080 } };\n\nconsole.log(config?.serveur?.port);\nconsole.log(config.base?.port ?? 3000);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur + ' — le chaînage optionnel <code>?.</code> évite précisément ce plantage.' };

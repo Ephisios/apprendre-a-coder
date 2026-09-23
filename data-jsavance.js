@@ -29,7 +29,11 @@ console.log(invites.join(" et "));      // "Léa et Tom et Nina" — coller en u
       type: 'js',
       consigne: 'Réécris ce programme avec une boucle <code>for...of</code> (sans compteur <code>i</code>, sans crochets) : il doit afficher chaque animal précédé de <code>J\'aime les</code>.',
       codeDepart: 'let animaux = ["chats", "chiens", "pandas"];\n\nfor (let i = 0; i < animaux.length; i++) {\n  console.log("J\'aime les " + animaux[i]);\n}',
-      indice: '<code>for (const animal of animaux) { console.log("J\'aime les " + animal); }</code>',
+      indices: [
+        "La boucle classique passe par un compteur et des crochets. <code>for…of</code> te donne directement chaque valeur : plus de <code>i</code>, plus de <code>[i]</code>.",
+        "La forme : <code>for (const x of tableau)</code>. Le nom entre <code>const</code> et <code>of</code> est celui que tu choisis pour la valeur du tour.",
+        "<code>for (const animal of animaux) { console.log(\"J’aime les \" + animal); }</code>"
+      ],
       solution: 'let animaux = ["chats", "chiens", "pandas"];\n\nfor (const animal of animaux) {\n  console.log("J\'aime les " + animal);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -43,7 +47,11 @@ console.log(invites.join(" et "));      // "Léa et Tom et Nina" — coller en u
       type: 'js',
       consigne: '<strong>Entraînement : le videur de boîte de nuit.</strong> Avec <code>includes</code>, vérifie si <code>"Sam"</code> est dans la liste des invités : affiche <code>Bienvenue Sam</code> si oui, <code>Désolé, tu n\'es pas sur la liste</code> sinon. Puis affiche la liste complète en un seul texte séparé par des virgules, avec <code>join(", ")</code>.',
       codeDepart: 'let invites = ["Léa", "Tom", "Sam", "Nina"];\n',
-      indice: '<code>if (invites.includes("Sam")) { ... } else { ... }</code> puis <code>console.log(invites.join(", "));</code>',
+      indices: [
+        "Deux questions indépendantes : « Sam est-il dans la liste ? », puis « comment afficher toute la liste sur une seule ligne ? ».",
+        "<code>includes()</code> répond vrai ou faux : il s’utilise donc directement dans un <code>if</code>. <code>join(\", \")</code>, lui, recolle le tableau en un seul texte.",
+        "<code>if (invites.includes(\"Sam\"))</code> puis <code>console.log(invites.join(\", \"));</code>"
+      ],
       solution: 'let invites = ["Léa", "Tom", "Sam", "Nina"];\n\nif (invites.includes("Sam")) {\n  console.log("Bienvenue Sam");\n} else {\n  console.log("Désolé, tu n\'es pas sur la liste");\n}\n\nconsole.log(invites.join(", "));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -57,7 +65,11 @@ console.log(invites.join(" et "));      // "Léa et Tom et Nina" — coller en u
       type: 'js',
       consigne: '<strong>Défi : l\'inventaire du jeu.</strong> Avec for...of et un accumulateur, compte combien de potions il y a dans l\'inventaire (réponse : 3). Puis vérifie avec <code>includes</code> si le joueur possède une <code>"épée"</code> et affiche <code>Prêt au combat !</code> ou <code>Il te faut une épée...</code>.',
       codeDepart: 'let inventaire = ["potion", "épée", "potion", "bouclier", "potion", "carte"];\n\nlet nbPotions = 0;\n',
-      indice: '<code>for (const objet of inventaire) { if (objet === "potion") { nbPotions++; } }</code> — un if DANS la boucle. Puis le test <code>includes("épée")</code>.',
+      indices: [
+        "Compter, c’est un accumulateur — mais qui n’augmente pas à chaque tour, seulement quand la condition est remplie.",
+        "Le <code>if</code> est <strong>dans</strong> la boucle. La vérification de l’épée, elle, est une question séparée : elle se fait en dehors.",
+        "<code>for (const objet of inventaire) { if (objet === \"potion\") { nbPotions++; } }</code>"
+      ],
       solution: 'let inventaire = ["potion", "épée", "potion", "bouclier", "potion", "carte"];\n\nlet nbPotions = 0;\nfor (const objet of inventaire) {\n  if (objet === "potion") {\n    nbPotions++;\n  }\n}\nconsole.log(nbPotions);\n\nif (inventaire.includes("épée")) {\n  console.log("Prêt au combat !");\n} else {\n  console.log("Il te faut une épée...");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -104,7 +116,11 @@ console.log(pairs);      // [2,4,6]</pre>
       type: 'js',
       consigne: 'Le tableau contient des prix en euros. 1) Avec <code>map</code>, crée un tableau <code>prixSoldes</code> où chaque prix est divisé par 2. 2) Affiche-le. 3) Avec <code>forEach</code>, affiche chaque prix soldé sous la forme <code>Prix soldé : X euros</code>.',
       codeDepart: 'let prix = [10, 24, 50, 8];\n',
-      indice: '<code>let prixSoldes = prix.map((p) => p / 2);</code> puis <code>prixSoldes.forEach((p) => console.log(\`Prix soldé : \${p} euros\`));</code>',
+      indices: [
+        "Deux outils différents : l’un fabrique un <strong>nouveau</strong> tableau, l’autre se contente de parcourir.",
+        "<code>map()</code> transforme et rend un tableau ; <code>forEach()</code> ne rend rien, il agit. C’est pour cela que le second sert à afficher.",
+        "<code>prix.map((p) =&gt; p / 2)</code> puis <code>prixSoldes.forEach((p) =&gt; console.log(…))</code>"
+      ],
       solution: 'let prix = [10, 24, 50, 8];\n\nlet prixSoldes = prix.map((p) => p / 2);\nconsole.log(prixSoldes);\n\nprixSoldes.forEach((p) => console.log(`Prix soldé : ${p} euros`));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -119,7 +135,11 @@ console.log(pairs);      // [2,4,6]</pre>
       type: 'js',
       consigne: '<strong>Entraînement : le tri des candidatures.</strong> Avec <code>filter</code>, crée un tableau <code>admis</code> contenant uniquement les notes supérieures ou égales à 10, puis affiche-le, puis affiche le NOMBRE d\'admis avec <code>.length</code> (réponse : [12, 15, 10, 18] puis 4).',
       codeDepart: 'let notes = [12, 7, 15, 3, 10, 18, 9];\n',
-      indice: '<code>let admis = notes.filter((n) => n >= 10);</code> — la condition dans la flèche décide qui reste.',
+      indices: [
+        "<code>filter</code> ne transforme rien : il garde ou il jette. La fonction qu’on lui donne doit répondre vrai ou faux.",
+        "La flèche reçoit chaque note et rend la condition. Ce qui est vrai reste, le reste disparaît. Le compte s’obtient ensuite avec <code>.length</code>.",
+        "<code>let admis = notes.filter((n) =&gt; n &gt;= 10);</code> puis <code>admis.length</code>"
+      ],
       solution: 'let notes = [12, 7, 15, 3, 10, 18, 9];\n\nlet admis = notes.filter((n) => n >= 10);\nconsole.log(admis);\nconsole.log(admis.length);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -133,7 +153,11 @@ console.log(pairs);      // [2,4,6]</pre>
       type: 'js',
       consigne: '<strong>Défi : la chaîne de traitement.</strong> Le grand art : ENCHAÎNER les méthodes. En une seule instruction (avec un point à la suite de l\'autre), filtre les températures positives PUIS transforme-les en Fahrenheit (<code>c * 1.8 + 32</code>), range le résultat dans <code>fahrenheit</code> et affiche-le (attendu : [68, 77, 50]).',
       codeDepart: 'let celsius = [20, -5, 25, -12, 10];\n\n// filter PUIS map, enchaînés\n',
-      indice: 'L\'enchaînement : <code>celsius.filter((c) => c > 0).map((c) => c * 1.8 + 32)</code> — le map s\'applique au résultat du filter.',
+      indices: [
+        "Deux opérations à la suite, et leur ordre compte : filtrer d’abord, transformer ensuite — sinon on convertirait des températures qu’on va jeter.",
+        "<code>filter</code> rend un tableau, sur lequel on peut appeler <code>map</code> directement. Un point après l’autre, dans la même instruction.",
+        "<code>celsius.filter((c) =&gt; c &gt; 0).map((c) =&gt; c * 1.8 + 32)</code>"
+      ],
       solution: 'let celsius = [20, -5, 25, -12, 10];\n\nlet fahrenheit = celsius.filter((c) => c > 0).map((c) => c * 1.8 + 32);\nconsole.log(fahrenheit);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -175,7 +199,11 @@ Number("5") + 3    // 8   ✓</pre>
       type: 'js',
       consigne: 'Lance le dé ! Avec la formule de la leçon, crée une variable <code>de</code> contenant un nombre entier au hasard entre 1 et 6, et affiche <code>Tu as fait un X !</code>. Reclique plusieurs fois sur <strong>Vérifier ma réponse</strong> : le nombre doit changer !',
       codeDepart: '// Le lancer de dé\n',
-      indice: 'Trois morceaux, tous dans la leçon : <code>Math.random()</code> donne un nombre à virgule entre 0 et 1, la multiplication l\'étale sur la plage voulue, et <code>Math.floor</code> coupe la virgule. Attention au décalage : sans le <code>+ 1</code>, ton dé a une face 0.',
+      indices: [
+        "<code>Math.random()</code> donne un nombre à virgule entre 0 et 1 — jamais 1. Il faut l’étaler sur la plage voulue, puis couper la virgule.",
+        "Multiplier par 6 donne 0 à 5,99. <code>Math.floor</code> coupe la virgule : on obtient 0 à 5. Il manque donc un décalage pour arriver à 1–6.",
+        "<code>Math.floor(Math.random() * 6) + 1</code> — le <code>+ 1</code> est ce qu’on oublie."
+      ],
       solution: 'let de = Math.floor(Math.random() * 6) + 1;\nconsole.log(`Tu as fait un ${de} !`);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -192,7 +220,11 @@ Number("5") + 3    // 8   ✓</pre>
       type: 'js',
       consigne: '<strong>Entraînement : la caisse du magasin.</strong> Trois articles à 19.99, 4.50 et 12.30. Calcule le total, puis le total avec remise de 10% (<code>total * 0.9</code>), et affiche ce dernier arrondi à 2 décimales avec <code>toFixed(2)</code> (résultat attendu : <code>33.11</code>).',
       codeDepart: 'let a = 19.99;\nlet b = 4.50;\nlet c = 12.30;\n',
-      indice: '<code>let total = a + b + c;</code> puis <code>let remise = total * 0.9;</code> puis <code>console.log(remise.toFixed(2));</code>',
+      indices: [
+        "Trois calculs qui s’enchaînent, puis un arrondi pour l’affichage. L’arrondi ne change pas le nombre : il change sa présentation.",
+        "<code>toFixed(2)</code> s’appelle sur le nombre et rend un <strong>texte</strong> à deux décimales. C’est la dernière étape, jamais une étape de calcul.",
+        "<code>let remise = total * 0.9;</code> puis <code>console.log(remise.toFixed(2));</code>"
+      ],
       solution: 'let a = 19.99;\nlet b = 4.50;\nlet c = 12.30;\n\nlet total = a + b + c;\nlet remise = total * 0.9;\nconsole.log(remise.toFixed(2));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -205,7 +237,11 @@ Number("5") + 3    // 8   ✓</pre>
       type: 'js',
       consigne: '<strong>Défi : pile ou face, 10 lancers.</strong> Avec une boucle de 10 tours et <code>Math.random() < 0.5</code> comme condition, simule 10 lancers de pièce : compte les « pile » dans une variable, et affiche à la fin <code>Pile : X / 10</code>. Exécute plusieurs fois : le score doit varier autour de 5 !',
       codeDepart: 'let nbPile = 0;\n\n// 10 lancers...\n',
-      indice: '<code>for (let i = 0; i < 10; i++) { if (Math.random() < 0.5) { nbPile++; } }</code> puis l\'affichage.',
+      indices: [
+        "Dix lancers, donc une boucle de dix tours, et un compteur qui ne monte que dans un cas sur deux.",
+        "Pas besoin de tirer un entier : <code>Math.random()</code> donne un nombre entre 0 et 1, et le comparer à 0.5 partage en deux moitiés égales.",
+        "<code>if (Math.random() &lt; 0.5) { nbPile++; }</code> dans une boucle de 10 tours."
+      ],
       solution: 'let nbPile = 0;\n\nfor (let i = 0; i < 10; i++) {\n  if (Math.random() < 0.5) {\n    nbPile++;\n  }\n}\n\nconsole.log(`Pile : ${nbPile} / 10`);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -248,7 +284,11 @@ li.style.color = "red";            // style direct (à petite dose !)</pre>
       type: 'html',
       consigne: 'Au clic sur le bouton, crée un nouvel élément <code>&lt;li&gt;</code> contenant <code>Une pomme de plus</code> et ajoute-le à la liste <code>#panier</code>. Chaque clic doit ajouter une ligne — teste dans l\'aperçu !',
       codeDepart: '<button id="ajouter">🍎 Ajouter une pomme</button>\n<ul id="panier"></ul>\n\n<script>\n  document.querySelector("#ajouter").addEventListener("click", function () {\n    // 1. créer le li — 2. le remplir — 3. l\'attacher\n\n  });\n</script>',
-      indice: 'Les trois temps, dans l\'écouteur : <code>let li = document.createElement("li");</code> puis <code>li.textContent = "Une pomme de plus";</code> puis <code>document.querySelector("#panier").appendChild(li);</code>',
+      indices: [
+        "Créer un élément ne le met pas dans la page : ce sont deux gestes distincts. Il en faut trois en tout.",
+        "Fabriquer avec <code>createElement</code>, remplir avec <code>textContent</code>, puis <strong>accrocher</strong> avec <code>appendChild</code>. Sans le dernier, rien n’apparaît.",
+        "<code>let li = document.createElement(\"li\");</code> · <code>li.textContent = \"…\";</code> · <code>document.querySelector(\"#panier\").appendChild(li);</code>"
+      ],
       solution: '<button id="ajouter">🍎 Ajouter une pomme</button>\n<ul id="panier"></ul>\n\n<script>\n  document.querySelector("#ajouter").addEventListener("click", function () {\n    let li = document.createElement("li");\n    li.textContent = "Une pomme de plus";\n    document.querySelector("#panier").appendChild(li);\n  });\n</script>',
       verifier: function (ctx) {
         const btn = ctx.doc.querySelector('#ajouter');
@@ -268,7 +308,11 @@ li.style.color = "red";            // style direct (à petite dose !)</pre>
       type: 'html',
       consigne: '<strong>Entraînement : le surligneur.</strong> La classe CSS <code>.surligne</code> existe déjà. Fais que le clic sur le bouton <code>#marquer</code> AJOUTE cette classe au paragraphe <code>#phrase</code>, et que le clic sur <code>#effacer</code> la RETIRE. (classList.add / classList.remove)',
       codeDepart: '<style>\n  .surligne { background: #ffe97a; font-weight: bold; }\n</style>\n\n<p id="phrase">La phrase la plus importante de la page.</p>\n<button id="marquer">🖍️ Surligner</button>\n<button id="effacer">🧽 Effacer</button>\n\n<script>\n\n</script>',
-      indice: 'Deux écouteurs : dans le premier <code>document.querySelector("#phrase").classList.add("surligne");</code>, dans le second <code>...classList.remove("surligne");</code>',
+      indices: [
+        "La classe CSS existe déjà : tu n’as rien à écrire en style, seulement à poser et retirer cette classe.",
+        "<code>classList.add()</code> ajoute, <code>classList.remove()</code> retire. Deux écouteurs indépendants, visant le même paragraphe.",
+        "<code>document.querySelector(\"#phrase\").classList.add(\"surligne\");</code> et la version <code>remove</code>."
+      ],
       solution: '<style>\n  .surligne { background: #ffe97a; font-weight: bold; }\n</style>\n\n<p id="phrase">La phrase la plus importante de la page.</p>\n<button id="marquer">🖍️ Surligner</button>\n<button id="effacer">🧽 Effacer</button>\n\n<script>\n  document.querySelector("#marquer").addEventListener("click", function () {\n    document.querySelector("#phrase").classList.add("surligne");\n  });\n\n  document.querySelector("#effacer").addEventListener("click", function () {\n    document.querySelector("#phrase").classList.remove("surligne");\n  });\n</script>',
       verifier: function (ctx) {
         const marquer = ctx.doc.querySelector('#marquer');
@@ -286,7 +330,11 @@ li.style.color = "red";            // style direct (à petite dose !)</pre>
       type: 'html',
       consigne: '<strong>Défi : le générateur de palette.</strong> Au clic sur le bouton, génère 3 pastilles de couleur ALÉATOIRE : pour chacune, crée un <code>&lt;div&gt;</code>, donne-lui la classe <code>pastille</code> (fournie), et un fond aléatoire via <code>el.style.backgroundColor = \`rgb(\${r}, \${v}, \${b})\`</code> avec r, v, b tirés au hasard entre 0 et 255. Vide d\'abord <code>#palette</code> avec <code>innerHTML = ""</code> pour remplacer l\'ancienne palette !',
       codeDepart: '<style>\n  .pastille { display: inline-block; width: 90px; height: 90px; border-radius: 14px; margin: 6px; }\n</style>\n\n<button id="generer">🎨 Nouvelle palette</button>\n<div id="palette"></div>\n\n<script>\n  document.querySelector("#generer").addEventListener("click", function () {\n\n  });\n</script>',
-      indice: 'Dans l\'écouteur : vider (<code>palette.innerHTML = ""</code>), puis une boucle de 3 tours qui fait : createElement("div") → classList.add("pastille") → 3 nombres <code>Math.floor(Math.random() * 256)</code> → style.backgroundColor → appendChild.',
+      indices: [
+        "Quatre gestes par pastille — et un cinquième avant tout : vider ce qui restait du clic précédent, sinon les pastilles s’accumulent.",
+        "Pour vider : <code>palette.innerHTML = \"\"</code>. Puis une boucle de 3 tours qui crée, classe, colore au hasard, et accroche.",
+        "Trois nombres <code>Math.floor(Math.random() * 256)</code> dans <code>el.style.backgroundColor = `rgb(…)`</code>."
+      ],
       solution: '<style>\n  .pastille { display: inline-block; width: 90px; height: 90px; border-radius: 14px; margin: 6px; }\n</style>\n\n<button id="generer">🎨 Nouvelle palette</button>\n<div id="palette"></div>\n\n<script>\n  document.querySelector("#generer").addEventListener("click", function () {\n    let palette = document.querySelector("#palette");\n    palette.innerHTML = "";\n\n    for (let i = 0; i < 3; i++) {\n      let pastille = document.createElement("div");\n      pastille.classList.add("pastille");\n      let r = Math.floor(Math.random() * 256);\n      let v = Math.floor(Math.random() * 256);\n      let b = Math.floor(Math.random() * 256);\n      pastille.style.backgroundColor = `rgb(${r}, ${v}, ${b})`;\n      palette.appendChild(pastille);\n    }\n  });\n</script>',
       verifier: function (ctx) {
         const btn = ctx.doc.querySelector('#generer');
@@ -342,7 +390,11 @@ console.log(Number(age) + 5);  // 30 ✓</pre>
       type: 'html',
       consigne: 'Le badge personnalisé : au clic sur <code>#faire</code>, lis le contenu du champ <code>#prenom</code> et affiche <code>Bienvenue, [prénom] !</code> dans le paragraphe <code>#badge</code>. Teste en tapant ton prénom dans l\'aperçu !',
       codeDepart: '<input id="prenom" type="text" placeholder="Ton prénom">\n<button id="faire">Créer mon badge</button>\n<p id="badge"></p>\n\n<script>\n\n</script>',
-      indice: 'Dans l\'écouteur du bouton : <code>let p = document.querySelector("#prenom").value;</code> puis <code>document.querySelector("#badge").textContent = \`Bienvenue, \${p} !\`;</code>',
+      indices: [
+        "Le contenu d’un champ ne se lit pas avec <code>textContent</code> : un champ de saisie a sa propre propriété.",
+        "<code>.value</code> donne ce que l’utilisateur a tapé. La lecture se fait <strong>au moment du clic</strong>, dans l’écouteur — pas avant.",
+        "<code>let p = document.querySelector(\"#prenom\").value;</code> puis l’affichage dans <code>#badge</code>."
+      ],
       solution: '<input id="prenom" type="text" placeholder="Ton prénom">\n<button id="faire">Créer mon badge</button>\n<p id="badge"></p>\n\n<script>\n  document.querySelector("#faire").addEventListener("click", function () {\n    let p = document.querySelector("#prenom").value;\n    document.querySelector("#badge").textContent = `Bienvenue, ${p} !`;\n  });\n</script>',
       verifier: function (ctx) {
         const champ = ctx.doc.querySelector('#prenom');
@@ -362,7 +414,11 @@ console.log(Number(age) + 5);  // 30 ✓</pre>
       type: 'html',
       consigne: '<strong>Entraînement : la calculatrice d\'âge de chien.</strong> L\'utilisateur tape son âge dans <code>#age</code> ; au clic sur <code>#calculer</code>, affiche dans <code>#resultat</code> : <code>En années de chien : X</code> où X = l\'âge × 7. Piège de la leçon inclus : sans <code>Number()</code>, 5 × ... marche mais 5 + ... aurait collé les textes — convertis proprement !',
       codeDepart: '<input id="age" type="number" placeholder="Ton âge">\n<button id="calculer">Calculer</button>\n<p id="resultat"></p>\n\n<script>\n\n</script>',
-      indice: '<code>let age = Number(document.querySelector("#age").value);</code> puis affiche <code>age * 7</code> dans le paragraphe.',
+      indices: [
+        "La valeur d’un champ est toujours du <strong>texte</strong>, même quand le champ est de type nombre. Et « 5 » × 7 ne donne pas ce qu’on croit.",
+        "<code>Number(…)</code> convertit le texte en nombre. Sans lui, la multiplication peut marcher par accident, mais l’addition collerait les chiffres bout à bout.",
+        "<code>let age = Number(document.querySelector(\"#age\").value);</code> puis <code>age * 7</code>."
+      ],
       solution: '<input id="age" type="number" placeholder="Ton âge">\n<button id="calculer">Calculer</button>\n<p id="resultat"></p>\n\n<script>\n  document.querySelector("#calculer").addEventListener("click", function () {\n    let age = Number(document.querySelector("#age").value);\n    document.querySelector("#resultat").textContent = `En années de chien : ${age * 7}`;\n  });\n</script>',
       verifier: function (ctx) {
         const champ = ctx.doc.querySelector('#age');
@@ -383,7 +439,11 @@ console.log(Number(age) + 5);  // 30 ✓</pre>
       type: 'html',
       consigne: '<strong>Défi : le compteur de caractères en direct.</strong> Comme sur les réseaux sociaux ! Avec l\'événement <code>"input"</code> (pas "click" !), affiche en permanence dans <code>#compte</code> le nombre de caractères tapés dans <code>#message</code>, au format <code>X / 100</code>. Bonus vérifié : si X dépasse 100, ajoute la classe <code>depasse</code> (fournie) au compteur, sinon retire-la.',
       codeDepart: '<style>\n  .depasse { color: red; font-weight: bold; }\n</style>\n\n<textarea id="message" placeholder="Écris ton message..."></textarea>\n<p id="compte">0 / 100</p>\n\n<script>\n  let champ = document.querySelector("#message");\n  let compte = document.querySelector("#compte");\n\n  champ.addEventListener("input", function () {\n\n  });\n</script>',
-      indice: 'Dans l\'écouteur : <code>let n = champ.value.length;</code> puis <code>compte.textContent = \`\${n} / 100\`;</code> puis un if/else avec <code>classList.add("depasse")</code> / <code>classList.remove("depasse")</code>.',
+      indices: [
+        "L’événement n’est pas le clic : il faut réagir à chaque frappe, donc écouter la saisie elle-même.",
+        "L’événement <code>\"input\"</code> se déclenche à chaque caractère. La longueur se lit avec <code>.value.length</code>, et la couleur se change en posant ou retirant une classe.",
+        "<code>let n = champ.value.length;</code> · <code>compte.textContent = `${n} / 100`;</code> · puis un <code>if/else</code> avec <code>classList</code>."
+      ],
       solution: '<style>\n  .depasse { color: red; font-weight: bold; }\n</style>\n\n<textarea id="message" placeholder="Écris ton message..."></textarea>\n<p id="compte">0 / 100</p>\n\n<script>\n  let champ = document.querySelector("#message");\n  let compte = document.querySelector("#compte");\n\n  champ.addEventListener("input", function () {\n    let n = champ.value.length;\n    compte.textContent = `${n} / 100`;\n    if (n > 100) {\n      compte.classList.add("depasse");\n    } else {\n      compte.classList.remove("depasse");\n    }\n  });\n</script>',
       verifier: function (ctx) {
         const champ = ctx.doc.querySelector('#message');
@@ -432,7 +492,11 @@ let relu = JSON.parse(localStorage.getItem("taches"));   // texte → objet</pre
       type: 'html',
       consigne: 'Le mémo permanent : au clic sur <code>#sauver</code>, sauvegarde le contenu du champ <code>#note</code> dans le localStorage sous la clé <code>"ma-note"</code> et affiche <code>Sauvegardé !</code> dans <code>#etat</code>. Au clic sur <code>#relire</code>, relis la valeur et affiche-la dans <code>#etat</code>.',
       codeDepart: '<input id="note" type="text" placeholder="Une note à retenir...">\n<button id="sauver">💾 Sauver</button>\n<button id="relire">📖 Relire</button>\n<p id="etat"></p>\n\n<script>\n\n</script>',
-      indice: 'Écouteur 1 : <code>localStorage.setItem("ma-note", document.querySelector("#note").value);</code> puis le message. Écouteur 2 : <code>etat.textContent = localStorage.getItem("ma-note");</code>',
+      indices: [
+        "Deux boutons, deux gestes opposés : l’un range une valeur sous un nom, l’autre va la rechercher par ce même nom.",
+        "<code>setItem(clé, valeur)</code> pour ranger, <code>getItem(clé)</code> pour relire. La clé doit être identique des deux côtés, au caractère près.",
+        "<code>localStorage.setItem(\"ma-note\", …value);</code> et <code>localStorage.getItem(\"ma-note\")</code>"
+      ],
       solution: '<input id="note" type="text" placeholder="Une note à retenir...">\n<button id="sauver">💾 Sauver</button>\n<button id="relire">📖 Relire</button>\n<p id="etat"></p>\n\n<script>\n  document.querySelector("#sauver").addEventListener("click", function () {\n    localStorage.setItem("ma-note", document.querySelector("#note").value);\n    document.querySelector("#etat").textContent = "Sauvegardé !";\n  });\n\n  document.querySelector("#relire").addEventListener("click", function () {\n    document.querySelector("#etat").textContent = localStorage.getItem("ma-note");\n  });\n</script>',
       verifier: function (ctx) {
         const note = ctx.doc.querySelector('#note');
@@ -458,7 +522,11 @@ let relu = JSON.parse(localStorage.getItem("taches"));   // texte → objet</pre
       type: 'html',
       consigne: '<strong>Défi : le score record.</strong> Un dé à lancer. À chaque clic sur <code>#lancer</code> : tire un nombre 1-100, affiche-le dans <code>#tirage</code>. Puis compare-le au record stocké (clé <code>"record"</code>, pense à <code>Number()</code> !) : s\'il le bat (ou si aucun record n\'existe), sauvegarde-le et affiche <code>Nouveau record : X</code> dans <code>#record</code>, sinon affiche <code>Record à battre : [record]</code>.',
       codeDepart: '<button id="lancer">🎲 Lancer (1-100)</button>\n<p id="tirage"></p>\n<p id="record"></p>\n\n<script>\n  document.querySelector("#lancer").addEventListener("click", function () {\n    let tirage = Math.floor(Math.random() * 100) + 1;\n    document.querySelector("#tirage").textContent = tirage;\n\n    // À toi : comparer au record stocké, sauvegarder si battu\n\n  });\n</script>',
-      indice: '<code>let record = Number(localStorage.getItem("record"));</code> (null devient 0, pratique !). Puis <code>if (tirage > record) { localStorage.setItem("record", tirage); ... } else { ... }</code>',
+      indices: [
+        "Le localStorage ne stocke que du <strong>texte</strong>. Un record relu tel quel se comparerait comme du texte — et « 9 » passerait devant « 100 ».",
+        "<code>Number(localStorage.getItem(\"record\"))</code> convertit, et transforme même l’absence de record en 0 — ce qui règle le premier lancer sans <code>if</code> supplémentaire.",
+        "<code>if (tirage &gt; record) { localStorage.setItem(\"record\", tirage); … }</code>"
+      ],
       solution: '<button id="lancer">🎲 Lancer (1-100)</button>\n<p id="tirage"></p>\n<p id="record"></p>\n\n<script>\n  document.querySelector("#lancer").addEventListener("click", function () {\n    let tirage = Math.floor(Math.random() * 100) + 1;\n    document.querySelector("#tirage").textContent = tirage;\n\n    let record = Number(localStorage.getItem("record"));\n    if (tirage > record) {\n      localStorage.setItem("record", tirage);\n      document.querySelector("#record").textContent = `Nouveau record : ${tirage}`;\n    } else {\n      document.querySelector("#record").textContent = `Record à battre : ${record}`;\n    }\n  });\n</script>',
       verifier: function (ctx) {
         const btn = ctx.doc.querySelector('#lancer');
@@ -522,7 +590,11 @@ typeof x             // "undefined" si x n'a jamais reçu de valeur</pre>
       type: 'js',
       consigne: 'Détective des types : pour chacune des quatre variables fournies, affiche son type avec <code>typeof</code>. Puis regarde le résultat et médite sur <code>b</code> : il a l\'air d\'un nombre... mais il n\'en est pas un !',
       codeDepart: 'let a = 42;\nlet b = "42";\nlet c = true;\nlet d = [1, 2, 3];\n\n// Affiche les 4 types\n',
-      indice: '<code>console.log(typeof a);</code> et ainsi de suite pour b, c, d.',
+      indices: [
+        "<code>typeof</code> s’écrit devant la valeur, sans parenthèses, et rend un texte qui nomme le type.",
+        "Quatre affichages, un par variable. Regarde bien celui de <code>b</code> : les guillemets changent tout.",
+        "<code>console.log(typeof a);</code>, et ainsi de suite pour <code>b</code>, <code>c</code> et <code>d</code>."
+      ],
       solution: 'let a = 42;\nlet b = "42";\nlet c = true;\nlet d = [1, 2, 3];\n\nconsole.log(typeof a);\nconsole.log(typeof b);\nconsole.log(typeof c);\nconsole.log(typeof d);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -537,7 +609,11 @@ typeof x             // "undefined" si x n'a jamais reçu de valeur</pre>
       type: 'js',
       consigne: '<strong>Entraînement : le parseur blindé.</strong> La fonction <code>lireDonnees</code> reçoit du texte censé être du JSON... mais parfois cassé. Complète-la avec <code>try/catch</code> : si <code>JSON.parse(texte)</code> réussit, retourne le résultat ; s\'il plante, retourne <code>"données illisibles"</code> SANS faire planter le programme. Les deux tests fournis doivent afficher le prénom puis le message d\'erreur.',
       codeDepart: 'function lireDonnees(texte) {\n  // try / catch ici\n\n}\n\nlet bon = lireDonnees(\'{"prenom": "Léa"}\');\nconsole.log(bon.prenom || bon);\n\nlet casse = lireDonnees(\'{prenom: Léa}\');\nconsole.log(casse.prenom || casse);',
-      indice: '<code>try { return JSON.parse(texte); } catch (erreur) { return "données illisibles"; }</code>',
+      indices: [
+        "<code>JSON.parse</code> lève une erreur quand le texte est mal formé. Sans protection, la fonction entière s’arrête.",
+        "Ce qui peut planter va dans le <code>try</code> ; ce qu’on fait en cas d’échec va dans le <code>catch</code>. Les deux peuvent contenir un <code>return</code>.",
+        "<code>try { return JSON.parse(texte); } catch (erreur) { return \"données illisibles\"; }</code>"
+      ],
       solution: 'function lireDonnees(texte) {\n  try {\n    return JSON.parse(texte);\n  } catch (erreur) {\n    return "données illisibles";\n  }\n}\n\nlet bon = lireDonnees(\'{"prenom": "Léa"}\');\nconsole.log(bon.prenom || bon);\n\nlet casse = lireDonnees(\'{prenom: Léa}\');\nconsole.log(casse.prenom || casse);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Le programme plante encore : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code> — c\'est exactement ce que le try/catch doit empêcher ! Entoure le JSON.parse.' };
@@ -551,7 +627,11 @@ typeof x             // "undefined" si x n'a jamais reçu de valeur</pre>
       type: 'js',
       consigne: '<strong>Défi final : la chasse aux 3 bugs.</strong> Ce programme devrait afficher <code>Total du panier : 60 euros</code>... mais il contient trois bugs classiques. Utilise la méthode : exécute, lis l\'erreur, corrige, recommence. (Les bugs : une faute de frappe de variable, un type texte au lieu d\'un nombre, et une condition avec = au lieu de ===.)',
       codeDepart: 'let panier = [10, "20", 30];\nlet total = 0;\n\nfor (const prix of panier) {\n  total += prix;\n}\n\nif (totale = 60) {\n  console.log("Total du panier : " + total + " euros");\n}',
-      indice: 'Bug 1 : <code>"20"</code> est un texte — corrige-le en <code>20</code> (ou convertis avec Number dans la boucle). Bug 2 : <code>totale</code> n\'existe pas, c\'est <code>total</code>. Bug 3 : la comparaison, c\'est <code>===</code>, pas <code>=</code>.',
+      indices: [
+        "Trois bugs, et la méthode est toujours la même : exécute, lis le message, corrige <strong>un seul</strong> problème, recommence.",
+        "Le premier se voit dans le résultat (un total inattendu), le deuxième dans le message d’erreur (un nom inconnu), le troisième dans une comparaison qui n’en est pas une.",
+        "Un <code>\"20\"</code> entre guillemets, un <code>totale</code> au lieu de <code>total</code>, et un <code>=</code> là où il faut <code>===</code>."
+      ],
       solution: 'let panier = [10, 20, 30];\nlet total = 0;\n\nfor (const prix of panier) {\n  total += prix;\n}\n\nif (total === 60) {\n  console.log("Total du panier : " + total + " euros");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Il reste une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code> — lis-la bien, elle nomme le coupable (indice : « totale » n\'existe nulle part).' };

@@ -39,7 +39,11 @@ let statut = (age >= 18) ? "majeur" : "mineur";
       type: 'js',
       consigne: 'La machine à menus : avec un <code>switch</code> sur la variable <code>jour</code>, affiche <code>Poisson</code> pour vendredi, <code>Pizza</code> pour samedi, <code>Rôti</code> pour dimanche, et <code>Plat du chef</code> pour tout le reste (default). Teste avec plusieurs jours !',
       codeDepart: 'let jour = "samedi";\n\n// Ton switch ici\n',
-      indice: '<code>switch (jour) { case "vendredi": console.log("Poisson"); break; case "samedi": ... default: console.log("Plat du chef"); }</code> — un break après chaque case !',
+      indices: [
+        "Un <code>switch</code> compare une valeur à plusieurs cas possibles. Chaque cas doit se terminer par un mot qui empêche de continuer dans le suivant.",
+        "Sans <code>break</code>, l’exécution « tombe » dans le cas d’après et affiche tout ce qui reste. Le <code>default</code>, lui, attrape ce qui n’a été prévu nulle part.",
+        "<code>switch (jour) { case \"vendredi\": … break; … default: … }</code> — un <code>break</code> après chaque <code>case</code>."
+      ],
       solution: 'let jour = "samedi";\n\nswitch (jour) {\n  case "vendredi":\n    console.log("Poisson");\n    break;\n  case "samedi":\n    console.log("Pizza");\n    break;\n  case "dimanche":\n    console.log("Rôti");\n    break;\n  default:\n    console.log("Plat du chef");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -57,7 +61,11 @@ let statut = (age >= 18) ? "majeur" : "mineur";
       type: 'js',
       consigne: '<strong>Entraînement : le ternaire.</strong> En UNE ligne chacune (avec l\'opérateur <code>? :</code>), crée : <code>parite</code> qui vaut <code>"pair"</code> ou <code>"impair"</code> selon <code>nombre % 2</code>, et <code>badge</code> qui vaut <code>"⭐ VIP"</code> si <code>points >= 100</code>, sinon <code>"Membre"</code>. Affiche les deux.',
       codeDepart: 'let nombre = 7;\nlet points = 150;\n\n// Deux ternaires, deux affichages\n',
-      indice: '<code>let parite = (nombre % 2 === 0) ? "pair" : "impair";</code> et le même schéma pour badge.',
+      indices: [
+        "Le ternaire condense un <code>if/else</code> qui ne fait qu’une chose : choisir entre deux valeurs. Il tient sur une ligne et rend directement un résultat.",
+        "La forme : la condition, puis <code>?</code>, puis la valeur si vrai, puis <code>:</code>, puis la valeur si faux. Le tout se range dans une variable.",
+        "<code>let parite = (nombre % 2 === 0) ? \"pair\" : \"impair\";</code> — même schéma pour <code>badge</code>."
+      ],
       solution: 'let nombre = 7;\nlet points = 150;\n\nlet parite = (nombre % 2 === 0) ? "pair" : "impair";\nlet badge = (points >= 100) ? "⭐ VIP" : "Membre";\n\nconsole.log(parite);\nconsole.log(badge);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -122,7 +130,11 @@ texte.includes("jour")             // true / false</pre>
       type: 'js',
       consigne: 'Le fichier d\'invités arrive en une seule ligne, séparée par des virgules. 1) Avec <code>split</code>, transforme-le en tableau <code>invites</code>. 2) Affiche le nombre d\'invités (5). 3) Avec une boucle, affiche chaque invité sur sa ligne.',
       codeDepart: 'let donnees = "Léa,Tom,Nina,Sam,Zoé";\n',
-      indice: '<code>let invites = donnees.split(",");</code> puis <code>console.log(invites.length);</code> puis un for...of.',
+      indices: [
+        "Une longue chaîne séparée par des virgules n’est pas encore une liste. Il faut la découper avant de pouvoir la compter ou la parcourir.",
+        "<code>split(\",\")</code> rend un tableau. Ensuite <code>.length</code> pour le compte, et une boucle pour l’affichage — <code>for…of</code> parcourt directement les valeurs.",
+        "<code>let invites = donnees.split(\",\");</code> puis <code>for (const invite of invites) { … }</code>"
+      ],
       solution: 'let donnees = "Léa,Tom,Nina,Sam,Zoé";\n\nlet invites = donnees.split(",");\nconsole.log(invites.length);\n\nfor (const invite of invites) {\n  console.log(invite);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -136,7 +148,11 @@ texte.includes("jour")             // true / false</pre>
       type: 'js',
       consigne: '<strong>Entraînement : le nettoyeur de pseudo.</strong> Le pseudo saisi est une horreur : espaces autour, et des espaces interdits au milieu. Nettoie-le en enchaînant les méthodes : <code>trim()</code> pour les bords, <code>replaceAll(" ", "_")</code> pour l\'intérieur, <code>toLowerCase()</code> pour uniformiser. Résultat attendu : <code>super_codeur_3000</code>.',
       codeDepart: 'let saisie = "   Super Codeur 3000  ";\n\n// Nettoie et affiche\n',
-      indice: 'Tout s\'enchaîne : <code>let pseudo = saisie.trim().replaceAll(" ", "_").toLowerCase();</code> — l\'ordre compte : trim d\'abord, sinon les espaces des bords deviennent des _ !',
+      indices: [
+        "Trois nettoyages à enchaîner, et leur <strong>ordre</strong> décide du résultat. Demande-toi ce que deviendraient les espaces des bords si tu les remplaçais avant de les couper.",
+        "<code>trim()</code> coupe les bords, <code>replaceAll(\" \", \"_\")</code> remplace l’intérieur, <code>toLowerCase()</code> met en minuscules. Chacune rend un texte, donc elles s’enchaînent.",
+        "<code>saisie.trim().replaceAll(\" \", \"_\").toLowerCase()</code> — <code>trim</code> en premier, sinon les espaces des bords deviendraient des tirets bas."
+      ],
       solution: 'let saisie = "   Super Codeur 3000  ";\n\nlet pseudo = saisie.trim().replaceAll(" ", "_").toLowerCase();\nconsole.log(pseudo);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -150,7 +166,11 @@ texte.includes("jour")             // true / false</pre>
       type: 'js',
       consigne: '<strong>Défi : les initiales.</strong> Écris une fonction <code>initiales(nomComplet)</code> qui retourne les initiales en majuscules séparées par des points : <code>initiales("marie curie")</code> → <code>M.C</code>. La méthode : split sur l\'espace, prendre le caractère [0] de chaque mot, toUpperCase, join avec un point. Teste avec les deux appels fournis.',
       codeDepart: 'function initiales(nomComplet) {\n\n}\n\nconsole.log(initiales("marie curie"));\nconsole.log(initiales("jean paul du pont"));',
-      indice: 'Dans la fonction : <code>let mots = nomComplet.split(" ");</code> puis <code>let lettres = mots.map((m) => m[0].toUpperCase());</code> puis <code>return lettres.join(".");</code>',
+      indices: [
+        "Trois étapes : séparer les mots, prendre la première lettre de chacun en majuscule, puis recoller avec des points.",
+        "<code>map()</code> transforme chaque élément et rend un <strong>nouveau</strong> tableau ; <code>join(\".\")</code> le recolle en intercalant le point.",
+        "<code>mots.map((m) =&gt; m[0].toUpperCase())</code> puis <code>lettres.join(\".\")</code>"
+      ],
       solution: 'function initiales(nomComplet) {\n  let mots = nomComplet.split(" ");\n  let lettres = mots.map((m) => m[0].toUpperCase());\n  return lettres.join(".");\n}\n\nconsole.log(initiales("marie curie"));\nconsole.log(initiales("jean paul du pont"));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -195,7 +215,11 @@ let max = Math.max(...tout);    // 4 — étale le tableau en arguments</pre>
       type: 'js',
       consigne: 'Voici des temps de course en secondes. 1) Trie-les en ordre CROISSANT (attention au piège des nombres !) et affiche le tableau trié. 2) Affiche le meilleur temps avec <code>Math.min(...)</code> et le spread.',
       codeDepart: 'let temps = [95, 102, 87, 110, 91];\n',
-      indice: '<code>temps.sort((a, b) => a - b);</code> puis <code>console.log(temps);</code> puis <code>console.log(Math.min(...temps));</code>',
+      indices: [
+        "<code>sort()</code> sans rien trie comme du <strong>texte</strong> : 102 passerait avant 87. Pour des nombres, il faut lui dire comment comparer.",
+        "La fonction de comparaison reçoit deux valeurs et rend leur différence : négatif si la première passe devant. Et le spread étale un tableau en arguments séparés.",
+        "<code>temps.sort((a, b) =&gt; a - b);</code> puis <code>Math.min(...temps)</code>"
+      ],
       solution: 'let temps = [95, 102, 87, 110, 91];\n\ntemps.sort((a, b) => a - b);\nconsole.log(temps);\n\nconsole.log(Math.min(...temps));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -211,7 +235,11 @@ let max = Math.max(...tout);    // 4 — étale le tableau en arguments</pre>
       type: 'js',
       consigne: '<strong>Entraînement : reduce.</strong> Le panier contient des prix. 1) Avec <code>reduce</code> (pas de boucle !), calcule le <code>total</code> (54). 2) Toujours avec reduce, calcule <code>totalRemise</code> : chaque prix compté à 90% (<code>somme + p * 0.9</code>) → 48.6. Affiche les deux.',
       codeDepart: 'let panier = [12, 30, 4, 8];\n',
-      indice: '<code>let total = panier.reduce((somme, p) => somme + p, 0);</code> — et pour la remise, remplace <code>p</code> par <code>p * 0.9</code>.',
+      indices: [
+        "<code>reduce</code>, c’est l’accumulateur en une seule expression : il parcourt le tableau en gardant un total d’un tour à l’autre.",
+        "Il reçoit deux choses : une fonction (le total jusqu’ici, l’élément courant) et la valeur de <strong>départ</strong> — le <code>0</code> tout à la fin, qu’on oublie souvent.",
+        "<code>panier.reduce((somme, p) =&gt; somme + p, 0)</code> — pour la remise, remplace <code>p</code> par <code>p * 0.9</code>."
+      ],
       solution: 'let panier = [12, 30, 4, 8];\n\nlet total = panier.reduce((somme, p) => somme + p, 0);\nconsole.log(total);\n\nlet totalRemise = panier.reduce((somme, p) => somme + p * 0.9, 0);\nconsole.log(totalRemise);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -226,7 +254,11 @@ let max = Math.max(...tout);    // 4 — étale le tableau en arguments</pre>
       type: 'js',
       consigne: '<strong>Défi : le podium.</strong> Écris une fonction <code>podium(scores)</code> qui retourne les 3 MEILLEURS scores, triés du plus grand au plus petit — SANS modifier le tableau d\'origine ! La combinaison : copier avec <code>[...scores]</code>, trier décroissant, garder les 3 premiers avec <code>slice(0, 3)</code>. Les tests vérifient aussi que l\'original est intact !',
       codeDepart: 'let scores = [820, 1450, 990, 1200, 760];\n\nfunction podium(scores) {\n\n}\n\nconsole.log(podium(scores));\nconsole.log(scores);   // doit rester dans l\'ordre d\'origine !',
-      indice: '<code>return [...scores].sort((a, b) => b - a).slice(0, 3);</code> — la copie [...] protège l\'original (sort modifie le tableau sur lequel il travaille !).',
+      indices: [
+        "Attention : <code>sort()</code> modifie le tableau sur lequel il travaille. Trier directement <code>scores</code> le changerait pour de bon.",
+        "Il faut donc trier une <strong>copie</strong>. Le spread <code>[...scores]</code> en fabrique une. Ensuite : trier décroissant, puis garder les trois premiers.",
+        "<code>return [...scores].sort((a, b) =&gt; b - a).slice(0, 3);</code>"
+      ],
       solution: 'let scores = [820, 1450, 990, 1200, 760];\n\nfunction podium(scores) {\n  return [...scores].sort((a, b) => b - a).slice(0, 3);\n}\n\nconsole.log(podium(scores));\nconsole.log(scores);   // doit rester dans l\'ordre d\'origine !',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -278,7 +310,11 @@ console.log(morpion[1][2]);   // "O" — ligne 1, colonne 2</pre>
       type: 'js',
       consigne: 'Dessine un rectangle d\'étoiles de 4 lignes sur 6 colonnes avec deux boucles imbriquées : chaque ligne est construite caractère par caractère (le motif de la leçon), puis affichée. Résultat : 4 lignes de <code>******</code>.',
       codeDepart: '// Le rectangle 4 × 6\n',
-      indice: 'Boucle externe (4 tours) : <code>let ligne = "";</code> puis boucle interne (6 tours) : <code>ligne += "*";</code> puis <code>console.log(ligne);</code> après la boucle interne.',
+      indices: [
+        "Deux boucles emboîtées : celle du dehors compte les lignes, celle du dedans construit une ligne caractère par caractère.",
+        "La ligne se remet à vide au début de chaque tour extérieur, et ne s’affiche qu’<strong>après</strong> que la boucle intérieure a fini de la remplir.",
+        "Externe : <code>let ligne = \"\";</code> · interne : <code>ligne += \"*\";</code> · puis <code>console.log(ligne);</code> après l’interne."
+      ],
       solution: 'for (let i = 1; i <= 4; i++) {\n  let ligne = "";\n  for (let j = 1; j <= 6; j++) {\n    ligne += "*";\n  }\n  console.log(ligne);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -293,7 +329,11 @@ console.log(morpion[1][2]);   // "O" — ligne 1, colonne 2</pre>
       type: 'js',
       consigne: '<strong>Entraînement : la pyramide.</strong> Même motif, mais la ligne i contient i étoiles : 1 étoile, puis 2, puis 3, puis 4, puis 5. L\'astuce : la boucle interne va de 1 jusqu\'à... <code>i</code> — la variable de la boucle externe !',
       codeDepart: '// La pyramide de 5 étages\n',
-      indice: '<code>for (let i = 1; i <= 5; i++) { let ligne = ""; for (let j = 1; j <= i; j++) { ligne += "*"; } console.log(ligne); }</code> — le <code>j <= i</code> fait toute la magie.',
+      indices: [
+        "Même structure qu’au précédent. Une seule chose change, et elle se trouve dans la condition de la boucle intérieure.",
+        "La boucle intérieure ne va plus jusqu’à un nombre fixe, mais jusqu’à <code>i</code> — la variable de la boucle extérieure. La ligne 3 aura donc 3 étoiles.",
+        "<code>for (let j = 1; j &lt;= i; j++)</code> — c’est tout ce qui diffère."
+      ],
       solution: 'for (let i = 1; i <= 5; i++) {\n  let ligne = "";\n  for (let j = 1; j <= i; j++) {\n    ligne += "*";\n  }\n  console.log(ligne);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -309,7 +349,11 @@ console.log(morpion[1][2]);   // "O" — ligne 1, colonne 2</pre>
       type: 'js',
       consigne: '<strong>Défi : le morpion.</strong> Voici une grille 2D. 1) Affiche-la ligne par ligne : chaque ligne du tableau devient un texte via <code>join(" | ")</code>. 2) Puis vérifie la DIAGONALE (cases [0][0], [1][1], [2][2]) : si les trois sont identiques, affiche <code>[symbole] gagne !</code>.',
       codeDepart: 'let grille = [\n  ["X", "O", "O"],\n  ["O", "X", "O"],\n  ["O", "O", "X"]\n];\n',
-      indice: 'Affichage : <code>for (const ligne of grille) { console.log(ligne.join(" | ")); }</code>. Diagonale : <code>if (grille[0][0] === grille[1][1] && grille[1][1] === grille[2][2]) { ... }</code>',
+      indices: [
+        "Deux parties indépendantes : afficher la grille, puis tester trois cases précises. Dans un tableau 2D, une case se désigne par <strong>deux</strong> crochets.",
+        "<code>join(\" | \")</code> transforme une ligne en texte. Pour la diagonale, il faut comparer les trois cases entre elles — donc deux comparaisons reliées par un « et ».",
+        "<code>console.log(ligne.join(\" | \"));</code> puis <code>if (grille[0][0] === grille[1][1] &amp;&amp; grille[1][1] === grille[2][2])</code>"
+      ],
       solution: 'let grille = [\n  ["X", "O", "O"],\n  ["O", "X", "O"],\n  ["O", "O", "X"]\n];\n\nfor (const ligne of grille) {\n  console.log(ligne.join(" | "));\n}\n\nif (grille[0][0] === grille[1][1] && grille[1][1] === grille[2][2]) {\n  console.log(grille[0][0] + " gagne !");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -358,7 +402,11 @@ troisFois(() => console.log("hop"));   // hop hop hop</pre>
       type: 'js',
       consigne: 'La machine à café configurable : écris <code>commander(boisson = "café", taille = "moyen")</code> qui RETOURNE <code>Un [boisson] [taille], tout de suite !</code>. Teste les trois appels fournis — le troisième sans aucun argument doit utiliser les deux défauts.',
       codeDepart: 'function commander(boisson, taille) {\n\n}\n\nconsole.log(commander("thé", "grand"));\nconsole.log(commander("chocolat"));\nconsole.log(commander());',
-      indice: 'Les défauts se déclarent dans la parenthèse : <code>function commander(boisson = "café", taille = "moyen")</code> — puis un return avec backticks.',
+      indices: [
+        "Une valeur par défaut sert quand l’appelant ne donne rien. Le troisième appel, sans aucun argument, doit donc utiliser les deux.",
+        "Les défauts s’écrivent dans la parenthèse du <code>function</code>, avec un <code>=</code>. Et la fonction <strong>retourne</strong> la phrase, elle ne l’affiche pas.",
+        "<code>function commander(boisson = \"café\", taille = \"moyen\") { return `Un ${boisson} ${taille}, tout de suite !`; }</code>"
+      ],
       solution: 'function commander(boisson = "café", taille = "moyen") {\n  return `Un ${boisson} ${taille}, tout de suite !`;\n}\n\nconsole.log(commander("thé", "grand"));\nconsole.log(commander("chocolat"));\nconsole.log(commander());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -373,7 +421,11 @@ troisFois(() => console.log("hop"));   // hop hop hop</pre>
       type: 'js',
       consigne: '<strong>Entraînement : ton premier callback.</strong> Écris <code>repeter(n, action)</code> qui exécute la fonction <code>action</code> n fois, en lui passant le numéro du tour (de 1 à n). Puis appelle <code>repeter(3, (i) => console.log("Tour " + i));</code> — résultat : Tour 1, Tour 2, Tour 3.',
       codeDepart: 'function repeter(n, action) {\n\n}\n\nrepeter(3, (i) => console.log("Tour " + i));',
-      indice: 'Dans la fonction : <code>for (let i = 1; i <= n; i++) { action(i); }</code> — action est une fonction reçue en paramètre : on l\'appelle avec des parenthèses !',
+      indices: [
+        "Le second paramètre n’est pas une valeur : c’est une <strong>fonction</strong>. On la reçoit, et on s’en sert.",
+        "Une fonction reçue en paramètre s’appelle comme n’importe quelle autre : avec des parenthèses, en lui passant ce qu’elle attend — ici, le numéro du tour.",
+        "<code>for (let i = 1; i &lt;= n; i++) { action(i); }</code>"
+      ],
       solution: 'function repeter(n, action) {\n  for (let i = 1; i <= n; i++) {\n    action(i);\n  }\n}\n\nrepeter(3, (i) => console.log("Tour " + i));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -434,7 +486,11 @@ clearInterval(minuteur);         // stop !</pre>
       type: 'js',
       consigne: 'La carte du jour : avec <code>new Date()</code>, affiche 1) l\'année actuelle, 2) le jour du mois, 3) la phrase <code>Nous sommes en [année]</code>. Ton code doit marcher n\'importe quel jour — aucune valeur écrite à la main !',
       codeDepart: 'let maintenant = new Date();\n',
-      indice: '<code>console.log(maintenant.getFullYear());</code>, <code>console.log(maintenant.getDate());</code> puis la phrase en backticks avec getFullYear() dedans.',
+      indices: [
+        "<code>new Date()</code> capture l’instant présent. Tout ce qu’on veut en tirer passe par des méthodes, jamais par une valeur écrite à la main.",
+        "L’année s’obtient avec <code>getFullYear()</code>, le jour du mois avec <code>getDate()</code>. Les deux s’appellent avec des parenthèses.",
+        "<code>maintenant.getFullYear()</code>, <code>maintenant.getDate()</code>, puis une phrase en accents graves."
+      ],
       solution: 'let maintenant = new Date();\n\nconsole.log(maintenant.getFullYear());\nconsole.log(maintenant.getDate());\nconsole.log(`Nous sommes en ${maintenant.getFullYear()}`);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -451,7 +507,11 @@ clearInterval(minuteur);         // stop !</pre>
       type: 'js',
       consigne: '<strong>Entraînement : le calculateur d\'âge.</strong> Écris <code>calculerAge(anneeNaissance)</code> qui utilise l\'année ACTUELLE (via Date, pas en dur !) pour retourner l\'âge. Puis affiche <code>calculerAge(2000)</code> et la phrase <code>Le web a [âge] ans</code> avec <code>calculerAge(1991)</code> (année de naissance du web !).',
       codeDepart: 'function calculerAge(anneeNaissance) {\n\n}\n\nconsole.log(calculerAge(2000));\nconsole.log(`Le web a ${calculerAge(1991)} ans`);',
-      indice: 'Dans la fonction : <code>return new Date().getFullYear() - anneeNaissance;</code>',
+      indices: [
+        "L’âge, c’est une soustraction. La seule difficulté : l’année actuelle ne doit pas être écrite en dur, sinon le code sera faux l’an prochain.",
+        "On peut créer la date et lire son année dans la même expression, sans passer par une variable intermédiaire.",
+        "<code>return new Date().getFullYear() - anneeNaissance;</code>"
+      ],
       solution: 'function calculerAge(anneeNaissance) {\n  return new Date().getFullYear() - anneeNaissance;\n}\n\nconsole.log(calculerAge(2000));\nconsole.log(`Le web a ${calculerAge(1991)} ans`);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -515,7 +575,11 @@ clearInterval(minuteur);         // stop !</pre>
       type: 'html',
       consigne: 'Le détecteur de touches : écoute <code>keydown</code> sur <code>document</code> et affiche dans <code>#touche</code> la phrase <code>Touche : [la touche]</code> à chaque frappe (via <code>evenement.key</code>). Clique dans l\'aperçu puis tape des lettres et des flèches pour tester !',
       codeDepart: '<h2>Tape sur ton clavier !</h2>\n<p id="touche" style="font-size: 24px; font-weight: bold;">En attente...</p>\n\n<script>\n\n</script>',
-      indice: '<code>document.addEventListener("keydown", function (evenement) { document.querySelector("#touche").textContent = "Touche : " + evenement.key; });</code>',
+      indices: [
+        "Cette fois l’écouteur ne se met pas sur un bouton mais sur le document entier : une touche ne vise aucun élément en particulier.",
+        "La fonction de l’écouteur reçoit un <strong>événement</strong> en paramètre. C’est lui qui porte la touche pressée, dans <code>.key</code>.",
+        "<code>document.addEventListener(\"keydown\", function (evenement) { … evenement.key … });</code>"
+      ],
       solution: '<h2>Tape sur ton clavier !</h2>\n<p id="touche" style="font-size: 24px; font-weight: bold;">En attente...</p>\n\n<script>\n  document.addEventListener("keydown", function (evenement) {\n    document.querySelector("#touche").textContent = "Touche : " + evenement.key;\n  });\n</script>',
       verifier: function (ctx) {
         const p = ctx.doc.querySelector('#touche');
@@ -533,7 +597,11 @@ clearInterval(minuteur);         // stop !</pre>
       hauteur: 300,
       consigne: '<strong>Défi : le personnage qui bouge.</strong> Fais bouger le carré au clavier : sur <code>ArrowRight</code>, augmente sa position de 20 (variable <code>position</code>, appliquée via <code>carre.style.marginLeft = position + "px"</code>) ; sur <code>ArrowLeft</code>, diminue de 20 — sans jamais descendre sous 0 ! Clique dans l\'aperçu puis pilote aux flèches.',
       codeDepart: '<style>\n  #carre {\n    width: 50px; height: 50px;\n    background: #4f6df5;\n    border-radius: 8px;\n    margin-left: 0px;\n  }\n</style>\n\n<h2>Pilote le carré aux flèches !</h2>\n<div id="carre"></div>\n\n<script>\n  let carre = document.querySelector("#carre");\n  let position = 0;\n\n  document.addEventListener("keydown", function (evenement) {\n\n  });\n</script>',
-      indice: 'Dans l\'écouteur : <code>if (evenement.key === "ArrowRight") { position += 20; }</code>, un <code>else if</code> pour ArrowLeft avec un garde-fou (<code>if (position > 0)</code> ou remise à 0), puis <code>carre.style.marginLeft = position + "px";</code>',
+      indices: [
+        "Une variable retient la position, et chaque flèche la modifie. Mais changer la variable ne suffit pas : il faut aussi l’appliquer au carré.",
+        "On compare <code>evenement.key</code> à <code>\"ArrowRight\"</code> et <code>\"ArrowLeft\"</code>. La position s’applique avec <code>carre.style.marginLeft = position + \"px\"</code> — l’unité est obligatoire.",
+        "<code>if (evenement.key === \"ArrowRight\") { position += 20; }</code>, un <code>else if</code> pour la gauche avec un garde-fou à 0, puis l’application du style."
+      ],
       solution: '<style>\n  #carre {\n    width: 50px; height: 50px;\n    background: #4f6df5;\n    border-radius: 8px;\n    margin-left: 0px;\n  }\n</style>\n\n<h2>Pilote le carré aux flèches !</h2>\n<div id="carre"></div>\n\n<script>\n  let carre = document.querySelector("#carre");\n  let position = 0;\n\n  document.addEventListener("keydown", function (evenement) {\n    if (evenement.key === "ArrowRight") {\n      position += 20;\n    } else if (evenement.key === "ArrowLeft") {\n      position -= 20;\n      if (position < 0) {\n        position = 0;\n      }\n    }\n    carre.style.marginLeft = position + "px";\n  });\n</script>',
       verifier: function (ctx) {
         const carre = ctx.doc.querySelector('#carre');
@@ -582,7 +650,11 @@ else { ... }</pre>
       hauteur: 300,
       consigne: 'Implémente le jeu complet selon le cahier des charges : lecture + conversion, comparaison à trois branches, compteur d\'essais, et le message de victoire <code>Trouvé en X essais !</code>. Puis... joue !',
       codeDepart: '<style>\n  body { font-family: sans-serif; text-align: center; padding: 20px; }\n  input { font-size: 18px; padding: 8px; width: 90px; }\n  button { font-size: 18px; padding: 8px 18px; }\n  #reponse { font-size: 22px; font-weight: bold; min-height: 30px; }\n</style>\n\n<h2>🎯 Le nombre mystère (1 à 100)</h2>\n<input id="essai" type="number" min="1" max="100">\n<button id="deviner">Deviner !</button>\n<p id="reponse">À toi de jouer...</p>\n\n<script>\n  window.secret = Math.floor(Math.random() * 100) + 1;\n  let nbEssais = 0;\n\n  document.querySelector("#deviner").addEventListener("click", function () {\n    // À toi !\n\n  });\n</script>',
-      indice: 'Dans l\'écouteur : <code>let essai = Number(document.querySelector("#essai").value);<br>nbEssais++;<br>let reponse = document.querySelector("#reponse");<br>if (essai < window.secret) { reponse.textContent = "Plus grand !"; }<br>else if (essai > window.secret) { reponse.textContent = "Plus petit !"; }<br>else { reponse.textContent = \`Trouvé en \${nbEssais} essais !\`; }</code>',
+      indices: [
+        "Quatre choses à faire dans l’écouteur, dans cet ordre : lire la saisie, compter l’essai, comparer, puis répondre.",
+        "La valeur d’un champ est toujours du <strong>texte</strong> : <code>Number(…)</code> la convertit, sinon la comparaison sera fausse. Et la comparaison a trois branches : trop petit, trop grand, ou gagné.",
+        "<code>let essai = Number(document.querySelector(\"#essai\").value);</code> · <code>nbEssais++;</code> · puis le <code>if / else if / else</code>."
+      ],
       solution: '<style>\n  body { font-family: sans-serif; text-align: center; padding: 20px; }\n  input { font-size: 18px; padding: 8px; width: 90px; }\n  button { font-size: 18px; padding: 8px 18px; }\n  #reponse { font-size: 22px; font-weight: bold; min-height: 30px; }\n</style>\n\n<h2>🎯 Le nombre mystère (1 à 100)</h2>\n<input id="essai" type="number" min="1" max="100">\n<button id="deviner">Deviner !</button>\n<p id="reponse">À toi de jouer...</p>\n\n<script>\n  window.secret = Math.floor(Math.random() * 100) + 1;\n  let nbEssais = 0;\n\n  document.querySelector("#deviner").addEventListener("click", function () {\n    let essai = Number(document.querySelector("#essai").value);\n    nbEssais++;\n\n    let reponse = document.querySelector("#reponse");\n    if (essai < window.secret) {\n      reponse.textContent = "Plus grand !";\n    } else if (essai > window.secret) {\n      reponse.textContent = "Plus petit !";\n    } else {\n      reponse.textContent = `Trouvé en ${nbEssais} essais !`;\n    }\n  });\n</script>',
       verifier: function (ctx) {
         const champ = ctx.doc.querySelector('#essai');

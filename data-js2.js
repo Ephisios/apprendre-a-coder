@@ -42,7 +42,11 @@ console.log(total);       // 1+2+3+4+5 = 15</pre>
       type: 'js',
       consigne: 'Écris le décompte d\'une fusée avec une boucle <code>for</code> : affiche les nombres de <code>5</code> à <code>1</code> (dans cet ordre décroissant !), puis, après la boucle, affiche <code>Décollage !</code>. Astuce : un compteur peut aussi descendre, avec <code>i--</code>.',
       codeDepart: '// Le compte à rebours\n',
-      indice: 'Départ à 5, on continue tant que <code>i >= 1</code>, et on descend : <code>for (let i = 5; i >= 1; i--) { ... }</code>. Le « Décollage ! » se met après l\'accolade fermante.',
+      indices: [
+        "Une boucle <code>for</code> a trois parties, séparées par des points-virgules : d’où l’on part, jusqu’où l’on va, et comment on avance. Ici, on ne monte pas : on descend.",
+        "Départ à 5, condition « tant que <code>i</code> vaut au moins 1 », et un pas qui retire 1 à chaque tour. Le « Décollage ! » n’est affiché qu’une fois : il va donc après l’accolade fermante.",
+        "<code>for (let i = 5; i &gt;= 1; i--) { … }</code> puis, en dehors, <code>console.log(\"Décollage !\");</code>"
+      ],
       solution: 'for (let i = 5; i >= 1; i--) {\n  console.log(i);\n}\nconsole.log("Décollage !");',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -60,7 +64,11 @@ console.log(total);       // 1+2+3+4+5 = 15</pre>
       type: 'js',
       consigne: '<strong>Entraînement : la tirelire.</strong> Chaque semaine pendant 8 semaines, tu mets ton numéro de semaine en euros dans la tirelire (1€ la semaine 1, 2€ la semaine 2...). Avec le motif accumulateur, calcule le total dans une variable <code>tirelire</code> et affiche-le APRÈS la boucle (résultat : 36).',
       codeDepart: 'let tirelire = 0;\n\n// La boucle des 8 semaines\n',
-      indice: '<code>for (let i = 1; i <= 8; i++) { tirelire += i; }</code> puis <code>console.log(tirelire);</code> après l\'accolade fermante.',
+      indices: [
+        "Le motif de l’accumulateur : une variable qui garde le total, déclarée <strong>avant</strong> la boucle — sinon elle repartirait de zéro à chaque tour.",
+        "Dans la boucle, on ajoute le numéro de semaine au total : <code>tirelire += i;</code>. L’affichage vient après l’accolade fermante.",
+        "<code>let tirelire = 0;</code> · <code>for (let i = 1; i &lt;= 8; i++) { tirelire += i; }</code> · puis l’affichage."
+      ],
       solution: 'let tirelire = 0;\n\nfor (let i = 1; i <= 8; i++) {\n  tirelire += i;\n}\n\nconsole.log(tirelire);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -76,7 +84,11 @@ console.log(total);       // 1+2+3+4+5 = 15</pre>
       type: 'js',
       consigne: '<strong>Défi : la table de multiplication.</strong> Affiche la table de 7 complète avec une boucle et des backticks : dix lignes de la forme <code>7 x 1 = 7</code>, <code>7 x 2 = 14</code>... jusqu\'à <code>7 x 10 = 70</code>. Le calcul doit être fait par l\'ordinateur (<code>7 * i</code>), pas par toi !',
       codeDepart: '// La table de 7\n',
-      indice: '<code>for (let i = 1; i <= 10; i++) { console.log(\`7 x \${i} = \${7 * i}\`); }</code> — deux <code>\${}</code> dans le même texte, dont un contenant un calcul.',
+      indices: [
+        "Une seule ligne de code, répétée dix fois avec une valeur qui change. Et le résultat doit être calculé, pas écrit à la main.",
+        "Les accents graves permettent d’insérer plusieurs valeurs dans un même texte. L’une est le compteur, l’autre un <strong>calcul</strong> — on a le droit de calculer dans un <code>${…}</code>.",
+        "<code>console.log(`7 x ${i} = ${7 * i}`);</code>"
+      ],
       solution: 'for (let i = 1; i <= 10; i++) {\n  console.log(`7 x ${i} = ${7 * i}`);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -134,7 +146,11 @@ for (let i = 0; i < invites.length; i++) {
       type: 'js',
       consigne: 'Crée un tableau <code>courses</code> avec 3 articles de ton choix. Ajoutes-en un 4e avec <code>push</code>. Puis parcours le tableau avec une boucle <code>for</code> pour afficher chaque article précédé d\'un tiret, par exemple <code>- pain</code>.',
       codeDepart: '// Ta liste de courses\n',
-      indice: 'Création : <code>let courses = ["a", "b", "c"];</code> puis <code>courses.push("d");</code> puis la boucle : <code>for (let i = 0; i < courses.length; i++) { console.log("- " + courses[i]); }</code>',
+      indices: [
+        "Trois gestes : créer le tableau, y ajouter un élément, puis le parcourir. Le parcours se fait par les <strong>positions</strong>, pas par les valeurs.",
+        "Un tableau s’écrit entre crochets. <code>push()</code> ajoute à la fin. La boucle part de 0 et s’arrête <em>avant</em> <code>courses.length</code>.",
+        "<code>for (let i = 0; i &lt; courses.length; i++)</code>, et dedans <code>console.log(\"- \" + courses[i]);</code>"
+      ],
       solution: 'let courses = ["pain", "lait", "œufs"];\ncourses.push("chocolat");\n\nfor (let i = 0; i < courses.length; i++) {\n  console.log("- " + courses[i]);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -150,7 +166,11 @@ for (let i = 0; i < invites.length; i++) {
       type: 'js',
       consigne: '<strong>Entraînement : premier et dernier.</strong> Voici un tableau de 6 villes-étapes d\'un voyage. SANS compter à la main (le tableau pourrait changer !), affiche : la ville de départ (premier élément), la ville d\'arrivée (dernier élément, via <code>length - 1</code>), et le nombre total d\'étapes.',
       codeDepart: 'let etapes = ["Paris", "Dijon", "Lyon", "Avignon", "Aix", "Nice"];\n',
-      indice: 'Départ : <code>etapes[0]</code>. Arrivée : <code>etapes[etapes.length - 1]</code> (6 éléments → dernier index 5). Total : <code>etapes.length</code>.',
+      indices: [
+        "Le premier élément est à la position 0. Le dernier n’est donc pas à <code>length</code>, mais juste avant.",
+        "Avec 6 éléments, les positions vont de 0 à 5 : le dernier index est <code>length - 1</code>. Et ça reste vrai quelle que soit la taille du tableau.",
+        "<code>etapes[0]</code>, <code>etapes[etapes.length - 1]</code>, et <code>etapes.length</code>."
+      ],
       solution: 'let etapes = ["Paris", "Dijon", "Lyon", "Avignon", "Aix", "Nice"];\n\nconsole.log(etapes[0]);\nconsole.log(etapes[etapes.length - 1]);\nconsole.log(etapes.length);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -165,7 +185,11 @@ for (let i = 0; i < invites.length; i++) {
       type: 'js',
       consigne: '<strong>Défi : les statistiques de la classe.</strong> Voici les notes d\'une classe. Avec UNE boucle et le motif accumulateur, calcule la <strong>somme</strong> des notes, puis la <strong>moyenne</strong> (somme divisée par le nombre de notes, SANS écrire 5 à la main). Affiche la somme (61) puis la moyenne (12.2).',
       codeDepart: 'let notes = [14, 9, 16, 11, 11];\n\nlet somme = 0;\n// La boucle...\n',
-      indice: 'Dans la boucle : <code>somme += notes[i];</code>. Après la boucle : <code>let moyenne = somme / notes.length;</code> puis les deux console.log.',
+      indices: [
+        "Encore l’accumulateur, mais cette fois sur les valeurs d’un tableau. La moyenne, elle, ne se calcule qu’une seule fois : après la boucle.",
+        "Dans la boucle : ajouter <code>notes[i]</code> à la somme. Après : diviser par <code>notes.length</code> plutôt que par 5, pour que ça marche encore si le tableau change.",
+        "<code>somme += notes[i];</code> dans la boucle, puis <code>let moyenne = somme / notes.length;</code>"
+      ],
       solution: 'let notes = [14, 9, 16, 11, 11];\n\nlet somme = 0;\nfor (let i = 0; i < notes.length; i++) {\n  somme += notes[i];\n}\n\nlet moyenne = somme / notes.length;\nconsole.log(somme);\nconsole.log(moyenne);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -221,7 +245,11 @@ console.log(doubler(5) + 1);  // 11</pre>
       type: 'js',
       consigne: 'Écris une fonction <code>aireRectangle</code> qui prend deux paramètres <code>largeur</code> et <code>hauteur</code>, et <strong>retourne</strong> leur produit. Puis affiche le résultat de <code>aireRectangle(6, 4)</code> et celui de <code>aireRectangle(10, 3)</code>.',
       codeDepart: 'function aireRectangle(largeur, hauteur) {\n  // à compléter\n}\n\n// Appelle la fonction et affiche les résultats\n',
-      indice: 'Dans la fonction : <code>return largeur * hauteur;</code>. Ensuite : <code>console.log(aireRectangle(6, 4));</code>',
+      indices: [
+        "Une fonction se déclare une fois, puis s’appelle autant qu’on veut. Ici, elle ne doit rien afficher : elle <strong>retourne</strong> un résultat.",
+        "Les deux paramètres se déclarent entre les parenthèses du <code>function</code>. C’est à l’extérieur qu’on affiche ce qu’elle a retourné.",
+        "<code>function aireRectangle(largeur, hauteur) { return largeur * hauteur; }</code> puis <code>console.log(aireRectangle(6, 4));</code>"
+      ],
       solution: 'function aireRectangle(largeur, hauteur) {\n  return largeur * hauteur;\n}\n\nconsole.log(aireRectangle(6, 4));\nconsole.log(aireRectangle(10, 3));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -236,7 +264,11 @@ console.log(doubler(5) + 1);  // 11</pre>
       type: 'js',
       consigne: '<strong>Entraînement : fonction + condition.</strong> Écris une fonction <code>categorie(age)</code> qui RETOURNE <code>"enfant"</code> si l\'âge est inférieur à 12, <code>"ado"</code> s\'il est inférieur à 18, et <code>"adulte"</code> sinon. Teste-la en affichant <code>categorie(8)</code>, <code>categorie(15)</code> et <code>categorie(30)</code>.',
       codeDepart: 'function categorie(age) {\n\n}\n\n// Les trois tests\n',
-      indice: 'Dans la fonction : <code>if (age < 12) { return "enfant"; } else if (age < 18) { return "ado"; } return "adulte";</code> — dès qu\'un return s\'exécute, la fonction s\'arrête !',
+      indices: [
+        "Trois réponses possibles, mais la fonction n’en rend qu’une. Ce qui compte : dès qu’un <code>return</code> s’exécute, la fonction s’arrête net.",
+        "On peut donc enchaîner les tests du plus restrictif au plus large. Le dernier cas n’a même pas besoin de condition : s’il reste quelque chose, c’est lui.",
+        "<code>if (age &lt; 12) return \"enfant\";</code> · <code>else if (age &lt; 18) return \"ado\";</code> · puis <code>return \"adulte\";</code>"
+      ],
       solution: 'function categorie(age) {\n  if (age < 12) {\n    return "enfant";\n  } else if (age < 18) {\n    return "ado";\n  }\n  return "adulte";\n}\n\nconsole.log(categorie(8));\nconsole.log(categorie(15));\nconsole.log(categorie(30));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -252,7 +284,11 @@ console.log(doubler(5) + 1);  // 11</pre>
       type: 'js',
       consigne: '<strong>Défi : les fonctions s\'appellent entre elles.</strong> 1) Écris <code>prixTTC(prixHT)</code> qui retourne le prix multiplié par <code>1.2</code> (TVA 20%). 2) Écris <code>ticket(nom, prixHT)</code> qui UTILISE <code>prixTTC</code> pour retourner la phrase <code>[nom] : [prix] euros TTC</code>. 3) Affiche <code>ticket("Clavier", 50)</code> → <code>Clavier : 60 euros TTC</code>.',
       codeDepart: 'function prixTTC(prixHT) {\n\n}\n\nfunction ticket(nom, prixHT) {\n\n}\n\nconsole.log(ticket("Clavier", 50));',
-      indice: 'Dans <code>ticket</code>, appelle l\'autre fonction : <code>return \`\${nom} : \${prixTTC(prixHT)} euros TTC\`;</code> — une fonction peut en appeler une autre !',
+      indices: [
+        "Deux fonctions, et la seconde se sert de la première. C’est normal : une fonction peut en appeler une autre, exactement comme tu appelles les tiennes.",
+        "Dans <code>ticket</code>, à l’endroit où il faut le prix, écris l’appel à <code>prixTTC(prixHT)</code> — son résultat prendra sa place.",
+        "<code>return `${nom} : ${prixTTC(prixHT)} euros TTC`;</code>"
+      ],
       solution: 'function prixTTC(prixHT) {\n  return prixHT * 1.2;\n}\n\nfunction ticket(nom, prixHT) {\n  return `${nom} : ${prixTTC(prixHT)} euros TTC`;\n}\n\nconsole.log(ticket("Clavier", 50));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -310,7 +346,11 @@ for (let i = 0; i < films.length; i++) {
       type: 'js',
       consigne: 'Crée un objet <code>livre</code> avec trois clés : <code>titre</code> (texte), <code>auteur</code> (texte) et <code>pages</code> (nombre). Affiche ensuite la phrase <code>[titre], de [auteur]</code> en utilisant les clés de l\'objet, puis ajoute une clé <code>lu</code> valant <code>true</code>, et affiche l\'objet entier avec <code>console.log(livre)</code>.',
       codeDepart: 'let livre = {\n\n};\n',
-      indice: 'Dans les accolades : <code>titre: "...", auteur: "...", pages: 250</code>. La phrase : <code>console.log(livre.titre + ", de " + livre.auteur);</code>. La nouvelle clé : <code>livre.lu = true;</code>',
+      indices: [
+        "Un objet regroupe des informations <strong>nommées</strong>, entre accolades. Chacune a un nom et une valeur, séparés par deux-points.",
+        "On accède à une valeur avec un point : <code>livre.titre</code>. Et écrire à une clé qui n’existe pas encore la crée au passage.",
+        "<code>let livre = { titre: \"…\", auteur: \"…\", pages: 700 };</code>, puis <code>livre.lu = true;</code>"
+      ],
       solution: 'let livre = {\n  titre: "Dune",\n  auteur: "Frank Herbert",\n  pages: 700\n};\n\nconsole.log(livre.titre + ", de " + livre.auteur);\nlivre.lu = true;\nconsole.log(livre);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>. Vérifie les virgules entre les paires clé: valeur.' };
@@ -327,7 +367,11 @@ for (let i = 0; i < films.length; i++) {
       type: 'js',
       consigne: '<strong>Entraînement : le tableau d\'objets.</strong> Voici la playlist du moment. Avec une boucle, affiche chaque morceau au format <code>[titre] — [duree] min</code>, puis calcule et affiche la durée TOTALE de la playlist (résultat : 11).',
       codeDepart: 'let playlist = [\n  { titre: "Intro", duree: 2 },\n  { titre: "Voyage", duree: 4 },\n  { titre: "Final", duree: 5 }\n];\n',
-      indice: 'Dans la boucle : <code>console.log(\`\${playlist[i].titre} — \${playlist[i].duree} min\`);</code> et l\'accumulateur : <code>total += playlist[i].duree;</code>',
+      indices: [
+        "Un tableau d’objets : la boucle te donne une <strong>position</strong>, et à cette position se trouve un objet dont il faut lire les clés.",
+        "<code>playlist[i]</code> est l’objet ; <code>playlist[i].duree</code> est sa durée. L’accumulateur additionne ces durées au fil des tours.",
+        "Dans la boucle : l’affichage avec <code>${playlist[i].titre}</code>, et <code>total += playlist[i].duree;</code>"
+      ],
       solution: 'let playlist = [\n  { titre: "Intro", duree: 2 },\n  { titre: "Voyage", duree: 4 },\n  { titre: "Final", duree: 5 }\n];\n\nlet total = 0;\nfor (let i = 0; i < playlist.length; i++) {\n  console.log(`${playlist[i].titre} — ${playlist[i].duree} min`);\n  total += playlist[i].duree;\n}\n\nconsole.log(total);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -342,7 +386,11 @@ for (let i = 0; i < films.length; i++) {
       type: 'js',
       consigne: '<strong>Défi : la recherche.</strong> Dans ce carnet de contacts, écris une fonction <code>chercher(nom)</code> qui parcourt le tableau et RETOURNE le numéro de téléphone du contact trouvé, ou <code>"Inconnu"</code> si aucun nom ne correspond. Affiche <code>chercher("Léa")</code> puis <code>chercher("Bob")</code>.',
       codeDepart: 'let contacts = [\n  { nom: "Léa", tel: "06 11 22 33 44" },\n  { nom: "Tom", tel: "07 55 66 77 88" },\n  { nom: "Nina", tel: "06 99 88 77 66" }\n];\n\nfunction chercher(nom) {\n\n}\n\nconsole.log(chercher("Léa"));\nconsole.log(chercher("Bob"));',
-      indice: 'Dans la fonction : boucle sur contacts, et <code>if (contacts[i].nom === nom) { return contacts[i].tel; }</code>. Le <code>return "Inconnu";</code> se place APRÈS la boucle — il ne s\'exécute que si rien n\'a été trouvé.',
+      indices: [
+        "La fonction parcourt le carnet et s’arrête dès qu’elle trouve. Si elle arrive au bout sans rien trouver, c’est qu’il n’y a rien.",
+        "Le <code>return</code> du numéro est <strong>dans</strong> la boucle ; celui de « Inconnu » est <strong>après</strong> — il ne s’exécute que si la boucle est allée jusqu’au bout.",
+        "<code>if (contacts[i].nom === nom) { return contacts[i].tel; }</code> dans la boucle, puis <code>return \"Inconnu\";</code> après."
+      ],
       solution: 'let contacts = [\n  { nom: "Léa", tel: "06 11 22 33 44" },\n  { nom: "Tom", tel: "07 55 66 77 88" },\n  { nom: "Nina", tel: "06 99 88 77 66" }\n];\n\nfunction chercher(nom) {\n  for (let i = 0; i < contacts.length; i++) {\n    if (contacts[i].nom === nom) {\n      return contacts[i].tel;\n    }\n  }\n  return "Inconnu";\n}\n\nconsole.log(chercher("Léa"));\nconsole.log(chercher("Bob"));',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -396,7 +444,11 @@ for (let i = 0; i < films.length; i++) {
       type: 'html',
       consigne: 'Le bouton ne fait rien. Dans la balise <code>&lt;script&gt;</code>, ajoute un écouteur de clic qui remplace le texte du paragraphe <code>#resultat</code> par <code>Bravo, ça marche !</code>. Teste ensuite en cliquant sur le bouton dans l\'aperçu, puis clique sur Vérifier.',
       codeDepart: '<button id="btn">Clique-moi</button>\n<p id="resultat">En attente d\'un clic...</p>\n\n<script>\n  let btn = document.querySelector("#btn");\n\n  // Ajoute l\'écouteur de clic ici\n\n</script>',
-      indice: 'Modèle complet :<br><code>btn.addEventListener("click", function () {<br>&nbsp;&nbsp;document.querySelector("#resultat").textContent = "Bravo, ça marche !";<br>});</code>',
+      indices: [
+        "Rien ne se passe parce que personne n’écoute le bouton. Il faut lui dire quoi faire quand on clique dessus.",
+        "<code>addEventListener(\"click\", …)</code> attache une fonction au bouton. Dans cette fonction, on change le <code>textContent</code> du paragraphe visé.",
+        "<code>btn.addEventListener(\"click\", function () { document.querySelector(\"#resultat\").textContent = \"Bravo, ça marche !\"; });</code>"
+      ],
       solution: '<button id="btn">Clique-moi</button>\n<p id="resultat">En attente d\'un clic...</p>\n\n<script>\n  let btn = document.querySelector("#btn");\n\n  btn.addEventListener("click", function () {\n    document.querySelector("#resultat").textContent = "Bravo, ça marche !";\n  });\n</script>',
       verifier: function (ctx) {
         const btn = ctx.doc.querySelector('#btn');
@@ -412,7 +464,11 @@ for (let i = 0; i < films.length; i++) {
       type: 'html',
       consigne: '<strong>Entraînement : le sélecteur d\'humeur.</strong> Deux boutons, un affichage. Fais que le clic sur <code>#soleil</code> mette le texte <code>Il fait beau dans mon cœur ☀️</code> dans <code>#humeur</code>, et le clic sur <code>#pluie</code> y mette <code>Petite journée grise 🌧️</code>. Deux écouteurs à écrire !',
       codeDepart: '<button id="soleil">☀️ Soleil</button>\n<button id="pluie">🌧️ Pluie</button>\n<p id="humeur">Comment te sens-tu ?</p>\n\n<script>\n\n</script>',
-      indice: 'Deux blocs indépendants, sur le même modèle que l\'exercice 1 : un <code>addEventListener</code> sur <code>#soleil</code>, un autre sur <code>#pluie</code>, chacun changeant <code>#humeur</code>.',
+      indices: [
+        "Deux boutons, deux comportements : ce sont deux écouteurs indépendants, écrits l’un après l’autre.",
+        "Chacun suit exactement le modèle de l’exercice précédent : on vise le bouton, on écoute le clic, on écrit dans <code>#humeur</code>.",
+        "Un <code>addEventListener</code> sur <code>#soleil</code>, un autre sur <code>#pluie</code>, chacun changeant le <code>textContent</code> de <code>#humeur</code>."
+      ],
       solution: '<button id="soleil">☀️ Soleil</button>\n<button id="pluie">🌧️ Pluie</button>\n<p id="humeur">Comment te sens-tu ?</p>\n\n<script>\n  document.querySelector("#soleil").addEventListener("click", function () {\n    document.querySelector("#humeur").textContent = "Il fait beau dans mon cœur ☀️";\n  });\n\n  document.querySelector("#pluie").addEventListener("click", function () {\n    document.querySelector("#humeur").textContent = "Petite journée grise 🌧️";\n  });\n</script>',
       verifier: function (ctx) {
         const soleil = ctx.doc.querySelector('#soleil');
@@ -474,7 +530,11 @@ for (let i = 0; i < films.length; i++) {
       type: 'html',
       consigne: 'Fais fonctionner le compteur : le clic sur <code>+1</code> doit augmenter le nombre affiché, le clic sur <code>-1</code> doit le diminuer. Utilise une variable, deux <code>addEventListener</code>, et mets à jour <code>#affichage</code> à chaque clic.',
       codeDepart: '<style>\n  body { text-align: center; font-family: sans-serif; }\n  #affichage { font-size: 60px; margin: 20px; }\n  button { font-size: 24px; padding: 8px 24px; }\n</style>\n\n<div id="affichage">0</div>\n<button id="moins">-1</button>\n<button id="plus">+1</button>\n\n<script>\n  let compteur = 0;\n\n  // À toi de jouer !\n\n</script>',
-      indice: 'Pour le bouton plus :<br><code>document.querySelector("#plus").addEventListener("click", function () {<br>&nbsp;&nbsp;compteur = compteur + 1;<br>&nbsp;&nbsp;document.querySelector("#affichage").textContent = compteur;<br>});</code><br>Puis pareil pour <code>#moins</code> avec <code>- 1</code>.',
+      indices: [
+        "Trois choses à relier : une variable qui retient le nombre, deux écouteurs, et l’affichage à remettre à jour après chaque changement.",
+        "La variable vit <strong>en dehors</strong> des écouteurs — sinon elle repartirait de zéro à chaque clic. Chaque écouteur la modifie, puis réécrit <code>#affichage</code>.",
+        "Dans l’écouteur de <code>#plus</code> : <code>compteur = compteur + 1;</code> puis <code>document.querySelector(\"#affichage\").textContent = compteur;</code>"
+      ],
       solution: '<style>\n  body { text-align: center; font-family: sans-serif; }\n  #affichage { font-size: 60px; margin: 20px; }\n  button { font-size: 24px; padding: 8px 24px; }\n</style>\n\n<div id="affichage">0</div>\n<button id="moins">-1</button>\n<button id="plus">+1</button>\n\n<script>\n  let compteur = 0;\n\n  document.querySelector("#plus").addEventListener("click", function () {\n    compteur = compteur + 1;\n    document.querySelector("#affichage").textContent = compteur;\n  });\n\n  document.querySelector("#moins").addEventListener("click", function () {\n    compteur = compteur - 1;\n    document.querySelector("#affichage").textContent = compteur;\n  });\n</script>',
       verifier: function (ctx) {
         const plus = ctx.doc.querySelector('#plus');
@@ -496,7 +556,11 @@ for (let i = 0; i < films.length; i++) {
       type: 'html',
       consigne: '<strong>Défi bonus : le plancher.</strong> Reprends ton compteur (ou la solution) et améliore-le : le compteur ne doit JAMAIS descendre en dessous de 0. Un <code>if</code> bien placé dans l\'écouteur du bouton moins suffit !',
       codeDepart: '<style>\n  body { text-align: center; font-family: sans-serif; }\n  #affichage { font-size: 60px; margin: 20px; }\n  button { font-size: 24px; padding: 8px 24px; }\n</style>\n\n<div id="affichage">0</div>\n<button id="moins">-1</button>\n<button id="plus">+1</button>\n\n<script>\n  let compteur = 0;\n\n  document.querySelector("#plus").addEventListener("click", function () {\n    compteur = compteur + 1;\n    document.querySelector("#affichage").textContent = compteur;\n  });\n\n  document.querySelector("#moins").addEventListener("click", function () {\n    compteur = compteur - 1;\n    document.querySelector("#affichage").textContent = compteur;\n  });\n</script>',
-      indice: 'Dans l\'écouteur du moins, deux options : ne décrémenter que <code>if (compteur > 0)</code>, ou décrémenter puis corriger : <code>if (compteur < 0) { compteur = 0; }</code>.',
+      indices: [
+        "Une seule ligne à ajouter, et une seule question à trancher : empêcher la descente, ou la corriger après coup.",
+        "Soit on ne retire 1 que si le compteur est encore au-dessus de 0, soit on retire puis on remonte à 0 si on est passé en dessous.",
+        "<code>if (compteur &gt; 0) { compteur = compteur - 1; }</code> dans l’écouteur du bouton moins."
+      ],
       solution: '<style>\n  body { text-align: center; font-family: sans-serif; }\n  #affichage { font-size: 60px; margin: 20px; }\n  button { font-size: 24px; padding: 8px 24px; }\n</style>\n\n<div id="affichage">0</div>\n<button id="moins">-1</button>\n<button id="plus">+1</button>\n\n<script>\n  let compteur = 0;\n\n  document.querySelector("#plus").addEventListener("click", function () {\n    compteur = compteur + 1;\n    document.querySelector("#affichage").textContent = compteur;\n  });\n\n  document.querySelector("#moins").addEventListener("click", function () {\n    if (compteur > 0) {\n      compteur = compteur - 1;\n    }\n    document.querySelector("#affichage").textContent = compteur;\n  });\n</script>',
       verifier: function (ctx) {
         const plus = ctx.doc.querySelector('#plus');

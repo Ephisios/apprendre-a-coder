@@ -29,7 +29,11 @@ console.log("Troisième ligne");</pre>
       type: 'js',
       consigne: 'Écris un programme qui affiche <strong>trois messages</strong> à la suite avec <code>console.log</code> : d\'abord <code>Bonjour</code>, puis <code>je m\'appelle</code> suivi de ton prénom, puis <code>et j\'apprends le JavaScript</code>.',
       codeDepart: 'console.log("Bonjour");\n',
-      indice: 'Ajoute deux lignes de plus sur le même modèle : <code>console.log("...");</code> — n\'oublie ni les guillemets ni les parenthèses.',
+      indices: [
+        "Un <code>console.log</code> affiche un message, et un seul. Pour trois messages, il en faut donc trois — la première ligne te sert de modèle.",
+        "Chaque ligne suit le même moule : <code>console.log(\"…\");</code>. Le texte va entre guillemets, les guillemets entre parenthèses, et la ligne se termine par un point-virgule.",
+        "Trois lignes, l’une sous l’autre. L’apostrophe de « je m’appelle » ne pose aucun problème à l’intérieur de guillemets doubles."
+      ],
       solution: 'console.log("Bonjour");\nconsole.log("je m\'appelle Mathéo");\nconsole.log("et j\'apprends le JavaScript");',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>. Lis-la, elle indique souvent la ligne du problème.' };
@@ -44,7 +48,11 @@ console.log("Troisième ligne");</pre>
       type: 'js',
       consigne: '<strong>Chasse au bug !</strong> Ce programme devrait afficher deux phrases, mais il plante. Clique sur <strong>Vérifier ma réponse</strong>, LIS le message d\'erreur qui s\'affiche à droite (c\'est l\'exercice !), puis répare les <strong>deux</strong> erreurs.',
       codeDepart: 'Console.log("Le code, c\'est logique");\nconsole.log(Une erreur est un indice);',
-      indice: 'Erreur 1 : la majuscule à <code>Console</code> (JavaScript veut tout en minuscules). Erreur 2 : le texte de la 2e ligne n\'a pas de guillemets autour de lui.',
+      indices: [
+        "Lance le code et lis le message d’erreur — c’est lui, l’exercice. JavaScript te donne le nom de ce qu’il ne connaît pas.",
+        "Deux fautes, à deux endroits différents. La première est une histoire de majuscule : JavaScript distingue <code>Console</code> de <code>console</code>. La seconde, un texte qui n’est pas signalé comme du texte.",
+        "<code>console</code> tout en minuscules, et des guillemets autour du texte de la deuxième ligne."
+      ],
       solution: 'console.log("Le code, c\'est logique");\nconsole.log("Une erreur est un indice");',
       verifier: function (ctx) {
         if (ctx.erreur) {
@@ -59,7 +67,11 @@ console.log("Troisième ligne");</pre>
       type: 'js',
       consigne: '<strong>Défi : la fusée ASCII.</strong> Les programmeurs adorent dessiner avec du texte. Affiche exactement ces 4 lignes, dans cet ordre : <code>/\\</code> puis <code>||</code> puis <code>||</code> puis <code>/  \\</code> — une fusée vue de face !',
       codeDepart: '// Dessine la fusée ligne par ligne\n',
-      indice: 'Quatre <code>console.log</code>, un par ligne. Attention : les caractères sont à recopier exactement (le / la barre \\ et les espaces).',
+      indices: [
+        "Quatre lignes à afficher, donc quatre instructions. La difficulté n’est pas là : elle tient à un seul caractère.",
+        "La barre oblique inversée a un sens spécial en JavaScript : elle annonce un caractère particulier. Pour en afficher une vraie, il faut la doubler.",
+        "<code>console.log(\"/\\\\\");</code> — deux barres dans le code pour en afficher une seule. Et la dernière ligne contient deux espaces entre les barres."
+      ],
       solution: 'console.log("/\\\\");\nconsole.log("||");\nconsole.log("||");\nconsole.log("/  \\\\");',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>. Astuce de pro : dans un texte, le caractère \\ doit s\'écrire en double : <code>"\\\\"</code> — il est spécial en JavaScript !' };
@@ -110,7 +122,11 @@ console.log(score);   // 10</pre>
       type: 'js',
       consigne: 'Crée une variable <code>animal</code> contenant le nom d\'un animal, et une variable <code>pattes</code> contenant son nombre de pattes (un nombre). Affiche ensuite les deux avec <code>console.log</code>.',
       codeDepart: '// Crée tes deux variables ici\n\n// Puis affiche-les ici\n',
-      indice: 'Modèle : <code>let animal = "chat";</code> puis <code>let pattes = 4;</code> (nombre sans guillemets), puis <code>console.log(animal);</code> et <code>console.log(pattes);</code>',
+      indices: [
+        "Deux variables à créer, puis deux affichages. Une différence essentielle entre elles : l’une contient du texte, l’autre un nombre.",
+        "Le texte va entre guillemets ; le nombre, <strong>sans</strong>. Un nombre entre guillemets deviendrait du texte, et on ne pourrait plus calculer avec.",
+        "<code>let animal = \"chat\";</code> et <code>let pattes = 4;</code>, puis un <code>console.log</code> pour chacune."
+      ],
       solution: 'let animal = "chat";\nlet pattes = 4;\n\nconsole.log(animal);\nconsole.log(pattes);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -125,7 +141,11 @@ console.log(score);   // 10</pre>
       type: 'js',
       consigne: '<strong>Chasse au bug !</strong> Ce programme de score devrait afficher <code>0</code> puis <code>100</code>... mais il affiche deux fois le mot « score », et en plus la mise à jour est cassée. Trouve les <strong>deux</strong> problèmes.',
       codeDepart: 'let score = 0;\nconsole.log("score");\n\nlet score = 100;\nconsole.log("score");',
-      indice: 'Problème 1 : les guillemets dans les <code>console.log</code> affichent le MOT au lieu de la variable. Problème 2 : on ne remet pas <code>let</code> pour modifier une variable qui existe déjà (ça provoque une erreur !).',
+      indices: [
+        "Deux fautes. La première se voit dans ce qui s’affiche : ce n’est pas la valeur qui sort, mais autre chose.",
+        "Des guillemets autour d’un nom de variable en font du texte ordinaire. Et pour <strong>changer</strong> une variable qui existe déjà, on ne la redéclare pas.",
+        "Enlève les guillemets dans les <code>console.log</code>, et le second <code>let</code> devant <code>score</code>."
+      ],
       solution: 'let score = 0;\nconsole.log(score);\n\nscore = 100;\nconsole.log(score);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code> — en JavaScript, on ne peut pas refaire <code>let score</code> si la variable existe déjà. Pour la modifier : <code>score = 100;</code> tout court.' };
@@ -138,7 +158,11 @@ console.log(score);   // 10</pre>
       type: 'js',
       consigne: '<strong>Défi : l\'échange.</strong> Deux verres : <code>verreA</code> contient "jus" et <code>verreB</code> contient "eau". Échange leur contenu SANS écrire directement "jus" ou "eau" une deuxième fois — utilise une troisième variable comme verre vide temporaire ! Affiche ensuite verreA puis verreB (résultat attendu : <code>eau</code> puis <code>jus</code>).',
       codeDepart: 'let verreA = "jus";\nlet verreB = "eau";\n\n// L\'échange (avec une 3e variable)...\n\nconsole.log(verreA);\nconsole.log(verreB);',
-      indice: 'Comme dans la vraie vie : verse A dans un verre vide (<code>let temporaire = verreA;</code>), puis B dans A (<code>verreA = verreB;</code>), puis le verre temporaire dans B (<code>verreB = temporaire;</code>).',
+      indices: [
+        "Le piège : si tu écris <code>verreA = verreB</code> en premier, le contenu de A est écrasé et perdu pour de bon. Il faut le mettre à l’abri avant.",
+        "Comme dans la vraie vie : verse A dans un verre vide, puis B dans A, puis le verre temporaire dans B. Trois affectations, dans cet ordre précis.",
+        "<code>let temporaire = verreA;</code> · <code>verreA = verreB;</code> · <code>verreB = temporaire;</code>"
+      ],
       solution: 'let verreA = "jus";\nlet verreB = "eau";\n\nlet temporaire = verreA;\nverreA = verreB;\nverreB = temporaire;\n\nconsole.log(verreA);\nconsole.log(verreB);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -187,7 +211,11 @@ console.log(score);   // 160</pre>
       type: 'js',
       consigne: 'Une pizzeria ! Crée <code>prixPizza</code> valant <code>12</code> et <code>nombrePizzas</code> valant <code>4</code>. Calcule le total dans une variable <code>total</code>, puis ajoute <code>3</code> au total pour la livraison. Affiche le total final (il doit valoir 51).',
       codeDepart: '// La commande de pizzas\n',
-      indice: '<code>let total = prixPizza * nombrePizzas;</code> puis <code>total = total + 3;</code> (ou <code>total += 3;</code>), puis affiche.',
+      indices: [
+        "Le total doit être <strong>calculé</strong>, pas écrit à la main : c’est JavaScript qui multiplie. Puis la livraison s’ajoute au résultat.",
+        "Une variable peut se modifier à partir d’elle-même : <code>total = total + 3;</code>. La droite est calculée d’abord, puis rangée à gauche.",
+        "<code>let total = prixPizza * nombrePizzas;</code> puis <code>total += 3;</code>, et l’affichage."
+      ],
       solution: 'let prixPizza = 12;\nlet nombrePizzas = 4;\nlet total = prixPizza * nombrePizzas;\ntotal = total + 3;\nconsole.log(total);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -202,7 +230,11 @@ console.log(score);   // 160</pre>
       type: 'js',
       consigne: '<strong>Entraînement : la moyenne.</strong> Trois notes : <code>note1 = 12</code>, <code>note2 = 15</code>, <code>note3 = 9</code>. Calcule la moyenne dans une variable <code>moyenne</code> (additionne les trois, divise par 3) et affiche-la. Attention au piège mathématique des parenthèses !',
       codeDepart: 'let note1 = 12;\nlet note2 = 15;\nlet note3 = 9;\n\n// Calcule et affiche la moyenne\n',
-      indice: 'Sans parenthèses, <code>note1 + note2 + note3 / 3</code> divise SEULEMENT note3 (priorité des opérations, comme à l\'école). Il faut : <code>(note1 + note2 + note3) / 3</code>',
+      indices: [
+        "Le piège est mathématique, pas informatique : la division se fait avant l’addition, exactement comme à l’école.",
+        "Sans parenthèses, seul le <strong>dernier</strong> terme est divisé. Il faut donc forcer l’ordre : additionner d’abord, diviser ensuite.",
+        "<code>(note1 + note2 + note3) / 3</code>"
+      ],
       solution: 'let note1 = 12;\nlet note2 = 15;\nlet note3 = 9;\n\nlet moyenne = (note1 + note2 + note3) / 3;\nconsole.log(moyenne);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -218,7 +250,11 @@ console.log(score);   // 160</pre>
       type: 'js',
       consigne: '<strong>Défi : le convertisseur de durée.</strong> La variable <code>totalMinutes</code> vaut <code>135</code>. Calcule combien ça fait d\'<code>heures</code> pleines (division entière : utilise <code>Math.floor(totalMinutes / 60)</code> qui arrondit vers le bas) et de <code>minutes</code> restantes (le fameux modulo <code>%</code> !). Affiche les deux : résultat attendu <code>2</code> puis <code>15</code>.',
       codeDepart: 'let totalMinutes = 135;\n\n// heures pleines, puis minutes restantes\n',
-      indice: '<code>let heures = Math.floor(totalMinutes / 60);</code> puis <code>let minutes = totalMinutes % 60;</code> — 135 = 2×60 + 15, donc le reste de la division par 60 est 15.',
+      indices: [
+        "Deux questions : combien d’heures <strong>pleines</strong>, et combien de minutes il reste. Aucune des deux n’est une division ordinaire.",
+        "<code>Math.floor()</code> arrondit vers le bas — il donne les heures pleines. Ce qui reste, c’est le modulo <code>%</code>.",
+        "<code>Math.floor(totalMinutes / 60)</code> et <code>totalMinutes % 60</code> — 135 = 2×60 + 15."
+      ],
       solution: 'let totalMinutes = 135;\n\nlet heures = Math.floor(totalMinutes / 60);\nlet minutes = totalMinutes % 60;\n\nconsole.log(heures);\nconsole.log(minutes);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -264,7 +300,11 @@ console.log(ville.toLowerCase());   // marseille</pre>
       type: 'js',
       consigne: 'Crée une variable <code>ville</code> avec le nom d\'une ville. Affiche la phrase <code>J\'habite à [ville]</code> (avec la variable dedans, par la méthode de ton choix), puis affiche le nom de la ville en MAJUSCULES.',
       codeDepart: 'let ville = "Paris";\n',
-      indice: 'Phrase : <code>console.log("J\'habite à " + ville);</code> ou avec backticks. Majuscules : <code>console.log(ville.toUpperCase());</code>',
+      indices: [
+        "Deux affichages. Le premier mêle du texte et une variable ; le second transforme le texte avant de l’afficher.",
+        "Coller du texte et une variable : soit avec <code>+</code>, soit avec des accents graves et <code>${…}</code>. Les méthodes de texte, elles, s’appellent avec un point et des parenthèses.",
+        "<code>console.log(`J’habite à ${ville}`);</code> puis <code>console.log(ville.toUpperCase());</code>"
+      ],
       solution: 'let ville = "Paris";\nconsole.log(`J\'habite à ${ville}`);\nconsole.log(ville.toUpperCase());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -281,7 +321,11 @@ console.log(ville.toLowerCase());   // marseille</pre>
       type: 'js',
       consigne: '<strong>Entraînement : la carte d\'identité.</strong> Avec les variables fournies, affiche avec des <strong>backticks</strong> la phrase exacte : <code>Rex a 5 ans et pèse 12 kilos.</code> — une seule ligne de code pour l\'affichage !',
       codeDepart: 'let nom = "Rex";\nlet age = 5;\nlet poids = 12;\n\n// Une seule ligne avec des backticks\n',
-      indice: 'Le modèle : <code>console.log(\`\${nom} a \${age} ans et pèse \${poids} kilos.\`);</code> — backticks AltGr+7, et chaque variable dans son <code>\${...}</code>.',
+      indices: [
+        "Une seule ligne d’affichage, avec trois variables dedans. C’est exactement ce à quoi servent les accents graves.",
+        "Le texte va entre accents graves (AltGr + 7), et chaque variable s’insère dans un <code>${…}</code>. La ponctuation finale fait partie du texte.",
+        "<code>console.log(`${nom} a ${age} ans et pèse ${poids} kilos.`);</code>"
+      ],
       solution: 'let nom = "Rex";\nlet age = 5;\nlet poids = 12;\n\nconsole.log(`${nom} a ${age} ans et pèse ${poids} kilos.`);',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -301,7 +345,11 @@ console.log(ville.toLowerCase());   // marseille</pre>
       type: 'js',
       consigne: '<strong>Défi : l\'analyseur de mot de passe.</strong> La variable <code>motDePasse</code> contient un mot de passe. Affiche : 1) sa longueur (nombre de caractères), 2) la phrase <code>Longueur : X caractères</code> avec la longueur dedans, 3) le mot de passe en minuscules. Ton code doit marcher <strong>quel que soit</strong> le mot de passe (change-le pour tester !).',
       codeDepart: 'let motDePasse = "Azerty123";\n',
-      indice: '<code>motDePasse.length</code> donne la longueur (sans parenthèses !), <code>motDePasse.toLowerCase()</code> les minuscules (avec parenthèses). La phrase : backticks + <code>\${motDePasse.length}</code>.',
+      indices: [
+        "Trois affichages, et une distinction à ne pas rater : certaines choses sont des <strong>propriétés</strong>, d’autres des <strong>méthodes</strong>.",
+        "Une propriété se lit sans parenthèses — <code>motDePasse.length</code>. Une méthode s’appelle avec — <code>motDePasse.toLowerCase()</code>.",
+        "Les trois lignes : <code>.length</code>, puis une phrase avec <code>${motDePasse.length}</code>, puis <code>.toLowerCase()</code>."
+      ],
       solution: 'let motDePasse = "Azerty123";\n\nconsole.log(motDePasse.length);\nconsole.log(`Longueur : ${motDePasse.length} caractères`);\nconsole.log(motDePasse.toLowerCase());',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -358,7 +406,11 @@ if (temperature > 25) {
       type: 'js',
       consigne: 'Un contrôle d\'accès : la variable <code>age</code> vaut 16. Écris un <code>if/else</code> qui affiche <code>Entrée autorisée</code> si l\'âge est supérieur ou égal à 18, et <code>Entrée refusée</code> sinon. Puis change la valeur de <code>age</code> pour vérifier que les deux cas marchent !',
       codeDepart: 'let age = 16;\n\n// Ton if/else ici\n',
-      indice: 'Modèle : <code>if (age >= 18) { console.log("..."); } else { console.log("..."); }</code>',
+      indices: [
+        "La condition se met entre parenthèses, et ce qui en dépend entre accolades. Il y a deux blocs : celui du <code>if</code>, et celui du <code>else</code>.",
+        "« Supérieur ou égal » s’écrit <code>&gt;=</code>, dans cet ordre. Le <code>else</code> se place juste après l’accolade fermante du <code>if</code>.",
+        "<code>if (age &gt;= 18) { … } else { … }</code>, avec un <code>console.log</code> dans chaque bloc."
+      ],
       solution: 'let age = 16;\n\nif (age >= 18) {\n  console.log("Entrée autorisée");\n} else {\n  console.log("Entrée refusée");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>. Vérifie que chaque accolade ouverte <code>{</code> est refermée <code>}</code>.' };
@@ -379,7 +431,11 @@ if (temperature > 25) {
       type: 'js',
       consigne: '<strong>Entraînement : positif, négatif ou nul ?</strong> La variable <code>nombre</code> vaut <code>-7</code>. Écris une chaîne <code>if / else if / else</code> qui affiche <code>Positif</code> si le nombre est &gt; 0, <code>Négatif</code> s\'il est &lt; 0, et <code>Zéro</code> sinon. Teste les trois cas en changeant la valeur !',
       codeDepart: 'let nombre = -7;\n\n// if / else if / else\n',
-      indice: '<code>if (nombre > 0) { ... } else if (nombre < 0) { ... } else { ... }</code> — le dernier else attrape le seul cas restant : zéro.',
+      indices: [
+        "Trois cas, donc trois branches. Mais « zéro » n’a pas besoin d’être testé : c’est le seul cas qui reste quand les deux autres ont échoué.",
+        "Après le premier <code>if</code>, on enchaîne avec <code>else if</code> pour le deuxième cas, puis un <code>else</code> nu pour tout le reste.",
+        "<code>if (nombre &gt; 0) { … } else if (nombre &lt; 0) { … } else { … }</code>"
+      ],
       solution: 'let nombre = -7;\n\nif (nombre > 0) {\n  console.log("Positif");\n} else if (nombre < 0) {\n  console.log("Négatif");\n} else {\n  console.log("Zéro");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -396,7 +452,11 @@ if (temperature > 25) {
       type: 'js',
       consigne: '<strong>Défi : le digicode.</strong> La variable <code>codeSecret</code> vaut <code>"4271"</code> et <code>codeTape</code> vaut <code>"1234"</code>. Compare-les avec <code>===</code> : affiche <code>Porte ouverte</code> s\'ils sont identiques, sinon affiche <code>Code incorrect</code> ET la phrase <code>Il y avait 4 chiffres à trouver</code> en calculant le nombre de chiffres avec <code>.length</code> (pas écrit à la main !).',
       codeDepart: 'let codeSecret = "4271";\nlet codeTape = "1234";\n',
-      indice: '<code>if (codeTape === codeSecret) { ... } else { ... }</code> — et dans le else, deux console.log, dont un avec <code>\${codeSecret.length}</code>.',
+      indices: [
+        "Comparer deux valeurs ne s’écrit pas avec un seul <code>=</code> : celui-là <em>range</em> une valeur. Pour comparer, il en faut trois.",
+        "Dans le <code>else</code>, il y a <strong>deux</strong> choses à afficher, donc deux <code>console.log</code> dans les mêmes accolades. La longueur du code s’obtient avec <code>.length</code>.",
+        "<code>if (codeTape === codeSecret)</code>, et dans le <code>else</code> une phrase avec <code>${codeSecret.length}</code>."
+      ],
       solution: 'let codeSecret = "4271";\nlet codeTape = "1234";\n\nif (codeTape === codeSecret) {\n  console.log("Porte ouverte");\n} else {\n  console.log("Code incorrect");\n  console.log(`Il y avait ${codeSecret.length} chiffres à trouver`);\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -457,7 +517,11 @@ if (jour === "samedi" || jour === "dimanche") {
       type: 'js',
       consigne: 'Météo intelligente : avec les variables <code>temperature</code> et <code>ilPleut</code>, écris des conditions qui affichent <code>Sortie parc</code> s\'il fait plus de 20 degrés ET qu\'il ne pleut pas (<code>ilPleut === false</code>), <code>Cinéma</code> s\'il pleut, et <code>Balade</code> dans tous les autres cas.',
       codeDepart: 'let temperature = 25;\nlet ilPleut = false;\n\n// Tes conditions ici\n',
-      indice: 'Structure : <code>if (temperature > 20 && ilPleut === false) { ... } else if (ilPleut) { ... } else { ... }</code>',
+      indices: [
+        "Le premier cas demande <strong>deux</strong> conditions vraies en même temps. Les suivants n’en demandent qu’une.",
+        "« Et en même temps » s’écrit <code>&amp;&amp;</code>. Les deux conditions tiennent dans les mêmes parenthèses, de part et d’autre.",
+        "<code>if (temperature &gt; 20 &amp;&amp; ilPleut === false) { … } else if (ilPleut) { … } else { … }</code>"
+      ],
       solution: 'let temperature = 25;\nlet ilPleut = false;\n\nif (temperature > 20 && ilPleut === false) {\n  console.log("Sortie parc");\n} else if (ilPleut) {\n  console.log("Cinéma");\n} else {\n  console.log("Balade");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -477,7 +541,11 @@ if (jour === "samedi" || jour === "dimanche") {
       type: 'js',
       consigne: '<strong>Entraînement : les mentions du bac.</strong> La variable <code>note</code> vaut 13. Écris la chaîne complète : ≥ 16 → <code>Mention très bien</code>, ≥ 14 → <code>Mention bien</code>, ≥ 12 → <code>Mention assez bien</code>, ≥ 10 → <code>Admis</code>, sinon → <code>Rattrapage</code>. L\'ordre des conditions est crucial !',
       codeDepart: 'let note = 13;\n',
-      indice: 'Commence par le seuil le PLUS HAUT (16) et descends. Si tu testais <code>note >= 10</code> en premier, un 17 serait attrapé par ce cas et n\'irait jamais plus loin !',
+      indices: [
+        "Cinq cas, et l’ordre décide de tout. Demande-toi ce qui arriverait à un 17 si tu testais d’abord « au moins 10 ».",
+        "Un <code>else if</code> n’est examiné que si tous les précédents ont échoué. Il faut donc commencer par le seuil le <strong>plus haut</strong> et descendre.",
+        "<code>if (note &gt;= 16)</code>, puis <code>else if (note &gt;= 14)</code>, <code>&gt;= 12</code>, <code>&gt;= 10</code>, et un <code>else</code> pour le rattrapage."
+      ],
       solution: 'let note = 13;\n\nif (note >= 16) {\n  console.log("Mention très bien");\n} else if (note >= 14) {\n  console.log("Mention bien");\n} else if (note >= 12) {\n  console.log("Mention assez bien");\n} else if (note >= 10) {\n  console.log("Admis");\n} else {\n  console.log("Rattrapage");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
@@ -494,7 +562,11 @@ if (jour === "samedi" || jour === "dimanche") {
       type: 'js',
       consigne: '<strong>Défi : le tarif du musée.</strong> Gratuit si <code>age < 6</code> OU <code>age >= 65</code> → affiche <code>Gratuit</code>. Demi-tarif si l\'âge est entre 6 et 17 inclus → affiche <code>5 euros</code>. Sinon plein tarif → <code>10 euros</code>. Utilise <code>||</code> pour le premier cas. Teste avec plusieurs âges !',
       codeDepart: 'let age = 70;\n',
-      indice: 'Premier cas : <code>if (age < 6 || age >= 65)</code>. Deuxième : <code>else if (age <= 17)</code> — pas besoin de retester age >= 6, le premier cas a déjà éliminé les moins de 6 ans !',
+      indices: [
+        "La gratuité couvre deux tranches d’âge opposées — les très jeunes et les plus âgés. C’est un « ou », pas un « et ».",
+        "« Ou » s’écrit <code>||</code>. Et pour le demi-tarif, inutile de retester la borne basse : le premier cas a déjà écarté les moins de 6 ans.",
+        "<code>if (age &lt; 6 || age &gt;= 65) { … } else if (age &lt;= 17) { … } else { … }</code>"
+      ],
       solution: 'let age = 70;\n\nif (age < 6 || age >= 65) {\n  console.log("Gratuit");\n} else if (age <= 17) {\n  console.log("5 euros");\n} else {\n  console.log("10 euros");\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
