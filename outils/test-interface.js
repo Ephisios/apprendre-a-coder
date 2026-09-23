@@ -63,7 +63,9 @@ sources.push(`
     genreDe: ex => genreDe(ex),
     exercicesDe: l => exercicesDe(l),
     modules: () => MODULES,
-    colorier: (code, langue, muet) => colorierCode(code, langue, null, muet)
+    colorier: (code, langue, muet) => colorierCode(code, langue, null, muet),
+    index: () => construireIndex(),
+    chercher: q => chercherDansMemos(q)
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -202,6 +204,47 @@ for (const [langue, code, quoi] of CASSES) {
   verifie(langue + ' — ' + quoi + ' : tu en chasse au bug',
           /j-err/.test(pont.colorier(code, langue, true)), false);
 }
+
+/* ======================================================================
+   La recherche atteint-elle le CORPS des leçons, et pas que leurs titres ?
+   ====================================================================== */
+console.log('\n=== La recherche trouve-t-elle les explications ? ===\n');
+
+const index = pont.index();
+const parOu = {};
+for (const e of index) parOu[e.ou] = (parOu[e.ou] || 0) + 1;
+
+verifie('index — le corps des leçons y est entré', (parOu.lecon || 0) > 1000, true);
+verifie('index — l\'encyclopédie y est toujours', (parOu.memo || 0) > 200, true);
+verifie('index — chaque entrée sait où elle mène',
+        index.every(e => e.ou === 'lecon' || e.ou === 'memo'), true);
+verifie('index — chaque entrée a une cible',
+        index.every(e => !!e.cible), true);
+console.log('         ' + index.length + ' entrées : ' +
+            Object.keys(parOu).sort().map(k => k + ' ' + parOu[k]).join('  ·  '));
+
+/* Le cas qui motivait tout : chercher une notion doit ramener le passage qui
+   l'explique, pas seulement un titre qui contient le mot. */
+function premiers(q, n) { return pont.chercher(q).slice(0, n); }
+
+verifie('« pointeur » trouve quelque chose', pont.chercher('pointeur').length > 0, true);
+verifie('« pointeur » ramène du corps de leçon, pas qu\'un titre',
+        premiers('pointeur', 5).some(e => e.ou === 'lecon' && e.genre !== 'lecon'), true);
+verifie('« localStorage » ramène du code expliqué',
+        premiers('localStorage', 5).some(e => e.genre === 'code'), true);
+verifie('« indentation » trouve encore les mémos',
+        premiers('indentation', 5).some(e => e.ou === 'memo'), true);
+verifie('un mot absent ne renvoie rien', pont.chercher('xyzzyplover').length, 0);
+
+// La règle de l'index d'origine, qui ne doit pas se perdre : un mot entier
+// vaut mieux qu'une syllabe prise au milieu d'un autre mot.
+const flex = premiers('flex', 3);
+verifie('« flex » ne remonte pas « réflexe » en tête',
+        flex.length > 0 && !/réflexe/i.test(flex[0].texte), true);
+
+// Les accents et les majuscules ne doivent pas compter.
+verifie('la recherche ignore les accents',
+        pont.chercher('elements').length > 0, true);
 
 console.log('\n' + ok + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
 process.exit(echecs ? 1 : 0);

@@ -2330,6 +2330,29 @@ function normaliser(t) {
 // dans l'onglet CSS ». Construit une seule fois, à la première recherche.
 let indexMemos = null;
 
+/* Découpe un contenu HTML en entrées autonomes — une ligne de tableau, une
+   définition, un bloc de code — et passe chacune à `faire`. Les mémos et les
+   leçons ont la même forme : autant les découper au même endroit. */
+function decouperEnEntrees(html, faire) {
+  const boite = document.createElement('div');
+  boite.innerHTML = html;
+  let section = '';
+  boite.querySelectorAll('h2, h3, tr, li, p, .bloc-code').forEach(el => {
+    if (el.tagName === 'H2' || el.tagName === 'H3') { section = el.textContent.trim(); return; }
+    if (el.tagName === 'TR' && el.querySelector('th')) return;      // ligne d'en-tête
+    if (el.closest('li') && el.tagName === 'P') return;             // évite les doublons
+    const texte = el.textContent.replace(/\s+/g, ' ').trim();
+    if (texte.length < 3) return;
+    faire({
+      genre: el.tagName === 'TR' ? 'ligne' : (el.classList.contains('bloc-code') ? 'code' : 'texte'),
+      cellules: el.tagName === 'TR' ? [...el.children].map(c => c.innerHTML) : null,
+      html: el.innerHTML,
+      texte,
+      section
+    });
+  });
+}
+
 function construireIndex() {
   if (indexMemos) return indexMemos;
   indexMemos = [];
@@ -2339,6 +2362,7 @@ function construireIndex() {
     mod.lecons.forEach((lecon, i) => {
       indexMemos.push({
         genre: 'lecon',
+        ou: 'lecon',
         cible: lecon.id,
         source: mod.titre,
         section: 'Leçon ' + (i + 1),
@@ -2353,27 +2377,33 @@ function construireIndex() {
 
   // 2) Le contenu de l'encyclopédie, découpé en entrées
   for (const memo of DATA_MEMOS) {
-    const boite = document.createElement('div');
-    boite.innerHTML = memo.contenu;
-    let section = '';
-    boite.querySelectorAll('h2, h3, tr, li, p, .bloc-code').forEach(el => {
-      if (el.tagName === 'H2' || el.tagName === 'H3') { section = el.textContent.trim(); return; }
-      if (el.tagName === 'TR' && el.querySelector('th')) return;      // ligne d'en-tête
-      if (el.closest('li') && el.tagName === 'P') return;             // évite les doublons
-      const texte = el.textContent.replace(/\s+/g, ' ').trim();
-      if (texte.length < 3) return;
+    decouperEnEntrees(memo.contenu, e => {
       indexMemos.push({
-        genre: el.tagName === 'TR' ? 'ligne' : (el.classList.contains('bloc-code') ? 'code' : 'texte'),
-        cible: memo.id,
-        source: memo.titre,
-        section,
-        cellules: el.tagName === 'TR' ? [...el.children].map(c => c.innerHTML) : null,
-        html: el.innerHTML,
-        texte,
-        cle: normaliser(texte),
-        cleContexte: normaliser(memo.titre + ' ' + section)
+        genre: e.genre, ou: 'memo', cible: memo.id,
+        source: memo.titre, section: e.section,
+        cellules: e.cellules, html: e.html, texte: e.texte,
+        cle: normaliser(e.texte),
+        cleContexte: normaliser(memo.titre + ' ' + e.section)
       });
     });
+  }
+
+  /* 3) Le CORPS des leçons. Sans lui, chercher « boucle for » ne ramenait que
+        les titres qui contiennent ces mots — jamais le paragraphe qui les
+        explique. C'est pourtant ce paragraphe qu'on cherche. */
+  for (const mod of MODULES) {
+    for (const lecon of mod.lecons) {
+      if (!lecon.contenu) continue;
+      decouperEnEntrees(lecon.contenu, e => {
+        indexMemos.push({
+          genre: e.genre, ou: 'lecon', cible: lecon.id,
+          source: lecon.titre, section: e.section,
+          cellules: e.cellules, html: e.html, texte: e.texte,
+          cle: normaliser(e.texte),
+          cleContexte: normaliser(mod.titre + ' ' + lecon.titre + ' ' + e.section)
+        });
+      });
+    }
   }
   return indexMemos;
 }
@@ -2556,7 +2586,7 @@ function majZoneMemo() {
     }
     html += '<div class="resultat" data-i="' + i + '" tabindex="0" role="button">' +
       '<div class="resultat-source">' +
-      (e.genre === 'lecon' ? '<span class="ou">Leçon</span><span class="sep">›</span>' : '') +
+      (e.ou === 'lecon' ? '<span class="ou">Leçon</span><span class="sep">›</span>' : '') +
       '<span>' + echapper(e.source) + '</span>' +
       (e.section ? '<span class="sep">›</span><span>' + echapper(e.section) + '</span>' : '') +
       '</div><div class="resultat-corps">' + corps + '</div></div>';
@@ -2568,7 +2598,9 @@ function majZoneMemo() {
   zone.querySelectorAll('.resultat').forEach(el => {
     surligner(el.querySelector('.resultat-corps'), requete);
     const e = montres[+el.dataset.i];
-    const aller = () => { if (e.genre === 'lecon') allerLecon(e.cible); else choisirOngletMemo(e.cible); };
+    // `genre` dit comment AFFICHER l'entrée, `ou` dit où elle MÈNE : un bloc
+    // de code peut venir d'un mémo comme d'une leçon.
+    const aller = () => { if (e.ou === 'lecon') allerLecon(e.cible); else choisirOngletMemo(e.cible); };
     el.addEventListener('click', aller);
     el.addEventListener('keydown', ev => {
       if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); aller(); }
