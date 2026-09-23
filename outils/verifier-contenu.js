@@ -597,7 +597,7 @@ function sabotagesGeneriques(code, famille) {
 const moteurs = { js: { juges: 0, ko: [] }, py: { juges: 0, ko: [] }, cj: { juges: 0, ko: [] },
                   sql: { juges: 0, ko: [] }, dom: { juges: 0, ko: [] } };
 const nonJuges = { miseEnPage: 0, qcm: stats.qcm, domSansJsdom: 0, pasDeMoteur: 0 };
-const sabo = { testes: 0, refuses: 0, complaisants: [], nonEprouves: 0, equivalentes: 0 };
+const sabo = { testes: 0, refuses: 0, complaisants: [], nonEprouves: 0, sansCopie: [], equivalentes: 0 };
 
 async function controler() {
   for (const t of travail) {
@@ -621,7 +621,7 @@ async function controler() {
       // 2. une copie sabotée doit être REFUSÉE — mais seulement si cette copie
       //    donne vraiment autre chose : sinon elle n'est pas fausse du tout.
       const copies = sabotages(ex, famille);
-      if (!copies.length) sabo.nonEprouves++;
+      if (!copies.length) { sabo.nonEprouves++; sabo.sansCopie.push(t.ou); }   // on garde QUI, pas seulement COMBIEN
       const sigOfficielle = signature(ct);
       let refuse = false, essais = 0;
       for (const copie of copies) {
@@ -680,6 +680,13 @@ controler().then(() => {
               sabo.complaisants.length + ' correcteur(s) à regarder');
   console.log('  ' + sabo.equivalentes + ' copies écartées : elles donnaient le même résultat que la solution' +
               (sabo.nonEprouves ? ' ; ' + sabo.nonEprouves + ' exercices sans copie à présenter' : ''));
+// Un correcteur qu'on n'a pas pu éprouver n'est pas un correcteur validé :
+  // un simple compte dans une parenthèse se lit, puis s'oublie. On NOMME donc
+  // les exercices concernés, pour qu'ils restent à vérifier dans la liste.
+  if (sabo.nonEprouves) {
+    console.log('      ces exercices n\'ont reçu aucune copie fausse à refuser — correcteur NON ÉPROUVÉ :');
+    for (const ou of sabo.sansCopie) console.log('        - ' + ou);
+  }
   console.log('');
 
   console.log('=== Ce qui n\'a PAS pu être jugé ici (' + totalNonJuges + ') ===');
