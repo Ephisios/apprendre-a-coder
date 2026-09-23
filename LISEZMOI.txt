@@ -102,7 +102,10 @@ le résultat, et te dit ce qui va ou ne va pas. En HTML et en CSS, un bouton
 "Exécuter" s'ajoute pour voir ta page sans être corrigé.
 L'aide, elle, monte avec les essais : après un premier essai raté, "Indice"
 apparaît (il dit OÙ regarder, pas quoi écrire) ; après un deuxième, "Solution"
-s'ajoute. Le bouton "..." range ce qui sert rarement : remettre le code de
+s'ajoute. Sur les exercices les plus difficiles, l'indice se donne en
+PLUSIEURS PALIERS : le premier dit où regarder, le deuxième comment s'y
+prendre, le troisième s'approche de la réponse. Il faut avoir réessayé entre
+chaque — sinon trois clics suffiraient à tout dévoiler sans écrire une ligne. Le bouton "..." range ce qui sert rarement : remettre le code de
 départ, ou reprendre son code dans le bac à sable.
 (Dans une fenêtre étroite, les deux colonnes s'empilent automatiquement.)
 
@@ -152,6 +155,21 @@ REFAIRE UN EXERCICE OU UNE LEÇON
   zéro » efface d'un coup ton code et tes réussites sur CETTE leçon seulement.
   Il demande confirmation, et le reste de ta progression n'est pas touché.
   Il n'apparaît que si tu as écrit ou réussi quelque chose dans la leçon.
+
+CHAQUE EXERCICE ANNONCE SA NATURE, en haut de sa carte : Exercice (on
+t'accompagne), Entraînement (à toi, sur le même modèle), Défi (on ne montre
+plus le chemin), Étape (une pièce d'un projet), ou Chasse au bug. Passe la
+souris sur le mot pour lire ce qu'il veut dire.
+Dans une CHASSE AU BUG, l'éditeur ne souligne rien en rouge : trouver la
+faute EST l'exercice, la montrer reviendrait à donner la réponse.
+
+RÉVISER (bouton 🔄 en bas à gauche)
+-----------------------------------
+Réussir un exercice ne veut pas dire l'avoir compris pour toujours — surtout
+celui qu'on a arraché en six essais. Cette page repropose les exercices déjà
+réussis qui t'ont coûté le plus d'essais, et ceux qui commencent à dater.
+Les refaire ne touche pas à ta progression : rien n'est effacé, rien n'est
+recompté. C'est un endroit où revenir, pas un examen.
 
 Ta progression, ton code et tes projets du bac à sable sont sauvegardés
 automatiquement dans le navigateur : tu peux fermer et reprendre quand tu veux.
