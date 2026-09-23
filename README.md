@@ -121,17 +121,21 @@ que de le noyer dans un compte.
 apparaît après combien d'échecs, ce que l'éditeur souligne ou tait dans chacun des sept langages, et
 ce que la recherche retrouve.
 
+**`outils/verifier-navigateur.html`** couvre les 63 correcteurs que Node laisse de côté : ceux qui
+*mesurent* la page — une largeur, une position, une couleur calculée, une media query. Ni Node ni
+jsdom ne savent faire de mise en page ; seul un vrai navigateur en est capable. Cette page s'ouvre
+donc à la main, dans l'esprit du reste du projet, et pose les deux mêmes questions.
+
 État actuel :
 
 ```
-362 exercices rejoués — 0 échec, 0 correcteur complaisant
-358 copies sabotées présentées, 358 refusées
- 64 vérifications d'interface — 0 échec
+362 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
+358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
+ 63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
+ 77 vérifications d'interface     — 0 échec
 ```
 
-> Les 63 correcteurs qui **mesurent** la page (largeur, position, media queries) ne sont pas
-> couverts : seul un vrai navigateur peut en juger. C'est le dernier angle mort connu, et il est
-> documenté plutôt que passé sous silence.
+Soit **425 correcteurs sur 425** mis à l'épreuve, et pas seulement exécutés.
 
 ## Pourquoi hors ligne
 
@@ -153,6 +157,9 @@ moteur-cj.js        l'interpréteur C et Java
 skulpt*.js          l'interpréteur Python (tiers — voir NOTICE.md)
 data-*.js           les 165 leçons et 484 exercices
 outils/             les harnais de vérification (développement)
+  verifier-contenu.js       rejoue les exercices et sabote les copies (Node)
+  test-interface.js         l'aide, les genres, la recherche, la sauvegarde (jsdom)
+  verifier-navigateur.html  les correcteurs qui mesurent la page (à ouvrir)
 ```
 
 ### Et côté développement

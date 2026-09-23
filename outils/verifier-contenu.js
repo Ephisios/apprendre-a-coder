@@ -153,6 +153,29 @@ for (const f of fichiersData) {
 for (const src of sourcesChargees) {
   if (!fs.existsSync(path.join(RACINE, src))) pb.push('index.html charge « ' + src + ' » qui n\'existe pas');
 }
+/* Le harnais navigateur porte sa propre liste de <script> : il s'ouvre en
+   file:// et ne peut donc pas lire index.html — les navigateurs refusent la
+   requête. Or une liste recopiée dérive, et la dérive ne se verrait qu'au
+   moment où un module manquerait à l'appel, c'est-à-dire quand on croirait
+   l'avoir vérifié. On compare donc les deux ici, où ils sont lisibles. */
+const CHEMIN_NAV = path.join(RACINE, 'outils', 'verifier-navigateur.html');
+if (fs.existsSync(CHEMIN_NAV)) {
+  const htmlNav = fs.readFileSync(CHEMIN_NAV, 'utf8');
+  const donneesNav = [];
+  htmlNav.replace(/<script[^>]*src="\.\.\/([^"]+)"/g, (m, src) => { donneesNav.push(src); return m; });
+  const donneesIndex = sourcesChargees.filter(f => /^data-.*\.js$/.test(f));
+  for (const f of donneesIndex) {
+    if (donneesNav.indexOf(f) === -1) {
+      pb.push('outils/verifier-navigateur.html ne charge pas « ' + f + ' » que index.html charge (exercices non vérifiés)');
+    }
+  }
+  for (const f of donneesNav) {
+    if (donneesIndex.indexOf(f) === -1) {
+      pb.push('outils/verifier-navigateur.html charge « ' + f + ' » qui n\'est plus dans index.html');
+    }
+  }
+}
+
 // app.js doit lire chaque tableau de données, sinon le fichier est chargé pour rien
 const srcApp = fs.readFileSync(path.join(RACINE, 'app.js'), 'utf8');
 for (const d of globauxDefinis) {

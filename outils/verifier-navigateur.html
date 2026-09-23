@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vérifier les correcteurs qui mesurent la page</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    max-width: 90ch; margin: 0 auto; padding: 24px 20px 60px;
+    line-height: 1.6; color: #1d1a15; background: #f4f1ea;
+  }
+  h1 { font-size: 26px; margin-bottom: 4px; }
+  .sous { color: #6d675c; margin-top: 0; }
+  .encadre {
+    background: #fffdf9; border: 1px solid #e0d9cb; border-radius: 10px;
+    padding: 14px 16px; margin: 20px 0;
+  }
+  button {
+    font: inherit; font-weight: 600; padding: 10px 18px; cursor: pointer;
+    border: 0; border-radius: 8px; background: #4257e0; color: #fff;
+  }
+  button:disabled { background: #9aa0b8; cursor: default; }
+  label { font-size: 14px; color: #423d35; }
+  input[type=number] { font: inherit; width: 80px; padding: 6px 8px;
+    border: 1px solid #cec5b3; border-radius: 6px; }
+  #bilan { font-size: 17px; font-weight: 600; margin: 20px 0 8px; }
+  .ligne { padding: 7px 10px; border-radius: 6px; font-size: 14px;
+    display: flex; gap: 10px; align-items: baseline; }
+  .ligne:nth-child(odd) { background: rgba(0,0,0,.03); }
+  .ok   { color: #2c7a51; }
+  .ko   { color: #b8362c; font-weight: 600; }
+  .note { color: #a76410; }
+  .ou   { font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: #6d675c;
+          min-width: 26ch; }
+  .pourquoi { color: #423d35; }
+  #banc { position: absolute; left: -10000px; top: 0; border: 0; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #17161c; color: #e8e5df; }
+    .encadre { background: #1f1e26; border-color: #34323d; }
+    .sous, .ou { color: #a7a29a; }
+    .pourquoi { color: #cfcbc3; }
+    .ligne:nth-child(odd) { background: rgba(255,255,255,.04); }
+    .ok { color: #7ddba4; } .ko { color: #ff9c92; } .note { color: #f0c07a; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Les correcteurs qui mesurent la page</h1>
+<p class="sous">Le dernier angle mort du projet — et il ne peut se combler qu'ici.</p>
+
+<div class="encadre">
+  <p><code>outils/verifier-contenu.js</code> rejoue les exercices sous Node, mais il en laisse
+  <strong>63 de côté</strong> : ceux dont le correcteur <em>mesure</em> la page — une largeur, une
+  position, une couleur calculée, une media query. Node ne sait pas faire de mise en page, et jsdom
+  non plus. <strong>Seul un vrai navigateur en est capable</strong> : c'est pourquoi cette page
+  existe, et pourquoi elle s'ouvre à la main.</p>
+
+  <p>Elle pose les deux mêmes questions que le harnais Node :</p>
+  <ol>
+    <li><strong>Non-régression</strong> — la solution officielle passe-t-elle son correcteur ?</li>
+    <li><strong>Mise à l'épreuve</strong> — une copie privée de son <code>&lt;style&gt;</code>
+        est-elle bien refusée ? Un correcteur qui l'accepte ne mesure rien.</li>
+  </ol>
+
+  <p><label>Largeur de l'aperçu :
+    <input type="number" id="largeur" value="520" min="240" max="1200" step="10"> px</label>
+  &nbsp; <span class="sous">— les correcteurs à media query en dépendent ; cette valeur vaut la
+  colonne d'aperçu sur un écran d'ordinateur.</span></p>
+
+  <p><button id="lancer" type="button">Lancer la vérification</button></p>
+</div>
+
+<div id="bilan"></div>
+<div id="rapport"></div>
+<iframe id="banc" title="banc d'essai"></iframe>
+
+<!-- Les leçons. Cette liste doit rester celle d'index.html :
+     verifier-contenu.js compare les deux et proteste si elles divergent. -->
+<script src="../data-intro.js"></script>
+<script src="../data-html.js"></script>
+<script src="../data-html2.js"></script>
+<script src="../data-html3.js"></script>
+<script src="../data-css.js"></script>
+<script src="../data-css2.js"></script>
+<script src="../data-css3.js"></script>
+<script src="../data-js1.js"></script>
+<script src="../data-js2.js"></script>
+<script src="../data-js3.js"></script>
+<script src="../data-jsavance.js"></script>
+<script src="../data-js4.js"></script>
+<script src="../data-projets.js"></script>
+<script src="../data-python.js"></script>
+<script src="../data-python2.js"></script>
+<script src="../data-python3.js"></script>
+<script src="../data-sql.js"></script>
+<script src="../data-sql2.js"></script>
+<script src="../data-c.js"></script>
+<script src="../data-java.js"></script>
+<script src="../data-fin.js"></script>
+<script src="../data-memo.js"></script>
+
+<script>
+/* La même sonde que dans verifier-contenu.js : si le correcteur emploie l'un
+   de ces mots, il interroge la mise en page, et Node ne peut rien en dire. */
+var MESURE = /getComputedStyle|offsetWidth|offsetHeight|clientWidth|clientHeight|getBoundingClientRect|scrollWidth|scrollHeight|innerWidth|innerHeight/;
+
+function exercicesDe(lecon) {
+  if (Array.isArray(lecon.exercices)) return lecon.exercices;
+  return lecon.exercice ? [lecon.exercice] : [];
+}
+
+// Toutes les leçons, quel que soit le fichier qui les a posées sur window.
+function toutesLesLecons() {
+  var out = [];
+  for (var cle in window) {
+    if (cle.indexOf('DATA_') !== 0 || cle === 'DATA_MEMOS') continue;
+    var v = window[cle];
+    if (!Array.isArray(v)) continue;
+    for (var i = 0; i < v.length; i++) if (v[i] && v[i].id) out.push(v[i]);
+  }
+  return out;
+}
+
+function aMesurer() {
+  var out = [];
+  var lecons = toutesLesLecons();
+  for (var l = 0; l < lecons.length; l++) {
+    var exos = exercicesDe(lecons[l]);
+    for (var i = 0; i < exos.length; i++) {
+      var ex = exos[i];
+      if (ex.type === 'qcm' || typeof ex.verifier !== 'function') continue;
+      if (typeof ex.solution !== 'string' || !ex.solution.trim()) continue;
+      if (!MESURE.test(String(ex.verifier))) continue;
+      out.push({ ou: lecons[l].id + ' [exo ' + i + ']', ex: ex });
+    }
+  }
+  return out;
+}
+
+/* Rend un code dans le banc d'essai et rend la main quand la page est prête.
+   srcdoc déclenche un vrai chargement : sans l'attendre, on mesurerait une
+   page vide. Les deux requestAnimationFrame laissent ensuite la mise en page
+   se faire.
+
+   MAIS un navigateur suspend requestAnimationFrame quand l'onglet n'est pas
+   visible : s'y fier seul, c'est un harnais qui reste bloqué pour toujours
+   dès qu'on regarde ailleurs. On prend donc le premier des deux qui répond,
+   la rafale d'images ou un simple délai. */
+function rendre(code, largeur) {
+  return new Promise(function (resolve) {
+    var banc = document.getElementById('banc');
+    banc.style.width = largeur + 'px';
+    banc.style.height = '400px';
+    banc.onload = function () {
+      var f = banc.contentWindow;
+      var rendu = false;
+      var pret = function () {
+        if (rendu) return;
+        rendu = true;
+        resolve({ doc: banc.contentDocument, win: f, code: code });
+      };
+      try {
+        f.requestAnimationFrame(function () { f.requestAnimationFrame(pret); });
+      } catch (e) { /* pas de rAF : le délai suffira */ }
+      setTimeout(pret, 60);
+    };
+    banc.srcdoc = code;
+  });
+}
+
+function juger(ex, ctx) {
+  try { return ex.verifier(ctx); }
+  catch (e) { return { ok: false, message: 'le correcteur a planté : ' + e.message }; }
+}
+
+// Une page sans son <style> ne peut plus rien mesurer de juste : tout
+// correcteur qui la valide ne regarde pas ce qu'il prétend regarder.
+function sansStyle(code) {
+  var nu = code.replace(/<style[\s\S]*?<\/style>/gi, '');
+  return nu === code ? null : { nom: 'privée de son <style>', code: nu };
+}
+
+/* Tous les exercices n'ont pas de <style> — une chasse au bug sur une balise
+   mal fermée, par exemple. On vise alors ce que le correcteur cherche
+   lui-même, exactement comme le fait le harnais Node : on lit ses sélecteurs
+   dans sa source, et on retire de la page ce qu'ils désignent.
+   Le sélecteur est pris entre SES guillemets, qui peuvent en contenir
+   d'autres : « a[href^="https"] » ne doit pas être coupé en deux. */
+function selecteursDe(src) {
+  var re = /(querySelectorAll|querySelector|getElementById)\(\s*(?:'([^']*)'|"([^"]*)")/g;
+  var out = [], m;
+  while ((m = re.exec(src)) !== null) {
+    var brut = m[2] !== undefined ? m[2] : m[3];
+    if (!brut) continue;
+    var sel = m[1] === 'getElementById' ? '#' + brut : brut;
+    if (out.indexOf(sel) === -1) out.push(sel);
+  }
+  return out;
+}
+
+function sansLaCible(code, src) {
+  var sels = selecteursDe(src);
+  for (var i = 0; i < sels.length; i++) {
+    var doc = new DOMParser().parseFromString(code, 'text/html');
+    var vises;
+    try { vises = doc.querySelectorAll(sels[i]); }
+    catch (e) { continue; }                 // sélecteur assemblé à l'exécution
+    if (!vises.length) continue;
+    for (var k = 0; k < vises.length; k++) vises[k].remove();
+    return { nom: 'sans ce que vise « ' + sels[i] + ' »', code: doc.documentElement.outerHTML };
+  }
+  return null;
+}
+
+function ligne(classe, ou, texte) {
+  var d = document.createElement('div');
+  d.className = 'ligne';
+  d.innerHTML = '<span class="' + classe + '">' +
+    (classe === 'ok' ? '✔' : classe === 'ko' ? '✘' : '?') + '</span>' +
+    '<span class="ou">' + ou + '</span>' +
+    '<span class="pourquoi">' + texte + '</span>';
+  document.getElementById('rapport').appendChild(d);
+}
+
+async function lancer() {
+  var bouton = document.getElementById('lancer');
+  bouton.disabled = true;
+  document.getElementById('rapport').innerHTML = '';
+  var largeur = Number(document.getElementById('largeur').value) || 520;
+  var travail = aMesurer();
+  var debut = Date.now();
+
+  document.getElementById('bilan').className = '';
+  document.getElementById('bilan').textContent =
+    'En cours — ' + travail.length + ' exercices à ' + largeur + ' px…';
+
+  var ko = 0, complaisants = 0, nonEprouves = 0, juges = 0;
+
+  for (var n = 0; n < travail.length; n++) {
+    var t = travail[n];
+
+    // 1. la solution officielle doit être ACCEPTÉE
+    var ctx = await rendre(t.ex.solution, largeur);
+    var v = juger(t.ex, ctx);
+    juges++;
+    if (!v || v.ok !== true) {
+      ko++;
+      ligne('ko', t.ou, 'la solution officielle est REFUSÉE → ' +
+        ((v && v.message) || 'sans message').replace(/<[^>]+>/g, ''));
+      continue;
+    }
+
+    // 2. une copie abîmée doit être REFUSÉE
+    var copie = sansStyle(t.ex.solution) || sansLaCible(t.ex.solution, String(t.ex.verifier));
+    if (copie === null) {
+      nonEprouves++;
+      ligne('note', t.ou, 'rien à lui retirer : correcteur NON ÉPROUVÉ');
+      continue;
+    }
+    var ctx2 = await rendre(copie.code, largeur);
+    var v2 = juger(t.ex, ctx2);
+    if (v2 && v2.ok === true) {
+      complaisants++;
+      ligne('ko', t.ou, 'ACCEPTE une page ' + copie.nom.replace(/</g, '&lt;') +
+        ' — il ne vérifie pas ce qu\'il prétend');
+    } else {
+      ligne('ok', t.ou, 'solution acceptée, copie ' + copie.nom.replace(/</g, '&lt;') + ' refusée');
+    }
+  }
+
+  var duree = ((Date.now() - debut) / 1000).toFixed(1);
+  var b = document.getElementById('bilan');
+  b.textContent = juges + ' exercices jugés en ' + duree + ' s — ' +
+    ko + ' solution(s) refusée(s), ' + complaisants + ' correcteur(s) complaisant(s)' +
+    (nonEprouves ? ', ' + nonEprouves + ' non éprouvé(s)' : '');
+  b.className = (ko || complaisants) ? 'ko' : 'ok';
+  bouton.disabled = false;
+}
+
+document.getElementById('lancer').addEventListener('click', lancer);
+</script>
+</body>
+</html>

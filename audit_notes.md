@@ -144,9 +144,22 @@ Fichier : outils/verifier-contenu.js
 3. Renforcer la sécurité des iframes du bac (sandbox) si besoin, après
    vérification du pont postMessage.
 4. (Plus tard) couverture du fallback JS "sans Worker" en conditions réelles.
-5. Les 63 correcteurs qui mesurent la page ne sont rejoués par personne :
-   ni le verifier (Node ne calcule pas de largeur), ni une relecture. C'est
-   le dernier angle mort réel, et il pèse 13 % des exercices.
+5. FAIT (2026-09-23) — les 63 correcteurs qui mesurent la page n'étaient
+   rejoués par personne : ni le verifier (Node ne calcule pas de largeur),
+   ni une relecture. outils/verifier-navigateur.html les exécute dans un
+   vrai navigateur, avec les deux mêmes questions que le harnais Node.
+   Premier run : 63 jugés, 0 solution refusée, 0 complaisant.
+
+   Deux pièges rencontrés en l'écrivant, à connaître avant d'y toucher :
+
+   - requestAnimationFrame est SUSPENDU quand l'onglet n'est pas visible.
+     S'y fier seul donne un harnais qui reste bloqué pour toujours dès
+     qu'on regarde ailleurs — il passe alors pour cassé. On prend le
+     premier des deux qui répond, la rafale d'images ou un délai de 60 ms.
+   - La page s'ouvre en file:// et ne peut donc PAS lire index.html pour
+     en tirer la liste des data-*.js : les navigateurs refusent la requête.
+     Elle porte donc sa propre liste, et verifier-contenu.js compare les
+     deux — une divergence devient un problème structurel.
 
 
 ## Notes de suivi
