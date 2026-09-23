@@ -119,6 +119,33 @@ window.DATA_PROJETS = [
     {
       type: 'html',
       hauteur: 300,
+      genre: 'etape',
+      consigne: '<strong>Étape 1 — afficher la question.</strong> Avant de faire marcher le quiz, fais-le simplement <strong>parler</strong> : remplis <code>afficherQuestion()</code> pour que <code>#question</code> montre le texte de la question courante, et les trois boutons ses trois réponses.',
+      codeDepart: '<style>\n  body { font-family: sans-serif; padding: 16px; text-align: center; }\n  #question { font-size: 20px; font-weight: bold; min-height: 50px; }\n  button { display: block; width: 240px; margin: 8px auto; padding: 10px; font-size: 15px; }\n</style>\n\n<p id="question"></p>\n<button id="r0"></button>\n<button id="r1"></button>\n<button id="r2"></button>\n\n<script>\n  let questions = [\n    { texte: "Quel langage gère l\'APPARENCE d\'une page ?", reponses: ["HTML", "CSS", "JavaScript"], bonne: 1 },\n    { texte: "Que retourne 10 % 3 ?", reponses: ["1", "3", "3.33"], bonne: 0 }\n  ];\n\n  let indexQuestion = 0;\n\n  function afficherQuestion() {\n    let q = questions[indexQuestion];\n    // 1. le texte de la question dans #question\n\n    // 2. les trois réponses dans #r0, #r1 et #r2\n\n  }\n\n  afficherQuestion();\n</script>',
+      indices: [
+        'Tout ce dont tu as besoin est déjà dans la variable <code>q</code> : <code>q.texte</code> d\'un côté, <code>q.reponses</code> de l\'autre. Il ne reste qu\'à écrire ces valeurs dans la page.',
+        'Écrire du texte dans un élément, c\'est <code>document.querySelector("#question").textContent = …</code>. Les réponses sont un tableau : la première est <code>q.reponses[0]</code>.',
+        '<code>document.querySelector("#question").textContent = q.texte;</code> puis la même ligne pour <code>#r0</code> avec <code>q.reponses[0]</code>, et ainsi de suite.'
+      ],
+      solution: '<style>\n  body { font-family: sans-serif; padding: 16px; text-align: center; }\n  #question { font-size: 20px; font-weight: bold; min-height: 50px; }\n  button { display: block; width: 240px; margin: 8px auto; padding: 10px; font-size: 15px; }\n</style>\n\n<p id="question"></p>\n<button id="r0"></button>\n<button id="r1"></button>\n<button id="r2"></button>\n\n<script>\n  let questions = [\n    { texte: "Quel langage gère l\'APPARENCE d\'une page ?", reponses: ["HTML", "CSS", "JavaScript"], bonne: 1 },\n    { texte: "Que retourne 10 % 3 ?", reponses: ["1", "3", "3.33"], bonne: 0 }\n  ];\n\n  let indexQuestion = 0;\n\n  function afficherQuestion() {\n    let q = questions[indexQuestion];\n    document.querySelector("#question").textContent = q.texte;\n    document.querySelector("#r0").textContent = q.reponses[0];\n    document.querySelector("#r1").textContent = q.reponses[1];\n    document.querySelector("#r2").textContent = q.reponses[2];\n  }\n\n  afficherQuestion();\n</script>',
+      verifier: function (ctx) {
+        const q = ctx.doc.querySelector('#question');
+        const r = [ctx.doc.querySelector('#r0'), ctx.doc.querySelector('#r1'), ctx.doc.querySelector('#r2')];
+        if (!q || r.some(b => !b)) return { ok: false, message: 'Garde le paragraphe <code>#question</code> et les trois boutons <code>#r0</code>, <code>#r1</code>, <code>#r2</code>.' };
+        if (!q.textContent.trim()) return { ok: false, message: 'Le paragraphe <code>#question</code> est resté vide : écris-y <code>q.texte</code>.' };
+        if (!/apparence/i.test(q.textContent)) return { ok: false, message: 'C\'est la question courante qu\'il faut afficher — ici la première, celle sur l\'APPARENCE d\'une page. Tu affiches : « ' + q.textContent.trim() + ' ».' };
+        const vus = r.map(b => b.textContent.trim());
+        if (vus.some(t => !t)) return { ok: false, message: 'Un bouton au moins est resté vide. Il en faut trois : <code>#r0</code>, <code>#r1</code> et <code>#r2</code>.' };
+        const attendus = ['HTML', 'CSS', 'JavaScript'];
+        for (let i = 0; i < 3; i++) {
+          if (vus[i] !== attendus[i]) return { ok: false, message: 'Le bouton <code>#r' + i + '</code> devrait montrer « ' + attendus[i] + ' », pas « ' + vus[i] + ' ». Les réponses vont dans l\'ordre du tableau <code>q.reponses</code>.' };
+        }
+        return { ok: true, message: 'La page parle ! Elle ne réagit pas encore, mais elle affiche les bonnes données au bon endroit — et c\'est toujours par là qu\'on commence.' };
+      }
+    },
+    {
+      type: 'html',
+      hauteur: 300,
       consigne: 'Implémente le quiz complet dans la fonction <code>repondre(i)</code> et la fonction <code>afficherQuestion()</code>. Rappel du flux : comparer → scorer → avancer → réafficher ou terminer avec <code>Fini ! Score : X / 3</code>.',
       codeDepart: '<style>\n  body { font-family: sans-serif; padding: 16px; text-align: center; }\n  #question { font-size: 20px; font-weight: bold; min-height: 50px; }\n  button { display: block; width: 240px; margin: 8px auto; padding: 10px; font-size: 15px; }\n</style>\n\n<p id="question"></p>\n<button id="r0"></button>\n<button id="r1"></button>\n<button id="r2"></button>\n\n<script>\n  let questions = [\n    { texte: "Quel langage gère l\'APPARENCE d\'une page ?", reponses: ["HTML", "CSS", "JavaScript"], bonne: 1 },\n    { texte: "Que retourne 10 % 3 ?", reponses: ["1", "3", "3.33"], bonne: 0 },\n    { texte: "Quelle méthode AJOUTE un élément à un tableau ?", reponses: ["add()", "append()", "push()"], bonne: 2 }\n  ];\n\n  let indexQuestion = 0;\n  let score = 0;\n\n  function afficherQuestion() {\n    // Remplis #question, #r0, #r1, #r2 depuis questions[indexQuestion]\n\n  }\n\n  function repondre(i) {\n    // Compare i à la bonne réponse, score, avance, réaffiche ou termine\n\n  }\n\n  for (let i = 0; i < 3; i++) {\n    document.querySelector("#r" + i).addEventListener("click", function () {\n      repondre(i);\n    });\n  }\n\n  afficherQuestion();\n</script>',
       indice: 'Dans <code>repondre(i)</code> :<br><code>if (i === questions[indexQuestion].bonne) { score++; }<br>indexQuestion++;<br>if (indexQuestion < questions.length) { afficherQuestion(); }<br>else { document.querySelector("#question").textContent = \`Fini ! Score : \${score} / 3\`; }</code>',
@@ -180,6 +207,38 @@ let ordi = choix[Math.floor(Math.random() * 3)];</pre>
     {
       type: 'html',
       hauteur: 300,
+      genre: 'etape',
+      consigne: '<strong>Étape 1 — faire jouer l\'ordinateur.</strong> Avant de désigner un vainqueur, occupe-toi du plus simple : dans <code>jouer(joueur)</code>, fais <strong>tirer l\'ordinateur au hasard</strong> parmi <code>choix</code>, et affiche les deux coups dans <code>#resultat</code>, sous la forme <code>Toi : pierre — Ordi : ciseaux</code>. Aucune comparaison pour l\'instant.',
+      codeDepart: '<style>\n  body { font-family: sans-serif; text-align: center; padding: 16px; }\n  button { font-size: 26px; padding: 12px 18px; margin: 4px; }\n  #resultat { font-size: 17px; min-height: 24px; }\n</style>\n\n<h2>Pierre, feuille, ciseaux !</h2>\n<button id="pierre">🪨</button>\n<button id="feuille">📄</button>\n<button id="ciseaux">✂️</button>\n<p id="resultat">Choisis ton arme...</p>\n\n<script>\n  let choix = ["pierre", "feuille", "ciseaux"];\n\n  function jouer(joueur) {\n    // 1. tire un indice au hasard entre 0 et 2\n\n    // 2. affiche les deux coups dans #resultat\n\n  }\n\n  document.querySelector("#pierre").addEventListener("click", function () { jouer("pierre"); });\n  document.querySelector("#feuille").addEventListener("click", function () { jouer("feuille"); });\n  document.querySelector("#ciseaux").addEventListener("click", function () { jouer("ciseaux"); });\n</script>',
+      indices: [
+        'Deux choses à faire, et le tirage vient en premier. <code>Math.random()</code> donne un nombre entre 0 et 1 — il faut en tirer un indice de tableau, c\'est-à-dire 0, 1 ou 2.',
+        'La recette habituelle : <code>Math.floor(Math.random() * choix.length)</code>. Cet indice te donne le coup de l\'ordi avec <code>choix[indice]</code>.',
+        '<code>let ordi = choix[Math.floor(Math.random() * choix.length)];</code> puis <code>document.querySelector("#resultat").textContent = "Toi : " + joueur + " — Ordi : " + ordi;</code>'
+      ],
+      solution: '<style>\n  body { font-family: sans-serif; text-align: center; padding: 16px; }\n  button { font-size: 26px; padding: 12px 18px; margin: 4px; }\n  #resultat { font-size: 17px; min-height: 24px; }\n</style>\n\n<h2>Pierre, feuille, ciseaux !</h2>\n<button id="pierre">🪨</button>\n<button id="feuille">📄</button>\n<button id="ciseaux">✂️</button>\n<p id="resultat">Choisis ton arme...</p>\n\n<script>\n  let choix = ["pierre", "feuille", "ciseaux"];\n\n  function jouer(joueur) {\n    let ordi = choix[Math.floor(Math.random() * choix.length)];\n    document.querySelector("#resultat").textContent = "Toi : " + joueur + " — Ordi : " + ordi;\n  }\n\n  document.querySelector("#pierre").addEventListener("click", function () { jouer("pierre"); });\n  document.querySelector("#feuille").addEventListener("click", function () { jouer("feuille"); });\n  document.querySelector("#ciseaux").addEventListener("click", function () { jouer("ciseaux"); });\n</script>',
+      verifier: function (ctx) {
+        const res = ctx.doc.querySelector('#resultat');
+        const bouton = ctx.doc.querySelector('#pierre');
+        if (!res || !bouton) return { ok: false, message: 'Garde le paragraphe <code>#resultat</code> et les trois boutons.' };
+        if (!/random/.test(ctx.code)) return { ok: false, message: 'Le coup de l\'ordinateur doit être TIRÉ AU HASARD, avec <code>Math.random()</code> — pas écrit à la main.' };
+        const depart = res.textContent;
+        bouton.click();
+        const apres = res.textContent;
+        if (apres === depart) return { ok: false, message: 'Rien ne change quand on clique sur 🪨 : <code>#resultat</code> affiche toujours « ' + depart + ' ». C\'est <code>jouer()</code> qui doit écrire dedans.' };
+        if (!/pierre/i.test(apres)) return { ok: false, message: 'Après un clic sur 🪨, le texte doit rappeler TON coup — « pierre ». Affiché : « ' + apres + ' ».' };
+        // Les deux coups doivent y être : sur dix clics, l'ordi sort forcément
+        // autre chose que « pierre » au moins une fois, sauf s'il ne joue pas.
+        let vus = {};
+        for (let n = 0; n < 40; n++) { bouton.click(); vus[res.textContent] = true; }
+        if (Object.keys(vus).length < 2) return { ok: false, message: 'Le texte est toujours le même après 40 clics : le coup de l\'ordinateur n\'est pas vraiment tiré au hasard à CHAQUE partie. Le tirage va DANS <code>jouer()</code>.' };
+        const unTexte = Object.keys(vus)[0];
+        if (!/ordi/i.test(unTexte)) return { ok: false, message: 'Le texte doit nommer les deux joueurs, par exemple <code>Toi : pierre — Ordi : ciseaux</code>. Affiché : « ' + unTexte + ' ».' };
+        return { ok: true, message: 'L\'ordinateur joue, et il joue différemment à chaque fois. Le hasard est en place : il ne reste plus qu\'à décider qui gagne.' };
+      }
+    },
+    {
+      type: 'html',
+      hauteur: 300,
       consigne: 'Implémente le jeu complet dans la fonction <code>jouer(joueur)</code> : tirage de l\'ordinateur, comparaison, affichage du résultat (avec « gagné », « perdu » ou « égalité » dedans) et mise à jour du score au format <code>Toi X - Y Ordi</code>. Puis affronte la machine dans l\'aperçu !',
       codeDepart: '<style>\n  body { font-family: sans-serif; text-align: center; padding: 16px; }\n  button { font-size: 26px; padding: 12px 18px; margin: 4px; }\n  #resultat { font-size: 17px; min-height: 24px; }\n  #score { font-size: 22px; font-weight: bold; }\n</style>\n\n<h2>Pierre, feuille, ciseaux !</h2>\n<button id="pierre">🪨</button>\n<button id="feuille">📄</button>\n<button id="ciseaux">✂️</button>\n<p id="resultat">Choisis ton arme...</p>\n<p id="score">Toi 0 - 0 Ordi</p>\n\n<script>\n  let victoires = 0;\n  let defaites = 0;\n  let choix = ["pierre", "feuille", "ciseaux"];\n\n  function jouer(joueur) {\n    // 1. tirage de l\'ordi — 2. comparaison — 3. affichages\n\n  }\n\n  document.querySelector("#pierre").addEventListener("click", function () { jouer("pierre"); });\n  document.querySelector("#feuille").addEventListener("click", function () { jouer("feuille"); });\n  document.querySelector("#ciseaux").addEventListener("click", function () { jouer("ciseaux"); });\n</script>',
       indice: 'Dans <code>jouer</code> : le tirage (<code>choix[Math.floor(Math.random() * 3)]</code>), puis le if/else if/else de la leçon (en incrémentant victoires/defaites et en préparant un texte avec gagné/perdu/égalité), puis les deux affichages (<code>#resultat</code> et <code>#score</code> au format <code>Toi X - Y Ordi</code>).',
@@ -236,6 +295,38 @@ let ordi = choix[Math.floor(Math.random() * 3)];</pre>
     {
       type: 'html',
       hauteur: 320,
+      genre: 'etape',
+      consigne: '<strong>Étape 1 — afficher la liste.</strong> Oublie la sauvegarde pour l\'instant : le tableau <code>notes</code> est déjà rempli. Écris <code>afficher()</code> pour qu\'il apparaisse à l\'écran — <strong>un <code>&lt;li&gt;</code> par note</strong>, dans <code>#liste</code>. Pense à vider la liste avant de la remplir, sinon les notes se dupliqueront à chaque appel.',
+      codeDepart: '<style>\n  body { font-family: sans-serif; padding: 16px; }\n  li { padding: 6px; margin: 4px 0; background: #eef1fe; border-radius: 6px; list-style: none; }\n</style>\n\n<h2>🗒️ Mon carnet</h2>\n<ul id="liste"></ul>\n\n<script>\n  let liste = document.querySelector("#liste");\n  let notes = ["Acheter du pain", "Réviser les boucles", "Appeler Maya"];\n\n  function afficher() {\n    // 1. vider la liste\n\n    // 2. une boucle sur notes : un <li> par note\n\n  }\n\n  afficher();\n</script>',
+      indices: [
+        'Deux temps, et le premier est celui qu\'on oublie : <strong>vider</strong> avant de remplir. Sans ça, un second appel à <code>afficher()</code> écrirait tout une deuxième fois à la suite.',
+        'Vider, c\'est <code>liste.innerHTML = "";</code>. Ensuite une boucle sur <code>notes</code>, et pour chacune un <code>document.createElement("li")</code> qu\'on ajoute avec <code>liste.appendChild(…)</code>.',
+        '<code>liste.innerHTML = "";<br>for (let n of notes) {<br>&nbsp;&nbsp;let li = document.createElement("li");<br>&nbsp;&nbsp;li.textContent = n;<br>&nbsp;&nbsp;liste.appendChild(li);<br>}</code>'
+      ],
+      solution: '<style>\n  body { font-family: sans-serif; padding: 16px; }\n  li { padding: 6px; margin: 4px 0; background: #eef1fe; border-radius: 6px; list-style: none; }\n</style>\n\n<h2>🗒️ Mon carnet</h2>\n<ul id="liste"></ul>\n\n<script>\n  let liste = document.querySelector("#liste");\n  let notes = ["Acheter du pain", "Réviser les boucles", "Appeler Maya"];\n\n  function afficher() {\n    liste.innerHTML = "";\n    for (let n of notes) {\n      let li = document.createElement("li");\n      li.textContent = n;\n      liste.appendChild(li);\n    }\n  }\n\n  afficher();\n</script>',
+      verifier: function (ctx) {
+        const liste = ctx.doc.querySelector('#liste');
+        if (!liste) return { ok: false, message: 'Garde la liste <code>&lt;ul id="liste"&gt;</code> : c\'est elle qu\'on remplit.' };
+        const li = liste.querySelectorAll('li');
+        if (!li.length) return { ok: false, message: 'Aucun <code>&lt;li&gt;</code> dans la liste. La boucle doit en créer un par note, et l\'ajouter avec <code>appendChild</code>.' };
+        if (li.length !== 3) return { ok: false, message: 'J\'attends 3 éléments, un par note — j\'en compte ' + li.length + '. Si tu en vois 6, c\'est que la liste n\'a pas été vidée avant d\'être remplie.' };
+        const textes = [...li].map(e => e.textContent.trim());
+        const attendues = ['Acheter du pain', 'Réviser les boucles', 'Appeler Maya'];
+        for (let i = 0; i < 3; i++) {
+          if (textes[i] !== attendues[i]) return { ok: false, message: 'Le <code>&lt;li&gt;</code> n°' + (i + 1) + ' devrait contenir « ' + attendues[i] + ' », pas « ' + textes[i] + ' ». Les notes s\'affichent dans l\'ordre du tableau.' };
+        }
+        // Le piège du doublon : appeler afficher() deux fois ne doit rien changer.
+        if (ctx.win && typeof ctx.win.afficher === 'function') {
+          ctx.win.afficher();
+          const apres = liste.querySelectorAll('li').length;
+          if (apres !== 3) return { ok: false, message: 'Deux appels à <code>afficher()</code> laissent ' + apres + ' éléments au lieu de 3 : la liste n\'est pas vidée au début. Ajoute <code>liste.innerHTML = "";</code> en première ligne.' };
+        }
+        return { ok: true, message: 'Trois notes, trois <code>&lt;li&gt;</code> — et le réflexe qui compte : vider avant de remplir. C\'est ce geste qui rendra la suppression possible tout à l\'heure.' };
+      }
+    },
+    {
+      type: 'html',
+      hauteur: 340,
       consigne: 'Implémente le carnet persistant complet : <code>afficher()</code>, <code>sauver()</code>, l\'ajout, la suppression au clic, et le chargement initial depuis le localStorage. La correction vérifie chaque point du cahier des charges — y compris la persistance réelle !',
       codeDepart: '<style>\n  body { font-family: sans-serif; padding: 16px; }\n  input { padding: 8px; width: 200px; }\n  button { padding: 8px 16px; }\n  li { cursor: pointer; padding: 6px; margin: 4px 0; background: #eef1fe; border-radius: 6px; list-style: none; }\n</style>\n\n<h2>🗒️ Mon carnet permanent</h2>\n<input id="champ" type="text" placeholder="Nouvelle note...">\n<button id="ajouter">Ajouter</button>\n<ul id="liste"></ul>\n\n<script>\n  let champ = document.querySelector("#champ");\n  let liste = document.querySelector("#liste");\n\n  // 6. Chargement initial : relire "carnet" (JSON.parse) ou partir de []\n  let notes = [];\n\n  function sauver() {\n    // JSON.stringify vers la clé "carnet"\n  }\n\n  function afficher() {\n    // vider la liste, puis une boucle : créer les li, clic = splice + sauver + afficher\n  }\n\n  document.querySelector("#ajouter").addEventListener("click", function () {\n    // pousser dans notes (si non vide), vider le champ, sauver, afficher\n  });\n\n  afficher();\n</script>',
       indice: 'Chargement : <code>let notes = JSON.parse(localStorage.getItem("carnet")) || [];</code><br>Dans afficher : <code>liste.innerHTML = ""; for (let i = 0; i < notes.length; i++) { ... li.addEventListener("click", function () { notes.splice(i, 1); sauver(); afficher(); }); ... }</code>',

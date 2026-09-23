@@ -186,7 +186,11 @@ for (const mod of pont.modules()) {
   }
 }
 verifie('genre — aucun exercice ne tombe dans un genre inconnu', inconnus, 0);
-verifie('genre — les 481 exercices sont tous classés', totalExos, 481);
+// Pas de nombre en dur ici : il casserait au premier exercice ajouté, et le
+// vrai invariant n'est pas « il y en a N », c'est « ils sont tous classés ».
+verifie('genre — chaque exercice est compté une fois et une seule',
+        connus.reduce((s, k) => s + (compte[k] || 0), 0), totalExos);
+verifie('genre — le cours a bien tous ses exercices', totalExos > 400, true);
 console.log('         ' + connus.map(k => k + ' ' + (compte[k] || 0)).join('  ·  '));
 
 /* Une chasse au bug doit taire TOUTES les fautes, dans les sept langages :
