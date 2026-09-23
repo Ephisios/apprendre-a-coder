@@ -594,6 +594,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       solution: '<style>\n  .carte {\n    width: 150px;\n    padding: 20px;\n    background: #eef1fe;\n    border-radius: 12px;\n    transition: transform 0.2s;\n  }\n  .carte:hover {\n    transform: translateY(-6px) scale(1.05);\n  }\n</style>\n\n<div class="carte" id="carte">Survole-moi</div>',
       verifier: function (ctx) {
         const code = ctx.code.replace(/\s+/g, ' ');
+        // Lire le texte du code ne suffit pas : une balise <style> cassée ou une
+        // carte effacée laissent les bonnes lignes bien visibles alors que plus
+        // rien ne s'applique. On vérifie donc d'abord que la page tient debout.
+        if (!ctx.doc.querySelector('style')) return { ok: false, message: 'Ton CSS doit être dans une balise <code>&lt;style&gt;</code> correctement ouverte et fermée — sinon il s\'affiche comme du texte au lieu d\'habiller la page.' };
+        if (!ctx.doc.querySelector('.carte')) return { ok: false, message: 'Garde l\'élément <code>&lt;div class="carte"&gt;</code> : c\'est lui que la règle <code>.carte</code> habille, et il n\'y a rien à survoler sans lui.' };
         if (!/transition:[^;]*transform/.test(code)) return { ok: false, message: 'Ajoute <code>transition: transform 0.2s;</code> sur <code>.carte</code> (et non sur le hover).' };
         if (!/:hover\s*\{[^}]*transform:/.test(code)) return { ok: false, message: 'La transformation doit être dans la règle <code>.carte:hover</code>.' };
         const hover = code.match(/:hover\s*\{([^}]*)\}/);

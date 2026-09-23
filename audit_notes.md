@@ -61,6 +61,35 @@ Donc dans ce run, 16 exercices n'ont pas pu être éprouvés : on ne peut pas
 conclure sur leur correcteur à partir de ce test. C'est normal et documenté,
 mais c'est bien l'information à surveiller pour une fausse sécurité.
 
+RÉSOLU le 2026-09-23. Les 16 n'étaient pas des correcteurs laxistes : c'est
+le saboteur qui était aveugle. Cinq défauts, tous dans
+outils/verifier-contenu.js sauf le dernier :
+
+1. selecteursDe() coupait le sélecteur au premier guillemet intérieur :
+   'a[href^="https"]' devenait 'a[href^=', qui ne vise plus rien.
+2. retirerSelecteur() refusait tout sélecteur composé ("ul li a",
+   "header h1"), c'est-à-dire la forme la plus courante de ces leçons.
+   Remplacé par retirerParDom(), qui confie la lecture du sélecteur à jsdom.
+3. Une page entièrement vidée était jetée comme "pas une copie" (chaîne vide
+   = falsy), alors que c'est la copie la plus fausse qui soit.
+4. SQL : une requête d'agrégat sans WHERE, sans nombre et sans texte
+   n'offrait prise à aucun sabotage. On vise désormais l'alias et l'agrégat.
+5. css-22 [exo 1] était, lui, un VRAI correcteur complaisant : il ne lisait
+   que le texte du code. Il acceptait donc une balise <style> cassée et une
+   page dont la .carte avait disparu. Deux contrôles sur le DOM ont été
+   ajoutés dans data-css3.js.
+
+Une tentative intermédiaire a fait retomber le DOM sur le sabotage générique.
+Mauvaise idée, et le harnais l'a montré : html-21 [exo 0] s'est retrouvé
+accusé parce que les copies abîmaient "UTF-8" ou "</body>" dans un exercice
+qui ne parle que d'Open Graph. Le commentaire d'origine ("frapper au hasard
+ne prouverait rien") avait raison. Le DOM garde donc sa sortie sèche, et
+reçoit à la place un sabotage ciblé : on corrompt les textes que le
+correcteur cherche lui-même ("og:title", "https://").
+
+Run du 2026-09-23 : 355 copies présentées, 355 refusées, 0 correcteur à
+regarder, 0 exercice sans copie à présenter.
+
 ### 4.2 Fallback "sans Worker" (JS)
 
 Non couvert par le verifier (Node), à noter pour plus tard.
@@ -79,10 +108,13 @@ la sécurité dans le futur (sans casser le pont postMessage).
 Depuis la racine du projet :
 
 ```powershell
-cd c:\Users\mathe\Downloads\Apprendre-a-coder\Apprendre-a-coder
+cd <la racine du projet>
 npm install   # si jsdom n'est pas installé (outils de dev uniquement)
 node outils/verifier-contenu.js
 ```
+
+Sans jsdom, les 77 exercices HTML/CSS sont annoncés comme non couverts au
+lieu d'être rejoués : le rapport le dit, mais c'est un piège si on lit vite.
 
 Interpréter :
 
@@ -90,8 +122,8 @@ Interpréter :
   cohérent avec ce run.
 - "X copies écartées" = sabo.equivalentes (copies = même résultat que
   la solution).
-- Nombre d'exercices sans copie à présenter = sabo.nonEprouves (16 dans
-  ce run).
+- Nombre d'exercices sans copie à présenter = sabo.nonEprouves (0 depuis
+  le 2026-09-23 ; la ligne disparaît alors du rapport).
 
 ### 5.2 Relire la logique (fichier source)
 
@@ -102,15 +134,19 @@ Fichier : outils/verifier-contenu.js
   sabo.equivalentes, sabo.nonEprouves.
 
 
-## 6. Prochaines modifications possibles (liste, non appliquées)
+## 6. Prochaines modifications possibles (liste)
 
-1. Rendre "16 exercices sans copie à présenter" encore plus lisible dans la
-   sortie du verifier (ex. ligne explicite).
-2. Éventuellement lister les exercices non éprouvés dans la section
-   "À regarder".
+1. FAIT (2026-09-22) — rendre "16 exercices sans copie à présenter" lisible
+   dans la sortie du verifier.
+2. FAIT (2026-09-22) — lister nommément les exercices non éprouvés.
+   Ce sont ces deux lignes qui ont permis de trouver les cinq défauts du
+   saboteur décrits en 4.1 : un compte anonyme ne les aurait jamais révélés.
 3. Renforcer la sécurité des iframes du bac (sandbox) si besoin, après
    vérification du pont postMessage.
 4. (Plus tard) couverture du fallback JS "sans Worker" en conditions réelles.
+5. Les 63 correcteurs qui mesurent la page ne sont rejoués par personne :
+   ni le verifier (Node ne calcule pas de largeur), ni une relecture. C'est
+   le dernier angle mort réel, et il pèse 13 % des exercices.
 
 
 ## Notes de suivi

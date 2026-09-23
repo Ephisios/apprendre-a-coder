@@ -458,17 +458,46 @@ function litterauxDe(src) {
 
 function selecteursDe(src) {
   const out = [];
-  const re = /querySelectorAll\(\s*['"]([^'"]+)['"]|querySelector\(\s*['"]([^'"]+)['"]|getElementById\(\s*['"]([^'"]+)['"]|getElementsByTagName\(\s*['"]([^'"]+)['"]/g;
+  // Le sélecteur est délimité par SES guillemets à lui, et peut en contenir
+  // d'autres : couper au premier venu réduisait « a[href^="https"] » à
+  // « a[href^= », qui ne vise plus rien. Le correcteur passait alors pour
+  // non éprouvé alors qu'il n'avait tout simplement jamais été attaqué.
+  const re = /(querySelectorAll|querySelector|getElementById|getElementsByTagName)\(\s*(?:'([^']*)'|"([^"]*)")/g;
   let m;
   while ((m = re.exec(src)) !== null) {
-    if (m[3]) out.push('#' + m[3]);
-    else if (m[4]) out.push(m[4]);
-    else if (m[1] || m[2]) out.push(m[1] || m[2]);
+    const brut = m[2] !== undefined ? m[2] : m[3];
+    const sel = m[1] === 'getElementById' ? '#' + brut : brut;
+    if (brut && out.indexOf(sel) === -1) out.push(sel);
   }
   return out;
 }
 
-// Enlève de la page tout ce qui répond à `sel` : une classe, un id, une balise.
+/* Enlève de la page tout ce que `sel` désigne, en confiant la lecture du
+   sélecteur à jsdom plutôt qu'à une expression régulière. « ul li a »,
+   « header h1 » ou « meta[name="viewport"] » sont alors traités exactement
+   comme le navigateur les traite — l'approximation en regex, elle, les
+   refusait tous et laissait leur correcteur sans copie à refuser.
+   Rend null quand il n'y a rien à retirer, ou quand le sélecteur a été
+   assemblé à l'exécution et n'est donc pas lisible dans la source. */
+function retirerParDom(code, sel) {
+  const j = chargerJsdom();
+  if (!j) return null;
+  let dom;
+  try { dom = new j.JSDOM(code, { virtualConsole: new j.VirtualConsole() }); }
+  catch (e) { return null; }
+  try {
+    const vises = dom.window.document.querySelectorAll(sel);
+    if (!vises.length) return null;          // rien à retirer : ce n'est pas un sabotage
+    for (const noeud of vises) noeud.remove();
+    return dom.serialize();
+  } catch (e) {
+    return null;                             // sélecteur illisible statiquement
+  } finally {
+    dom.window.close();
+  }
+}
+
+// Repli quand jsdom manque : une classe, un id, une balise — rien de composé.
 function retirerSelecteur(code, sel) {
   const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   if (sel[0] === '.' && sel.length > 1) {
@@ -492,12 +521,28 @@ function sabotagesCibles(ex, famille) {
   const sol = ex.solution;
   const src = String(ex.verifier);
   const out = [];
-  const proposer = (nom, texte) => { if (texte && texte !== sol && out.length < 6) out.push({ nom, texte }); };
+  // Un texte vide n'est pas « pas de copie » : une page effacée est au
+  // contraire la copie la plus fausse qui soit, et tout correcteur doit la
+  // refuser. Seule la différence avec la solution compte donc ici.
+  const proposer = (nom, texte) => {
+    if (texte == null || texte === sol || out.length >= 6) return;
+    out.push({ nom: texte.trim() === '' ? nom + ' — il ne reste rien' : nom, texte });
+  };
 
   if (famille === 'dom') {
     for (const sel of selecteursDe(src)) {
-      const attaque = retirerSelecteur(sol, sel);
+      const attaque = retirerParDom(sol, sel) || retirerSelecteur(sol, sel);
       if (attaque) proposer('la page ne contient plus rien qui réponde à « ' + sel + ' »', attaque);
+    }
+    // Les textes que le correcteur cherche — « og:title », « https:// » —
+    // sont ce que l'exercice demande vraiment. Les corrompre est une faute
+    // qu'il DOIT voir, et cela reste dans le sujet : c'est ce qui distingue
+    // cette attaque du sabotage au hasard auquel le DOM renonce.
+    let vises = 0;
+    for (const lit of litterauxDe(src)) {
+      if (sol.indexOf(lit) === -1) continue;
+      proposer('le texte « ' + lit + ' » corrompu au milieu', sol.replace(lit, corrompreTexte(lit)));
+      if (++vises >= 3) break;
     }
   } else if (famille === 'js' || famille === 'py' || famille === 'cj') {
     // Ce correcteur relit le code de l'élève pour en déduire ce qu'il attend
@@ -516,6 +561,23 @@ function sabotagesCibles(ex, famille) {
       if (++essaies >= 3) break;
     }
   } else if (famille === 'sql') {
+    // Une requête d'agrégat sans WHERE, sans nombre et sans texte échappait à
+    // tous les sabotages : on vise alors l'alias et l'agrégat eux-mêmes, qui
+    // sont précisément ce que la requête affirme.
+    const alias = sol.match(/\bAS\s+([a-zA-Z_]\w*)/i);
+    if (alias) proposer('l\'alias « ' + alias[1] + ' » disparaît', sol.replace(alias[0], ''));
+
+    const agg = sol.match(/\b(COUNT|AVG|SUM|MAX|MIN)\s*\(([^()]*)\)/i);
+    if (agg) {
+      const dedans = agg[2].trim();
+      if (dedans === '*') {
+        proposer('le comptage devient une constante', sol.replace(agg[0], '3'));
+      } else {
+        const autre = { COUNT: 'MAX', AVG: 'MAX', SUM: 'COUNT', MAX: 'MIN', MIN: 'MAX' }[agg[1].toUpperCase()];
+        proposer('l\'agrégat ' + agg[1].toUpperCase() + ' devient ' + autre, sol.replace(agg[0], autre + '(' + dedans + ')'));
+      }
+    }
+
     if (/\bwhere\b/i.test(sol)) {
       proposer('clause WHERE retirée (les lignes filtrées reviennent)',
         sol.replace(/\bwhere\b[\s\S]*?(?=\border by\b|\bgroup by\b|\blimit\b|$)/i, ''));
@@ -539,12 +601,18 @@ function sabotagesCibles(ex, famille) {
   return out;
 }
 
-// L'attaque ciblée d'abord. Si le correcteur ne dit rien de précis à viser,
-// les attaques génériques servent de secours — sauf pour les pages HTML/CSS,
-// où frapper au hasard ne prouverait rien : on préfère alors ne rien affirmer.
+// L'attaque ciblée d'abord : sélecteurs retirés, textes visés corrompus. Si
+// le correcteur ne dit rien de précis à viser, les attaques génériques
+// servent de secours — sauf pour les pages HTML/CSS, où frapper au hasard ne
+// prouverait rien : on préfère alors ne rien affirmer, et l'exercice est
+// nommé dans le rapport comme non éprouvé.
 function sabotages(ex, famille) {
   const ciblees = sabotagesCibles(ex, famille);
   if (ciblees.length) return ciblees;
+  // Sur une page, le sabotage au hasard abîme presque toujours autre chose
+  // que ce que l'exercice demande — corrompre « UTF-8 » dans un exercice sur
+  // Open Graph accuse un correcteur qui a raison de laisser passer. On
+  // préfère donc ne rien affirmer, et le dire dans le rapport.
   if (famille === 'dom') return [];
   return sabotagesGeneriques(ex.solution, famille);
 }
@@ -552,7 +620,7 @@ function sabotages(ex, famille) {
 function sabotagesGeneriques(code, famille) {
   const out = [];
   const proposer = (nom, texte) => {
-    if (texte && texte !== code && out.length < 4 && !out.some(s => s.texte === texte)) out.push({ nom, texte });
+    if (texte != null && texte !== code && out.length < 4 && !out.some(s => s.texte === texte)) out.push({ nom, texte });
   };
 
   // a) le dernier morceau utile disparaît
