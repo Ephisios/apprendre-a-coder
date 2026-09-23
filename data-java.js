@@ -700,7 +700,11 @@ medor.nom = "Médor";
       type: 'java',
       consigne: 'Crée une classe <code>Chien</code> avec un attribut <code>String nom</code> et une méthode <code>aboyer()</code> qui renvoie <code>« nom » dit Ouaf !</code>. Fabrique un chien nommé Rex et affiche le résultat.',
       codeDepart: 'class Chien {\n    \n}\n\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: 'Dans la classe : <code>String nom;</code> et <code>String aboyer() { return nom + " dit Ouaf !"; }</code>. Dans le main : <code>Chien rex = new Chien(); rex.nom = "Rex";</code>',
+      indices: [
+        "Une classe est un moule, pas un objet. Il faut donc deux choses : décrire le moule (hors du <code>main</code>), puis en fabriquer un exemplaire avec <code>new</code>.",
+        "Dans la classe : un attribut <code>String nom;</code> et une méthode qui renvoie un texte. Dans le <code>main</code> : un <code>new Chien()</code>, puis on remplit son <code>nom</code>.",
+        "<code>String aboyer() { return nom + \" dit Ouaf !\"; }</code>, et côté main <code>Chien rex = new Chien(); rex.nom = \"Rex\";</code>"
+      ],
       solution: 'class Chien {\n    String nom;\n\n    String aboyer() {\n        return nom + " dit Ouaf !";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien();\n        rex.nom = "Rex";\n        System.out.println(rex.aboyer());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -715,7 +719,11 @@ medor.nom = "Médor";
       type: 'java',
       consigne: '<strong>Entraînement :</strong> fabrique <strong>deux</strong> chiens différents et affiche les deux aboiements, pour vérifier que chaque objet garde ses propres données.',
       codeDepart: 'class Chien {\n    String nom;\n\n    String aboyer() {\n        return nom + " dit Ouaf !";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: 'Deux fois <code>new Chien()</code>, deux variables différentes, deux noms différents.',
+      indices: [
+        "Un seul <code>new</code> ne fabrique qu’un seul objet. Deux chiens différents, cela veut dire deux appels.",
+        "Deux variables distinctes, chacune recevant son propre <code>new Chien()</code> — puis son propre nom.",
+        "<code>Chien a = new Chien(); a.nom = \"Rex\";</code> puis <code>Chien b = new Chien(); b.nom = \"Bella\";</code>"
+      ],
       solution: 'class Chien {\n    String nom;\n\n    String aboyer() {\n        return nom + " dit Ouaf !";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien();\n        rex.nom = "Rex";\n        Chien medor = new Chien();\n        medor.nom = "Médor";\n        System.out.println(rex.aboyer());\n        System.out.println(medor.aboyer());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };

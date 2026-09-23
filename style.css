@@ -1349,6 +1349,16 @@ h1.titre-lecon {
 .indice-bloc strong { color: inherit; }
 .indice-bloc code { background: rgba(128, 128, 128, .18); color: inherit; }
 
+/* Les paliers d'indices s'empilent : le précédent reste lisible pendant qu'on
+   découvre le suivant. Un filet les sépare sans en faire une liste à puces —
+   ce sont les étapes d'une même aide, pas des éléments indépendants. */
+.indice-palier { margin: 0; }
+.indice-palier + .indice-palier {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
 /* Un recours qui vient d'apparaître se signale une fois, puis se tait. */
 .btn-apparu { animation: badge-entre 420ms var(--sortie); }
 

@@ -204,6 +204,19 @@ for (const item of lecons) {
     if (!TYPES_CONNUS[t]) pb.push(tag + ' : type inconnu « ' + t + ' » — app.js ne saura pas l\'exécuter');
     if (!ex.consigne) pb.push(tag + ' : consigne manquante');
 
+    // L'aide peut s'écrire en un palier (indice, une chaine) ou plusieurs
+    // (indices, un tableau range du plus discret au plus explicite).
+    if (ex.indices !== undefined && !Array.isArray(ex.indices)) {
+      pb.push(tag + ' : indices doit etre un tableau de chaines');
+    }
+    if (Array.isArray(ex.indices)) {
+      if (!ex.indices.length) pb.push(tag + ' : indices est un tableau vide');
+      ex.indices.forEach((t, k) => {
+        if (typeof t !== 'string' || !t.trim()) pb.push(tag + ' : indices[' + k + '] vide ou non textuel');
+      });
+      if (ex.indice) notes.push(tag + ' : indice ET indices definis — seul indices sera lu');
+    }
+
     if (t === 'qcm') {
       stats.qcm++;
       if (!Array.isArray(ex.choix) || ex.choix.length < 2) pb.push(tag + ' : choix[] invalide');

@@ -407,7 +407,7 @@ function rendreExercice(lecon, ex, i, total) {
       '<div class="exercice-boutons">' +
       '<button class="btn btn-verifier" onclick="verifier(' + i + ')">✓ Vérifier ma réponse</button>' +
       '</div>' +
-      '<div class="exercice-boutons exercice-recours">' + contenuRecours(i, ex, 0, false) + '</div>' +
+      '<div class="exercice-boutons exercice-recours">' + contenuRecours(i, ex, 0) + '</div>' +
       // Pas de colonne de sortie pour un QCM : le jugement reste sous les choix.
       blocsJugement(i, ex);
   } else {
@@ -446,7 +446,7 @@ function rendreExercice(lecon, ex, i, total) {
       (ex.type === 'html' ? '<button class="btn btn-executer" onclick="executer(' + i + ')">▶ Exécuter</button>' : '') +
       '<button class="btn btn-verifier" onclick="verifier(' + i + ')">✓ Vérifier ma réponse</button>' +
       '</div>' +
-      '<div class="exercice-boutons exercice-recours">' + contenuRecours(i, ex, 0, false) + '</div>' +
+      '<div class="exercice-boutons exercice-recours">' + contenuRecours(i, ex, 0) + '</div>' +
       '</div>' +
       // Les zones de résultat sont des zones vivantes : sans role="status", un
       // lecteur d'écran entend le verdict mais jamais ce que le code a produit.
@@ -1332,13 +1332,36 @@ function celebrer() {
   setTimeout(() => zone.remove(), 4200);
 }
 
+/* Un exercice peut proposer UN indice (`indice`, une chaîne) ou PLUSIEURS
+   (`indices`, un tableau rangé du plus discret au plus explicite). Les deux
+   formes coexistent : la première est celle de tous les exercices écrits
+   jusqu'ici, et rien ne l'oblige à changer. */
+function indicesDe(ex) {
+  if (Array.isArray(ex.indices)) return ex.indices.filter(t => t && String(t).trim());
+  return ex.indice ? [ex.indice] : [];
+}
+
+let indicesOuverts = {};
+function nbIndicesOuverts(i) { return indicesOuverts[cleEssai(i)] || 0; }
+
 function montrerIndice(i) {
   const zone = document.getElementById('indice-' + i);
   const ex = exercicesDe(leconCourante)[i];
-  if (!zone || !ex.indice) return;
+  const liste = indicesDe(ex);
+  if (!zone || !liste.length) return;
+
+  const n = Math.min(nbIndicesOuverts(i) + 1, liste.length);
+  indicesOuverts[cleEssai(i)] = n;
+
+  // Les paliers déjà ouverts restent affichés : on relit le premier en
+  // découvrant le second, sinon l'aide se contredit d'un clic à l'autre.
   zone.className = 'indice-bloc visible';
-  zone.innerHTML = '💡 <strong>Indice :</strong> ' + ex.indice;
-  // L'indice est sorti : le bouton qui l'appelait n'a plus rien à faire.
+  zone.innerHTML = liste.slice(0, n).map((texte, k) =>
+    '<p class="indice-palier">💡 <strong>Indice' +
+    (liste.length > 1 ? ' ' + (k + 1) + '/' + liste.length : '') +
+    ' :</strong> ' + texte + '</p>').join('');
+
+  // Un palier est sorti : le bouton qui l'appelait doit changer, ou partir.
   majRecours(i);
   ajouterBoutonsCopie();
   amenerDansLeChamp(zone);
@@ -1346,17 +1369,26 @@ function montrerIndice(i) {
 
 /* L'échelle d'aide monte avec les essais, et rien d'autre n'est proposé avant
    d'avoir essayé. Carte neuve : « Vérifier » et un « ⋯ ». Premier échec :
-   l'indice apparaît. Deuxième : la solution. C'était six boutons de même
-   poids au moment de la page où l'on hésite le plus. */
-function contenuRecours(i, ex, echecs, indiceOuvert) {
+   le premier indice apparaît. Chaque échec suivant en ouvre un de plus, s'il
+   en reste. Quand ils sont épuisés, un dernier échec découvre la solution.
+   C'était six boutons de même poids au moment de la page où l'on hésite le
+   plus — et, avant les paliers, un saut direct de « où regarder » à « voici
+   la réponse », qui est l'endroit exact où l'on abandonne. */
+function contenuRecours(i, ex, echecs) {
+  const liste = indicesDe(ex);
+  const ouverts = nbIndicesOuverts(i);
   let h = '';
-  if (ex.indice && echecs >= 1 && !indiceOuvert) {
-    h += '<button class="btn btn-secondaire btn-mini btn-indice btn-apparu" onclick="montrerIndice(' + i + ')">💡 Indice</button>';
+  // Il faut avoir réessayé AVEC le palier précédent pour mériter le suivant :
+  // sans cette condition, trois clics suffiraient à tout dévoiler sans avoir
+  // écrit une ligne.
+  if (ouverts < liste.length && echecs >= ouverts + 1) {
+    h += '<button class="btn btn-secondaire btn-mini btn-indice btn-apparu" onclick="montrerIndice(' + i + ')">💡 ' +
+      (ouverts === 0 ? 'Indice' : 'Un autre indice') + '</button>';
   }
   // Un QCM n'a pas de solution à ouvrir : la dévoiler ne serait pas une aide,
   // ce serait un clic vers une réussite vide. Il garde l'indice et le retour
   // en arrière, rien d'autre.
-  if (ex.type !== 'qcm' && echecs >= 2) {
+  if (ex.type !== 'qcm' && echecs >= Math.max(liste.length, 1) + 1) {
     h += '<button class="btn btn-secondaire btn-mini btn-apparu" onclick="montrerSolution(' + i + ')">👀 Solution</button>';
   }
   h += '<details class="menu-plus">' +
@@ -1381,6 +1413,7 @@ function effacerReponseQcm(i) {
   const ind = document.getElementById('indice-' + i);
   if (ind) { ind.className = 'indice-bloc'; ind.innerHTML = ''; }
   delete essaisRates[cleEssai(i)];
+  delete indicesOuverts[cleEssai(i)];
   delete dernierVerdict[cleEssai(i)];
   oublierExo(leconCourante.id, i);
   const badge = document.querySelector('#exercice-' + i + ' .badge-fait');
@@ -1394,9 +1427,7 @@ function effacerReponseQcm(i) {
 function majRecours(i) {
   const zone = document.querySelector('#exercice-' + i + ' .exercice-recours');
   if (!zone) return;
-  const bloc = document.getElementById('indice-' + i);
-  zone.innerHTML = contenuRecours(i, exercicesDe(leconCourante)[i], nbEchecs(i),
-    !!bloc && bloc.classList.contains('visible'));
+  zone.innerHTML = contenuRecours(i, exercicesDe(leconCourante)[i], nbEchecs(i));
 }
 
 function fermerMenus() {
@@ -1435,6 +1466,7 @@ function reinitialiser(i) {
   // indice et solution reviennent à leur état de départ.
   fermerMenus();
   delete essaisRates[cleEssai(i)];
+  delete indicesOuverts[cleEssai(i)];
   delete dernierVerdict[cleEssai(i)];
   const zoneIndice = document.getElementById('indice-' + i);
   if (zoneIndice) { zoneIndice.className = 'indice-bloc'; zoneIndice.innerHTML = ''; }
@@ -1466,6 +1498,7 @@ function recommencerLecon() {
   exos.forEach((_, i) => {
     oublierCode(lecon.id, i);
     delete essaisRates[lecon.id + '#' + i];
+    delete indicesOuverts[lecon.id + '#' + i];
     delete dernierVerdict[lecon.id + '#' + i];
   });
   delete progression.exos[lecon.id];

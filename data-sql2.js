@@ -48,7 +48,11 @@ HAVING AVG(note) > 7;        -- …puis que les genres bien notés</pre>
       tables: ['films'],
       consigne: 'Affiche les genres qui comptent <strong>plus d\'un film</strong>, avec leur nombre nommé <code>nombre</code>.',
       codeDepart: 'SELECT genre, COUNT(*) AS nombre\nFROM films\nGROUP BY genre\n-- ajoute le filtre sur les groupes ici\n',
-      indice: '<code>HAVING COUNT(*) > 1</code> se place après le GROUP BY.',
+      indices: [
+        "<code>WHERE</code> filtre des <strong>lignes</strong>, avant tout regroupement. Ici tu veux filtrer des <strong>groupes</strong>, une fois qu’ils sont formés et comptés : pas le même moment, donc pas le même mot.",
+        "Ce mot-là, c’est <code>HAVING</code>, et il se place <strong>après</strong> le <code>GROUP BY</code>. Il peut porter sur un agrégat — ce que <code>WHERE</code> ne sait pas faire.",
+        "<code>HAVING COUNT(*) &gt; 1</code>"
+      ],
       solution: 'SELECT genre, COUNT(*) AS nombre\nFROM films\nGROUP BY genre\nHAVING COUNT(*) > 1;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -63,7 +67,11 @@ HAVING AVG(note) > 7;        -- …puis que les genres bien notés</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> affiche les genres dont la <strong>note moyenne dépasse 8</strong>, avec la moyenne nommée <code>moyenne</code>.',
       codeDepart: '',
-      indice: '<code>GROUP BY genre HAVING AVG(note) > 8</code>',
+      indices: [
+        "Même structure qu’à l’exercice précédent : on regroupe, puis on ne garde que les groupes qui remplissent une condition.",
+        "Seul l’agrégat change : ce n’est plus un comptage mais une moyenne, <code>AVG(note)</code>.",
+        "<code>GROUP BY genre HAVING AVG(note) &gt; 8</code>"
+      ],
       solution: 'SELECT genre, AVG(note) AS moyenne\nFROM films\nGROUP BY genre\nHAVING AVG(note) > 8;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -79,7 +87,11 @@ HAVING AVG(note) > 7;        -- …puis que les genres bien notés</pre>
       tables: ['seances', 'films'],
       consigne: '<strong>Défi :</strong> quels films ont été programmés <strong>au moins deux fois</strong> ? Affiche le <code>titre</code> et le nombre de séances nommé <code>seances_total</code>, du plus programmé au moins programmé.',
       codeDepart: '',
-      indice: 'Jointure, regroupement sur <code>films.titre</code>, puis <code>HAVING COUNT(*) >= 2</code> et un tri décroissant.',
+      indices: [
+        "Trois étapes, dans cet ordre : relier les deux tables, regrouper sur le titre du film, puis ne garder que les groupes assez gros.",
+        "Le regroupement se fait sur <code>films.titre</code>, et la condition sur le groupe s’écrit avec <code>HAVING COUNT(*)</code>.",
+        "<code>HAVING COUNT(*) &gt;= 2</code>, puis un <code>ORDER BY … DESC</code> pour le tri."
+      ],
       solution: 'SELECT films.titre, COUNT(*) AS seances_total\nFROM seances\nJOIN films ON seances.film_id = films.id\nGROUP BY films.titre\nHAVING COUNT(*) >= 2\nORDER BY seances_total DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;

@@ -9,7 +9,9 @@
   },
   "description": "Apprendre à coder de A à Z — cours hors ligne de 165 leçons et 481 exercices corrigés automatiquement. Le logiciel lui-même (index.html) n'a besoin d'AUCUNE installation : ce fichier ne sert qu'aux outils de développement rangés dans outils/.",
   "scripts": {
-    "verifier": "node outils/verifier-contenu.js"
+    "verifier": "node outils/verifier-contenu.js",
+    "test-indices": "node outils/test-indices.js",
+    "tout-verifier": "npm run verifier && npm run test-indices"
   },
   "devDependencies": {
     "jsdom": "^30.1.0"

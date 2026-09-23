@@ -710,7 +710,11 @@ printf("%d\\n", age);      // 31 — age a changé !</pre>
       type: 'c',
       consigne: 'Déclare <code>int age = 30;</code>, crée un pointeur <code>p</code> vers cette variable, puis affiche la valeur <strong>via le pointeur</strong> (tu dois voir <code>30</code>).',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int age = 30;\n    \n    return 0;\n}',
-      indice: 'Deux ingrédients, tous les deux dans « Deux symboles à ne pas confondre » plus haut. La <strong>déclaration</strong> d\'un pointeur porte une étoile juste devant son nom ; ce qu\'on lui donne, c\'est l\'<strong>adresse</strong> de la variable. Et pour lire ce qu\'il y a au bout, l\'étoile revient devant le pointeur.',
+      indices: [
+        "Deux symboles sont en jeu, et ils ne font pas la même chose — c’est tout le sujet de « Deux symboles à ne pas confondre », juste au-dessus.",
+        "À la déclaration, l’étoile colle au nom du pointeur : <code>int *p</code>. Et ce qu’on lui donne, ce n’est pas la variable, c’est son <strong>adresse</strong> — qui s’obtient avec <code>&amp;</code>.",
+        "Pour lire ce qu’il y a au bout, l’étoile revient devant le pointeur : <code>printf(\"%d\\n\", *p);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int age = 30;\n    int *p = &age;\n    printf("%d\\n", *p);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -725,7 +729,11 @@ printf("%d\\n", age);      // 31 — age a changé !</pre>
       type: 'c',
       consigne: '<strong>Entraînement :</strong> modifie <code>age</code> <strong>à travers le pointeur</strong> pour qu\'il vaille 31, puis affiche <code>age</code> (et non <code>*p</code>) pour prouver que la vraie variable a changé.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int age = 30;\n    int *p = &age;\n    \n    printf("%d\\n", age);\n    return 0;\n}',
-      indice: 'L\'étoile devant un pointeur veut dire « la case qui est au bout ». Sans elle, tu écrirais dans le pointeur lui-même, c\'est-à-dire dans l\'adresse — c\'est exactement la confusion que raconte « Modifier à distance ».',
+      indices: [
+        "Tu as déjà le pointeur. La vraie question : écrire <em>dans</em> le pointeur, ou dans la case qui est au bout ? Une seule des deux modifie <code>age</code>.",
+        "L’étoile devant un pointeur veut dire « la case qui est au bout ». Sans elle, tu écrirais dans l’adresse elle-même — la confusion que raconte « Modifier à distance ».",
+        "<code>*p = 31;</code> — puis affiche <code>age</code>, et non <code>*p</code>, pour prouver que la vraie variable a bougé."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int age = 30;\n    int *p = &age;\n    *p = 31;\n    printf("%d\\n", age);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };

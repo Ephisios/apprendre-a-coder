@@ -199,7 +199,11 @@ courts = [m for m in mots if len(m) <= 4]</pre>
       type: 'py',
       consigne: 'Crée la liste des <strong>doubles</strong> de chaque nombre, en une seule ligne avec une compréhension, puis affiche-la.',
       codeDepart: 'nombres = [1, 2, 3, 4, 5]\n\n# doubles = ... (en une ligne)\n',
-      indice: 'La forme : <code>[n * 2 for n in nombres]</code>',
+      indices: [
+        "Une compréhension se lit à l’envers de ce qu’on croit : on annonce d’abord ce qu’on veut <strong>obtenir</strong>, et seulement ensuite d’où ça vient.",
+        "La carcasse est <code>[ … for n in nombres]</code>. Il ne reste qu’à dire, à la place des points, ce qu’on fait de chaque <code>n</code>.",
+        "Doubler, c’est multiplier par 2 : <code>[n * 2 for n in nombres]</code>"
+      ],
       solution: 'nombres = [1, 2, 3, 4, 5]\n\ndoubles = [n * 2 for n in nombres]\nprint(doubles)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -213,7 +217,11 @@ courts = [m for m in mots if len(m) <= 4]</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> à partir des notes, construis la liste des <strong>notes supérieures ou égales à 10</strong> et affiche-la.',
       codeDepart: 'notes = [12, 7, 15, 9, 18, 4]\n\n# reçues = ...\n',
-      indice: 'Le filtre se met à la fin : <code>[n for n in notes if n >= 10]</code>',
+      indices: [
+        "Garder certains éléments, ce n’est pas les transformer : chaque note gardée sort telle quelle. Ce qui s’ajoute, c’est une <strong>condition</strong>.",
+        "La condition se met tout à la fin, après le <code>for</code> : <code>[n for n in notes if …]</code>",
+        "« Supérieure ou égale à 10 » s’écrit <code>n &gt;= 10</code> : <code>[n for n in notes if n &gt;= 10]</code>"
+      ],
       solution: 'notes = [12, 7, 15, 9, 18, 4]\n\nrecues = [n for n in notes if n >= 10]\nprint(recues)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -227,7 +235,11 @@ courts = [m for m in mots if len(m) <= 4]</pre>
       type: 'py',
       consigne: '<strong>Défi :</strong> à partir des prix hors taxes, construis la liste des prix TTC (multipliés par 1.2), <strong>arrondis à 2 décimales</strong>, et affiche-la.',
       codeDepart: 'ht = [10.0, 25.5, 8.99]\n\n# ttc = ...\n',
-      indice: 'On peut appeler une fonction dans la compréhension : <code>[round(p * 1.2, 2) for p in ht]</code>',
+      indices: [
+        "Deux gestes sur chaque prix : multiplier, puis arrondir. Les deux tiennent à la place du « ce que je veux obtenir », tout au début.",
+        "On a le droit d’appeler une fonction à cet endroit. <code>round(x, 2)</code> arrondit <code>x</code> à deux décimales.",
+        "<code>[round(p * 1.2, 2) for p in ht]</code>"
+      ],
       solution: 'ht = [10.0, 25.5, 8.99]\n\nttc = [round(p * 1.2, 2) for p in ht]\nprint(ttc)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
