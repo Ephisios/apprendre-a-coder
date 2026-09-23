@@ -26,7 +26,11 @@ print("Ceci s'affiche")  # on peut aussi commenter en fin de ligne</pre>
       type: 'py',
       consigne: 'À toi : affiche exactement <code>Bonjour Python !</code> avec <code>print()</code>.',
       codeDepart: '# Écris ta première ligne de Python ici :\n',
-      indice: 'La recette : <code>print("ton texte entre guillemets")</code> — vérifie la majuscule au B, l\'espace avant le !',
+      indices: [
+        "Une seule instruction suffit, et c’est celle que la leçon vient de montrer. Le texte à afficher se met entre guillemets, à l’intérieur des parenthèses.",
+        "<code>print(\"…\")</code> — remplace les points par le texte demandé. Python affiche exactement ce qui est entre les guillemets, au caractère près.",
+        "Trois détails font échouer cet exercice : la majuscule à <code>Bonjour</code>, l’espace avant le <code>!</code>, et les guillemets qui encadrent le tout."
+      ],
       solution: 'print("Bonjour Python !")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -39,7 +43,11 @@ print("Ceci s'affiche")  # on peut aussi commenter en fin de ligne</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> affiche trois lignes à la suite, avec trois <code>print()</code> : ton prénom, ta ville, et une chose que tu aimes.',
       codeDepart: '# Trois print, trois lignes :\n',
-      indice: 'Chaque <code>print()</code> affiche sur sa propre ligne. Trois print = trois lignes.',
+      indices: [
+        "Un <code>print()</code> affiche une ligne, et une seule. Pour trois lignes, il n’y a donc pas de mystère.",
+        "Écris trois instructions <code>print()</code>, l’une sous l’autre, sans rien devant : en Python le décalage a un sens, et ici il n’y en a aucun.",
+        "<code>print(\"Alex\")</code>, puis <code>print(\"Lyon\")</code>, puis <code>print(\"le cinéma\")</code> — avec tes propres réponses."
+      ],
       solution: 'print("Alex")\nprint("Lyon")\nprint("le cinéma")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -103,7 +111,11 @@ print("Je m'appelle", prenom, "et j'ai", age, "ans")
       type: 'py',
       consigne: 'Crée une variable <code>prenom</code> avec ton prénom et une variable <code>age</code> avec un nombre, puis affiche une phrase qui utilise <strong>les deux variables</strong> dans un seul <code>print()</code> (avec des virgules).',
       codeDepart: '# Deux variables, un print :\n',
-      indice: '<code>prenom = "..."</code> puis <code>age = ...</code> puis <code>print("Je m\'appelle", prenom, "et j\'ai", age, "ans")</code>',
+      indices: [
+        "Deux variables à créer d’abord, puis un seul <code>print()</code> qui les utilise toutes les deux.",
+        "Dans un <code>print()</code>, les virgules séparent les morceaux : du texte entre guillemets, puis une variable <strong>sans</strong> guillemets, et ainsi de suite. Python glisse une espace entre chaque.",
+        "<code>print(\"Je m’appelle\", prenom, \"et j’ai\", age, \"ans\")</code>"
+      ],
       solution: 'prenom = "Alex"\nage = 25\nprint("Je m\'appelle", prenom, "et j\'ai", age, "ans")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -118,7 +130,11 @@ print("Je m'appelle", prenom, "et j'ai", age, "ans")
       type: 'py',
       consigne: '<strong>Défi (déjà vu en JS !) :</strong> échange le contenu des variables <code>a</code> et <code>b</code>, pour que le premier print affiche 2 et le second 1. Bonus : Python a une astuce magique pour ça, cherche « échanger deux variables python » dans ta mémoire… ou utilise une variable temporaire comme en JS.',
       codeDepart: 'a = 1\nb = 2\n\n# échange les valeurs ici...\n\nprint(a)\nprint(b)',
-      indice: 'La méthode classique : <code>temp = a</code> puis <code>a = b</code> puis <code>b = temp</code>. La méthode 100 % Python : <code>a, b = b, a</code> — une seule ligne !',
+      indices: [
+        "Le piège : si tu écris <code>a = b</code> en premier, l’ancienne valeur de <code>a</code> est perdue pour toujours. Il faut soit la mettre de côté, soit tout faire d’un seul geste.",
+        "La méthode classique passe par une troisième variable, souvent nommée <code>temp</code>, où l’on range <code>a</code> avant de l’écraser. La méthode Python, elle, tient sur une ligne.",
+        "<code>a, b = b, a</code> — Python calcule d’abord toute la droite, puis distribue."
+      ],
       solution: 'a = 1\nb = 2\n\na, b = b, a\n\nprint(a)\nprint(b)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -178,7 +194,11 @@ print((2 + 3) * 4)  # 20</pre>
       type: 'py',
       consigne: 'Combien y a-t-il d\'heures dans une semaine ? Fais calculer Python : affiche le résultat de <code>7 * 24</code> (le calcul, pas le résultat écrit à la main !).',
       codeDepart: '# Le calcul, pas la réponse toute faite :\n',
-      indice: '<code>print(7 * 24)</code> — Python calcule, toi tu écris le calcul.',
+      indices: [
+        "Le calcul doit être écrit dans le code, pas fait dans ta tête : c’est Python qui compte. Combien d’heures dans un jour, combien de jours dans une semaine ?",
+        "Une opération peut se mettre directement dans un <code>print()</code>, sans passer par une variable.",
+        "<code>print(7 * 24)</code>"
+      ],
       solution: 'print(7 * 24)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -191,7 +211,11 @@ print((2 + 3) * 4)  # 20</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> les puissances de 2 sont partout en informatique (les octets, les Go…). Affiche <code>2 ** 10</code> — la fameuse valeur du « kilo » informatique.',
       codeDepart: '# 2 puissance 10 :\n',
-      indice: 'L\'opérateur puissance, c\'est deux étoiles collées : <code>**</code>',
+      indices: [
+        "Ce n’est pas une multiplication ordinaire : « 2 puissance 10 », c’est 2 multiplié par lui-même dix fois. Python a un opérateur pour ça.",
+        "C’est le seul opérateur de la leçon qui s’écrit avec <strong>deux</strong> symboles collés.",
+        "<code>print(2 ** 10)</code>"
+      ],
       solution: 'print(2 ** 10)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -204,7 +228,11 @@ print((2 + 3) * 4)  # 20</pre>
       type: 'py',
       consigne: '<strong>Défi des bonbons :</strong> 17 bonbons, 5 enfants. Affiche sur une première ligne combien de bonbons reçoit chaque enfant (division entière), et sur une seconde combien il en reste (modulo).',
       codeDepart: 'bonbons = 17\nenfants = 5\n\n# Ligne 1 : la part de chacun\n# Ligne 2 : le reste\n',
-      indice: '<code>print(bonbons // enfants)</code> puis <code>print(bonbons % enfants)</code>',
+      indices: [
+        "Deux questions différentes : « combien chacun en reçoit » et « combien il en reste ». Deux opérateurs différents, et aucun des deux n’est la division ordinaire.",
+        "<code>//</code> donne le quotient entier — ce que chacun reçoit. <code>%</code> donne le reste — ce qui ne se partage pas.",
+        "<code>print(bonbons // enfants)</code> puis <code>print(bonbons % enfants)</code>"
+      ],
       solution: 'bonbons = 17\nenfants = 5\n\nprint(bonbons // enfants)\nprint(bonbons % enfants)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -260,7 +288,11 @@ else:
       type: 'py',
       consigne: 'La note est de 15. Écris un <code>if</code>/<code>else</code> : si <code>note >= 10</code>, affiche <code>Reçu !</code>, sinon affiche <code>Recalé</code>. Attention au <code>:</code> et à l\'indentation !',
       codeDepart: 'note = 15\n\n# ton if / else ici :\n',
-      indice: 'La structure :<br><code>if note >= 10:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("Reçu !")</code><br><code>else:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("Recalé")</code>',
+      indices: [
+        "Deux choses que Python exige, et que beaucoup d’autres langages n’imposent pas : un signe à la fin de la ligne du <code>if</code>, et un décalage pour ce qui en dépend.",
+        "La ligne du <code>if</code> se termine par <code>:</code>. Ce qui doit s’exécuter dessous est décalé de 4 espaces. Le <code>else:</code> revient au niveau du <code>if</code>, pas plus loin.",
+        "<code>if note &gt;= 10:</code> · 4 espaces · <code>print(\"Reçu !\")</code> · puis <code>else:</code> · 4 espaces · <code>print(\"Recalé\")</code>"
+      ],
       solution: 'note = 15\n\nif note >= 10:\n    print("Reçu !")\nelse:\n    print("Recalé")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur + (/indent/i.test(ctx.erreur) ? ' — décale la ligne sous le if avec 4 espaces (ou la touche Tab).' : '') };
@@ -276,7 +308,11 @@ else:
       type: 'py',
       consigne: '<strong>Chasse au bug :</strong> ce code plante avec une erreur d\'indentation. Lance-le pour voir le message, puis répare-le.',
       codeDepart: 'temperature = 30\n\nif temperature > 25:\nprint("Il fait chaud !")',
-      indice: 'La ligne du print appartient au if : elle doit être décalée de 4 espaces. Place ton curseur devant <code>print</code> et appuie sur Tab.',
+      indices: [
+        "Lance le code et lis le message : Python nomme lui-même son erreur, et il est très explicite sur celle-ci.",
+        "<code>IndentationError</code> veut dire que le décalage ne va pas. Regarde ce qui suit le <code>if</code> : tout ce qui en dépend doit être poussé vers la droite.",
+        "Place ton curseur juste devant <code>print</code> et appuie sur Tab."
+      ],
       solution: 'temperature = 30\n\nif temperature > 25:\n    print("Il fait chaud !")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Encore une erreur : ' + ctx.erreur + ' — la ligne du print doit être décalée de 4 espaces sous le if.' };
@@ -342,7 +378,11 @@ print("Partez !")</pre>
       type: 'py',
       consigne: 'Affiche les nombres de 1 à 5 (inclus) avec une boucle <code>for</code> et <code>range()</code>.',
       codeDepart: '# de 1 à 5, avec range :\n',
-      indice: 'La borne de fin est exclue : pour aller jusqu\'à 5, écris <code>range(1, 6)</code>.',
+      indices: [
+        "<code>range()</code> ne fait pas tout à fait ce qu’on croit : sa borne de fin n’est jamais atteinte.",
+        "Pour aller jusqu’à 5 <strong>inclus</strong>, il faut donc demander une borne de fin plus grande d’un cran.",
+        "<code>for i in range(1, 6):</code> puis, décalé, <code>print(i)</code>"
+      ],
       solution: 'for i in range(1, 6):\n    print(i)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -356,7 +396,11 @@ print("Partez !")</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> la table de 7, de <code>7 × 1</code> à <code>7 × 10</code>. Dix lignes, chacune montrant juste le résultat (7, 14, 21…).',
       codeDepart: '# La table de 7 :\n',
-      indice: '<code>for i in range(1, 11):</code> puis, indenté, <code>print(7 * i)</code>',
+      indices: [
+        "Tu n’écris pas dix lignes : tu en écris <strong>une</strong>, que la boucle répète dix fois avec une valeur qui change.",
+        "La boucle te donne <code>i</code>, qui vaut 1, puis 2, puis 3… Il ne reste qu’à afficher le produit de 7 par cette valeur.",
+        "<code>for i in range(1, 11):</code> puis, décalé, <code>print(7 * i)</code>"
+      ],
       solution: 'for i in range(1, 11):\n    print(7 * i)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -370,7 +414,11 @@ print("Partez !")</pre>
       type: 'py',
       consigne: '<strong>Défi :</strong> le décompte de fusée, avec un <code>while</code> cette fois : affiche 5, 4, 3, 2, 1 puis <code>Partez !</code>',
       codeDepart: 'compteur = 5\n\n# ton while ici, puis le print final :\n',
-      indice: '<code>while compteur > 0:</code> puis, indentés : le print et <code>compteur = compteur - 1</code>. Le print de « Partez ! » vient APRÈS la boucle, sans indentation.',
+      indices: [
+        "Un <code>while</code> ne compte pas tout seul : si rien ne change à l’intérieur, il tourne sans fin. C’est à toi de faire descendre le compteur.",
+        "Deux instructions <strong>dans</strong> la boucle : afficher, puis diminuer. Le « Partez ! » n’y est pas — il n’arrive qu’une fois, donc il n’est pas décalé.",
+        "<code>while compteur &gt; 0:</code> · décalés : <code>print(compteur)</code> et <code>compteur = compteur - 1</code> · puis, sans décalage, <code>print(\"Partez !\")</code>"
+      ],
       solution: 'compteur = 5\n\nwhile compteur > 0:\n    print(compteur)\n    compteur = compteur - 1\n\nprint("Partez !")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -420,7 +468,11 @@ print(total)   # 54</pre>
       type: 'py',
       consigne: 'Crée une liste <code>courses</code> avec 3 produits, ajoute-en un 4e avec <code>append()</code>, puis affiche le nombre d\'éléments avec <code>len()</code>.',
       codeDepart: '# Ta liste de courses :\n',
-      indice: '<code>courses = ["...", "...", "..."]</code> puis <code>courses.append("...")</code> puis <code>print(len(courses))</code>',
+      indices: [
+        "Trois gestes, dans l’ordre : fabriquer la liste, lui ajouter un élément, puis demander sa taille.",
+        "Une liste s’écrit entre crochets, éléments séparés par des virgules. <code>append()</code> s’emploie <em>sur</em> la liste, avec un point ; <code>len()</code> s’emploie <em>autour</em> d’elle.",
+        "<code>courses.append(\"café\")</code> puis <code>print(len(courses))</code>"
+      ],
       solution: 'courses = ["pain", "pommes", "chocolat"]\ncourses.append("café")\nprint(len(courses))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -435,7 +487,11 @@ print(total)   # 54</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> affiche le premier produit de la liste, puis le dernier — en utilisant l\'indice négatif <code>[-1]</code> pour le dernier (le superpouvoir de Python !).',
       codeDepart: 'courses = ["pain", "pommes", "chocolat"]\n\n# premier puis dernier :\n',
-      indice: '<code>print(courses[0])</code> puis <code>print(courses[-1])</code>',
+      indices: [
+        "Le premier élément ne porte pas le numéro 1 — c’est le piège classique. Et pour le dernier, Python offre un raccourci que peu de langages ont.",
+        "On compte à partir de 0. Un indice négatif, lui, part de la <strong>fin</strong> : -1 désigne le dernier élément, quelle que soit la longueur de la liste.",
+        "<code>print(courses[0])</code> puis <code>print(courses[-1])</code>"
+      ],
       solution: 'courses = ["pain", "pommes", "chocolat"]\n\nprint(courses[0])\nprint(courses[-1])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -449,7 +505,11 @@ print(total)   # 54</pre>
       type: 'py',
       consigne: '<strong>Défi de l\'accumulateur :</strong> calcule le total des notes avec une boucle <code>for</code> (pas de calcul à la main !), puis affiche-le.',
       codeDepart: 'notes = [12, 15, 9, 18]\n\n# total = 0, puis la boucle...\n',
-      indice: 'Trois étapes : <code>total = 0</code> · puis <code>for n in notes:</code> · puis, indenté, <code>total = total + n</code>. Et après la boucle : <code>print(total)</code>.',
+      indices: [
+        "Le mot « accumulateur » dit tout : il faut une variable qui garde le total pendant que la boucle avance. Elle doit exister <strong>avant</strong> la boucle.",
+        "Trois temps : <code>total = 0</code> avant ; dans la boucle, on ajoute la note courante au total ; et on affiche <strong>après</strong>, sinon on affiche un total incomplet à chaque tour.",
+        "<code>total = 0</code> · <code>for n in notes:</code> · décalé : <code>total = total + n</code> · puis, sans décalage, <code>print(total)</code>"
+      ],
       solution: 'notes = [12, 15, 9, 18]\n\ntotal = 0\nfor n in notes:\n    total = total + n\n\nprint(total)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -496,7 +556,11 @@ print(aire_rectangle(3, 3)) # 9 — utilisable directement dans un print</pre>
       type: 'py',
       consigne: 'Définis une fonction <code>bonjour(prenom)</code> qui affiche « Bonjour » suivi du prénom, puis appelle-la <strong>deux fois</strong> avec deux prénoms différents.',
       codeDepart: '# def, puis deux appels :\n',
-      indice: '<code>def bonjour(prenom):</code> puis, indenté, <code>print("Bonjour", prenom)</code>. Ensuite, sans indentation : <code>bonjour("Nadia")</code> et <code>bonjour("Karim")</code>.',
+      indices: [
+        "Définir une fonction ne l’exécute pas : c’est une recette qu’on écrit, et qui attend qu’on l’appelle. Il y a donc deux parties à écrire.",
+        "La définition commence par <code>def</code>, se termine par <code>:</code>, et son contenu est décalé. L’appel, lui, s’écrit sans décalage et sans <code>def</code>.",
+        "<code>def bonjour(prenom):</code> · décalé : <code>print(\"Bonjour\", prenom)</code> · puis <code>bonjour(\"Nadia\")</code> et <code>bonjour(\"Karim\")</code>"
+      ],
       solution: 'def bonjour(prenom):\n    print("Bonjour", prenom)\n\nbonjour("Nadia")\nbonjour("Karim")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -512,7 +576,11 @@ print(aire_rectangle(3, 3)) # 9 — utilisable directement dans un print</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> écris une fonction <code>aire_rectangle(largeur, hauteur)</code> qui <code>return</code> le produit des deux, puis affiche <code>aire_rectangle(4, 5)</code>.',
       codeDepart: '# une fonction qui RENVOIE (return) :\n',
-      indice: 'Dans la fonction : <code>return largeur * hauteur</code>. À l\'extérieur : <code>print(aire_rectangle(4, 5))</code>.',
+      indices: [
+        "<code>print</code> et <code>return</code> ne font pas la même chose : l’un affiche, l’autre <strong>renvoie</strong> une valeur à qui a appelé la fonction. Ici, c’est le second qu’on veut.",
+        "La fonction ne doit rien afficher : elle renvoie le produit. C’est à l’extérieur qu’on affiche ce qu’elle a renvoyé.",
+        "Dans la fonction : <code>return largeur * hauteur</code>. À l’extérieur : <code>print(aire_rectangle(4, 5))</code>"
+      ],
       solution: 'def aire_rectangle(largeur, hauteur):\n    return largeur * hauteur\n\nprint(aire_rectangle(4, 5))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -577,7 +645,11 @@ print(len(contact))             # 4 — len marche aussi ici !</pre>
       type: 'py',
       consigne: 'Voici un contact. Affiche sa ville en allant la chercher dans le dictionnaire (pas en la réécrivant à la main !).',
       codeDepart: 'contact = {\n    "nom": "Nadia Benali",\n    "ville": "Lyon",\n    "age": 32\n}\n\n# affiche la ville :\n',
-      indice: 'L\'accès par clé : <code>contact["ville"]</code> — la clé entre guillemets, dans des crochets.',
+      indices: [
+        "Un dictionnaire ne se lit pas par numéro mais par <strong>nom</strong>. Le nom à employer est écrit dans le dictionnaire lui-même, juste à gauche des deux-points.",
+        "L’accès ressemble à celui d’une liste, mais entre les crochets on met la clé, entre guillemets, au lieu d’un nombre.",
+        "<code>print(contact[\"ville\"])</code>"
+      ],
       solution: 'contact = {\n    "nom": "Nadia Benali",\n    "ville": "Lyon",\n    "age": 32\n}\n\nprint(contact["ville"])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -590,7 +662,11 @@ print(len(contact))             # 4 — len marche aussi ici !</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> ajoute une clé <code>"email"</code> au contact (avec l\'adresse de ton choix), puis affiche le nombre de clés du dictionnaire avec <code>len()</code>.',
       codeDepart: 'contact = {\n    "nom": "Nadia Benali",\n    "ville": "Lyon",\n    "age": 32\n}\n\n# ajoute l\'email, puis compte :\n',
-      indice: '<code>contact["email"] = "..."</code> puis <code>print(len(contact))</code>',
+      indices: [
+        "Ajouter une clé, c’est simplement écrire dedans : il n’existe pas d’<code>append()</code> pour les dictionnaires, contrairement aux listes.",
+        "On écrit à une clé qui n’existe pas encore, et Python la crée au passage. <code>len()</code>, lui, compte les clés.",
+        "<code>contact[\"email\"] = \"nadia@mail.fr\"</code> puis <code>print(len(contact))</code>"
+      ],
       solution: 'contact = {\n    "nom": "Nadia Benali",\n    "ville": "Lyon",\n    "age": 32\n}\n\ncontact["email"] = "nadia@mail.fr"\nprint(len(contact))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -647,7 +723,11 @@ print(len(contact))             # 4 — len marche aussi ici !</pre>
       type: 'py',
       consigne: '<strong>Étape 1 — la moyenne :</strong> totalise les notes avec une boucle, divise par le nombre d\'élèves (<code>len</code>), affiche le résultat.',
       codeDepart: 'notes = [12, 15, 9, 18]\n\n# total, puis moyenne :\n',
-      indice: 'L\'accumulateur : <code>total = 0</code>, boucle <code>for n in notes:</code>, <code>total = total + n</code>. Puis <code>moyenne = total / len(notes)</code> et un print.',
+      indices: [
+        "Tu as déjà fait l’accumulateur dans la leçon sur les listes : c’est exactement le même geste. Il ne reste qu’à diviser à la fin.",
+        "Le total se construit dans la boucle ; la division n’a lieu qu’une fois, <strong>après</strong>. Le nombre d’élèves, c’est <code>len(notes)</code> — ne l’écris pas à la main.",
+        "<code>moyenne = total / len(notes)</code> puis <code>print(moyenne)</code>"
+      ],
       solution: 'notes = [12, 15, 9, 18]\n\ntotal = 0\nfor n in notes:\n    total = total + n\n\nmoyenne = total / len(notes)\nprint(moyenne)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -661,7 +741,11 @@ print(len(contact))             # 4 — len marche aussi ici !</pre>
       type: 'py',
       consigne: '<strong>Étape 2 — la meilleure note</strong>, sans utiliser <code>max()</code> : pars d\'une variable <code>meilleure = 0</code>, parcours les notes, et remplace <code>meilleure</code> chaque fois qu\'une note la dépasse.',
       codeDepart: 'notes = [12, 15, 9, 18]\n\nmeilleure = 0\n# ta boucle avec un if :\n',
-      indice: 'Dans la boucle : <code>if n > meilleure:</code> puis, encore plus indenté, <code>meilleure = n</code>. Deux niveaux d\'indentation : le if est dans le for, le remplacement est dans le if.',
+      indices: [
+        "Le principe : on garde la meilleure note vue jusqu’ici, et on la remplace dès qu’on trouve mieux. Une seule variable suffit.",
+        "Il y a <strong>deux</strong> décalages emboîtés : le <code>if</code> est dans le <code>for</code>, et le remplacement est dans le <code>if</code>. Soit 4 espaces, puis 8.",
+        "<code>for n in notes:</code> · 4 espaces : <code>if n &gt; meilleure:</code> · 8 espaces : <code>meilleure = n</code>"
+      ],
       solution: 'notes = [12, 15, 9, 18]\n\nmeilleure = 0\nfor n in notes:\n    if n > meilleure:\n        meilleure = n\n\nprint(meilleure)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -675,7 +759,11 @@ print(len(contact))             # 4 — len marche aussi ici !</pre>
       type: 'py',
       consigne: '<strong>Étape 3 — les reçus :</strong> compte combien de notes sont supérieures ou égales à 10, et affiche ce nombre.',
       codeDepart: 'notes = [12, 15, 9, 18]\n\nrecus = 0\n# compte les notes >= 10 :\n',
-      indice: 'Le compteur conditionnel : dans la boucle, <code>if n >= 10:</code> puis <code>recus = recus + 1</code>. Et un print après la boucle.',
+      indices: [
+        "C’est encore un accumulateur, mais qui n’ajoute pas toujours : il compte, et seulement quand une condition est remplie.",
+        "Un compteur à 0 avant la boucle. Dans la boucle, un <code>if</code> ; et dans le <code>if</code>, on augmente le compteur de 1.",
+        "<code>if n &gt;= 10:</code> puis, plus décalé, <code>recus = recus + 1</code>"
+      ],
       solution: 'notes = [12, 15, 9, 18]\n\nrecus = 0\nfor n in notes:\n    if n >= 10:\n        recus = recus + 1\n\nprint(recus)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };

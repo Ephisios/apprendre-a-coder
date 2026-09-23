@@ -35,7 +35,11 @@ print("café" in "j'aime le café")    # True — le mot-clé in marche aussi su
       type: 'py',
       consigne: 'La variable <code>saisie</code> contient un email mal saisi. Nettoie-le : enlève les espaces autour et mets tout en minuscules, puis affiche le résultat.',
       codeDepart: 'saisie = "   Alex.Martin@MAIL.COM  "\n\n# nettoie puis affiche :\n',
-      indice: 'On peut enchaîner les méthodes : <code>saisie.strip().lower()</code>',
+      indices: [
+        "Deux nettoyages différents à faire : les espaces autour, et la casse. Chacun a sa méthode, et le nom de chacune dit ce qu’elle fait.",
+        "Une méthode de texte renvoie un <strong>nouveau</strong> texte : on peut donc en enchaîner plusieurs à la suite, chacune travaillant sur le résultat de la précédente.",
+        "<code>saisie.strip().lower()</code> — d’abord les espaces, puis les minuscules."
+      ],
       solution: 'saisie = "   Alex.Martin@MAIL.COM  "\n\nprint(saisie.strip().lower())',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -49,7 +53,11 @@ print("café" in "j'aime le café")    # True — le mot-clé in marche aussi su
       type: 'py',
       consigne: '<strong>Entraînement :</strong> découpe la liste de courses (séparée par des virgules) et affiche <strong>le nombre d\'articles</strong>, puis <strong>le premier</strong>.',
       codeDepart: 'courses = "pain,lait,café,pommes"\n\n# découpe, puis affiche le nombre et le premier :\n',
-      indice: '<code>articles = courses.split(",")</code> puis <code>print(len(articles))</code> et <code>print(articles[0])</code>',
+      indices: [
+        "Une chaîne de texte n’est pas une liste : tant qu’elle n’est pas découpée, <code>len()</code> compte ses caractères, pas ses articles.",
+        "<code>split()</code> découpe un texte à chaque occurrence du séparateur qu’on lui donne, et renvoie une liste. Ici, le séparateur est la virgule.",
+        "<code>articles = courses.split(\",\")</code> puis <code>print(len(articles))</code> et <code>print(articles[0])</code>"
+      ],
       solution: 'courses = "pain,lait,café,pommes"\n\narticles = courses.split(",")\nprint(len(articles))\nprint(articles[0])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -64,7 +72,11 @@ print("café" in "j'aime le café")    # True — le mot-clé in marche aussi su
       type: 'py',
       consigne: '<strong>Défi des initiales :</strong> à partir du nom complet, affiche les initiales en majuscules, séparées par un point — ici <code>A.M</code>.',
       codeDepart: 'nom = "alex martin"\n\n# affiche : A.M\n',
-      indice: 'Découpe avec <code>.split(" ")</code>, prends le premier caractère de chaque morceau avec <code>[0]</code>, mets en majuscule avec <code>.upper()</code>, et recolle avec <code>".".join(...)</code>.',
+      indices: [
+        "Quatre gestes s’enchaînent : séparer les mots, prendre la première lettre de chacun, la mettre en majuscule, puis recoller le tout avec des points.",
+        "La première lettre d’un mot, c’est <code>m[0]</code> — un texte s’indexe comme une liste. Et <code>\".\".join(liste)</code> recolle une liste en intercalant le point.",
+        "Boucle sur <code>nom.split(\" \")</code>, puis <code>initiales.append(m[0].upper())</code>, et enfin <code>print(\".\".join(initiales))</code>"
+      ],
       solution: 'nom = "alex martin"\n\nmorceaux = nom.split(" ")\ninitiales = []\nfor m in morceaux:\n    initiales.append(m[0].upper())\n\nprint(".".join(initiales))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -114,7 +126,11 @@ print(f"Moyenne : {moyenne:.2f}")     # Moyenne : 13.67</pre>
       type: 'py',
       consigne: 'Réécris cette phrase avec une <strong>f-string</strong> pour afficher : <code>Nadia a 32 ans</code>.',
       codeDepart: 'prenom = "Nadia"\nage = 32\n\n# avec une f-string :\n',
-      indice: 'Un <code>f</code> collé devant le guillemet, et les variables entre accolades : <code>print(f"{prenom} a {age} ans")</code>',
+      indices: [
+        "Plus besoin de virgules ni de collage : on écrit la phrase telle qu’elle doit sortir, et on désigne les variables à l’intérieur.",
+        "Deux choses à ne pas oublier : la lettre <code>f</code> collée juste avant le guillemet ouvrant, et les accolades autour de chaque variable.",
+        "<code>print(f\"{prenom} a {age} ans\")</code>"
+      ],
       solution: 'prenom = "Nadia"\nage = 32\n\nprint(f"{prenom} a {age} ans")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -129,7 +145,11 @@ print(f"Moyenne : {moyenne:.2f}")     # Moyenne : 13.67</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> affiche le total de la commande sous la forme <code>Total : 59.97 €</code> — avec exactement <strong>deux décimales</strong>.',
       codeDepart: 'prix = 19.99\nquantite = 3\n\n# Total : 59.97 €\n',
-      indice: 'On peut calculer dans les accolades et imposer le format : <code>{prix * quantite:.2f}</code>',
+      indices: [
+        "Deux difficultés en une : faire le calcul, et imposer exactement deux décimales — sinon Python affichera <code>59.97000000000001</code> ou <code>60.0</code> selon les cas.",
+        "On peut calculer <strong>dans</strong> les accolades. Et après le contenu, un <code>:</code> suivi d’un format impose l’affichage : <code>.2f</code> veut dire « deux décimales ».",
+        "<code>print(f\"Total : {prix * quantite:.2f} €\")</code>"
+      ],
       solution: 'prix = 19.99\nquantite = 3\n\nprint(f"Total : {prix * quantite:.2f} €")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -289,7 +309,11 @@ print(math.pi)           # 3.14159...</pre>
       type: 'py',
       consigne: 'Importe le module <code>random</code> et affiche un lancer de dé : un nombre entier entre 1 et 6 inclus.',
       codeDepart: '# import puis lancer :\n',
-      indice: '<code>import random</code> en haut, puis <code>print(random.randint(1, 6))</code>',
+      indices: [
+        "Le hasard ne fait pas partie du langage de base : il faut d’abord aller chercher l’outil, par une ligne tout en haut du fichier.",
+        "Après <code>import random</code>, les fonctions s’appellent avec le nom du module devant. Celle qui tire un entier entre deux bornes les inclut toutes les deux.",
+        "<code>import random</code> puis <code>print(random.randint(1, 6))</code>"
+      ],
       solution: 'import random\n\nprint(random.randint(1, 6))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -306,7 +330,11 @@ print(math.pi)           # 3.14159...</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> importe <code>math</code> et affiche la racine carrée de 144, puis l\'arrondi <strong>vers le haut</strong> de 4.1.',
       codeDepart: '# deux lignes de résultat :\n',
-      indice: '<code>math.sqrt(144)</code> pour la racine, <code>math.ceil(4.1)</code> pour l\'arrondi vers le haut.',
+      indices: [
+        "Même principe qu’avec <code>random</code> : un module à importer d’abord. Celui des mathématiques porte un nom évident.",
+        "« Racine carrée » se dit <em>square root</em>, et « arrondi vers le haut » <em>ceiling</em>, le plafond. Les noms des fonctions viennent de là.",
+        "<code>math.sqrt(144)</code> pour la racine, <code>math.ceil(4.1)</code> pour l’arrondi vers le haut."
+      ],
       solution: 'import math\n\nprint(math.sqrt(144))\nprint(math.ceil(4.1))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -321,7 +349,11 @@ print(math.pi)           # 3.14159...</pre>
       type: 'py',
       consigne: '<strong>Défi du pile ou face :</strong> lance une pièce 100 fois et affiche le nombre de « pile ». Le résultat doit tourner autour de 50 — relance plusieurs fois pour le voir varier.',
       codeDepart: 'import random\n\npiles = 0\n# lance 100 fois...\n',
-      indice: 'Une boucle <code>for i in range(100):</code>, et dedans : <code>if random.choice(["pile", "face"]) == "pile":</code> puis <code>piles = piles + 1</code>.',
+      indices: [
+        "C’est le compteur conditionnel déjà rencontré : une variable à 0, une boucle de 100 tours, et on augmente seulement dans certains cas.",
+        "<code>random.choice(liste)</code> tire un élément au hasard. Compare son résultat à <code>\"pile\"</code> dans un <code>if</code>, à l’intérieur de la boucle.",
+        "<code>for i in range(100):</code> · <code>if random.choice([\"pile\", \"face\"]) == \"pile\":</code> · <code>piles = piles + 1</code>"
+      ],
       solution: 'import random\n\npiles = 0\nfor i in range(100):\n    if random.choice(["pile", "face"]) == "pile":\n        piles = piles + 1\n\nprint(piles)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -377,7 +409,11 @@ print(compte)    # {'chat': 3, 'chien': 1, 'oiseau': 1}</pre>
       type: 'py',
       consigne: 'Parcours le stock avec <code>.items()</code> et affiche une ligne par produit, sous la forme <code>pommes : 12</code>.',
       codeDepart: 'stock = {"pommes": 12, "poires": 5, "cerises": 30}\n\n# une ligne par produit :\n',
-      indice: '<code>for cle, valeur in stock.items():</code> puis, indenté, un print avec une f-string : <code>print(f"{cle} : {valeur}")</code>',
+      indices: [
+        "Parcourir un dictionnaire directement ne donne que les clés. Pour obtenir la clé <strong>et</strong> sa valeur en même temps, il faut le demander.",
+        "<code>.items()</code> fournit les deux à chaque tour — d’où les <strong>deux</strong> noms de variables après le <code>for</code>, séparés par une virgule.",
+        "<code>for cle, valeur in stock.items():</code> puis <code>print(f\"{cle} : {valeur}\")</code>"
+      ],
       solution: 'stock = {"pommes": 12, "poires": 5, "cerises": 30}\n\nfor cle, valeur in stock.items():\n    print(f"{cle} : {valeur}")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -392,7 +428,11 @@ print(compte)    # {'chat': 3, 'chien': 1, 'oiseau': 1}</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> affiche le stock de <code>bananes</code>. Le produit n\'existe pas dans le dictionnaire — ton code doit afficher <code>0</code> au lieu de planter.',
       codeDepart: 'stock = {"pommes": 12, "poires": 5}\n\n# doit afficher 0, sans erreur :\n',
-      indice: '<code>stock.get("bananes", 0)</code> — le second argument est la valeur renvoyée si la clé est absente.',
+      indices: [
+        "Demander une clé absente avec les crochets fait planter le programme. Il existe une façon plus douce de demander.",
+        "<code>.get()</code> ne plante jamais : son second argument est la valeur à renvoyer quand la clé n’existe pas.",
+        "<code>print(stock.get(\"bananes\", 0))</code>"
+      ],
       solution: 'stock = {"pommes": 12, "poires": 5}\n\nprint(stock.get("bananes", 0))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur + ' — c\'est justement ce que <code>.get()</code> permet d\'éviter.' };
@@ -406,7 +446,11 @@ print(compte)    # {'chat': 3, 'chien': 1, 'oiseau': 1}</pre>
       type: 'py',
       consigne: '<strong>Défi du compteur :</strong> compte combien de fois chaque mot apparaît, et affiche le dictionnaire obtenu.',
       codeDepart: 'mots = ["chat", "chien", "chat", "oiseau", "chat", "chien"]\n\ncompte = {}\n# ta boucle :\n',
-      indice: 'Dans la boucle, une seule ligne suffit : <code>compte[mot] = compte.get(mot, 0) + 1</code>',
+      indices: [
+        "À chaque mot rencontré, il faut ajouter 1 à son compte. Le problème : la première fois, le mot n’a pas encore de compte du tout.",
+        "C’est exactement ce que règle <code>.get(mot, 0)</code> : il donne 0 pour un mot jamais vu, et son compte sinon. Une seule ligne suffit dans la boucle.",
+        "<code>compte[mot] = compte.get(mot, 0) + 1</code>"
+      ],
       solution: 'mots = ["chat", "chien", "chat", "oiseau", "chat", "chien"]\n\ncompte = {}\nfor mot in mots:\n    compte[mot] = compte.get(mot, 0) + 1\n\nprint(compte)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -458,7 +502,11 @@ except ValueError:
       type: 'py',
       consigne: 'Ce code plante. Entoure-le d\'un <code>try</code> / <code>except ValueError</code> pour qu\'il affiche <code>Ce n\'est pas un nombre</code> au lieu de s\'arrêter.',
       codeDepart: 'saisie = "abc"\n\nnombre = int(saisie)\nprint(nombre)\n',
-      indice: 'Décale les deux lignes sous <code>try:</code>, puis ajoute <code>except ValueError:</code> avec le message.',
+      indices: [
+        "On ne corrige pas le code fautif : on l’<strong>entoure</strong>. Le principe est de dire « essaie ceci ; si ça rate, fais cela ».",
+        "Les lignes à surveiller passent sous <code>try:</code>, décalées. Puis <code>except ValueError:</code>, au même niveau que <code>try</code>, avec le message dessous.",
+        "<code>try:</code> · les deux lignes décalées · <code>except ValueError:</code> · <code>print(\"Ce n’est pas un nombre\")</code>"
+      ],
       solution: 'saisie = "abc"\n\ntry:\n    nombre = int(saisie)\n    print(nombre)\nexcept ValueError:\n    print("Ce n\'est pas un nombre")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Le programme plante encore : ' + ctx.erreur + ' — c\'est justement ce que le <code>try</code> doit empêcher.' };
@@ -472,7 +520,11 @@ except ValueError:
       type: 'py',
       consigne: '<strong>Entraînement :</strong> la division par zéro doit afficher <code>Division impossible</code>, et le programme doit continuer jusqu\'au message final (déjà écrit).',
       codeDepart: 'a = 10\nb = 0\n\n# protège cette division :\nresultat = a / b\nprint(resultat)\n\nprint("Fin du programme")',
-      indice: 'L\'erreur à attraper s\'appelle <code>ZeroDivisionError</code>.',
+      indices: [
+        "Même structure qu’à l’exercice précédent. Seul le nom de l’erreur change — et Python te le donne lui-même si tu lances le code sans protection.",
+        "Ce nom est très littéral : division, zéro, erreur. En un seul mot, sans espace, chaque partie avec sa majuscule.",
+        "<code>except ZeroDivisionError:</code>"
+      ],
       solution: 'a = 10\nb = 0\n\ntry:\n    resultat = a / b\n    print(resultat)\nexcept ZeroDivisionError:\n    print("Division impossible")\n\nprint("Fin du programme")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Le programme plante encore : ' + ctx.erreur };
@@ -544,7 +596,11 @@ print(medor.aboyer())  # Médor dit Ouaf !</pre>
       type: 'py',
       consigne: 'Crée une classe <code>Chien</code> avec un <code>__init__</code> qui range le <code>nom</code>, puis fabrique un chien nommé <code>Rex</code> et affiche son nom.',
       codeDepart: '# class, puis création, puis affichage :\n',
-      indice: '<code>class Chien:</code> · <code>def __init__(self, nom):</code> · <code>self.nom = nom</code>. Ensuite : <code>rex = Chien("Rex")</code> et <code>print(rex.nom)</code>.',
+      indices: [
+        "Une classe est un moule ; l’objet est ce qu’on en tire. <code>__init__</code> est la méthode que Python appelle tout seul au moment de la fabrication.",
+        "<code>self</code> désigne l’objet en train d’être fabriqué : <code>self.nom = nom</code> range le paramètre <em>dans</em> l’objet, pour qu’il y reste après.",
+        "<code>class Chien:</code> · <code>def __init__(self, nom):</code> · <code>self.nom = nom</code> · puis <code>rex = Chien(\"Rex\")</code> et <code>print(rex.nom)</code>"
+      ],
       solution: 'class Chien:\n    def __init__(self, nom):\n        self.nom = nom\n\nrex = Chien("Rex")\nprint(rex.nom)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -560,7 +616,11 @@ print(medor.aboyer())  # Médor dit Ouaf !</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> ajoute une méthode <code>aboyer()</code> qui <strong>renvoie</strong> <code>Rex dit Ouaf !</code>, et affiche son résultat pour deux chiens différents.',
       codeDepart: 'class Chien:\n    def __init__(self, nom):\n        self.nom = nom\n\n    # ta méthode aboyer ici\n\n',
-      indice: '<code>def aboyer(self):</code> puis <code>return f"{self.nom} dit Ouaf !"</code>. N\'oublie pas <code>self</code> en premier paramètre.',
+      indices: [
+        "Une méthode s’écrit comme une fonction, mais à l’intérieur de la classe — donc décalée d’un cran — et elle reçoit toujours l’objet en premier paramètre.",
+        "Ce premier paramètre s’appelle <code>self</code> par convention, et c’est par lui qu’on atteint le nom : <code>self.nom</code>. La méthode doit <strong>renvoyer</strong> le texte, pas l’afficher.",
+        "<code>def aboyer(self):</code> puis <code>return f\"{self.nom} dit Ouaf !\"</code>"
+      ],
       solution: 'class Chien:\n    def __init__(self, nom):\n        self.nom = nom\n\n    def aboyer(self):\n        return f"{self.nom} dit Ouaf !"\n\nrex = Chien("Rex")\nmedor = Chien("Médor")\nprint(rex.aboyer())\nprint(medor.aboyer())',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -577,7 +637,11 @@ print(medor.aboyer())  # Médor dit Ouaf !</pre>
       type: 'py',
       consigne: '<strong>Défi du compte en banque :</strong> crée une classe <code>Compte</code> avec un <code>solde</code> de départ, une méthode <code>deposer(montant)</code> qui l\'augmente, et affiche le solde après un dépôt de 50 sur un compte ouvert à 100.',
       codeDepart: '# Attendu à l\'écran : 150\n',
-      indice: 'Dans <code>deposer</code>, modifie l\'attribut : <code>self.solde = self.solde + montant</code>. Puis <code>c = Compte(100)</code>, <code>c.deposer(50)</code>, <code>print(c.solde)</code>.',
+      indices: [
+        "Une méthode peut aussi <strong>modifier</strong> l’objet, pas seulement lire dedans. Ici, <code>deposer</code> doit changer le solde pour de bon.",
+        "Modifier un attribut, c’est lui réaffecter une valeur : <code>self.solde = …</code>. Sans le <code>self.</code>, tu créerais une variable locale qui disparaîtrait à la fin de la méthode.",
+        "<code>self.solde = self.solde + montant</code>, puis <code>c = Compte(100)</code> · <code>c.deposer(50)</code> · <code>print(c.solde)</code>"
+      ],
       solution: 'class Compte:\n    def __init__(self, solde):\n        self.solde = solde\n\n    def deposer(self, montant):\n        self.solde = self.solde + montant\n\nc = Compte(100)\nc.deposer(50)\nprint(c.solde)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -620,7 +684,11 @@ print(len(lyonnais))    # 2</pre>
       type: 'py',
       consigne: 'Affiche une ligne par contact, sous la forme <code>Nadia (Lyon)</code>.',
       codeDepart: 'carnet = [\n    {"nom": "Nadia", "ville": "Lyon", "age": 32},\n    {"nom": "Karim", "ville": "Lille", "age": 45},\n    {"nom": "Sophie", "ville": "Lyon", "age": 28}\n]\n\n# une ligne par contact :\n',
-      indice: '<code>for c in carnet:</code> puis <code>print(f"{c[\'nom\']} ({c[\'ville\']})")</code>',
+      indices: [
+        "Le carnet est une <strong>liste de dictionnaires</strong> : la boucle te donne un dictionnaire à chaque tour, et c’est dedans qu’il faut aller chercher.",
+        "Dans une f-string, les guillemets de la clé doivent être différents de ceux qui entourent la chaîne — sinon Python croit que le texte s’arrête là.",
+        "<code>for c in carnet:</code> puis <code>print(f\"{c['nom']} ({c['ville']})\")</code> — apostrophes dedans, guillemets dehors."
+      ],
       solution: 'carnet = [\n    {"nom": "Nadia", "ville": "Lyon", "age": 32},\n    {"nom": "Karim", "ville": "Lille", "age": 45},\n    {"nom": "Sophie", "ville": "Lyon", "age": 28}\n]\n\nfor c in carnet:\n    print(f"{c[\'nom\']} ({c[\'ville\']})")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -635,7 +703,11 @@ print(len(lyonnais))    # 2</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> écris une fonction <code>chercher_par_ville(carnet, ville)</code> qui <strong>renvoie</strong> la liste des contacts de cette ville, et affiche le nombre de Lyonnais.',
       codeDepart: 'carnet = [\n    {"nom": "Nadia", "ville": "Lyon", "age": 32},\n    {"nom": "Karim", "ville": "Lille", "age": 45},\n    {"nom": "Sophie", "ville": "Lyon", "age": 28}\n]\n\n# ta fonction, puis print(len(...)) :\n',
-      indice: 'Dans la fonction : <code>return [c for c in carnet if c["ville"] == ville]</code>. Ensuite : <code>print(len(chercher_par_ville(carnet, "Lyon")))</code>',
+      indices: [
+        "La fonction ne doit rien afficher : elle <strong>renvoie</strong> une liste, qu’on comptera ensuite avec <code>len()</code>.",
+        "Filtrer une liste, c’est une compréhension avec un <code>if</code> à la fin : on garde chaque contact dont la ville correspond au paramètre reçu.",
+        "<code>return [c for c in carnet if c[\"ville\"] == ville]</code>, puis <code>print(len(chercher_par_ville(carnet, \"Lyon\")))</code>"
+      ],
       solution: 'carnet = [\n    {"nom": "Nadia", "ville": "Lyon", "age": 32},\n    {"nom": "Karim", "ville": "Lille", "age": 45},\n    {"nom": "Sophie", "ville": "Lyon", "age": 28}\n]\n\ndef chercher_par_ville(carnet, ville):\n    return [c for c in carnet if c["ville"] == ville]\n\nprint(len(chercher_par_ville(carnet, "Lyon")))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -650,7 +722,11 @@ print(len(lyonnais))    # 2</pre>
       type: 'py',
       consigne: '<strong>Défi :</strong> affiche l\'<strong>âge moyen</strong> du carnet, arrondi à une décimale, sous la forme <code>Âge moyen : 35.0</code>.',
       codeDepart: 'carnet = [\n    {"nom": "Nadia", "ville": "Lyon", "age": 32},\n    {"nom": "Karim", "ville": "Lille", "age": 45},\n    {"nom": "Sophie", "ville": "Lyon", "age": 28}\n]\n\n# Âge moyen : 35.0\n',
-      indice: 'Totalise les âges avec une boucle (ou <code>sum([c["age"] for c in carnet])</code>), divise par <code>len(carnet)</code>, et formate avec <code>:.1f</code> dans une f-string.',
+      indices: [
+        "Trois choses à enchaîner : totaliser les âges, diviser par le nombre de contacts, et imposer une seule décimale à l’affichage.",
+        "Le total se fait avec un accumulateur, ou d’un coup avec <code>sum([…])</code>. Pour l’affichage, c’est le format <code>:.1f</code> dans la f-string.",
+        "<code>moyenne = total / len(carnet)</code> puis <code>print(f\"Âge moyen : {moyenne:.1f}\")</code>"
+      ],
       solution: 'carnet = [\n    {"nom": "Nadia", "ville": "Lyon", "age": 32},\n    {"nom": "Karim", "ville": "Lille", "age": 45},\n    {"nom": "Sophie", "ville": "Lyon", "age": 28}\n]\n\ntotal = 0\nfor c in carnet:\n    total = total + c["age"]\n\nmoyenne = total / len(carnet)\nprint(f"Âge moyen : {moyenne:.1f}")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -700,7 +776,11 @@ for mot, n in compte.items():
       type: 'py',
       consigne: '<strong>Étape 1 :</strong> découpe le texte en mots et affiche <strong>le nombre total de mots</strong>.',
       codeDepart: 'texte = "le chat dort le chien court le chat mange"\n\n# nombre de mots :\n',
-      indice: '<code>mots = texte.split(" ")</code> puis <code>print(len(mots))</code>',
+      indices: [
+        "Le texte est une seule chaîne : tant qu’elle n’est pas découpée, il n’y a pas de mots à compter.",
+        "<code>split(\" \")</code> découpe à chaque espace et renvoie la liste des mots. <code>len()</code> compte ensuite les éléments de cette liste.",
+        "<code>mots = texte.split(\" \")</code> puis <code>print(len(mots))</code>"
+      ],
       solution: 'texte = "le chat dort le chien court le chat mange"\n\nmots = texte.split(" ")\nprint(len(mots))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -714,7 +794,11 @@ for mot, n in compte.items():
       type: 'py',
       consigne: '<strong>Étape 2 :</strong> compte les occurrences de chaque mot et affiche combien de fois apparaît le mot <code>le</code>.',
       codeDepart: 'texte = "le chat dort le chien court le chat mange"\nmots = texte.split(" ")\n\ncompte = {}\n# ta boucle, puis affiche compte["le"] :\n',
-      indice: 'Le motif du compteur : <code>compte[mot] = compte.get(mot, 0) + 1</code>, puis <code>print(compte["le"])</code>',
+      indices: [
+        "C’est exactement le compteur de mots de la leçon sur les dictionnaires : le même motif, appliqué au texte découpé.",
+        "Un dictionnaire vide au départ, puis dans la boucle on ajoute 1 au compte du mot courant — en donnant 0 par défaut pour un mot jamais vu.",
+        "<code>compte[mot] = compte.get(mot, 0) + 1</code> puis <code>print(compte[\"le\"])</code>"
+      ],
       solution: 'texte = "le chat dort le chien court le chat mange"\nmots = texte.split(" ")\n\ncompte = {}\nfor mot in mots:\n    compte[mot] = compte.get(mot, 0) + 1\n\nprint(compte["le"])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -728,7 +812,11 @@ for mot, n in compte.items():
       type: 'py',
       consigne: '<strong>Étape 3 — la finale :</strong> trouve le mot <strong>le plus fréquent</strong> et affiche-le sous la forme <code>le (3 fois)</code>.',
       codeDepart: 'texte = "le chat dort le chien court le chat mange"\nmots = texte.split(" ")\n\ncompte = {}\nfor mot in mots:\n    compte[mot] = compte.get(mot, 0) + 1\n\n# trouve le maximum, puis affiche : le (3 fois)\n',
-      indice: 'Deux variables à retenir : <code>meilleur_mot = ""</code> et <code>meilleur_compte = 0</code>. Puis <code>for mot, n in compte.items():</code> avec un <code>if n > meilleur_compte:</code> qui met les deux à jour.',
+      indices: [
+        "Même principe que « la meilleure note » : on garde le champion en cours, et on le remplace dès qu’on trouve mieux. Mais ici il faut en retenir <strong>deux</strong>.",
+        "Deux variables avant la boucle : le mot champion, et son compte. Dans le <code>if</code>, les deux se mettent à jour ensemble — sinon elles se désaccordent.",
+        "<code>for mot, n in compte.items():</code> · <code>if n &gt; meilleur_compte:</code> · puis <code>meilleur_mot = mot</code> et <code>meilleur_compte = n</code>"
+      ],
       solution: 'texte = "le chat dort le chien court le chat mange"\nmots = texte.split(" ")\n\ncompte = {}\nfor mot in mots:\n    compte[mot] = compte.get(mot, 0) + 1\n\nmeilleur_mot = ""\nmeilleur_compte = 0\nfor mot, n in compte.items():\n    if n > meilleur_compte:\n        meilleur_compte = n\n        meilleur_mot = mot\n\nprint(f"{meilleur_mot} ({meilleur_compte} fois)")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };

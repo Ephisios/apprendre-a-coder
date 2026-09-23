@@ -35,7 +35,11 @@ print(mot[::-1])   # ruojnoB</pre>
       type: 'py',
       consigne: 'À partir de la liste, affiche sur trois lignes : les <strong>trois premiers</strong> éléments, les <strong>trois derniers</strong>, et la liste <strong>à l\'envers</strong>.',
       codeDepart: 't = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n',
-      indice: '<code>t[:3]</code>, <code>t[-3:]</code>, et <code>t[::-1]</code>.',
+      indices: [
+        "Trois découpes différentes sur la même liste. Le principe est toujours le même : deux bornes séparées par <code>:</code>, dont l’une peut manquer.",
+        "Une borne omise veut dire « depuis le début » ou « jusqu’à la fin ». Un indice négatif part de la fin. Et un <strong>troisième</strong> nombre, après un second <code>:</code>, donne le pas.",
+        "<code>t[:3]</code>, <code>t[-3:]</code>, et <code>t[::-1]</code> — un pas de -1 parcourt à l’envers."
+      ],
       solution: 't = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\nprint(t[:3])\nprint(t[-3:])\nprint(t[::-1])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -51,7 +55,11 @@ print(mot[::-1])   # ruojnoB</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> à partir de <code>"Bonjour tout le monde"</code>, affiche les 7 premiers caractères, puis le mot à l\'envers.',
       codeDepart: 'phrase = "Bonjour tout le monde"\n\n',
-      indice: 'Le découpage marche pareil sur le texte : <code>phrase[:7]</code> puis <code>phrase[::-1]</code>.',
+      indices: [
+        "Rien de nouveau ici : un texte se découpe exactement comme une liste, avec la même notation.",
+        "Les 7 premiers caractères : une borne de fin, et pas de borne de début. À l’envers : un pas de -1.",
+        "<code>phrase[:7]</code> puis <code>phrase[::-1]</code>"
+      ],
       solution: 'phrase = "Bonjour tout le monde"\n\nprint(phrase[:7])\nprint(phrase[::-1])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -66,7 +74,11 @@ print(mot[::-1])   # ruojnoB</pre>
       type: 'py',
       consigne: '<strong>Défi du palindrome :</strong> écris une fonction <code>est_palindrome(mot)</code> qui renvoie <code>True</code> si le mot se lit pareil dans les deux sens. Teste-la sur <code>"kayak"</code> puis <code>"python"</code>.',
       codeDepart: '# ta fonction, puis deux print :\n',
-      indice: 'Un mot est un palindrome si <code>mot == mot[::-1]</code>. La fonction peut renvoyer directement cette comparaison.',
+      indices: [
+        "Un palindrome se lit pareil dans les deux sens. Tu sais déjà retourner un texte — il ne reste qu’à comparer.",
+        "Une comparaison produit déjà <code>True</code> ou <code>False</code> : inutile de passer par un <code>if</code>, la fonction peut renvoyer la comparaison elle-même.",
+        "<code>return mot == mot[::-1]</code>"
+      ],
       solution: 'def est_palindrome(mot):\n    return mot == mot[::-1]\n\nprint(est_palindrome("kayak"))\nprint(est_palindrome("python"))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -123,7 +135,11 @@ print(a - b)    # {1} — la différence (dans a mais pas dans b)</pre>
       type: 'py',
       consigne: 'Écris une fonction <code>extremes(valeurs)</code> qui renvoie <strong>le minimum et le maximum</strong> (un tuple), puis déballe le résultat en deux variables et affiche-les séparées par un espace.',
       codeDepart: 'valeurs = [12, 3, 45, 7]\n\n# ta fonction, puis le déballage :\n',
-      indice: '<code>return min(valeurs), max(valeurs)</code> puis <code>petit, grand = extremes(valeurs)</code> et <code>print(petit, grand)</code>.',
+      indices: [
+        "Une fonction peut renvoyer plusieurs valeurs d’un coup : il suffit de les séparer par une virgule. Python en fait un tuple.",
+        "À la réception, on peut « déballer » ce tuple dans deux variables d’un seul geste, en les séparant aussi par une virgule.",
+        "<code>return min(valeurs), max(valeurs)</code> puis <code>petit, grand = extremes(valeurs)</code>"
+      ],
       solution: 'valeurs = [12, 3, 45, 7]\n\ndef extremes(valeurs):\n    return min(valeurs), max(valeurs)\n\npetit, grand = extremes(valeurs)\nprint(petit, grand)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -138,7 +154,11 @@ print(a - b)    # {1} — la différence (dans a mais pas dans b)</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> à partir de la liste avec doublons, affiche le <strong>nombre de valeurs différentes</strong>, puis la liste dédoublonnée et triée.',
       codeDepart: 'notes = [12, 15, 12, 9, 15, 15, 9]\n\n',
-      indice: '<code>set(notes)</code> supprime les doublons. Puis <code>len(...)</code> pour compter et <code>sorted(...)</code> pour trier.',
+      indices: [
+        "Un ensemble ne peut pas contenir deux fois la même valeur : le transformer en ensemble suffit donc à dédoublonner.",
+        "<code>set(liste)</code> supprime les doublons, mais perd l’ordre au passage. <code>sorted()</code> le rétablit et renvoie une liste.",
+        "<code>print(len(set(notes)))</code> puis <code>print(sorted(set(notes)))</code>"
+      ],
       solution: 'notes = [12, 15, 12, 9, 15, 15, 9]\n\nprint(len(set(notes)))\nprint(sorted(set(notes)))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -153,7 +173,11 @@ print(a - b)    # {1} — la différence (dans a mais pas dans b)</pre>
       type: 'py',
       consigne: '<strong>Défi :</strong> deux clients ont acheté des produits. Affiche ceux achetés <strong>par les deux</strong> (triés), puis ceux achetés <strong>uniquement par Alice</strong> (triés).',
       codeDepart: 'alice = {"pain", "lait", "café", "miel"}\nbob = {"lait", "café", "thé"}\n\n',
-      indice: 'L\'intersection s\'écrit <code>alice & bob</code>, la différence <code>alice - bob</code>. Entoure chaque résultat de <code>sorted(...)</code> pour un affichage stable.',
+      indices: [
+        "Les ensembles ont leurs propres opérateurs, empruntés aux mathématiques : ce qui est dans les <strong>deux</strong>, et ce qui est dans l’un <strong>sans</strong> être dans l’autre.",
+        "L’intersection s’écrit <code>&amp;</code>, la différence <code>-</code>. Un ensemble n’a pas d’ordre : <code>sorted()</code> rend l’affichage stable.",
+        "<code>print(sorted(alice &amp; bob))</code> puis <code>print(sorted(alice - bob))</code>"
+      ],
       solution: 'alice = {"pain", "lait", "café", "miel"}\nbob = {"lait", "café", "thé"}\n\nprint(sorted(alice & bob))\nprint(sorted(alice - bob))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -204,7 +228,11 @@ for nom, age in zip(noms, ages):
       type: 'py',
       consigne: 'Affiche la liste numérotée <strong>à partir de 1</strong>, sous la forme <code>1. Alice</code>, <code>2. Bob</code>, etc., avec <code>enumerate</code>.',
       codeDepart: 'noms = ["Alice", "Bob", "Chloé"]\n\n',
-      indice: '<code>for i, nom in enumerate(noms, 1):</code> puis <code>print(f"{i}. {nom}")</code>',
+      indices: [
+        "Tu pourrais tenir un compteur à la main, mais Python le fait tout seul : une fonction donne à la fois le rang et l’élément.",
+        "<code>enumerate()</code> commence à 0 par défaut. Un second argument change ce point de départ — ici, il faut commencer à 1.",
+        "<code>for i, nom in enumerate(noms, 1):</code> puis <code>print(f\"{i}. {nom}\")</code>"
+      ],
       solution: 'noms = ["Alice", "Bob", "Chloé"]\n\nfor i, nom in enumerate(noms, 1):\n    print(f"{i}. {nom}")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -220,7 +248,11 @@ for nom, age in zip(noms, ages):
       type: 'py',
       consigne: '<strong>Entraînement :</strong> parcours les deux listes en parallèle avec <code>zip</code> et affiche <code>Alice a 30 ans</code>, une ligne par personne.',
       codeDepart: 'noms = ["Alice", "Bob", "Chloé"]\nages = [30, 25, 41]\n\n',
-      indice: '<code>for nom, age in zip(noms, ages):</code> puis un print avec une f-string.',
+      indices: [
+        "Deux listes à parcourir en même temps, élément par élément. Python a une fonction faite pour les apparier.",
+        "<code>zip()</code> donne un couple à chaque tour — d’où les deux noms de variables après le <code>for</code>.",
+        "<code>for nom, age in zip(noms, ages):</code> puis <code>print(f\"{nom} a {age} ans\")</code>"
+      ],
       solution: 'noms = ["Alice", "Bob", "Chloé"]\nages = [30, 25, 41]\n\nfor nom, age in zip(noms, ages):\n    print(f"{nom} a {age} ans")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -235,7 +267,11 @@ for nom, age in zip(noms, ages):
       type: 'py',
       consigne: '<strong>Défi :</strong> à partir des deux listes, construis un <strong>dictionnaire</strong> <code>{nom: age}</code> et affiche l\'âge de Bob.',
       codeDepart: 'noms = ["Alice", "Bob", "Chloé"]\nages = [30, 25, 41]\n\nannuaire = {}\n',
-      indice: 'Boucle avec zip et remplis le dictionnaire : <code>annuaire[nom] = age</code>. Puis <code>print(annuaire["Bob"])</code>.',
+      indices: [
+        "Tu sais déjà apparier deux listes. Il ne reste qu’à ranger chaque couple dans un dictionnaire, au fur et à mesure.",
+        "Un dictionnaire vide avant la boucle, puis dans la boucle : la clé est le nom, la valeur est l’âge.",
+        "<code>annuaire[nom] = age</code> dans la boucle, puis <code>print(annuaire[\"Bob\"])</code>"
+      ],
       solution: 'noms = ["Alice", "Bob", "Chloé"]\nages = [30, 25, 41]\n\nannuaire = {}\nfor nom, age in zip(noms, ages):\n    annuaire[nom] = age\n\nprint(annuaire["Bob"])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -291,7 +327,11 @@ print(list(filter(lambda x: x % 2 == 0, nombres)))  # [2, 4]</pre>
       type: 'py',
       consigne: 'Trie les contacts <strong>par âge croissant</strong> avec <code>sorted</code> et une <code>lambda</code>, puis affiche le nom du plus jeune.',
       codeDepart: 'contacts = [\n    {"nom": "Zoé", "age": 30},\n    {"nom": "Alex", "age": 25},\n    {"nom": "Bob", "age": 41}\n]\n\n',
-      indice: '<code>tries = sorted(contacts, key=lambda c: c["age"])</code> puis <code>print(tries[0]["nom"])</code>.',
+      indices: [
+        "<code>sorted()</code> ne sait pas comparer des dictionnaires tout seul : il faut lui dire <strong>sur quoi</strong> trier.",
+        "L’argument <code>key</code> reçoit une fonction qui, pour un élément, renvoie la valeur à comparer. Une <code>lambda</code> s’écrit sur place, sans <code>def</code>.",
+        "<code>sorted(contacts, key=lambda c: c[\"age\"])</code>, puis le premier élément du résultat."
+      ],
       solution: 'contacts = [\n    {"nom": "Zoé", "age": 30},\n    {"nom": "Alex", "age": 25},\n    {"nom": "Bob", "age": 41}\n]\n\ntries = sorted(contacts, key=lambda c: c["age"])\nprint(tries[0]["nom"])',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -305,7 +345,11 @@ print(list(filter(lambda x: x % 2 == 0, nombres)))  # [2, 4]</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> avec <code>map</code>, affiche la liste des carrés ; avec <code>filter</code>, la liste des nombres pairs.',
       codeDepart: 'nombres = [1, 2, 3, 4, 5, 6]\n\n',
-      indice: '<code>print(list(map(lambda x: x * x, nombres)))</code> puis <code>print(list(filter(lambda x: x % 2 == 0, nombres)))</code> — le <code>list()</code> est indispensable.',
+      indices: [
+        "Deux outils différents : l’un <strong>transforme</strong> chaque élément, l’autre en <strong>garde</strong> certains. Et aucun des deux ne renvoie une liste.",
+        "<code>map</code> transforme, <code>filter</code> sélectionne. Tous deux rendent un objet paresseux : sans <code>list(…)</code> autour, tu verras une adresse mémoire au lieu des valeurs.",
+        "<code>list(map(lambda x: x * x, nombres))</code> et <code>list(filter(lambda x: x % 2 == 0, nombres))</code>"
+      ],
       solution: 'nombres = [1, 2, 3, 4, 5, 6]\n\nprint(list(map(lambda x: x * x, nombres)))\nprint(list(filter(lambda x: x % 2 == 0, nombres)))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -322,7 +366,11 @@ print(list(filter(lambda x: x % 2 == 0, nombres)))  # [2, 4]</pre>
       type: 'py',
       consigne: '<strong>Défi :</strong> trie les contacts <strong>par ordre alphabétique de nom</strong> et affiche les trois noms séparés par des virgules, sur une seule ligne.',
       codeDepart: 'contacts = [\n    {"nom": "Zoé", "age": 30},\n    {"nom": "Alex", "age": 25},\n    {"nom": "Bob", "age": 41}\n]\n\n',
-      indice: 'Trie avec <code>key=lambda c: c["nom"]</code>, puis assemble avec <code>", ".join([c["nom"] for c in tries])</code>.',
+      indices: [
+        "Deux temps : trier sur le nom, puis assembler les noms en une seule ligne.",
+        "<code>join</code> ne fonctionne que sur des textes : il faut d’abord extraire la liste des noms, avec une compréhension.",
+        "<code>\", \".join([c[\"nom\"] for c in tries])</code>"
+      ],
       solution: 'contacts = [\n    {"nom": "Zoé", "age": 30},\n    {"nom": "Alex", "age": 25},\n    {"nom": "Bob", "age": 41}\n]\n\ntries = sorted(contacts, key=lambda c: c["nom"])\nprint(", ".join([c["nom"] for c in tries]))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -372,7 +420,11 @@ print(somme(1, 2, 3, 4))    # 10</pre>
       type: 'py',
       consigne: 'Écris <code>saluer(nom, salutation="Bonjour")</code> et appelle-la deux fois : une fois sans préciser la salutation, une fois avec <code>"Salut"</code>.',
       codeDepart: '# ta fonction, puis deux appels :\n',
-      indice: '<code>def saluer(nom, salutation="Bonjour"):</code> puis <code>return f"{salutation} {nom}"</code>.',
+      indices: [
+        "Un paramètre peut avoir une valeur prête d’avance, utilisée quand l’appelant n’en donne pas. Elle s’écrit dans la définition.",
+        "La valeur par défaut se met après un <code>=</code>, dans la parenthèse du <code>def</code>. Les paramètres ainsi dotés viennent toujours en dernier.",
+        "<code>def saluer(nom, salutation=\"Bonjour\"):</code> puis <code>return f\"{salutation} {nom}\"</code>"
+      ],
       solution: 'def saluer(nom, salutation="Bonjour"):\n    return f"{salutation} {nom}"\n\nprint(saluer("Alex"))\nprint(saluer("Alex", "Salut"))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -388,7 +440,11 @@ print(somme(1, 2, 3, 4))    # 10</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> écris <code>somme(*nombres)</code> qui additionne <strong>autant d\'arguments qu\'on veut</strong>, et teste-la avec 2 puis avec 4 nombres.',
       codeDepart: '# ta fonction, puis deux appels de tailles différentes :\n',
-      indice: 'L\'étoile rassemble les arguments : <code>def somme(*nombres):</code>. Ensuite, une boucle ordinaire sur <code>nombres</code>.',
+      indices: [
+        "Le nombre d’arguments n’est pas connu d’avance. Python sait les rassembler tous dans une seule variable.",
+        "Une étoile devant le nom du paramètre : <code>*nombres</code> devient un tuple contenant tout ce qu’on a passé. Ensuite, une boucle ordinaire suffit.",
+        "<code>def somme(*nombres):</code> puis un accumulateur, et <code>return total</code>"
+      ],
       solution: 'def somme(*nombres):\n    total = 0\n    for n in nombres:\n        total += n\n    return total\n\nprint(somme(1, 2))\nprint(somme(1, 2, 3, 4))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -470,7 +526,11 @@ print(a)      # Animal nommé Rex</pre>
       type: 'py',
       consigne: 'Crée une classe <code>Chien</code> qui <strong>hérite</strong> d\'<code>Animal</code> et redéfinit <code>crier()</code> pour renvoyer <code>« nom » fait Ouaf !</code>. Affiche le résultat pour un chien nommé Rex.',
       codeDepart: 'class Animal:\n    def __init__(self, nom):\n        self.nom = nom\n\n    def crier(self):\n        return "..."\n\n# ta classe Chien ici\n',
-      indice: '<code>class Chien(Animal):</code> puis, indentée, la méthode <code>def crier(self):</code> qui renvoie <code>self.nom + " fait Ouaf !"</code>.',
+      indices: [
+        "Hériter, c’est repartir d’une classe existante : la nouvelle reçoit tout ce que l’ancienne avait, y compris son constructeur.",
+        "La classe parente se met entre parenthèses après le nom. Redéfinir une méthode, c’est simplement en réécrire une du même nom dans la classe enfant.",
+        "<code>class Chien(Animal):</code> puis <code>def crier(self):</code> avec <code>return self.nom + \" fait Ouaf !\"</code>"
+      ],
       solution: 'class Animal:\n    def __init__(self, nom):\n        self.nom = nom\n\n    def crier(self):\n        return "..."\n\nclass Chien(Animal):\n    def crier(self):\n        return self.nom + " fait Ouaf !"\n\nrex = Chien("Rex")\nprint(rex.crier())',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -486,7 +546,11 @@ print(a)      # Animal nommé Rex</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> ajoute une classe <code>Chat</code> avec un constructeur qui prend <code>nom</code> ET <code>couleur</code>, en appelant <code>super()</code> pour le nom. Affiche <code>Félix est blanc</code>.',
       codeDepart: 'class Animal:\n    def __init__(self, nom):\n        self.nom = nom\n\n# ta classe Chat ici\n',
-      indice: 'Dans le constructeur : <code>super().__init__(nom)</code> puis <code>self.couleur = couleur</code>. Ensuite <code>print(f"{c.nom} est {c.couleur}")</code>.',
+      indices: [
+        "Le chat a un nom, comme tout animal, plus une couleur. Le nom est déjà géré par le parent : inutile de refaire son travail.",
+        "<code>super()</code> désigne la classe parente. On appelle son constructeur pour le nom, puis on ajoute ce qui est propre au chat.",
+        "<code>super().__init__(nom)</code> puis <code>self.couleur = couleur</code>"
+      ],
       solution: 'class Animal:\n    def __init__(self, nom):\n        self.nom = nom\n\nclass Chat(Animal):\n    def __init__(self, nom, couleur):\n        super().__init__(nom)\n        self.couleur = couleur\n\nc = Chat("Félix", "blanc")\nprint(f"{c.nom} est {c.couleur}")',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -500,7 +564,11 @@ print(a)      # Animal nommé Rex</pre>
       type: 'py',
       consigne: '<strong>Défi :</strong> ajoute une méthode <code>__str__</code> à <code>Animal</code> qui renvoie <code>Animal nommé Rex</code>, puis affiche l\'objet <strong>directement</strong> avec <code>print(a)</code>.',
       codeDepart: 'class Animal:\n    def __init__(self, nom):\n        self.nom = nom\n\n    # ta méthode __str__ ici\n\na = Animal("Rex")\nprint(a)',
-      indice: '<code>def __str__(self):</code> puis <code>return "Animal nommé " + self.nom</code> — deux tirets bas de chaque côté.',
+      indices: [
+        "Afficher un objet donne normalement quelque chose d’illisible. Une méthode spéciale permet de décider ce que <code>print</code> en montre.",
+        "Son nom est encadré de deux tirets bas de chaque côté, comme <code>__init__</code>. Elle doit <strong>renvoyer</strong> un texte, pas l’afficher.",
+        "<code>def __str__(self):</code> puis <code>return \"Animal nommé \" + self.nom</code>"
+      ],
       solution: 'class Animal:\n    def __init__(self, nom):\n        self.nom = nom\n\n    def __str__(self):\n        return "Animal nommé " + self.nom\n\na = Animal("Rex")\nprint(a)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -557,7 +625,11 @@ def carres_gen(n):
       type: 'py',
       consigne: 'Écris un générateur <code>compter(n)</code> qui produit les nombres de 1 à n avec <code>yield</code>, et parcours <code>compter(3)</code> dans une boucle pour afficher 1, 2, 3.',
       codeDepart: '# ton générateur, puis la boucle :\n',
-      indice: 'Une boucle <code>while i <= n:</code> avec <code>yield i</code> à l\'intérieur, puis <code>i += 1</code>. Attention : <code>yield</code>, pas <code>return</code>.',
+      indices: [
+        "Un générateur ne rend pas une liste toute faite : il produit ses valeurs une par une, à mesure qu’on les demande.",
+        "Le mot-clé n’est pas <code>return</code> — celui-là arrêterait tout au premier tour. Il en faut un qui donne une valeur <strong>sans</strong> terminer la fonction.",
+        "<code>while i &lt;= n:</code> · <code>yield i</code> · <code>i += 1</code>"
+      ],
       solution: 'def compter(n):\n    i = 1\n    while i <= n:\n        yield i\n        i += 1\n\nfor x in compter(3):\n    print(x)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -571,7 +643,11 @@ def carres_gen(n):
       type: 'py',
       consigne: '<strong>Entraînement :</strong> écris un générateur <code>carres(n)</code> qui produit les carrés de 0 à n-1, et affiche <code>list(carres(5))</code>.',
       codeDepart: '',
-      indice: '<code>for i in range(n):</code> puis <code>yield i * i</code>. À l\'appel : <code>print(list(carres(5)))</code>.',
+      indices: [
+        "Même principe qu’au précédent, mais avec un <code>for</code> au lieu d’un <code>while</code> : plus court, et aucun compteur à gérer.",
+        "Le générateur ne produit rien tant qu’on ne le parcourt pas. <code>list()</code> le parcourt entièrement d’un coup.",
+        "<code>for i in range(n):</code> puis <code>yield i * i</code>, et <code>print(list(carres(5)))</code>"
+      ],
       solution: 'def carres(n):\n    for i in range(n):\n        yield i * i\n\nprint(list(carres(5)))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -643,7 +719,11 @@ print(d.strftime("%d/%m/%Y"))     # 14/07/2024</pre>
       type: 'py',
       consigne: 'Crée la date du <strong>14 juillet 2024</strong> et affiche, sur deux lignes : l\'année seule, puis la date au format <code>14/07/2024</code>.',
       codeDepart: 'import datetime\n\n',
-      indice: '<code>d = datetime.date(2024, 7, 14)</code>, puis <code>print(d.year)</code> et <code>print(d.strftime("%d/%m/%Y"))</code>.',
+      indices: [
+        "Comme <code>random</code> et <code>math</code>, les dates viennent d’un module à importer. Une date se construit avec trois nombres.",
+        "L’ordre est année, mois, jour — du plus grand au plus petit. L’année seule est un attribut ; la mise en forme passe par une méthode et un motif.",
+        "<code>datetime.date(2024, 7, 14)</code>, puis <code>d.year</code> et <code>d.strftime(\"%d/%m/%Y\")</code>"
+      ],
       solution: 'import datetime\n\nd = datetime.date(2024, 7, 14)\nprint(d.year)\nprint(d.strftime("%d/%m/%Y"))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -659,7 +739,11 @@ print(d.strftime("%d/%m/%Y"))     # 14/07/2024</pre>
       type: 'py',
       consigne: '<strong>Entraînement :</strong> calcule le <strong>nombre de jours</strong> entre le 1er janvier 2024 et le 1er mars 2024, et affiche-le.',
       codeDepart: 'import datetime\n\ndebut = datetime.date(2024, 1, 1)\nfin = datetime.date(2024, 3, 1)\n\n',
-      indice: 'Soustrais les deux dates et prends <code>.days</code> : <code>print((fin - debut).days)</code>.',
+      indices: [
+        "Deux dates se soustraient comme deux nombres. Mais le résultat n’est pas un nombre : c’est une <strong>durée</strong>.",
+        "Cette durée porte son nombre de jours dans un attribut au nom évident, au pluriel.",
+        "<code>(fin - debut).days</code>"
+      ],
       solution: 'import datetime\n\ndebut = datetime.date(2024, 1, 1)\nfin = datetime.date(2024, 3, 1)\n\necart = fin - debut\nprint(ecart.days)',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
@@ -673,7 +757,11 @@ print(d.strftime("%d/%m/%Y"))     # 14/07/2024</pre>
       type: 'py',
       consigne: '<strong>Défi :</strong> écris une fonction <code>age_en_jours(naissance)</code> qui renvoie le nombre de jours entre une date de naissance et le <strong>1er janvier 2025</strong>, et teste-la avec le 1er janvier 2000.',
       codeDepart: 'import datetime\n\n# ta fonction, puis le test :\n',
-      indice: 'Dans la fonction : <code>reference = datetime.date(2025, 1, 1)</code> puis <code>return (reference - naissance).days</code>.',
+      indices: [
+        "C’est la même soustraction qu’à l’exercice précédent, rangée dans une fonction. La date d’arrivée, elle, ne change jamais.",
+        "La date de référence se construit à l’intérieur de la fonction ; la date de naissance, elle, arrive en paramètre.",
+        "<code>return (reference - naissance).days</code>"
+      ],
       solution: 'import datetime\n\ndef age_en_jours(naissance):\n    reference = datetime.date(2025, 1, 1)\n    return (reference - naissance).days\n\nprint(age_en_jours(datetime.date(2000, 1, 1)))',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: 'Ton code plante : ' + ctx.erreur };
