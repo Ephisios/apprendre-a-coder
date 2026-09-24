@@ -91,7 +91,11 @@ window.DATA_SQL = [
       tables: ['films'],
       consigne: 'Affiche <strong>tout le contenu</strong> de la table <code>films</code>. Déplie « Voir les tables » au-dessus si tu veux jeter un œil avant.',
       codeDepart: '-- Toutes les colonnes, toutes les lignes :\n',
-      indice: 'La formule complète : <code>SELECT * FROM films;</code>',
+      indices: [
+        "Une requête SQL se lit comme une phrase : on dit d’abord CE QU’ON VEUT, puis D’OÙ ça vient.",
+        "L’étoile veut dire « toutes les colonnes ». Le nom de la table se met après <code>FROM</code>, et la requête se termine par un point-virgule.",
+        "<code>SELECT * FROM films;</code>"
+      ],
       solution: 'SELECT * FROM films;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -105,7 +109,11 @@ window.DATA_SQL = [
       tables: ['salles'],
       consigne: '<strong>Entraînement :</strong> affiche tout le contenu de la table <code>salles</code>.',
       codeDepart: '',
-      indice: 'Même formule, en changeant le nom de la table après <code>FROM</code>.',
+      indices: [
+        "Exactement la même formule que juste avant. Un seul mot change.",
+        "Ce mot est celui qui suit <code>FROM</code> : c’est lui qui désigne la table.",
+        "<code>SELECT * FROM salles;</code>"
+      ],
       solution: 'SELECT * FROM salles;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -162,7 +170,11 @@ window.DATA_SQL = [
       tables: ['films'],
       consigne: 'Affiche uniquement les colonnes <code>titre</code> et <code>note</code> de la table <code>films</code>.',
       codeDepart: '',
-      indice: 'Les colonnes voulues, séparées par une virgule : <code>SELECT titre, note FROM films;</code>',
+      indices: [
+        "Au lieu de tout demander, on nomme les colonnes qu’on veut. L’étoile disparaît.",
+        "Les noms des colonnes se listent juste après <code>SELECT</code>, séparés par une virgule.",
+        "<code>SELECT titre, note FROM films;</code>"
+      ],
       solution: 'SELECT titre, note FROM films;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -178,7 +190,11 @@ window.DATA_SQL = [
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> affiche la liste des <strong>genres différents</strong>, sans doublon. Le résultat doit tenir en 4 lignes.',
       codeDepart: '',
-      indice: 'Le mot-clé qui supprime les doublons se place juste après SELECT : <code>SELECT DISTINCT genre FROM films;</code>',
+      indices: [
+        "Il y a huit films mais seulement quatre genres : plusieurs films partagent le même. Il faut donc écarter les répétitions.",
+        "Un mot-clé sert exactement à cela, et il se place <strong>juste après</strong> <code>SELECT</code>, avant le nom de la colonne.",
+        "<code>SELECT DISTINCT genre FROM films;</code>"
+      ],
       solution: 'SELECT DISTINCT genre FROM films;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -192,7 +208,11 @@ window.DATA_SQL = [
       tables: ['films'],
       consigne: '<strong>Défi :</strong> affiche le <code>titre</code> et la durée <strong>en heures</strong> (la durée est en minutes), en nommant cette colonne calculée <code>heures</code> grâce à <code>AS</code>.',
       codeDepart: '',
-      indice: 'On peut calculer directement dans le SELECT : <code>duree / 60 AS heures</code>',
+      indices: [
+        "Une colonne n’est pas forcément stockée telle quelle : on peut en calculer une au passage.",
+        "Le calcul s’écrit directement dans le <code>SELECT</code>, et <code>AS</code> lui donne un nom lisible.",
+        "<code>SELECT titre, duree / 60 AS heures FROM films;</code>"
+      ],
       solution: 'SELECT titre, duree / 60 AS heures FROM films;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -238,7 +258,11 @@ SELECT titre FROM films WHERE note > 8;          -- nombre : rien</pre>
       tables: ['films'],
       consigne: 'Affiche le <code>titre</code> et l\'<code>annee</code> des films sortis en <strong>2023</strong>.',
       codeDepart: '',
-      indice: '<code>SELECT titre, annee FROM films WHERE annee = 2023;</code> — l\'année est un nombre, donc pas d\'apostrophes.',
+      indices: [
+        "Filtrer, c’est ajouter une condition à la requête. Un mot-clé l’annonce.",
+        "<code>WHERE</code> se place après le <code>FROM</code>. La condition s’écrit avec un seul <code>=</code> — en SQL, c’est bien une comparaison.",
+        "<code>WHERE annee = 2023</code> — l’année est un nombre, donc pas d’apostrophes autour."
+      ],
       solution: 'SELECT titre, annee FROM films WHERE annee = 2023;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -252,7 +276,11 @@ SELECT titre FROM films WHERE note > 8;          -- nombre : rien</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> affiche le <code>titre</code> des films de genre <code>Comédie</code>. Attention aux apostrophes !',
       codeDepart: '',
-      indice: 'Le texte se met entre apostrophes simples : <code>WHERE genre = \'Comédie\'</code>',
+      indices: [
+        "Même structure qu’à l’exercice précédent, mais on filtre sur du texte. Et le texte ne s’écrit pas comme un nombre.",
+        "En SQL, un texte se met entre <strong>apostrophes simples</strong> — pas entre guillemets doubles.",
+        "<code>WHERE genre = 'Comédie'</code>"
+      ],
       solution: "SELECT titre FROM films WHERE genre = 'Comédie';",
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -265,7 +293,11 @@ SELECT titre FROM films WHERE note > 8;          -- nombre : rien</pre>
       tables: ['films'],
       consigne: '<strong>Défi :</strong> affiche le <code>titre</code> et la <code>note</code> des films dont la note est <strong>strictement supérieure à 8</strong>.',
       codeDepart: '',
-      indice: 'Un nombre ne prend pas d\'apostrophes : <code>WHERE note > 8</code>',
+      indices: [
+        "Une comparaison ne se limite pas à l’égalité : on peut demander « plus grand que ».",
+        "« Strictement supérieur » s’écrit <code>&gt;</code>, sans le signe égal. Et un nombre ne prend pas d’apostrophes.",
+        "<code>WHERE note &gt; 8</code>"
+      ],
       solution: 'SELECT titre, note FROM films WHERE note > 8;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -319,7 +351,11 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
       tables: ['films'],
       consigne: 'Affiche le <code>titre</code> des <strong>thrillers sortis après 2020</strong> (les deux conditions à la fois).',
       codeDepart: '',
-      indice: 'Deux conditions reliées par <code>AND</code> : <code>WHERE genre = \'Thriller\' AND annee > 2020</code>',
+      indices: [
+        "Deux conditions doivent être vraies <strong>en même temps</strong>.",
+        "Le mot qui les relie est <code>AND</code>. Les deux s’écrivent l’une après l’autre, après un seul <code>WHERE</code>.",
+        "<code>WHERE genre = 'Thriller' AND annee &gt; 2020</code>"
+      ],
       solution: "SELECT titre FROM films WHERE genre = 'Thriller' AND annee > 2020;",
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -333,7 +369,11 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> affiche le <code>titre</code> des films dont le titre <strong>commence par « Le »</strong>.',
       codeDepart: '',
-      indice: 'Le joker <code>%</code> remplace la suite : <code>WHERE titre LIKE \'Le %\'</code>',
+      indices: [
+        "On ne cherche pas une égalité exacte mais un <strong>début</strong> de texte. L’opérateur <code>=</code> ne sait pas faire cela.",
+        "<code>LIKE</code> compare avec un motif, dans lequel <code>%</code> remplace « n’importe quelle suite de caractères ».",
+        "<code>WHERE titre LIKE 'Le %'</code>"
+      ],
       solution: "SELECT titre FROM films WHERE titre LIKE 'Le %';",
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -348,7 +388,11 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
       tables: ['films'],
       consigne: '<strong>Défi :</strong> affiche le <code>titre</code> des films <strong>sans note</strong> (la case est vide).',
       codeDepart: '',
-      indice: 'Une case vide ne se compare pas avec <code>=</code> : il faut <code>WHERE note IS NULL</code>.',
+      indices: [
+        "Une case vide n’est pas une valeur comme les autres : elle ne vaut rien — pas même zéro, ni une chaîne vide.",
+        "C’est pour cela qu’elle ne se compare pas avec <code>=</code> : il faut une écriture particulière, qui se lit comme une phrase anglaise.",
+        "<code>WHERE note IS NULL</code>"
+      ],
       solution: 'SELECT titre FROM films WHERE note IS NULL;',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -389,7 +433,11 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
       tables: ['films'],
       consigne: 'Affiche le <code>titre</code> et la <code>note</code> de tous les films, <strong>du mieux noté au moins bien noté</strong>.',
       codeDepart: '',
-      indice: '<code>ORDER BY note DESC</code> se place à la fin de la requête.',
+      indices: [
+        "Le tri se demande à la fin de la requête, après le filtrage s’il y en a un.",
+        "<code>ORDER BY</code> suivi de la colonne. Par défaut le tri est croissant : il faut un mot de plus pour l’inverser.",
+        "<code>ORDER BY note DESC</code>"
+      ],
       solution: 'SELECT titre, note FROM films ORDER BY note DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -408,7 +456,11 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> affiche le <code>titre</code> et la <code>note</code> des <strong>3 meilleurs films</strong> seulement.',
       codeDepart: '',
-      indice: 'Trier d\'abord, couper ensuite : <code>ORDER BY note DESC LIMIT 3</code>',
+      indices: [
+        "Deux choses à enchaîner, et l’ordre compte : couper avant de trier donnerait trois films au hasard.",
+        "On trie d’abord, on coupe ensuite. <code>LIMIT</code> vient donc <strong>après</strong> <code>ORDER BY</code>.",
+        "<code>ORDER BY note DESC LIMIT 3</code>"
+      ],
       solution: 'SELECT titre, note FROM films ORDER BY note DESC LIMIT 3;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -423,7 +475,11 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
       tables: ['films'],
       consigne: '<strong>Défi :</strong> affiche <code>titre</code>, <code>annee</code> et <code>note</code>, triés par <strong>année décroissante</strong>, et <strong>en cas d\'égalité</strong> par note décroissante.',
       codeDepart: '',
-      indice: 'Deux critères séparés par une virgule, chacun avec son sens : <code>ORDER BY annee DESC, note DESC</code>',
+      indices: [
+        "Deux critères de tri : le second ne sert qu’à départager les ex æquo du premier.",
+        "Ils se listent après un seul <code>ORDER BY</code>, séparés par une virgule. Chacun porte son propre sens de tri.",
+        "<code>ORDER BY annee DESC, note DESC</code>"
+      ],
       solution: 'SELECT titre, annee, note FROM films ORDER BY annee DESC, note DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -476,7 +532,11 @@ SELECT MIN(annee), MAX(annee) FROM films; -- le plus ancien et le plus récent</
       tables: ['films'],
       consigne: 'Compte le nombre total de films et nomme le résultat <code>nombre</code>.',
       codeDepart: '',
-      indice: '<code>SELECT COUNT(*) AS nombre FROM films;</code>',
+      indices: [
+        "Compter des lignes n’est pas les afficher : le résultat tiendra sur une seule ligne, avec une seule valeur.",
+        "<code>COUNT(*)</code> compte les lignes. <code>AS</code> donne un nom à cette colonne calculée — sans lui, elle en porterait un illisible.",
+        "<code>SELECT COUNT(*) AS nombre FROM films;</code>"
+      ],
       solution: 'SELECT COUNT(*) AS nombre FROM films;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -491,7 +551,11 @@ SELECT MIN(annee), MAX(annee) FROM films; -- le plus ancien et le plus récent</
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> calcule la <strong>note moyenne</strong> de tous les films, en nommant la colonne <code>moyenne</code>.',
       codeDepart: '',
-      indice: '<code>SELECT AVG(note) AS moyenne FROM films;</code>',
+      indices: [
+        "Même forme qu’au précédent : un seul calcul, une seule ligne en résultat. Seule la fonction change.",
+        "La moyenne s’écrit <code>AVG</code>, et elle prend en argument la <strong>colonne</strong> à moyenner — pas l’étoile.",
+        "<code>SELECT AVG(note) AS moyenne FROM films;</code>"
+      ],
       solution: 'SELECT AVG(note) AS moyenne FROM films;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -506,7 +570,11 @@ SELECT MIN(annee), MAX(annee) FROM films; -- le plus ancien et le plus récent</
       tables: ['films'],
       consigne: '<strong>Défi :</strong> combien de films sont sortis <strong>après 2020</strong> ? Une seule ligne, une seule valeur, nommée <code>recents</code>.',
       codeDepart: '',
-      indice: 'On combine WHERE et COUNT : <code>SELECT COUNT(*) AS recents FROM films WHERE annee > 2020;</code>',
+      indices: [
+        "Deux choses vues séparément se rencontrent ici : compter, et filtrer.",
+        "Le <code>WHERE</code> agit <strong>avant</strong> le comptage : il écarte des lignes, puis <code>COUNT</code> compte celles qui restent.",
+        "<code>SELECT COUNT(*) AS recents FROM films WHERE annee &gt; 2020;</code>"
+      ],
       solution: 'SELECT COUNT(*) AS recents FROM films WHERE annee > 2020;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -557,7 +625,11 @@ ORDER BY moyenne DESC;</pre>
       tables: ['films'],
       consigne: 'Affiche <strong>le nombre de films par genre</strong> : la colonne <code>genre</code> et un compte nommé <code>nombre</code>.',
       codeDepart: '',
-      indice: '<code>SELECT genre, COUNT(*) AS nombre FROM films GROUP BY genre;</code>',
+      indices: [
+        "Jusqu’ici, un agrégat donnait UNE ligne pour toute la table. Ici on en veut une par genre.",
+        "<code>GROUP BY</code> découpe la table en paquets. L’agrégat s’applique alors à chaque paquet séparément.",
+        "<code>SELECT genre, COUNT(*) AS nombre FROM films GROUP BY genre;</code>"
+      ],
       solution: 'SELECT genre, COUNT(*) AS nombre FROM films GROUP BY genre;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -573,7 +645,11 @@ ORDER BY moyenne DESC;</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> affiche la <strong>note moyenne par genre</strong> (colonnes <code>genre</code> et <code>moyenne</code>), du genre le mieux noté au moins bien noté.',
       codeDepart: '',
-      indice: 'Regroupe, calcule, puis trie : <code>GROUP BY genre ORDER BY moyenne DESC</code>',
+      indices: [
+        "Même structure que l’exercice précédent, avec un agrégat différent et un tri en plus.",
+        "On peut trier sur le nom donné par <code>AS</code>, alors même que cette colonne n’existe pas dans la table.",
+        "<code>GROUP BY genre ORDER BY moyenne DESC</code>"
+      ],
       solution: 'SELECT genre, AVG(note) AS moyenne FROM films GROUP BY genre ORDER BY moyenne DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -592,7 +668,11 @@ ORDER BY moyenne DESC;</pre>
       tables: ['films'],
       consigne: '<strong>Défi :</strong> combien de films <strong>par année</strong> ? Affiche <code>annee</code> et un compte nommé <code>nombre</code>, de l\'année la plus récente à la plus ancienne.',
       codeDepart: '',
-      indice: 'Le regroupement peut porter sur n\'importe quelle colonne : <code>GROUP BY annee ORDER BY annee DESC</code>',
+      indices: [
+        "Le regroupement ne se limite pas aux catégories : n’importe quelle colonne peut servir de critère.",
+        "Regrouper sur l’année donne un paquet par année. Le tri, lui, se fait sur cette même colonne.",
+        "<code>GROUP BY annee ORDER BY annee DESC</code>"
+      ],
       solution: 'SELECT annee, COUNT(*) AS nombre FROM films GROUP BY annee ORDER BY annee DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -636,7 +716,11 @@ WHERE titre = 'Les Voisins';</pre>
       tables: ['films'],
       consigne: 'Ajoute un film à la table : <code>id</code> 9, titre <code>Aurore</code>, année 2024, genre <code>Drame</code>, durée 101, note 7.4.',
       codeDepart: '',
-      indice: '<code>INSERT INTO films (id, titre, annee, genre, duree, note) VALUES (9, \'Aurore\', 2024, \'Drame\', 101, 7.4);</code>',
+      indices: [
+        "Jusqu’ici tu n’as fait que lire. Ajouter une ligne demande un autre verbe, et une autre forme.",
+        "On nomme d’abord les colonnes entre parenthèses, puis les valeurs dans le <strong>même ordre</strong>, après <code>VALUES</code>.",
+        "<code>INSERT INTO films (id, titre, …) VALUES (9, 'Aurore', …);</code> — textes entre apostrophes, nombres sans."
+      ],
       solution: "INSERT INTO films (id, titre, annee, genre, duree, note) VALUES (9, 'Aurore', 2024, 'Drame', 101, 7.4);",
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -655,7 +739,11 @@ WHERE titre = 'Les Voisins';</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> le film <code>Les Voisins</code> a été réévalué : mets sa note à <code>8.5</code>. Attention à ne toucher que lui !',
       codeDepart: '',
-      indice: '<code>UPDATE films SET note = 8.5 WHERE titre = \'Les Voisins\';</code> — sans le WHERE, tous les films prendraient cette note.',
+      indices: [
+        "Modifier une ligne est facile. Ce qui est dangereux, c’est d’oublier de dire <strong>laquelle</strong>.",
+        "<code>UPDATE … SET …</code> change une valeur, et le <code>WHERE</code> désigne la cible. Sans lui, <strong>tous</strong> les films prendraient cette note.",
+        "<code>UPDATE films SET note = 8.5 WHERE titre = 'Les Voisins';</code>"
+      ],
       solution: "UPDATE films SET note = 8.5 WHERE titre = 'Les Voisins';",
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -673,7 +761,11 @@ WHERE titre = 'Les Voisins';</pre>
       tables: ['films'],
       consigne: '<strong>Défi :</strong> supprime tous les films sortis <strong>avant 2020</strong>. (Vérifie mentalement combien de lignes ça représente avant de lancer !)',
       codeDepart: '',
-      indice: '<code>DELETE FROM films WHERE annee < 2020;</code>',
+      indices: [
+        "Même avertissement qu’au précédent, en pire : une suppression ne se rattrape pas.",
+        "<code>DELETE FROM</code> n’a pas besoin de <code>SET</code> : la table, puis le <code>WHERE</code> qui désigne les lignes à effacer.",
+        "<code>DELETE FROM films WHERE annee &lt; 2020;</code>"
+      ],
       solution: 'DELETE FROM films WHERE annee < 2020;',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -715,7 +807,11 @@ JOIN films ON seances.film_id = films.id;</pre>
       tables: ['seances', 'films'],
       consigne: 'Affiche pour chaque séance : le <code>jour</code>, le <code>titre</code> du film, et le nombre de <code>spectateurs</code>. Il faut relier <code>seances</code> et <code>films</code>.',
       codeDepart: 'SELECT seances.jour, films.titre, seances.spectateurs\nFROM seances\n-- complète la jointure ici\n',
-      indice: '<code>JOIN films ON seances.film_id = films.id;</code>',
+      indices: [
+        "L’information est répartie sur deux tables : les séances savent quel film, mais pas son titre. Il faut les relier.",
+        "<code>JOIN</code> rattache la seconde table, et <code>ON</code> dit par quelles colonnes : celle qui porte la référence, et celle qui porte l’identifiant.",
+        "<code>FROM seances JOIN films ON seances.film_id = films.id</code>"
+      ],
       solution: 'SELECT seances.jour, films.titre, seances.spectateurs\nFROM seances\nJOIN films ON seances.film_id = films.id;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -730,7 +826,11 @@ JOIN films ON seances.film_id = films.id;</pre>
       tables: ['seances', 'salles'],
       consigne: '<strong>Entraînement :</strong> affiche le <code>jour</code>, le <code>nom</code> de la salle et les <code>spectateurs</code> de chaque séance, en reliant <code>seances</code> et <code>salles</code>.',
       codeDepart: '',
-      indice: 'Même principe : <code>FROM seances JOIN salles ON seances.salle_id = salles.id</code>',
+      indices: [
+        "Exactement le même geste qu’à l’exercice précédent, avec une autre table au bout.",
+        "La colonne de référence change de nom, et celle qu’on rejoint aussi. Le reste est identique.",
+        "<code>FROM seances JOIN salles ON seances.salle_id = salles.id</code>"
+      ],
       solution: 'SELECT seances.jour, salles.nom, seances.spectateurs\nFROM seances\nJOIN salles ON seances.salle_id = salles.id;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -745,7 +845,11 @@ JOIN films ON seances.film_id = films.id;</pre>
       tables: ['seances', 'films'],
       consigne: '<strong>Défi :</strong> quel film a attiré le plus de spectateurs <strong>au total</strong> ? Affiche le <code>titre</code> et la somme des spectateurs nommée <code>total</code>, du plus grand au plus petit.',
       codeDepart: '',
-      indice: 'Jointure + regroupement + tri : <code>JOIN … GROUP BY films.titre ORDER BY total DESC</code>. La somme s\'écrit <code>SUM(seances.spectateurs) AS total</code>.',
+      indices: [
+        "Trois choses s’enchaînent ici, et chacune a été vue séparément : relier, regrouper, trier.",
+        "On relie les deux tables, on regroupe sur le titre du film, et on somme les spectateurs de chaque paquet.",
+        "<code>SUM(seances.spectateurs) AS total</code>, puis <code>GROUP BY films.titre ORDER BY total DESC</code>"
+      ],
       solution: 'SELECT films.titre, SUM(seances.spectateurs) AS total\nFROM seances\nJOIN films ON seances.film_id = films.id\nGROUP BY films.titre\nORDER BY total DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -785,7 +889,11 @@ LIMIT    nombre</pre>
       tables: ['salles', 'seances'],
       consigne: '<strong>Question 1 :</strong> quelle est la <strong>fréquentation totale par ville</strong> ? Affiche <code>ville</code> et la somme des spectateurs nommée <code>total</code>, de la ville la plus fréquentée à la moins fréquentée.',
       codeDepart: '',
-      indice: 'Relie <code>seances</code> et <code>salles</code>, regroupe sur <code>salles.ville</code>, et somme <code>seances.spectateurs</code>.',
+      indices: [
+        "La ville est dans une table, les spectateurs dans une autre. Comme toujours, il faut relier avant de calculer.",
+        "On regroupe sur la ville, et on somme les spectateurs. Le tri se fait ensuite sur le total obtenu.",
+        "<code>JOIN salles ON seances.salle_id = salles.id</code>, puis <code>GROUP BY salles.ville</code>"
+      ],
       solution: 'SELECT salles.ville, SUM(seances.spectateurs) AS total\nFROM seances\nJOIN salles ON seances.salle_id = salles.id\nGROUP BY salles.ville\nORDER BY total DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -802,7 +910,11 @@ LIMIT    nombre</pre>
       tables: ['films', 'seances'],
       consigne: '<strong>Question 2 :</strong> quels films ont été programmés <strong>plus d\'une fois</strong> ? Affiche le <code>titre</code> et le nombre de séances nommé <code>seances_total</code>, du plus programmé au moins programmé, en te limitant aux 3 premiers.',
       codeDepart: '',
-      indice: 'Compte les séances par film avec <code>COUNT(*)</code>, regroupe sur <code>films.titre</code>, trie en décroissant et coupe avec <code>LIMIT 3</code>.',
+      indices: [
+        "Compter les séances d’un film, c’est compter les lignes de son paquet après regroupement.",
+        "<code>COUNT(*)</code> par paquet, regroupement sur le titre, tri décroissant, puis une coupe.",
+        "<code>COUNT(*) AS seances_total</code> · <code>GROUP BY films.titre</code> · <code>ORDER BY … DESC LIMIT 3</code>"
+      ],
       solution: 'SELECT films.titre, COUNT(*) AS seances_total\nFROM seances\nJOIN films ON seances.film_id = films.id\nGROUP BY films.titre\nORDER BY seances_total DESC\nLIMIT 3;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -819,7 +931,11 @@ LIMIT    nombre</pre>
       tables: ['films', 'seances'],
       consigne: '<strong>Question 3 — la plus difficile :</strong> quelle est la <strong>fréquentation moyenne par séance</strong> pour chaque genre de film ? Affiche <code>genre</code> et la moyenne nommée <code>moyenne</code>, du genre le plus fréquenté au moins fréquenté.',
       codeDepart: '',
-      indice: 'Relie <code>seances</code> à <code>films</code>, regroupe sur <code>films.genre</code>, et calcule <code>AVG(seances.spectateurs) AS moyenne</code>.',
+      indices: [
+        "La question mêle les deux tables : le genre vient des films, les spectateurs des séances.",
+        "On regroupe sur le genre, et on prend la <strong>moyenne</strong> des spectateurs — pas leur somme.",
+        "<code>AVG(seances.spectateurs) AS moyenne</code>, avec <code>GROUP BY films.genre</code>"
+      ],
       solution: 'SELECT films.genre, AVG(seances.spectateurs) AS moyenne\nFROM seances\nJOIN films ON seances.film_id = films.id\nGROUP BY films.genre\nORDER BY moyenne DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;

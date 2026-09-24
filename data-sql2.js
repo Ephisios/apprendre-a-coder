@@ -139,7 +139,11 @@ WHERE id NOT IN (SELECT film_id FROM seances);</pre>
       tables: ['films'],
       consigne: 'Affiche le <code>titre</code> et la <code>note</code> des films dont la note dépasse <strong>la moyenne générale</strong> — calculée par une sous-requête, pas écrite à la main.',
       codeDepart: 'SELECT titre, note\nFROM films\nWHERE note > \n',
-      indice: 'La moyenne se calcule entre parenthèses : <code>WHERE note > (SELECT AVG(note) FROM films)</code>',
+      indices: [
+        "Comparer chaque note à la moyenne, c’est comparer à une valeur qu’on ne connaît pas d’avance : il faut la calculer dans la requête elle-même.",
+        "Une requête peut en contenir une autre, entre parenthèses. Celle du dedans est calculée en premier, et son résultat sert au <code>WHERE</code>.",
+        "<code>WHERE note &gt; (SELECT AVG(note) FROM films)</code>"
+      ],
       solution: 'SELECT titre, note\nFROM films\nWHERE note > (SELECT AVG(note) FROM films);',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -155,7 +159,11 @@ WHERE id NOT IN (SELECT film_id FROM seances);</pre>
       tables: ['films', 'seances'],
       consigne: '<strong>Entraînement :</strong> affiche le <code>titre</code> des films qui ont <strong>au moins une séance</strong>, en utilisant <code>IN</code> et une sous-requête sur <code>seances</code>.',
       codeDepart: '',
-      indice: '<code>WHERE id IN (SELECT film_id FROM seances)</code>',
+      indices: [
+        "Cette fois la sous-requête ne rend pas une valeur mais une <strong>liste</strong>. On ne peut donc pas comparer avec <code>=</code>.",
+        "<code>IN</code> demande « est-ce que cette valeur figure dans la liste ? ». La sous-requête fournit la liste.",
+        "<code>WHERE id IN (SELECT film_id FROM seances)</code>"
+      ],
       solution: 'SELECT titre FROM films WHERE id IN (SELECT film_id FROM seances);',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -169,7 +177,11 @@ WHERE id NOT IN (SELECT film_id FROM seances);</pre>
       tables: ['films', 'seances'],
       consigne: '<strong>Défi :</strong> affiche le <code>titre</code> des films qui n\'ont <strong>jamais été programmés</strong>.',
       codeDepart: '',
-      indice: 'Le contraire du précédent : <code>WHERE id NOT IN (SELECT film_id FROM seances)</code>',
+      indices: [
+        "C’est exactement la question inverse de l’exercice précédent. Un seul mot change.",
+        "<code>NOT</code> se glisse devant <code>IN</code> pour renverser la condition.",
+        "<code>WHERE id NOT IN (SELECT film_id FROM seances)</code>"
+      ],
       solution: 'SELECT titre FROM films WHERE id NOT IN (SELECT film_id FROM seances);',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -217,7 +229,11 @@ WHERE seances.id IS NULL;</pre>
       tables: ['films', 'seances'],
       consigne: 'Affiche <strong>tous</strong> les films avec le <code>jour</code> de leur séance — y compris ceux qui n\'en ont aucune (leur jour sera <code>NULL</code>).',
       codeDepart: 'SELECT films.titre, seances.jour\nFROM films\n-- remplace par une jointure qui garde tous les films\n',
-      indice: '<code>LEFT JOIN seances ON films.id = seances.film_id</code>',
+      indices: [
+        "Un <code>JOIN</code> ordinaire écarte les films sans séance : faute de correspondance, la ligne disparaît. Or on veut les garder.",
+        "<code>LEFT JOIN</code> garde <strong>toutes</strong> les lignes de la table de gauche, et remplit de <code>NULL</code> ce qui manque à droite.",
+        "<code>FROM films LEFT JOIN seances ON films.id = seances.film_id</code>"
+      ],
       solution: 'SELECT films.titre, seances.jour\nFROM films\nLEFT JOIN seances ON films.id = seances.film_id;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -233,7 +249,11 @@ WHERE seances.id IS NULL;</pre>
       tables: ['films', 'seances'],
       consigne: '<strong>Entraînement :</strong> affiche uniquement le <code>titre</code> des films <strong>jamais programmés</strong>, en utilisant un <code>LEFT JOIN</code> (pas une sous-requête cette fois).',
       codeDepart: '',
-      indice: 'Après le LEFT JOIN, garde les lignes orphelines : <code>WHERE seances.id IS NULL</code>',
+      indices: [
+        "Le <code>LEFT JOIN</code> ramène tout le monde. Il reste à ne garder que ceux dont la partie droite est vide.",
+        "Ces lignes-là portent des <code>NULL</code> du côté des séances. On les repère donc par un test de nullité.",
+        "<code>WHERE seances.id IS NULL</code>, après le <code>LEFT JOIN</code>."
+      ],
       solution: 'SELECT films.titre\nFROM films\nLEFT JOIN seances ON films.id = seances.film_id\nWHERE seances.id IS NULL;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -247,7 +267,11 @@ WHERE seances.id IS NULL;</pre>
       tables: ['films', 'seances'],
       consigne: '<strong>Défi :</strong> affiche chaque <code>titre</code> avec son <strong>nombre de séances</strong> nommé <code>nb</code> — <strong>y compris les films à zéro séance</strong>. Trie du plus programmé au moins programmé.',
       codeDepart: '',
-      indice: 'LEFT JOIN puis <code>GROUP BY films.titre</code>. Compte avec <code>COUNT(seances.id)</code> et non <code>COUNT(*)</code> : COUNT(*) compterait aussi la ligne vide et donnerait 1 au lieu de 0.',
+      indices: [
+        "Compter après un <code>LEFT JOIN</code> cache un piège : un film sans séance produit quand même une ligne.",
+        "<code>COUNT(*)</code> compterait cette ligne vide et annoncerait 1 au lieu de 0. Compter une <strong>colonne</strong>, en revanche, ignore les <code>NULL</code>.",
+        "<code>COUNT(seances.id) AS nb</code>, avec <code>GROUP BY films.titre</code>"
+      ],
       solution: 'SELECT films.titre, COUNT(seances.id) AS nb\nFROM films\nLEFT JOIN seances ON films.id = seances.film_id\nGROUP BY films.titre\nORDER BY nb DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -299,7 +323,11 @@ SELECT nom, 'fournisseur' AS type FROM fournisseurs;</pre>
       tables: ['films'],
       consigne: 'Affiche en une seule liste les <code>titre</code> des films de <strong>2019</strong> et ceux de genre <strong>Comédie</strong>.',
       codeDepart: 'SELECT titre FROM films WHERE annee = 2019\n-- empile la seconde requête ici\n',
-      indice: 'Écris <code>UNION</code> puis la seconde requête complète : <code>SELECT titre FROM films WHERE genre = \'Comédie\'</code>',
+      indices: [
+        "Deux listes à mettre bout à bout. Ce n’est pas un filtre à deux conditions : ce sont deux requêtes.",
+        "<code>UNION</code> s’écrit entre les deux, et la seconde requête est <strong>complète</strong> : son propre <code>SELECT</code>, son propre <code>FROM</code>.",
+        "<code>SELECT titre FROM films WHERE annee = 2019</code> · <code>UNION</code> · <code>SELECT titre FROM films WHERE genre = 'Comédie'</code>"
+      ],
       solution: "SELECT titre FROM films WHERE annee = 2019\nUNION\nSELECT titre FROM films WHERE genre = 'Comédie';",
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -313,7 +341,11 @@ SELECT nom, 'fournisseur' AS type FROM fournisseurs;</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> empile les <code>genre</code> des films de 2019 et ceux de 2021 <strong>en gardant les doublons</strong>. Tu dois obtenir 4 lignes.',
       codeDepart: '',
-      indice: 'Pour conserver les répétitions, il faut <code>UNION ALL</code> et non <code>UNION</code> seul.',
+      indices: [
+        "<code>UNION</code> seul fait discrètement quelque chose qu’on n’a pas demandé : il supprime les doublons.",
+        "Pour tout garder, y compris les répétitions, il faut un mot de plus.",
+        "<code>UNION ALL</code> au lieu de <code>UNION</code>."
+      ],
       solution: 'SELECT genre FROM films WHERE annee = 2019\nUNION ALL\nSELECT genre FROM films WHERE annee = 2021;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -380,7 +412,11 @@ FROM films;</pre>
       tables: ['films'],
       consigne: 'Affiche le <code>titre</code>, la <code>note</code>, et une colonne <code>avis</code> qui vaut <code>excellent</code> si la note est ≥ 8, <code>bon</code> si elle est ≥ 7, et <code>moyen</code> sinon.',
       codeDepart: 'SELECT titre, note,\n  -- ton CASE ici\nFROM films;',
-      indice: '<code>CASE WHEN note >= 8 THEN \'excellent\' WHEN note >= 7 THEN \'bon\' ELSE \'moyen\' END AS avis</code> — n\'oublie pas le END.',
+      indices: [
+        "On veut une colonne qui n’existe pas dans la table, et dont la valeur dépend d’une condition.",
+        "<code>CASE</code> enchaîne des <code>WHEN … THEN …</code>, puis un <code>ELSE</code> pour le reste. Et il se ferme par un mot qu’on oublie souvent.",
+        "<code>CASE WHEN note &gt;= 8 THEN 'excellent' WHEN note &gt;= 7 THEN 'bon' ELSE 'moyen' END AS avis</code>"
+      ],
       solution: "SELECT titre, note,\n  CASE\n    WHEN note >= 8 THEN 'excellent'\n    WHEN note >= 7 THEN 'bon'\n    ELSE 'moyen'\n  END AS avis\nFROM films;",
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -401,7 +437,11 @@ FROM films;</pre>
       tables: ['films'],
       consigne: '<strong>Entraînement :</strong> affiche le <code>titre</code> et une colonne <code>statut</code> valant <code>pas encore noté</code> quand la note est vide, et <code>noté</code> sinon.',
       codeDepart: '',
-      indice: 'La condition d\'une case vide s\'écrit <code>note IS NULL</code> : <code>CASE WHEN note IS NULL THEN \'pas encore noté\' ELSE \'noté\' END AS statut</code>',
+      indices: [
+        "Même structure, mais la condition ne porte pas sur une valeur : elle porte sur son <strong>absence</strong>.",
+        "Une case vide se teste avec <code>IS NULL</code>, jamais avec <code>=</code>. Un seul <code>WHEN</code> suffit ici.",
+        "<code>CASE WHEN note IS NULL THEN 'pas encore noté' ELSE 'noté' END AS statut</code>"
+      ],
       solution: "SELECT titre,\n  CASE WHEN note IS NULL THEN 'pas encore noté' ELSE 'noté' END AS statut\nFROM films;",
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -418,7 +458,11 @@ FROM films;</pre>
       tables: ['films'],
       consigne: '<strong>Défi :</strong> affiche le <code>titre</code> et une colonne <code>duree_texte</code> valant <code>long</code> si la durée dépasse 120 minutes, <code>moyen</code> entre 100 et 120 inclus, et <code>court</code> en dessous.',
       codeDepart: '',
-      indice: 'Trois cas, du plus exigeant au moins exigeant : <code>WHEN duree > 120 THEN \'long\' WHEN duree >= 100 THEN \'moyen\' ELSE \'court\'</code>',
+      indices: [
+        "Trois cas, et comme pour un <code>else if</code>, l’ordre décide de tout.",
+        "Le premier <code>WHEN</code> vrai l’emporte : il faut donc commencer par le seuil le plus élevé. Le second n’a alors plus besoin de retester la borne haute.",
+        "<code>WHEN duree &gt; 120 THEN 'long' WHEN duree &gt;= 100 THEN 'moyen' ELSE 'court'</code>"
+      ],
       solution: "SELECT titre,\n  CASE\n    WHEN duree > 120 THEN 'long'\n    WHEN duree >= 100 THEN 'moyen'\n    ELSE 'court'\n  END AS duree_texte\nFROM films;",
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
@@ -512,7 +556,11 @@ FROM films;</pre>
       tables: ['films', 'seances', 'salles'],
       consigne: '<strong>Bilan du module :</strong> pour chaque <strong>ville</strong>, affiche le nombre de séances (<code>nb</code>) et le total de spectateurs (<code>total</code>), uniquement pour les villes ayant accueilli <strong>plus de 2 séances</strong>, triées par total décroissant.',
       codeDepart: '',
-      indice: 'Jointure <code>seances</code> + <code>salles</code>, <code>GROUP BY salles.ville</code>, <code>HAVING COUNT(*) > 2</code>, puis <code>ORDER BY total DESC</code>.',
+      indices: [
+        "Bilan du module : tout y passe — relier, regrouper, filtrer les groupes, trier.",
+        "Le filtre porte sur le <strong>nombre de séances par ville</strong>, donc sur un agrégat : c’est <code>HAVING</code>, pas <code>WHERE</code>.",
+        "<code>GROUP BY salles.ville HAVING COUNT(*) &gt; 2</code>, puis <code>ORDER BY total DESC</code>"
+      ],
       solution: 'SELECT salles.ville, COUNT(*) AS nb, SUM(seances.spectateurs) AS total\nFROM seances\nJOIN salles ON seances.salle_id = salles.id\nGROUP BY salles.ville\nHAVING COUNT(*) > 2\nORDER BY total DESC;',
       verifier: function (ctx) {
         const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
