@@ -131,6 +131,10 @@ que de le noyer dans un compte.
 apparaît après combien d'échecs, ce que l'éditeur souligne ou tait dans chacun des sept langages, et
 ce que la recherche retrouve.
 
+Il juge aussi si **le logiciel s'applique ce qu'il enseigne** : le `alt`, le `label` lié à son champ,
+et le vrai bouton plutôt que la `div` cliquable. Il ne s'y tenait pas — les douze cartes de la page
+d'accueil étaient des `<div onclick>`, inatteignables au clavier.
+
 **`outils/verifier-navigateur.html`** couvre les 63 correcteurs que Node laisse de côté : ceux qui
 *mesurent* la page — une largeur, une position, une couleur calculée, une media query. Ni Node ni
 jsdom ne savent faire de mise en page ; seul un vrai navigateur en est capable. Cette page pose les
@@ -152,7 +156,7 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 362 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
 358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
- 77 vérifications d'interface     — 0 échec
+ 85 vérifications d'interface     — 0 échec, dont 8 d'accessibilité
 425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
 ```
 

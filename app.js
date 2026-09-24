@@ -584,7 +584,13 @@ function rendreAccueil() {
     const fini = faites === m.lecons.length;
     const enCours = !fini && idModuleEnCours && idModuleEnCours.id === m.id;
     const etat = fini ? 'Terminé' : (enCours ? 'En cours' : (c.faits > 0 ? 'Commencé' : 'À venir'));
-    html += '<div class="etape-module' + (fini ? ' finie' : '') + (enCours ? ' encours' : '') + '"' +
+    // Un vrai <button>, pas une <div> : une div ne se reçoit pas au clavier,
+    // et aucune classe CSS n'y change rien. C'est exactement ce que la leçon
+    // html-22 reproche à l'élève ; on n'allait pas le faire en page d'accueil.
+    // aria-label plutôt que le texte entier : « Bienvenue — En cours, 0 sur
+    // 3 leçons » vaut mieux que l'énumération de toute la carte.
+    html += '<button type="button" class="etape-module' + (fini ? ' finie' : '') + (enCours ? ' encours' : '') + '"' +
+      ' aria-label="' + echapperAttr(m.titre + ' — ' + etat + ', ' + faites + ' sur ' + m.lecons.length + ' leçons') + '"' +
       ' style="--teinte:' + m.teinte + '" onclick="allerLecon(\'' + m.lecons[0].id + '\')">' +
       '<div class="etape-puce">' + m.icone + '</div>' +
       '<div class="etape-corps">' +
@@ -595,7 +601,7 @@ function rendreAccueil() {
       '<span class="chiffres">' + faites + '/' + m.lecons.length + ' leçons · ' + c.total + ' exercices</span>' +
       '</div></div>' +
       '<div class="etape-etat">' + etat + '</div>' +
-      '</div>';
+      '</button>';
   }
   html += '</div>';
 
@@ -2193,7 +2199,9 @@ function rendreBac() {
   // ---- Bandeau : le projet ouvert et ce qu'on peut en faire
   let html = '<div class="atelier-tete">' +
     '<div class="atelier-titre"><span class="atelier-puce">🧪</span>' +
-    '<b>Ton atelier</b><em>écris ce que tu veux : rien n\'est corrigé, rien n\'est noté</em></div>' +
+    // Un <h1> et non un <b> : c'est le titre de la vue, et un lecteur d'écran
+    // navigue par titres. Le bac était la seule vue à n'en avoir aucun.
+    '<h1>Ton atelier</h1><em>écris ce que tu veux : rien n\'est corrigé, rien n\'est noté</em></div>' +
     '<div class="atelier-projet">' +
     '<label class="bac-etiquette" for="bac-projet">Projet</label>' +
     '<select id="bac-projet" class="bac-select" onchange="changerProjet(this.value)">';

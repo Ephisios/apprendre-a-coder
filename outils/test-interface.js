@@ -45,6 +45,10 @@ const win = dom.window;
 win.Element.prototype.scrollIntoView = function () {};
 win.scrollTo = function () {};
 
+// Le corps du vrai index.html, avant que le moindre test ne le remplace :
+// les fonctions de rendu ecrivent dans ses conteneurs, pas dans le vide.
+const CORPS_INDEX = win.document.body.innerHTML;
+
 const sources = [];
 for (const m of html.matchAll(/<script src="([^"]+)"><\/script>/g)) {
   sources.push(fs.readFileSync(path.join(RACINE, m[1]), 'utf8'));
@@ -71,7 +75,11 @@ sources.push(`
     rendreRevision: () => rendreRevision(),
     clesSauvegardables: () => clesSauvegardables(),
     marque: () => MARQUE_SAUVEGARDE,
-    restaurer: t => restaurerProgression(t)
+    restaurer: t => restaurerProgression(t),
+    rendreAccueil: () => rendreAccueil(),
+    rendreLecon: id => rendreLecon(id),
+    rendreBac: () => rendreBac(),
+    rendreMemos: o => rendreMemos(o)
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -371,6 +379,100 @@ pont.restaurer(fichier);
 verifie('restauration — refuser la confirmation ne touche à rien',
         LS.getItem('aac-progression'), 'intact');
 LS.clear();
+
+/* ========================================================================
+   Le logiciel s'applique-t-il ce qu'il enseigne ?
+   ========================================================================
+   Le cours apprend le alt vide, le label lié à son champ, et surtout qu'une
+   div cliquable est inatteignable au clavier là où un vrai bouton ne l'est
+   pas (html-22). Rien ne vérifiait que l'application s'y tienne — et elle
+   ne s'y tenait pas : les douze cartes de module de l'accueil étaient des
+   <div onclick>. Mesuré dans un vrai navigateur le 2026-09-24, corrigé, et
+   contrôlé ici pour que cela ne revienne pas.
+
+   Ce que jsdom NE PEUT PAS juger, et qu'il ne faut pas croire couvert : le
+   contraste et la visibilité du focus, qui demandent une mise en page. Les
+   deux ont été mesurés à la main dans Chrome — zéro défaut une fois les
+   emoji écartés, un emoji étant une image en couleurs et non du texte. */
+
+function auditA11y(racine) {
+  const maux = [];
+  const nom = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
+    (typeof el.className === 'string' && el.className.trim()
+      ? '.' + el.className.trim().split(/\s+/)[0] : '');
+  const parId = (id) => racine.querySelector('[id="' + String(id).replace(/"/g, '') + '"]');
+
+  const aUnNom = (el) => {
+    if (el.getAttribute('aria-label') || el.getAttribute('title')) return true;
+    const lb = el.getAttribute('aria-labelledby');
+    if (lb && lb.split(/\s+/).some((id) => id && parId(id))) return true;
+    if (el.id && racine.querySelector('label[for="' + el.id + '"]')) return true;
+    if (el.closest('label')) return true;
+    return !!(el.textContent || '').trim();
+  };
+
+  for (const img of racine.querySelectorAll('img')) {
+    if (!img.hasAttribute('alt')) maux.push('image sans alt — ' + nom(img));
+  }
+  for (const c of racine.querySelectorAll('input, select, textarea')) {
+    if (c.getAttribute('type') === 'hidden') continue;
+    if (!aUnNom(c)) maux.push('champ sans nom accessible — ' + nom(c));
+  }
+  for (const b of racine.querySelectorAll('button, a[href], [role="button"]')) {
+    if (!aUnNom(b)) maux.push('commande sans nom — ' + nom(b));
+  }
+  // Le point que le cours enseigne lui-même.
+  for (const el of racine.querySelectorAll('[onclick]')) {
+    if (el.matches('button, a[href], input, select, textarea, summary, option')) continue;
+    // Number(null) vaut 0, et 0 >= 0 : ecrire Number(getAttribute(...)) >= 0
+    // laisserait passer TOUT element sans tabindex, et ce controle ne
+    // dirait plus rien. Le sabotage l'a montre ; la lecture, non.
+    const ti = el.getAttribute('tabindex');
+    if (ti !== null && Number(ti) >= 0) continue;
+    maux.push('cliquable mais hors du clavier — ' + nom(el));
+  }
+  for (const el of racine.querySelectorAll('[tabindex]')) {
+    if (Number(el.getAttribute('tabindex')) > 0) maux.push('tabindex positif — ' + nom(el));
+  }
+  for (const a of ['aria-labelledby', 'aria-describedby', 'aria-controls']) {
+    for (const el of racine.querySelectorAll('[' + a + ']')) {
+      for (const id of (el.getAttribute(a) || '').split(/\s+/)) {
+        if (id && !parId(id)) maux.push(a + ' vers un id absent « ' + id + ' » — ' + nom(el));
+      }
+    }
+  }
+  return maux;
+}
+
+function poserScene() {
+  win.document.body.innerHTML = CORPS_INDEX;
+  return win.document.body;
+}
+
+console.log('\n=== Le logiciel s\'applique-t-il ce qu\'il enseigne ? ===\n');
+
+const VUES = [
+  ['accueil', () => pont.rendreAccueil()],
+  ['leçon', () => pont.rendreLecon(pont.modules()[0].lecons[0].id)],
+  ['bac à sable', () => pont.rendreBac()],
+  ['encyclopédie', () => pont.rendreMemos()]
+];
+
+for (const [titre, rendre] of VUES) {
+  const contenu = poserScene();
+  let plante = null;
+  try { rendre(); } catch (e) { plante = e.message; }
+  if (plante) { verifie('a11y — la vue « ' + titre + ' » se rend', plante, null); continue; }
+
+  const maux = auditA11y(contenu);
+  if (maux.length) {
+    console.log('         ' + titre + ' : ' + maux.slice(0, 6).join('\n                   '));
+  }
+  verifie('a11y — « ' + titre + ' » : rien d\'inatteignable ni d\'anonyme', maux.length, 0);
+
+  const h1 = contenu.querySelectorAll('h1').length;
+  verifie('a11y — « ' + titre + ' » a un titre de niveau 1 et un seul', h1, 1);
+}
 
 console.log('\n' + ok + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
 process.exit(echecs ? 1 : 0);
