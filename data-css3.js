@@ -38,7 +38,11 @@ window.DATA_CSS3 = [
       type: 'html',
       consigne: 'Mets en <strong>rouge</strong> uniquement les paragraphes qui sont <strong>enfants directs</strong> de <code>.carte</code>. Le paragraphe imbriqué plus profond ne doit pas changer.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<div class="carte">\n  <p id="direct">Directement dans la carte</p>\n  <div>\n    <p id="profond">Plus profond</p>\n  </div>\n</div>',
-      indice: 'Le chevron désigne l\'enfant direct : <code>.carte > p { color: red; }</code>',
+      indices: [
+        "Un sélecteur séparé par une espace vise <em>tous</em> les descendants, à n’importe quelle profondeur. Ici on ne veut que le premier niveau.",
+        "Le chevron <code>&gt;</code> restreint aux <strong>enfants directs</strong> : les petits-enfants sont exclus.",
+        "<code>.carte &gt; p { color: red; }</code>"
+      ],
       solution: '<style>\n  .carte > p {\n    color: red;\n  }\n</style>\n\n<div class="carte">\n  <p id="direct">Directement dans la carte</p>\n  <div>\n    <p id="profond">Plus profond</p>\n  </div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -56,7 +60,11 @@ window.DATA_CSS3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> mets en gras uniquement le paragraphe qui suit <strong>immédiatement</strong> le <code>h2</code> — le chapô. Le second paragraphe doit rester normal.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<h2>Mon article</h2>\n<p id="chapo">Le chapô, juste après le titre.</p>\n<p id="suite">Le reste de l\'article.</p>',
-      indice: 'Le plus signifie « frère immédiat » : <code>h2 + p { font-weight: bold; }</code>',
+      indices: [
+        "On ne vise pas un enfant mais un <strong>voisin</strong> : l’élément qui suit immédiatement, au même niveau.",
+        "Le <code>+</code> désigne le frère immédiat — et seulement lui.",
+        "<code>h2 + p { font-weight: bold; }</code>"
+      ],
       solution: '<style>\n  h2 + p {\n    font-weight: bold;\n  }\n</style>\n\n<h2>Mon article</h2>\n<p id="chapo">Le chapô, juste après le titre.</p>\n<p id="suite">Le reste de l\'article.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -74,7 +82,11 @@ window.DATA_CSS3 = [
       type: 'html',
       consigne: '<strong>Défi :</strong> cette fois, mets en <strong>italique</strong> <em>tous</em> les paragraphes qui suivent le <code>h2</code>, pas seulement le premier.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<h2>Mon article</h2>\n<p id="p1">Premier paragraphe.</p>\n<p id="p2">Deuxième paragraphe.</p>\n<p id="p3">Troisième paragraphe.</p>',
-      indice: 'Le tilde désigne tous les frères suivants : <code>h2 ~ p { font-style: italic; }</code>',
+      indices: [
+        "Même idée qu’au précédent, mais sans s’arrêter au premier voisin.",
+        "Le tilde <code>~</code> vise <strong>tous</strong> les frères qui suivent, pas seulement le suivant immédiat.",
+        "<code>h2 ~ p { font-style: italic; }</code>"
+      ],
       solution: '<style>\n  h2 ~ p {\n    font-style: italic;\n  }\n</style>\n\n<h2>Mon article</h2>\n<p id="p1">Premier paragraphe.</p>\n<p id="p2">Deuxième paragraphe.</p>\n<p id="p3">Troisième paragraphe.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -131,7 +143,11 @@ button[disabled] {
       type: 'html',
       consigne: 'Donne une bordure bleue de 2px uniquement au champ dont le <code>type</code> vaut <code>email</code>. Le champ texte ne doit pas changer.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<input type="text" id="texte" placeholder="Nom">\n<input type="email" id="mail" placeholder="Email">',
-      indice: '<code>input[type="email"] { border: 2px solid blue; }</code>',
+      indices: [
+        "Les deux champs sont des <code>input</code> : le nom de balise ne suffit pas à les distinguer. Ce qui les sépare est un attribut.",
+        "Un sélecteur d’attribut s’écrit entre crochets, juste après la balise, avec la valeur entre guillemets.",
+        "<code>input[type=\"email\"] { border: 2px solid blue; }</code>"
+      ],
       solution: '<style>\n  input[type="email"] {\n    border: 2px solid blue;\n  }\n</style>\n\n<input type="text" id="texte" placeholder="Nom">\n<input type="email" id="mail" placeholder="Email">',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -149,7 +165,11 @@ button[disabled] {
       type: 'html',
       consigne: '<strong>Entraînement :</strong> mets en rouge uniquement les liens dont l\'adresse <strong>se termine</strong> par <code>.pdf</code>.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<a href="page.html" id="page">Une page</a><br>\n<a href="rapport.pdf" id="pdf">Un rapport PDF</a>',
-      indice: 'Le dollar marque la fin : <code>a[href$=".pdf"] { color: red; }</code>',
+      indices: [
+        "On ne cherche pas une valeur exacte mais une <strong>terminaison</strong>. Le sélecteur d’attribut sait faire cela.",
+        "Un symbole glissé avant le <code>=</code> change le sens : le dollar veut dire « se termine par ».",
+        "<code>a[href$=\".pdf\"] { color: red; }</code>"
+      ],
       solution: '<style>\n  a[href$=".pdf"] {\n    color: red;\n  }\n</style>\n\n<a href="page.html" id="page">Une page</a><br>\n<a href="rapport.pdf" id="pdf">Un rapport PDF</a>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -165,7 +185,11 @@ button[disabled] {
       type: 'html',
       consigne: '<strong>Défi :</strong> rends à moitié transparent (<code>opacity: 0.5</code>) tout bouton portant l\'attribut <code>disabled</code>, sans viser sa classe ni son id.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<button id="actif">Valider</button>\n<button id="inactif" disabled>Indisponible</button>',
-      indice: 'Un attribut sans valeur se teste par sa seule présence : <code>button[disabled] { opacity: 0.5; }</code>',
+      indices: [
+        "<code>disabled</code> n’a pas de valeur : il est là, ou il n’est pas là. On teste donc sa seule présence.",
+        "Les crochets avec le seul nom de l’attribut suffisent — pas de <code>=</code>, pas de guillemets.",
+        "<code>button[disabled] { opacity: 0.5; }</code>"
+      ],
       solution: '<style>\n  button[disabled] {\n    opacity: 0.5;\n  }\n</style>\n\n<button id="actif">Valider</button>\n<button id="inactif" disabled>Indisponible</button>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -219,7 +243,11 @@ label:has(input:checked) { font-weight: bold; }</pre>
       type: 'html',
       consigne: 'Rends à moitié transparents tous les <code>li</code> <strong>sauf</strong> celui qui a la classe <code>actif</code>, en une seule règle avec <code>:not</code>.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<ul>\n  <li id="a">Accueil</li>\n  <li id="b" class="actif">Produits</li>\n  <li id="c">Contact</li>\n</ul>',
-      indice: '<code>li:not(.actif) { opacity: 0.5; }</code>',
+      indices: [
+        "Une seule règle pour « tous sauf un » : il existe un sélecteur qui exclut.",
+        "<code>:not()</code> prend entre parenthèses ce qu’il faut écarter.",
+        "<code>li:not(.actif) { opacity: 0.5; }</code>"
+      ],
       solution: '<style>\n  li:not(.actif) {\n    opacity: 0.5;\n  }\n</style>\n\n<ul>\n  <li id="a">Accueil</li>\n  <li id="b" class="actif">Produits</li>\n  <li id="c">Contact</li>\n</ul>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -236,7 +264,11 @@ label:has(input:checked) { font-weight: bold; }</pre>
       type: 'html',
       consigne: '<strong>Entraînement :</strong> mets en bleu marine (<code>navy</code>) les <code>h1</code>, <code>h2</code> et <code>h3</code> situés dans <code>article</code>, en une seule règle avec <code>:is</code>.',
       codeDepart: '<style>\n  /* ta règle ici */\n\n</style>\n\n<article>\n  <h1 id="t1">Titre</h1>\n  <h2 id="t2">Sous-titre</h2>\n  <h3 id="t3">Section</h3>\n</article>\n<h1 id="dehors">Hors article</h1>',
-      indice: '<code>article :is(h1, h2, h3) { color: navy; }</code>',
+      indices: [
+        "Sans raccourci, il faudrait écrire trois sélecteurs presque identiques. <code>:is()</code> les regroupe.",
+        "Attention à l’espace avant <code>:is</code> : elle signifie « à l’intérieur de <code>article</code> ».",
+        "<code>article :is(h1, h2, h3) { color: navy; }</code>"
+      ],
       solution: '<style>\n  article :is(h1, h2, h3) {\n    color: navy;\n  }\n</style>\n\n<article>\n  <h1 id="t1">Titre</h1>\n  <h2 id="t2">Sous-titre</h2>\n  <h3 id="t3">Section</h3>\n</article>\n<h1 id="dehors">Hors article</h1>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -255,7 +287,11 @@ label:has(input:checked) { font-weight: bold; }</pre>
       type: 'html',
       consigne: '<strong>Défi :</strong> avec <code>:has</code>, donne un fond jaune (<code>yellow</code>) uniquement aux <code>.carte</code> qui <strong>contiennent une image</strong>.',
       codeDepart: '<style>\n  .carte { padding: 10px; border: 1px solid #ccc; margin-bottom: 8px; }\n  /* ta règle ici */\n\n</style>\n\n<div class="carte" id="avec">\n  <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'%3E%3Crect width=\'40\' height=\'40\' fill=\'%234f6df5\'/%3E%3C/svg%3E" alt="carré">\n  <p>Avec image</p>\n</div>\n<div class="carte" id="sans">\n  <p>Sans image</p>\n</div>',
-      indice: '<code>.carte:has(img) { background-color: yellow; }</code>',
+      indices: [
+        "Jusqu’ici, le CSS ne savait viser qu’en descendant. <code>:has()</code> fait l’inverse : il sélectionne un parent d’après son contenu.",
+        "On vise la carte, et entre parenthèses on décrit ce qu’elle doit contenir.",
+        "<code>.carte:has(img) { background-color: yellow; }</code>"
+      ],
       solution: '<style>\n  .carte { padding: 10px; border: 1px solid #ccc; margin-bottom: 8px; }\n  .carte:has(img) {\n    background-color: yellow;\n  }\n</style>\n\n<div class="carte" id="avec">\n  <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'%3E%3Crect width=\'40\' height=\'40\' fill=\'%234f6df5\'/%3E%3C/svg%3E" alt="carré">\n  <p>Avec image</p>\n</div>\n<div class="carte" id="sans">\n  <p>Sans image</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -305,7 +341,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: 'Le paragraphe doit finir en <strong>vert</strong>. Sans supprimer ni modifier la règle <code>p</code> existante, ajoute une règle <strong>plus spécifique</strong> qui l\'emporte.',
       codeDepart: '<style>\n  p { color: red; }\n  /* ajoute ta règle ici */\n\n</style>\n\n<p class="special" id="cible">Ce texte doit devenir vert.</p>',
-      indice: 'Une classe (0-1-0) bat une balise (0-0-1) : <code>.special { color: green; }</code>',
+      indices: [
+        "On ne peut pas toucher à la règle existante : il faut donc en écrire une qui la <strong>batte</strong>.",
+        "La spécificité se compte en trois chiffres : id, classe, balise. Une classe l’emporte toujours sur une balise, quel que soit l’ordre.",
+        "<code>.special { color: green; }</code>"
+      ],
       solution: '<style>\n  p { color: red; }\n  .special { color: green; }\n</style>\n\n<p class="special" id="cible">Ce texte doit devenir vert.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -342,7 +382,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Chasse au bug :</strong> le développeur précédent a utilisé <code>!important</code>, et maintenant plus rien ne peut le surcharger. Enlève-le et fais fonctionner la mise en forme <strong>par la spécificité</strong> : le titre doit être bleu.',
       codeDepart: '<style>\n  h1 { color: red !important; }\n  .titre-principal { color: blue; }\n</style>\n\n<h1 class="titre-principal" id="cible">Mon titre</h1>',
-      indice: 'Retire simplement <code>!important</code> : la classe <code>.titre-principal</code> (0-1-0) l\'emportera alors sur la balise <code>h1</code> (0-0-1).',
+      indices: [
+        "<code>!important</code> écrase tout, y compris les règles plus précises. C’est justement pour cela qu’on l’évite.",
+        "La bonne solution n’est pas d’en ajouter un autre : c’est de retirer celui qui est là.",
+        "Une fois <code>!important</code> retiré, la classe l’emporte naturellement sur la balise."
+      ],
       solution: '<style>\n  h1 { color: red; }\n  .titre-principal { color: blue; }\n</style>\n\n<h1 class="titre-principal" id="cible">Mon titre</h1>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -391,7 +435,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: 'La boîte fait 80px de haut mais son contenu déborde. Ajoute une <strong>barre de défilement verticale</strong> qui n\'apparaît que si nécessaire.',
       codeDepart: '<style>\n  .boite {\n    height: 80px;\n    width: 200px;\n    border: 2px solid #333;\n    /* ta propriété ici */\n\n  }\n</style>\n\n<div class="boite" id="boite">\n  <p>Ligne 1</p>\n  <p>Ligne 2</p>\n  <p>Ligne 3</p>\n  <p>Ligne 4</p>\n  <p>Ligne 5</p>\n</div>',
-      indice: '<code>overflow: auto;</code> — la barre n\'apparaît que quand le contenu dépasse.',
+      indices: [
+        "Le contenu déborde. On peut le couper, ou permettre de le faire défiler — ici, c’est la seconde option.",
+        "<code>auto</code> n’affiche la barre que si elle est nécessaire, contrairement à <code>scroll</code> qui la montre toujours.",
+        "<code>overflow: auto;</code>"
+      ],
       solution: '<style>\n  .boite {\n    height: 80px;\n    width: 200px;\n    border: 2px solid #333;\n    overflow: auto;\n  }\n</style>\n\n<div class="boite" id="boite">\n  <p>Ligne 1</p>\n  <p>Ligne 2</p>\n  <p>Ligne 3</p>\n  <p>Ligne 4</p>\n  <p>Ligne 5</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -409,7 +457,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Chasse au bug :</strong> le carré bleu devrait passer <strong>devant</strong> le rouge, mais son <code>z-index</code> semble ignoré. Trouve ce qui manque.',
       codeDepart: '<style>\n  .carre { width: 100px; height: 100px; }\n  .rouge {\n    background: red;\n    position: relative;\n    z-index: 1;\n  }\n  .bleu {\n    background: blue;\n    margin-top: -50px;\n    z-index: 5;\n  }\n</style>\n\n<div class="carre rouge" id="rouge"></div>\n<div class="carre bleu" id="bleu"></div>',
-      indice: '<code>z-index</code> est ignoré sur un élément en <code>position: static</code> (la valeur par défaut). Ajoute <code>position: relative;</code> au carré bleu.',
+      indices: [
+        "Le <code>z-index</code> est bien écrit, et pourtant il ne fait rien. C’est qu’il a une condition d’existence.",
+        "<code>z-index</code> est ignoré sur un élément en <code>position: static</code> — la valeur par défaut. Il faut le positionner pour qu’il compte.",
+        "Ajoute <code>position: relative;</code> au carré bleu."
+      ],
       solution: '<style>\n  .carre { width: 100px; height: 100px; }\n  .rouge {\n    background: red;\n    position: relative;\n    z-index: 1;\n  }\n  .bleu {\n    background: blue;\n    margin-top: -50px;\n    position: relative;\n    z-index: 5;\n  }\n</style>\n\n<div class="carre rouge" id="rouge"></div>\n<div class="carre bleu" id="bleu"></div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -426,7 +478,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Entraînement :</strong> le texte long déborde horizontalement de sa boîte. Coupe ce qui dépasse avec <code>overflow: hidden</code>, sans changer la largeur.',
       codeDepart: '<style>\n  .etiquette {\n    width: 150px;\n    border: 2px solid #333;\n    white-space: nowrap;\n    /* ta propriété ici */\n\n  }\n</style>\n\n<div class="etiquette" id="etiquette">Un texte beaucoup trop long pour cette boîte étroite</div>',
-      indice: '<code>overflow: hidden;</code> coupe simplement ce qui dépasse.',
+      indices: [
+        "Cette fois on ne veut pas de barre de défilement : ce qui dépasse doit disparaître.",
+        "C’est la même propriété qu’à l’exercice sur le débordement, avec une autre valeur.",
+        "<code>overflow: hidden;</code>"
+      ],
       solution: '<style>\n  .etiquette {\n    width: 150px;\n    border: 2px solid #333;\n    white-space: nowrap;\n    overflow: hidden;\n  }\n</style>\n\n<div class="etiquette" id="etiquette">Un texte beaucoup trop long pour cette boîte étroite</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -481,7 +537,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: 'Fais en sorte que l\'image de fond <strong>remplisse toute la boîte</strong> sans se répéter, et qu\'elle soit centrée.',
       codeDepart: '<style>\n  .banniere {\n    height: 150px;\n    background-image: url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\'%3E%3Crect width=\'100\' height=\'60\' fill=\'%234f6df5\'/%3E%3C/svg%3E");\n    /* tes propriétés ici */\n\n  }\n</style>\n\n<div class="banniere" id="banniere"></div>',
-      indice: 'Trois propriétés : <code>background-size: cover;</code>, <code>background-repeat: no-repeat;</code> et <code>background-position: center;</code>',
+      indices: [
+        "Trois défauts à corriger : l’image se répète, elle n’est pas dimensionnée, et elle est calée en haut à gauche.",
+        "<code>cover</code> remplit la boîte quitte à rogner ; <code>no-repeat</code> empêche la répétition ; <code>center</code> recentre.",
+        "<code>background-size: cover; background-repeat: no-repeat; background-position: center;</code>"
+      ],
       solution: '<style>\n  .banniere {\n    height: 150px;\n    background-image: url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\'%3E%3Crect width=\'100\' height=\'60\' fill=\'%234f6df5\'/%3E%3C/svg%3E");\n    background-size: cover;\n    background-repeat: no-repeat;\n    background-position: center;\n  }\n</style>\n\n<div class="banniere" id="banniere"></div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -498,7 +558,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Entraînement :</strong> le texte blanc est illisible sur l\'image claire. Ajoute un <strong>voile noir semi-transparent</strong> par-dessus l\'image, avec un dégradé, sans toucher au HTML.',
       codeDepart: '<style>\n  .hero {\n    height: 150px;\n    color: white;\n    padding: 20px;\n    background-image: url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\'%3E%3Crect width=\'100\' height=\'60\' fill=\'%23ffe08a\'/%3E%3C/svg%3E");\n    background-size: cover;\n  }\n</style>\n\n<div class="hero" id="hero"><h2>Titre lisible</h2></div>',
-      indice: 'Deux fonds séparés par une virgule, le voile en premier :<br><code>background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("...");</code>',
+      indices: [
+        "Un élément peut porter <strong>plusieurs</strong> fonds superposés, séparés par une virgule.",
+        "Le premier de la liste est celui du dessus. Le voile doit donc venir <strong>avant</strong> l’image.",
+        "<code>background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(…);</code>"
+      ],
       solution: '<style>\n  .hero {\n    height: 150px;\n    color: white;\n    padding: 20px;\n    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\'%3E%3Crect width=\'100\' height=\'60\' fill=\'%23ffe08a\'/%3E%3C/svg%3E");\n    background-size: cover;\n  }\n</style>\n\n<div class="hero" id="hero"><h2>Titre lisible</h2></div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -570,7 +634,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: 'Fais pivoter le carré de <strong>45 degrés</strong> avec <code>transform</code>.',
       codeDepart: '<style>\n  .carre {\n    width: 80px;\n    height: 80px;\n    background: #4f6df5;\n    margin: 40px;\n    /* ta propriété ici */\n\n  }\n</style>\n\n<div class="carre" id="carre"></div>',
-      indice: '<code>transform: rotate(45deg);</code>',
+      indices: [
+        "Faire pivoter n’est pas changer une position : c’est une <strong>transformation</strong> visuelle, qui ne bouscule pas les voisins.",
+        "<code>transform</code> accepte plusieurs fonctions ; celle qui fait tourner prend un angle en degrés.",
+        "<code>transform: rotate(45deg);</code>"
+      ],
       solution: '<style>\n  .carre {\n    width: 80px;\n    height: 80px;\n    background: #4f6df5;\n    margin: 40px;\n    transform: rotate(45deg);\n  }\n</style>\n\n<div class="carre" id="carre"></div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -590,7 +658,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Entraînement :</strong> au survol, la carte doit <strong>monter de 6px</strong> et grossir de 5 %, avec une transition douce de 0.2s.',
       codeDepart: '<style>\n  .carte {\n    width: 150px;\n    padding: 20px;\n    background: #eef1fe;\n    border-radius: 12px;\n    /* la transition ici */\n\n  }\n  .carte:hover {\n    /* la transformation ici */\n\n  }\n</style>\n\n<div class="carte" id="carte">Survole-moi</div>',
-      indice: 'Sur <code>.carte</code> : <code>transition: transform 0.2s;</code>. Sur <code>.carte:hover</code> : <code>transform: translateY(-6px) scale(1.05);</code>',
+      indices: [
+        "Deux règles à écrire : l’état normal porte la transition, le survol porte la transformation.",
+        "Monter, c’est un <code>translateY</code> <strong>négatif</strong> — l’axe Y descend en CSS. Et grossir, c’est <code>scale</code>.",
+        "<code>transition: transform 0.2s;</code> sur <code>.carte</code> ; <code>transform: translateY(-6px) scale(1.05);</code> sur <code>.carte:hover</code>."
+      ],
       solution: '<style>\n  .carte {\n    width: 150px;\n    padding: 20px;\n    background: #eef1fe;\n    border-radius: 12px;\n    transition: transform 0.2s;\n  }\n  .carte:hover {\n    transform: translateY(-6px) scale(1.05);\n  }\n</style>\n\n<div class="carte" id="carte">Survole-moi</div>',
       verifier: function (ctx) {
         const code = ctx.code.replace(/\s+/g, ' ');
@@ -665,7 +737,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: 'La barre latérale doit faire <strong>exactement 120px</strong> et ne jamais rétrécir ; le contenu doit prendre <strong>tout le reste</strong>.',
       codeDepart: '<style>\n  .page { display: flex; gap: 10px; }\n  .barre {\n    background: #4f6df5;\n    color: white;\n    padding: 10px;\n    /* ta règle ici */\n\n  }\n  .contenu {\n    background: #eef1fe;\n    padding: 10px;\n    /* ta règle ici */\n\n  }\n</style>\n\n<div class="page">\n  <div class="barre" id="barre">Menu</div>\n  <div class="contenu" id="contenu">Contenu principal</div>\n</div>',
-      indice: 'Sur la barre : <code>flex: 0 0 120px;</code> (ne grandit pas, ne rétrécit pas, base 120px). Sur le contenu : <code>flex: 1;</code>',
+      indices: [
+        "Deux comportements opposés : l’un doit rester figé, l’autre prendre tout ce qui reste.",
+        "<code>flex</code> réunit trois valeurs : grandir, rétrécir, taille de base. Deux zéros signifient « ne bouge pas ».",
+        "<code>flex: 0 0 120px;</code> sur la barre, <code>flex: 1;</code> sur le contenu."
+      ],
       solution: '<style>\n  .page { display: flex; gap: 10px; }\n  .barre {\n    background: #4f6df5;\n    color: white;\n    padding: 10px;\n    flex: 0 0 120px;\n  }\n  .contenu {\n    background: #eef1fe;\n    padding: 10px;\n    flex: 1;\n  }\n</style>\n\n<div class="page">\n  <div class="barre" id="barre">Menu</div>\n  <div class="contenu" id="contenu">Contenu principal</div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -690,7 +766,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Entraînement :</strong> répartis l\'espace pour que la zone de droite soit <strong>deux fois plus large</strong> que celle de gauche, avec <code>flex-grow</code>.',
       codeDepart: '<style>\n  .page { display: flex; gap: 10px; }\n  .zone { padding: 10px; background: #eef1fe; }\n  .gauche { /* ta règle */ }\n  .droite { /* ta règle */ }\n</style>\n\n<div class="page">\n  <div class="zone gauche" id="gauche">Gauche</div>\n  <div class="zone droite" id="droite">Droite</div>\n</div>',
-      indice: '<code>.gauche { flex-grow: 1; }</code> et <code>.droite { flex-grow: 2; }</code>',
+      indices: [
+        "Il ne s’agit pas de largeurs fixes mais de <strong>parts</strong> : l’espace libre se partage.",
+        "<code>flex-grow</code> dit combien de parts chacun prend. Deux fois plus large, c’est deux parts contre une.",
+        "<code>.gauche { flex-grow: 1; }</code> et <code>.droite { flex-grow: 2; }</code>"
+      ],
       solution: '<style>\n  .page { display: flex; gap: 10px; }\n  .zone { padding: 10px; background: #eef1fe; }\n  .gauche { flex-grow: 1; }\n  .droite { flex-grow: 2; }\n</style>\n\n<div class="page">\n  <div class="zone gauche" id="gauche">Gauche</div>\n  <div class="zone droite" id="droite">Droite</div>\n</div>',
       verifier: function (ctx) {
         const g = ctx.doc.getElementById('gauche');
@@ -709,7 +789,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Défi :</strong> fais passer l\'élément « Priorité » <strong>en premier</strong> visuellement, sans toucher à l\'ordre du HTML.',
       codeDepart: '<style>\n  .liste { display: flex; gap: 10px; }\n  .item { padding: 10px; background: #eef1fe; }\n  .priorite {\n    background: #ffe08a;\n    /* ta règle ici */\n\n  }\n</style>\n\n<div class="liste">\n  <div class="item" id="un">Un</div>\n  <div class="item" id="deux">Deux</div>\n  <div class="item priorite" id="prio">Priorité</div>\n</div>',
-      indice: 'Par défaut tous les éléments ont <code>order: 0</code>. Une valeur négative passe devant : <code>order: -1;</code>',
+      indices: [
+        "L’ordre du HTML ne doit pas changer — seul l’ordre <em>visuel</em> change. Flexbox sait faire cela.",
+        "Tous les éléments ont <code>order: 0</code> par défaut. Une valeur plus petite passe devant.",
+        "<code>order: -1;</code>"
+      ],
       solution: '<style>\n  .liste { display: flex; gap: 10px; }\n  .item { padding: 10px; background: #eef1fe; }\n  .priorite {\n    background: #ffe08a;\n    order: -1;\n  }\n</style>\n\n<div class="liste">\n  <div class="item" id="un">Un</div>\n  <div class="item" id="deux">Deux</div>\n  <div class="item priorite" id="prio">Priorité</div>\n</div>',
       verifier: function (ctx) {
         const prio = ctx.doc.getElementById('prio');
@@ -769,7 +853,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: 'Crée une galerie qui s\'adapte toute seule : autant de colonnes que possible, chacune d\'au moins <strong>150px</strong>, avec un écart de 10px.',
       codeDepart: '<style>\n  .galerie {\n    display: grid;\n    /* tes propriétés ici */\n\n  }\n  .galerie div { background: #4f6df5; color: white; padding: 20px; text-align: center; }\n</style>\n\n<div class="galerie" id="galerie">\n  <div>1</div><div>2</div><div>3</div><div>4</div>\n</div>',
-      indice: '<code>grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</code> et <code>gap: 10px;</code>',
+      indices: [
+        "On ne sait pas combien de colonnes tiendront : c’est à la grille de le décider selon la place disponible.",
+        "<code>repeat(auto-fit, …)</code> crée autant de colonnes que possible, et <code>minmax()</code> fixe leur largeur minimale et maximale.",
+        "<code>grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</code>"
+      ],
       solution: '<style>\n  .galerie {\n    display: grid;\n    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));\n    gap: 10px;\n  }\n  .galerie div { background: #4f6df5; color: white; padding: 20px; text-align: center; }\n</style>\n\n<div class="galerie" id="galerie">\n  <div>1</div><div>2</div><div>3</div><div>4</div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -788,7 +876,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Entraînement :</strong> compose la page avec des <strong>zones nommées</strong> : l\'en-tête sur toute la largeur, puis le menu à gauche et le contenu à droite.',
       codeDepart: '<style>\n  .page {\n    display: grid;\n    grid-template-columns: 120px 1fr;\n    gap: 8px;\n    /* déclare les zones ici */\n\n  }\n  .entete { background: #4f6df5; color: white; padding: 10px; /* grid-area */ }\n  .menu { background: #ffe08a; padding: 10px; /* grid-area */ }\n  .contenu { background: #eef1fe; padding: 10px; /* grid-area */ }\n</style>\n\n<div class="page">\n  <div class="entete" id="entete">En-tête</div>\n  <div class="menu" id="menu">Menu</div>\n  <div class="contenu" id="contenu">Contenu</div>\n</div>',
-      indice: 'Dans <code>.page</code> : <code>grid-template-areas: "entete entete" "menu contenu";</code> puis <code>grid-area: entete;</code> dans chaque classe.',
+      indices: [
+        "Plutôt que de placer chaque élément par ses coordonnées, on dessine la mise en page avec des noms.",
+        "Chaque chaîne représente une ligne de la grille, et chaque mot une cellule. Un nom répété occupe plusieurs cellules.",
+        "<code>grid-template-areas: \"entete entete\" \"menu contenu\";</code> puis <code>grid-area: entete;</code> dans chaque classe."
+      ],
       solution: '<style>\n  .page {\n    display: grid;\n    grid-template-columns: 120px 1fr;\n    gap: 8px;\n    grid-template-areas:\n      "entete entete"\n      "menu contenu";\n  }\n  .entete { background: #4f6df5; color: white; padding: 10px; grid-area: entete; }\n  .menu { background: #ffe08a; padding: 10px; grid-area: menu; }\n  .contenu { background: #eef1fe; padding: 10px; grid-area: contenu; }\n</style>\n\n<div class="page">\n  <div class="entete" id="entete">En-tête</div>\n  <div class="menu" id="menu">Menu</div>\n  <div class="contenu" id="contenu">Contenu</div>\n</div>',
       verifier: function (ctx) {
         if (!/grid-template-areas/.test(ctx.code)) return { ok: false, message: 'Déclare les zones avec <code>grid-template-areas</code>.' };
@@ -807,7 +899,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Défi :</strong> dans cette grille de 3 colonnes, fais en sorte que la case « Vedette » occupe <strong>2 colonnes</strong>.',
       codeDepart: '<style>\n  .grille {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    gap: 8px;\n  }\n  .case { background: #eef1fe; padding: 20px; text-align: center; }\n  .vedette {\n    background: #ffe08a;\n    /* ta règle ici */\n\n  }\n</style>\n\n<div class="grille">\n  <div class="case vedette" id="vedette">Vedette</div>\n  <div class="case" id="c2">2</div>\n  <div class="case" id="c3">3</div>\n</div>',
-      indice: '<code>grid-column: span 2;</code>',
+      indices: [
+        "La case doit déborder sur la colonne voisine, sans qu’on ait à redéfinir toute la grille.",
+        "<code>grid-column</code> avec <code>span</code> dit combien de colonnes l’élément occupe à partir de sa position.",
+        "<code>grid-column: span 2;</code>"
+      ],
       solution: '<style>\n  .grille {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    gap: 8px;\n  }\n  .case { background: #eef1fe; padding: 20px; text-align: center; }\n  .vedette {\n    background: #ffe08a;\n    grid-column: span 2;\n  }\n</style>\n\n<div class="grille">\n  <div class="case vedette" id="vedette">Vedette</div>\n  <div class="case" id="c2">2</div>\n  <div class="case" id="c3">3</div>\n</div>',
       verifier: function (ctx) {
         const v = ctx.doc.getElementById('vedette');
@@ -857,7 +953,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: 'Donne au titre une taille <strong>fluide</strong> avec <code>clamp()</code> : au minimum 20px, idéalement 5vw, au maximum 48px.',
       codeDepart: '<style>\n  h1 {\n    /* ta propriété ici */\n\n  }\n</style>\n\n<h1 id="titre">Un titre adaptatif</h1>',
-      indice: '<code>font-size: clamp(20px, 5vw, 48px);</code>',
+      indices: [
+        "Trois valeurs à concilier : un plancher, une taille idéale qui suit l’écran, et un plafond.",
+        "<code>clamp()</code> prend exactement ces trois-là, dans cet ordre : minimum, valeur préférée, maximum.",
+        "<code>font-size: clamp(20px, 5vw, 48px);</code>"
+      ],
       solution: '<style>\n  h1 {\n    font-size: clamp(20px, 5vw, 48px);\n  }\n</style>\n\n<h1 id="titre">Un titre adaptatif</h1>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -874,7 +974,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Entraînement :</strong> donne au bloc vidéo les proportions <strong>16/9</strong> avec <code>aspect-ratio</code>, sans fixer sa hauteur.',
       codeDepart: '<style>\n  .video {\n    width: 320px;\n    background: #333;\n    /* ta propriété ici */\n\n  }\n</style>\n\n<div class="video" id="video"></div>',
-      indice: '<code>aspect-ratio: 16 / 9;</code> — la hauteur se calcule toute seule.',
+      indices: [
+        "Fixer la hauteur à la main casserait les proportions dès que la largeur change. Mieux vaut déclarer le <strong>rapport</strong>.",
+        "<code>aspect-ratio</code> prend deux nombres séparés par une barre oblique. La hauteur se calcule alors toute seule.",
+        "<code>aspect-ratio: 16 / 9;</code>"
+      ],
       solution: '<style>\n  .video {\n    width: 320px;\n    background: #333;\n    aspect-ratio: 16 / 9;\n  }\n</style>\n\n<div class="video" id="video"></div>',
       verifier: function (ctx) {
         const v = ctx.doc.getElementById('video');
@@ -891,7 +995,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
       type: 'html',
       consigne: '<strong>Défi :</strong> l\'image est déformée parce qu\'on lui impose une largeur et une hauteur. Corrige-la avec <code>object-fit</code> pour qu\'elle remplisse le cadre <strong>sans être écrasée</strong>.',
       codeDepart: '<style>\n  img {\n    width: 300px;\n    height: 100px;\n    /* ta propriété ici */\n\n  }\n</style>\n\n<img id="photo" alt="Un rectangle bleu" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\'%3E%3Crect width=\'200\' height=\'200\' fill=\'%234f6df5\'/%3E%3Ccircle cx=\'100\' cy=\'100\' r=\'60\' fill=\'white\'/%3E%3C/svg%3E">',
-      indice: '<code>object-fit: cover;</code> recadre l\'image au lieu de la déformer.',
+      indices: [
+        "L’image est écrasée parce qu’on lui impose deux dimensions incompatibles avec ses proportions.",
+        "<code>object-fit</code> dit comment elle doit remplir l’espace : <code>cover</code> recadre au lieu de déformer.",
+        "<code>object-fit: cover;</code>"
+      ],
       solution: '<style>\n  img {\n    width: 300px;\n    height: 100px;\n    object-fit: cover;\n  }\n</style>\n\n<img id="photo" alt="Un rectangle bleu" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\'%3E%3Crect width=\'200\' height=\'200\' fill=\'%234f6df5\'/%3E%3Ccircle cx=\'100\' cy=\'100\' r=\'60\' fill=\'white\'/%3E%3C/svg%3E">',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;

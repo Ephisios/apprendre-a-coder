@@ -36,7 +36,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: 'Le code contient un titre et un paragraphe. Ajoute une règle CSS dans la balise <code>&lt;style&gt;</code> pour mettre le <code>h1</code> en <code>blue</code>, et une autre pour mettre le <code>p</code> en <code>green</code>.',
       codeDepart: '<style>\n\n</style>\n\n<h1>Un titre qui veut de la couleur</h1>\n<p>Un paragraphe qui en veut aussi.</p>',
-      indice: 'Entre <code>&lt;style&gt;</code> et <code>&lt;/style&gt;</code>, écris : <code>h1 { color: blue; }</code> puis à la ligne <code>p { color: green; }</code>',
+      indices: [
+        "Une règle CSS a toujours la même forme : QUI on vise, puis, entre accolades, CE QU’ON CHANGE.",
+        "Le sélecteur est ici le nom de la balise. Chaque réglage s’écrit <code>propriété: valeur;</code> — deux-points au milieu, point-virgule à la fin.",
+        "<code>h1 { color: blue; }</code> puis, à la ligne, <code>p { color: green; }</code>"
+      ],
       solution: '<style>\n  h1 { color: blue; }\n  p { color: green; }\n</style>\n\n<h1>Un titre qui veut de la couleur</h1>\n<p>Un paragraphe qui en veut aussi.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -52,7 +56,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Chasse au bug !</strong> Ce CSS devrait mettre le titre en orange et agrandir le paragraphe... mais rien ne marche. <strong>Deux erreurs</strong> se sont glissées dans le code. Trouve-les et répare.',
       codeDepart: '<style>\n  h1 {\n    color orange;\n  }\n  p {\n    font-size: 22px\n    color: purple;\n  }\n</style>\n\n<h1>Je devrais être orange</h1>\n<p>Et moi, grand et violet.</p>',
-      indice: 'Erreur 1 : il manque les <strong>deux-points</strong> entre <code>color</code> et <code>orange</code>. Erreur 2 : il manque le <strong>point-virgule</strong> après <code>22px</code> (du coup la ligne suivante est ignorée aussi).',
+      indices: [
+        "Deux fautes, et aucune ne fait planter la page : un CSS invalide est simplement ignoré, en silence. C’est ce qui le rend difficile à déboguer.",
+        "Une déclaration a besoin de <strong>deux-points</strong> entre la propriété et sa valeur, et d’un <strong>point-virgule</strong> à la fin. Sans ce dernier, la ligne suivante est avalée avec.",
+        "Les deux-points manquent entre <code>color</code> et <code>orange</code> ; le point-virgule manque après <code>22px</code>."
+      ],
       solution: '<style>\n  h1 {\n    color: orange;\n  }\n  p {\n    font-size: 22px;\n    color: purple;\n  }\n</style>\n\n<h1>Je devrais être orange</h1>\n<p>Et moi, grand et violet.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -111,7 +119,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: 'Trois paragraphes, mais un seul doit changer : ajoute <code>class="alerte"</code> au <strong>deuxième</strong> paragraphe, puis écris la règle CSS <code>.alerte</code> qui le met en <code>red</code>.',
       codeDepart: '<style>\n\n</style>\n\n<p>Tout va bien.</p>\n<p>Attention, ceci est une alerte !</p>\n<p>Tout va bien aussi.</p>',
-      indice: 'HTML : <code>&lt;p class="alerte"&gt;</code>. CSS : <code>.alerte { color: red; }</code> — avec le point devant !',
+      indices: [
+        "Viser la balise changerait les trois paragraphes. Il faut un moyen de désigner un seul d’entre eux.",
+        "On pose une <strong>classe</strong> sur la balise en HTML, puis on la vise en CSS. Le sélecteur de classe s’écrit avec un point devant son nom — point qui ne figure pas dans le HTML.",
+        "HTML : <code>&lt;p class=\"alerte\"&gt;</code> · CSS : <code>.alerte { color: red; }</code>"
+      ],
       solution: '<style>\n  .alerte { color: red; }\n</style>\n\n<p>Tout va bien.</p>\n<p class="alerte">Attention, ceci est une alerte !</p>\n<p>Tout va bien aussi.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -128,7 +140,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Entraînement : classe réutilisable.</strong> Quatre articles de blog : deux sont « premium ». Pose la classe <code>premium</code> sur le 1er et le 3e paragraphe, et écris UNE seule règle qui les met en <code>purple</code> et en gras (<code>font-weight: bold;</code>).',
       codeDepart: '<style>\n\n</style>\n\n<p>Article exclusif sur les fusées.</p>\n<p>Article gratuit sur les chats.</p>\n<p>Article exclusif sur les océans.</p>\n<p>Article gratuit sur le fromage.</p>',
-      indice: 'La même classe sur deux balises : <code>&lt;p class="premium"&gt;</code> deux fois. Et une seule règle : <code>.premium { color: purple; font-weight: bold; }</code>',
+      indices: [
+        "Tout l’intérêt d’une classe : elle se pose autant de fois qu’on veut, et ne s’écrit qu’une seule fois en CSS.",
+        "La même classe sur les deux paragraphes premium, et <strong>une seule</strong> règle qui les habille tous les deux.",
+        "<code>&lt;p class=\"premium\"&gt;</code> deux fois, et <code>.premium { color: purple; font-weight: bold; }</code>"
+      ],
       solution: '<style>\n  .premium {\n    color: purple;\n    font-weight: bold;\n  }\n</style>\n\n<p class="premium">Article exclusif sur les fusées.</p>\n<p>Article gratuit sur les chats.</p>\n<p class="premium">Article exclusif sur les océans.</p>\n<p>Article gratuit sur le fromage.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -196,7 +212,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: 'Transforme le <code>&lt;div class="carte"&gt;</code> en carte colorée : donne à la classe <code>.carte</code> un fond <code>#4f6df5</code> et un texte <code>white</code>.',
       codeDepart: '<style>\n  .carte {\n    padding: 20px;\n    border-radius: 12px;\n  }\n</style>\n\n<div class="carte">\n  <h2>Carte membre</h2>\n  <p>Apprenti codeur — niveau CSS</p>\n</div>',
-      indice: 'Ajoute deux déclarations dans la règle <code>.carte</code> : <code>background-color: #4f6df5;</code> et <code>color: white;</code>',
+      indices: [
+        "Deux couleurs à poser, et elles ne portent pas le même nom : l’une concerne le fond, l’autre le texte.",
+        "Le fond, c’est <code>background-color</code> ; le texte, simplement <code>color</code>. Les deux vont dans la même règle <code>.carte</code>.",
+        "<code>background-color: #4f6df5;</code> et <code>color: white;</code>"
+      ],
       solution: '<style>\n  .carte {\n    padding: 20px;\n    border-radius: 12px;\n    background-color: #4f6df5;\n    color: white;\n  }\n</style>\n\n<div class="carte">\n  <h2>Carte membre</h2>\n  <p>Apprenti codeur — niveau CSS</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -212,7 +232,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Entraînement : le code hexadécimal.</strong> Trois pastilles à colorer UNIQUEMENT en hexadécimal : <code>.rouge</code> en fond <code>#e63946</code>, <code>.vert</code> en fond <code>#2a9d8f</code>, <code>.jaune</code> en fond <code>#e9c46a</code>.',
       codeDepart: '<style>\n  .pastille {\n    display: inline-block;\n    width: 80px; height: 80px;\n    border-radius: 50%;\n    margin: 8px;\n  }\n\n  /* Ajoute les 3 règles de couleur ici */\n\n</style>\n\n<div class="pastille rouge"></div>\n<div class="pastille vert"></div>\n<div class="pastille jaune"></div>',
-      indice: 'Trois règles distinctes : <code>.rouge { background-color: #e63946; }</code> et pareil pour les deux autres. (Remarque au passage : un élément peut avoir PLUSIEURS classes, séparées par des espaces !)',
+      indices: [
+        "Trois pastilles, trois classes différentes : il faut donc trois règles distinctes.",
+        "Un code hexadécimal commence par un <code>#</code> suivi de six caractères. C’est une notation, pas un nom de couleur.",
+        "<code>.rouge { background-color: #e63946; }</code>, et de même pour les deux autres."
+      ],
       solution: '<style>\n  .pastille {\n    display: inline-block;\n    width: 80px; height: 80px;\n    border-radius: 50%;\n    margin: 8px;\n  }\n\n  .rouge { background-color: #e63946; }\n  .vert { background-color: #2a9d8f; }\n  .jaune { background-color: #e9c46a; }\n</style>\n\n<div class="pastille rouge"></div>\n<div class="pastille vert"></div>\n<div class="pastille jaune"></div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -229,7 +253,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Défi : le mode sombre.</strong> Transforme cette page claire en page sombre : le <code>body</code> reçoit un fond <code>#1e2432</code> et un texte <code>white</code> ; la classe <code>.encart</code> reçoit un fond <code>#2f3850</code> et des coins arrondis de <code>12px</code>.',
       codeDepart: '<style>\n  body { font-family: sans-serif; padding: 20px; }\n  .encart { padding: 16px; }\n</style>\n\n<h1>Mon blog de nuit</h1>\n<div class="encart">\n  <p>Les meilleurs articles se lisent dans le noir.</p>\n</div>',
-      indice: 'Complète les deux règles existantes : dans <code>body</code>, ajoute <code>background-color: #1e2432; color: white;</code> ; dans <code>.encart</code>, ajoute <code>background-color: #2f3850; border-radius: 12px;</code>',
+      indices: [
+        "Rien à créer : les deux règles existent déjà, il n’y a qu’à les compléter.",
+        "Le <code>body</code> donne le fond général et la couleur de texte par défaut. L’encart, lui, a besoin de son propre fond pour se détacher.",
+        "Dans <code>body</code> : <code>background-color: #1e2432; color: white;</code> — et un fond distinct dans <code>.encart</code>."
+      ],
       solution: '<style>\n  body {\n    font-family: sans-serif;\n    padding: 20px;\n    background-color: #1e2432;\n    color: white;\n  }\n  .encart {\n    padding: 16px;\n    background-color: #2f3850;\n    border-radius: 12px;\n  }\n</style>\n\n<h1>Mon blog de nuit</h1>\n<div class="encart">\n  <p>Les meilleurs articles se lisent dans le noir.</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -276,7 +304,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: 'Style la citation : donne à la classe <code>.citation</code> une taille de <code>24px</code>, un alignement <code>center</code> et le style <code>italic</code>.',
       codeDepart: '<style>\n  .citation {\n\n  }\n</style>\n\n<p class="citation">La seule façon d\'apprendre à coder, c\'est de coder.</p>',
-      indice: 'Trois déclarations : <code>font-size: 24px;</code>, <code>text-align: center;</code> et <code>font-style: italic;</code>',
+      indices: [
+        "Trois réglages de texte, tous dans la même règle. Chacun porte un nom qui dit ce qu’il fait.",
+        "La taille, l’alignement, et l’inclinaison. Attention : l’italique n’est pas un « style de police » au sens large, mais une propriété précise.",
+        "<code>font-size: 24px;</code> · <code>text-align: center;</code> · <code>font-style: italic;</code>"
+      ],
       solution: '<style>\n  .citation {\n    font-size: 24px;\n    text-align: center;\n    font-style: italic;\n  }\n</style>\n\n<p class="citation">La seule façon d\'apprendre à coder, c\'est de coder.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -293,7 +325,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Entraînement : l\'article de presse.</strong> Trois règles à écrire : le <code>h1</code> en <code>34px</code> et centré ; la classe <code>.chapo</code> (l\'intro) en gras (<code>font-weight: bold;</code>) ; la classe <code>.article</code> avec une hauteur de ligne aérée <code>line-height: 1.8;</code>.',
       codeDepart: '<style>\n\n</style>\n\n<h1>Le CSS expliqué à tous</h1>\n<p class="chapo">Trois propriétés suffisent pour transformer un texte.</p>\n<p class="article">La taille change la hiérarchie, l\'alignement structure la page, et la hauteur de ligne rend la lecture agréable. Les grands journaux appliquent exactement ces trois réglages.</p>',
-      indice: 'Trois règles : <code>h1 { font-size: 34px; text-align: center; }</code>, <code>.chapo { font-weight: bold; }</code>, <code>.article { line-height: 1.8; }</code>',
+      indices: [
+        "Trois cibles différentes : une balise, et deux classes. Donc trois règles séparées.",
+        "Le <code>h1</code> reçoit deux réglages ; le chapô, une graisse ; l’article, un interlignage.",
+        "<code>h1 { font-size: 34px; text-align: center; }</code>, <code>.chapo { font-weight: bold; }</code>, <code>.article { line-height: 1.8; }</code>"
+      ],
       solution: '<style>\n  h1 {\n    font-size: 34px;\n    text-align: center;\n  }\n  .chapo {\n    font-weight: bold;\n  }\n  .article {\n    line-height: 1.8;\n  }\n</style>\n\n<h1>Le CSS expliqué à tous</h1>\n<p class="chapo">Trois propriétés suffisent pour transformer un texte.</p>\n<p class="article">La taille change la hiérarchie, l\'alignement structure la page, et la hauteur de ligne rend la lecture agréable. Les grands journaux appliquent exactement ces trois réglages.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -314,7 +350,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Défi : la police fait tout.</strong> Donne à la classe <code>.code-exemple</code> l\'apparence d\'un vrai bout de code : police <code>monospace</code> (via <code>font-family</code>), fond <code>#1e2432</code>, texte <code>#7ee787</code>, et <code>padding</code> de <code>12px</code>.',
       codeDepart: '<style>\n  .code-exemple {\n\n  }\n</style>\n\n<p>Voici à quoi ressemble du code dans un livre :</p>\n<p class="code-exemple">let score = 42;</p>',
-      indice: 'Quatre déclarations : <code>font-family: monospace;</code>, <code>background-color: #1e2432;</code>, <code>color: #7ee787;</code>, <code>padding: 12px;</code>',
+      indices: [
+        "Ce qui fait ressembler un bloc à du code, ce n’est pas une propriété magique : c’est une combinaison de quatre réglages ordinaires.",
+        "Une police à chasse fixe, un fond sombre, un texte clair, et de l’air autour. La police s’appelle <code>monospace</code> — un mot-clé, pas un nom de police.",
+        "<code>font-family: monospace;</code> · <code>background-color: #1e2432;</code> · <code>color: #7ee787;</code> · <code>padding: 12px;</code>"
+      ],
       solution: '<style>\n  .code-exemple {\n    font-family: monospace;\n    background-color: #1e2432;\n    color: #7ee787;\n    padding: 12px;\n  }\n</style>\n\n<p>Voici à quoi ressemble du code dans un livre :</p>\n<p class="code-exemple">let score = 42;</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -362,7 +402,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: 'La classe <code>.encadre</code> est toute nue. Donne-lui : un <code>padding</code> de <code>16px</code>, une bordure <code>2px solid black</code>, et une <code>margin</code> de <code>24px</code>.',
       codeDepart: '<style>\n  .encadre {\n\n  }\n</style>\n\n<p class="encadre">Encadre-moi comme un tableau de maître !</p>',
-      indice: 'Trois déclarations : <code>padding: 16px;</code>, <code>border: 2px solid black;</code>, <code>margin: 24px;</code>',
+      indices: [
+        "Trois réglages, et deux d’entre eux se confondent souvent : l’un pousse vers l’intérieur, l’autre vers l’extérieur.",
+        "<code>padding</code> est l’air <strong>dedans</strong>, entre la bordure et le contenu. <code>margin</code> est l’air <strong>dehors</strong>, entre la boîte et ses voisines.",
+        "<code>padding: 16px;</code> · <code>border: 2px solid black;</code> · <code>margin: 24px;</code>"
+      ],
       solution: '<style>\n  .encadre {\n    padding: 16px;\n    border: 2px solid black;\n    margin: 24px;\n  }\n</style>\n\n<p class="encadre">Encadre-moi comme un tableau de maître !</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -379,7 +423,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Entraînement : padding vs margin, pour de vrai.</strong> Deux cartes collées l\'une à l\'autre, au texte écrasé contre les bords. Répare : donne à <code>.carte</code> un <code>padding</code> de <code>20px</code> (respiration intérieure) et une <code>margin-bottom</code> de <code>16px</code> (espace entre les cartes).',
       codeDepart: '<style>\n  .carte {\n    background-color: #eef1fe;\n    border-radius: 12px;\n  }\n</style>\n\n<div class="carte">\n  <h2>Carte du haut</h2>\n  <p>Mon texte est collé aux bords, à l\'aide !</p>\n</div>\n<div class="carte">\n  <h2>Carte du bas</h2>\n  <p>Et moi je suis collée à ma voisine.</p>\n</div>',
-      indice: 'Dans la règle <code>.carte</code> : <code>padding: 20px;</code> règle le problème intérieur, <code>margin-bottom: 16px;</code> écarte les cartes entre elles.',
+      indices: [
+        "Deux problèmes distincts : le texte est écrasé contre les bords, et les cartes se touchent. Ce ne sont pas les mêmes réglages.",
+        "Le texte écrasé, c’est un manque de <code>padding</code>. Les cartes collées, un manque de <code>margin</code>.",
+        "<code>padding: 20px;</code> pour l’intérieur, <code>margin-bottom: 16px;</code> pour l’espace entre les cartes."
+      ],
       solution: '<style>\n  .carte {\n    background-color: #eef1fe;\n    border-radius: 12px;\n    padding: 20px;\n    margin-bottom: 16px;\n  }\n</style>\n\n<div class="carte">\n  <h2>Carte du haut</h2>\n  <p>Mon texte est collé aux bords, à l\'aide !</p>\n</div>\n<div class="carte">\n  <h2>Carte du bas</h2>\n  <p>Et moi je suis collée à ma voisine.</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -395,7 +443,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Défi : fabrique un bouton.</strong> Un lien <code>&lt;a&gt;</code> peut ressembler à un vrai bouton avec le bon CSS ! Donne à <code>.btn</code> : un fond <code>#4f6df5</code>, un texte <code>white</code>, un padding <code>12px 24px</code> (haut/bas puis gauche/droite), des coins arrondis <code>10px</code>, et <code>text-decoration: none;</code> pour supprimer le soulignement.',
       codeDepart: '<style>\n  .btn {\n\n  }\n</style>\n\n<p>Ceci est un simple lien déguisé :</p>\n<a class="btn" href="#">Cliquez ici</a>',
-      indice: 'Cinq déclarations : <code>background-color: #4f6df5; color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none;</code> — remarque le padding à DEUX valeurs : 12px vertical, 24px horizontal.',
+      indices: [
+        "Un lien ne ressemble pas à un bouton pour deux raisons : il n’a ni fond ni forme, et il porte un soulignement par défaut.",
+        "Il faut donc un fond, une couleur de texte, de l’air autour, des coins arrondis — et surtout <strong>retirer</strong> le soulignement.",
+        "<code>text-decoration: none;</code> est celle qu’on oublie, avec <code>padding: 12px 24px;</code> et <code>border-radius: 10px;</code>."
+      ],
       solution: '<style>\n  .btn {\n    background-color: #4f6df5;\n    color: white;\n    padding: 12px 24px;\n    border-radius: 10px;\n    text-decoration: none;\n  }\n</style>\n\n<p>Ceci est un simple lien déguisé :</p>\n<a class="btn" href="#">Cliquez ici</a>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -442,7 +494,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: 'Trois pastilles sont empilées verticalement. Utilise Flexbox sur la classe <code>.rangee</code> pour les placer <strong>côte à côte, centrées</strong> horizontalement, avec un <code>gap</code> de <code>16px</code>.',
       codeDepart: '<style>\n  .rangee {\n\n  }\n  .pastille {\n    background: #4f6df5; color: white;\n    padding: 14px 20px; border-radius: 30px;\n  }\n</style>\n\n<div class="rangee">\n  <div class="pastille">Un</div>\n  <div class="pastille">Deux</div>\n  <div class="pastille">Trois</div>\n</div>',
-      indice: 'Dans <code>.rangee</code> : <code>display: flex;</code> + <code>justify-content: center;</code> + <code>gap: 16px;</code>',
+      indices: [
+        "Par défaut, ces éléments s’empilent. Une seule propriété change complètement la façon dont le conteneur range ses enfants.",
+        "<code>display: flex</code> se met sur le <strong>parent</strong>, jamais sur les enfants. Ensuite, <code>justify-content</code> les place sur l’axe horizontal.",
+        "<code>display: flex; justify-content: center; gap: 16px;</code> dans <code>.rangee</code>."
+      ],
       solution: '<style>\n  .rangee {\n    display: flex;\n    justify-content: center;\n    gap: 16px;\n  }\n  .pastille {\n    background: #4f6df5; color: white;\n    padding: 14px 20px; border-radius: 30px;\n  }\n</style>\n\n<div class="rangee">\n  <div class="pastille">Un</div>\n  <div class="pastille">Deux</div>\n  <div class="pastille">Trois</div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -459,7 +515,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Entraînement : la barre de navigation.</strong> Le grand classique du web : le logo à gauche, le menu à droite. Sur la classe <code>.barre</code>, active Flexbox avec <code>justify-content: space-between;</code> (les enfants s\'écartent aux deux extrémités) et <code>align-items: center;</code>.',
       codeDepart: '<style>\n  .barre {\n    background: #1e2432;\n    color: white;\n    padding: 14px 20px;\n\n  }\n  .menu { display: flex; gap: 18px; }\n</style>\n\n<div class="barre">\n  <strong>MonLogo</strong>\n  <div class="menu">\n    <span>Accueil</span>\n    <span>Tarifs</span>\n    <span>Contact</span>\n  </div>\n</div>',
-      indice: 'Dans <code>.barre</code>, ajoute : <code>display: flex; justify-content: space-between; align-items: center;</code>',
+      indices: [
+        "Le logo à gauche, le menu à droite : il ne s’agit pas de centrer, mais de pousser les deux extrémités.",
+        "<code>space-between</code> colle le premier élément au début, le dernier à la fin, et répartit l’espace entre. <code>align-items</code>, lui, gère l’alignement vertical.",
+        "<code>display: flex; justify-content: space-between; align-items: center;</code>"
+      ],
       solution: '<style>\n  .barre {\n    background: #1e2432;\n    color: white;\n    padding: 14px 20px;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  }\n  .menu { display: flex; gap: 18px; }\n</style>\n\n<div class="barre">\n  <strong>MonLogo</strong>\n  <div class="menu">\n    <span>Accueil</span>\n    <span>Tarifs</span>\n    <span>Contact</span>\n  </div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -476,7 +536,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Défi : le centrage parfait.</strong> La carte doit se retrouver exactement au CENTRE de la zone grise (horizontalement ET verticalement). Applique la formule magique de la leçon sur la classe <code>.zone</code>.',
       codeDepart: '<style>\n  .zone {\n    background: #e4e7ef;\n    height: 220px;\n\n  }\n  .carte {\n    background: white;\n    padding: 20px 30px;\n    border-radius: 12px;\n  }\n</style>\n\n<div class="zone">\n  <div class="carte">Parfaitement centrée ?</div>\n</div>',
-      indice: 'La formule magique, dans <code>.zone</code> : <code>display: flex; justify-content: center; align-items: center;</code>',
+      indices: [
+        "Centrer horizontalement, tu sais faire. Le vrai sujet ici, c’est le centrage <strong>vertical</strong>, longtemps réputé difficile en CSS.",
+        "Flexbox le règle en une ligne de plus : un axe est géré par <code>justify-content</code>, l’autre par <code>align-items</code>.",
+        "<code>display: flex; justify-content: center; align-items: center;</code> sur <code>.zone</code>."
+      ],
       solution: '<style>\n  .zone {\n    background: #e4e7ef;\n    height: 220px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n  }\n  .carte {\n    background: white;\n    padding: 20px 30px;\n    border-radius: 12px;\n  }\n</style>\n\n<div class="zone">\n  <div class="carte">Parfaitement centrée ?</div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -522,7 +586,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: 'Rends le bouton vivant : ajoute une règle <code>.btn:hover</code> qui passe le fond en <code>#22c55e</code>, et ajoute <code>transition: background-color 0.3s;</code> dans la règle <code>.btn</code>. Puis survole le bouton dans l\'aperçu pour admirer !',
       codeDepart: '<style>\n  .btn {\n    background-color: #4f6df5;\n    color: white;\n    padding: 12px 24px;\n    border: none;\n    border-radius: 10px;\n    font-size: 16px;\n  }\n</style>\n\n<button class="btn">Survole-moi</button>',
-      indice: 'Sous la règle <code>.btn</code>, ajoute un nouveau bloc : <code>.btn:hover { background-color: #22c55e; }</code>. Et dans <code>.btn</code>, la ligne <code>transition: background-color 0.3s;</code>',
+      indices: [
+        "Deux choses à écrire : ce qui se passe au survol, et ce qui rend le changement <em>progressif</em> plutôt que brutal.",
+        "<code>:hover</code> s’accroche au sélecteur et forme une <strong>nouvelle</strong> règle. La transition, elle, se met sur l’état normal — pas sur le survol.",
+        "<code>.btn:hover { background-color: #22c55e; }</code>, et <code>transition: background-color 0.3s;</code> dans <code>.btn</code>."
+      ],
       solution: '<style>\n  .btn {\n    background-color: #4f6df5;\n    color: white;\n    padding: 12px 24px;\n    border: none;\n    border-radius: 10px;\n    font-size: 16px;\n    transition: background-color 0.3s;\n  }\n  .btn:hover {\n    background-color: #22c55e;\n  }\n</style>\n\n<button class="btn">Survole-moi</button>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -540,7 +608,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Entraînement : la carte qui se soulève.</strong> Effet très en vogue : au survol, la carte grossit légèrement. Ajoute à <code>.carte</code> une <code>transition: all 0.3s;</code>, puis une règle <code>.carte:hover</code> avec <code>transform: scale(1.05);</code> (agrandissement de 5%) et un fond <code>#4f6df5</code> avec texte <code>white</code>.',
       codeDepart: '<style>\n  .carte {\n    background: #eef1fe;\n    padding: 24px;\n    border-radius: 14px;\n    width: 220px;\n  }\n</style>\n\n<div class="carte">\n  <h2>Offre Premium</h2>\n  <p>Survole-moi pour voir la magie.</p>\n</div>',
-      indice: 'Dans <code>.carte</code> : <code>transition: all 0.3s;</code>. Puis un nouveau bloc : <code>.carte:hover { transform: scale(1.05); background: #4f6df5; color: white; }</code>',
+      indices: [
+        "Même principe qu’à l’exercice précédent, mais avec plusieurs propriétés qui changent en même temps.",
+        "<code>transition: all</code> anime tout ce qui bouge. Et grossir légèrement, c’est <code>transform: scale(…)</code> — pas une modification de largeur.",
+        "<code>.carte:hover { transform: scale(1.05); … }</code>, avec <code>transition: all 0.3s;</code> sur <code>.carte</code>."
+      ],
       solution: '<style>\n  .carte {\n    background: #eef1fe;\n    padding: 24px;\n    border-radius: 14px;\n    width: 220px;\n    transition: all 0.3s;\n  }\n  .carte:hover {\n    transform: scale(1.05);\n    background: #4f6df5;\n    color: white;\n  }\n</style>\n\n<div class="carte">\n  <h2>Offre Premium</h2>\n  <p>Survole-moi pour voir la magie.</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -609,7 +681,11 @@ window.DATA_CSS = [
       largeur: 380,   // aperçu volontairement étroit : la media query doit pouvoir s'y déclencher
       consigne: 'Les deux cartes sont côte à côte, mais l\'aperçu est un écran étroit : ajoute une media query <code>@media (max-width: 600px)</code> qui passe <code>.colonnes</code> en <code>flex-direction: column;</code>. Tu verras les cartes s\'empiler dans l\'aperçu.',
       codeDepart: '<style>\n  .colonnes {\n    display: flex;\n    gap: 16px;\n  }\n  .carte {\n    background: #eef1fe;\n    padding: 20px;\n    border-radius: 12px;\n    flex: 1;\n  }\n</style>\n\n<div class="colonnes">\n  <div class="carte">Carte A</div>\n  <div class="carte">Carte B</div>\n</div>',
-      indice: 'Après la règle <code>.carte</code>, ajoute :<br><code>@media (max-width: 600px) {<br>&nbsp;&nbsp;.colonnes { flex-direction: column; }<br>}</code><br>Attention aux doubles accolades : la media query englobe la règle.',
+      indices: [
+        "Le CSS écrit jusqu’ici s’applique toujours. Ici, il ne doit s’appliquer qu’en dessous d’une certaine largeur d’écran.",
+        "Une <em>media query</em> est un bloc qui <strong>contient</strong> des règles : il y a donc deux niveaux d’accolades, et deux à refermer à la fin.",
+        "<code>@media (max-width: 600px) { .colonnes { flex-direction: column; } }</code>"
+      ],
       solution: '<style>\n  .colonnes {\n    display: flex;\n    gap: 16px;\n  }\n  .carte {\n    background: #eef1fe;\n    padding: 20px;\n    border-radius: 12px;\n    flex: 1;\n  }\n  @media (max-width: 600px) {\n    .colonnes {\n      flex-direction: column;\n    }\n  }\n</style>\n\n<div class="colonnes">\n  <div class="carte">Carte A</div>\n  <div class="carte">Carte B</div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -625,7 +701,11 @@ window.DATA_CSS = [
       type: 'html',
       consigne: '<strong>Entraînement : l\'image qui déborde.</strong> Cette image de 800px de large déborde de l\'aperçu (regarde la barre de défilement horizontale !). Ajoute la règle réflexe des pros : <code>img { max-width: 100%; }</code> — et le débordement disparaît.',
       codeDepart: '<style>\n\n</style>\n\n<h1>Mon paysage</h1>\n<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'200\'%3E%3Crect width=\'800\' height=\'200\' fill=\'%234f6df5\'/%3E%3Ctext x=\'400\' y=\'110\' fill=\'white\' font-size=\'30\' text-anchor=\'middle\'%3EImage de 800px de large%3C/text%3E%3C/svg%3E" alt="Un paysage bleu très large">\n<p>Ce texte est bien visible, mais l\'image déborde !</p>',
-      indice: 'Dans la balise style : <code>img { max-width: 100%; }</code> — l\'image ne dépassera jamais la largeur de son conteneur.',
+      indices: [
+        "L’image fait 800 px de large, et l’aperçu bien moins. Plutôt que de lui fixer une largeur, il vaut mieux lui poser une <strong>limite</strong>.",
+        "<code>max-width</code> en pourcentage se calcule sur la largeur du conteneur : l’image rétrécira si besoin, mais ne grossira jamais au-delà de sa taille réelle.",
+        "<code>img { max-width: 100%; }</code>"
+      ],
       solution: '<style>\n  img { max-width: 100%; }\n</style>\n\n<h1>Mon paysage</h1>\n<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'200\'%3E%3Crect width=\'800\' height=\'200\' fill=\'%234f6df5\'/%3E%3Ctext x=\'400\' y=\'110\' fill=\'white\' font-size=\'30\' text-anchor=\'middle\'%3EImage de 800px de large%3C/text%3E%3C/svg%3E" alt="Un paysage bleu très large">\n<p>Ce texte est bien visible, mais l\'image déborde !</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;

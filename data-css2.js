@@ -28,7 +28,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: 'La jauge de progression : donne à <code>.barre-fond</code> une largeur de <code>100%</code>, et à <code>.barre-remplie</code> une largeur de <code>75%</code> (75% de son parent, la barre de fond !). Observe : redimensionne mentalement — tout suivrait.',
       codeDepart: '<style>\n  .barre-fond {\n    background: #e4e7ef;\n    border-radius: 20px;\n    height: 24px;\n  }\n  .barre-remplie {\n    background: #22c55e;\n    border-radius: 20px;\n    height: 24px;\n  }\n</style>\n\n<p>Progression du niveau :</p>\n<div class="barre-fond">\n  <div class="barre-remplie"></div>\n</div>',
-      indice: 'Deux ajouts : <code>width: 100%;</code> dans .barre-fond, <code>width: 75%;</code> dans .barre-remplie.',
+      indices: [
+        "Deux largeurs à poser, et leur relation fait tout : la barre intérieure se mesure par rapport à celle qui la contient.",
+        "Un pourcentage se calcule toujours sur le parent. 100 % pour le fond, et la part voulue pour le remplissage.",
+        "<code>width: 100%;</code> dans <code>.barre-fond</code>, <code>width: 75%;</code> dans <code>.barre-remplie</code>."
+      ],
       solution: '<style>\n  .barre-fond {\n    background: #e4e7ef;\n    border-radius: 20px;\n    height: 24px;\n    width: 100%;\n  }\n  .barre-remplie {\n    background: #22c55e;\n    border-radius: 20px;\n    height: 24px;\n    width: 75%;\n  }\n</style>\n\n<p>Progression du niveau :</p>\n<div class="barre-fond">\n  <div class="barre-remplie"></div>\n</div>',
       verifier: function (ctx) {
         const fond = ctx.doc.querySelector('.barre-fond');
@@ -46,7 +50,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: '<strong>Entraînement : le texte en rem.</strong> Convertis les tailles en rem : le <code>h1</code> à <code>2rem</code> (= 32px), le paragraphe à <code>1.25rem</code> (= 20px). Le calcul : pixels voulus ÷ 16.',
       codeDepart: '<style>\n  h1 {\n\n  }\n  p {\n\n  }\n</style>\n\n<h1>Un titre accessible</h1>\n<p>Un texte qui respecte les réglages de l\'utilisateur.</p>',
-      indice: '<code>h1 { font-size: 2rem; }</code> et <code>p { font-size: 1.25rem; }</code> — le navigateur convertit tout seul (2 × 16 = 32, 1.25 × 16 = 20).',
+      indices: [
+        "Le <code>rem</code> ne fixe pas une taille absolue : il se calcule à partir de la taille de base du navigateur.",
+        "Cette base vaut 16 px par défaut. Il suffit donc de diviser la taille voulue par 16.",
+        "<code>h1 { font-size: 2rem; }</code> et <code>p { font-size: 1.25rem; }</code>"
+      ],
       solution: '<style>\n  h1 {\n    font-size: 2rem;\n  }\n  p {\n    font-size: 1.25rem;\n  }\n</style>\n\n<h1>Un titre accessible</h1>\n<p>Un texte qui respecte les réglages de l\'utilisateur.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -62,7 +70,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: '<strong>Défi : la section plein écran.</strong> Crée l\'écran d\'accueil d\'un site : la classe <code>.hero</code> doit occuper <code>100vh</code> (toute la hauteur visible), avec le contenu parfaitement centré (la formule Flexbox !), un fond <code>#1e2432</code> et un texte <code>white</code>.',
       codeDepart: '<style>\n  body { margin: 0; font-family: sans-serif; }\n  .hero {\n\n  }\n</style>\n\n<div class="hero">\n  <h1>Bienvenue dans le grand bain</h1>\n</div>\n\n<p style="padding: 20px">Ce contenu n\'apparaît qu\'en défilant — l\'écran d\'accueil prend TOUTE la hauteur.</p>',
-      indice: 'Cinq déclarations : <code>height: 100vh; display: flex; justify-content: center; align-items: center; background: #1e2432; color: white;</code> (oui ça fait six, la dernière est cadeau).',
+      indices: [
+        "Occuper tout l’écran ne se fait pas en pixels : il existe une unité qui vaut un pourcentage de la hauteur de la fenêtre.",
+        "<code>vh</code> veut dire « viewport height » : <code>100vh</code>, c’est toute la hauteur visible. Le centrage, lui, passe par Flexbox.",
+        "<code>height: 100vh;</code> plus <code>display: flex; justify-content: center; align-items: center;</code>"
+      ],
       solution: '<style>\n  body { margin: 0; font-family: sans-serif; }\n  .hero {\n    height: 100vh;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    background: #1e2432;\n    color: white;\n  }\n</style>\n\n<div class="hero">\n  <h1>Bienvenue dans le grand bain</h1>\n</div>\n\n<p style="padding: 20px">Ce contenu n\'apparaît qu\'en défilant — l\'écran d\'accueil prend TOUTE la hauteur.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -110,7 +122,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: 'Pose le badge « PROMO » en haut à droite de la carte : <code>.carte</code> passe en <code>position: relative;</code>, et <code>.badge</code> en <code>position: absolute;</code> avec <code>top: 8px;</code> et <code>right: 8px;</code>.',
       codeDepart: '<style>\n  .carte {\n    background: #eef1fe;\n    border-radius: 12px;\n    padding: 24px;\n    width: 220px;\n  }\n  .badge {\n    background: #e63946;\n    color: white;\n    padding: 4px 10px;\n    border-radius: 20px;\n    font-size: 13px;\n    display: inline-block;\n  }\n</style>\n\n<div class="carte">\n  <span class="badge">PROMO</span>\n  <h2>Casque audio</h2>\n  <p>59,99 €</p>\n</div>',
-      indice: 'Dans .carte : <code>position: relative;</code>. Dans .badge : <code>position: absolute; top: 8px; right: 8px;</code>',
+      indices: [
+        "Un élément en position absolue se place par rapport à son ancêtre positionné le plus proche. Sans ancêtre, il se cale sur la page entière.",
+        "C’est pourquoi le parent doit passer en <code>relative</code> : il devient la référence. L’enfant, lui, passe en <code>absolute</code>.",
+        "<code>position: relative;</code> dans <code>.carte</code> ; <code>position: absolute; top: 8px; right: 8px;</code> dans <code>.badge</code>."
+      ],
       solution: '<style>\n  .carte {\n    background: #eef1fe;\n    border-radius: 12px;\n    padding: 24px;\n    width: 220px;\n    position: relative;\n  }\n  .badge {\n    background: #e63946;\n    color: white;\n    padding: 4px 10px;\n    border-radius: 20px;\n    font-size: 13px;\n    display: inline-block;\n    position: absolute;\n    top: 8px;\n    right: 8px;\n  }\n</style>\n\n<div class="carte">\n  <span class="badge">PROMO</span>\n  <h2>Casque audio</h2>\n  <p>59,99 €</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -129,7 +145,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: '<strong>Entraînement : le bandeau épinglé.</strong> Le bandeau cookie doit rester collé en BAS de la fenêtre, même en défilant : donne à <code>.bandeau</code> une <code>position: fixed;</code>, <code>bottom: 0;</code>, <code>left: 0;</code> et <code>width: 100%;</code>. Fais défiler l\'aperçu pour vérifier qu\'il ne bouge pas !',
       codeDepart: '<style>\n  body { margin: 0; font-family: sans-serif; }\n  .bandeau {\n    background: #1e2432;\n    color: white;\n    padding: 14px 20px;\n  }\n</style>\n\n<h1>Un long article</h1>\n<p>Paragraphe 1...</p><p>Paragraphe 2...</p><p>Paragraphe 3...</p>\n<p>Paragraphe 4...</p><p>Paragraphe 5...</p><p>Paragraphe 6...</p>\n<p>Paragraphe 7...</p><p>Paragraphe 8...</p><p>Paragraphe 9...</p>\n\n<div class="bandeau">🍪 Ce site utilise des cookies (imaginaires).</div>',
-      indice: 'Quatre déclarations dans .bandeau : <code>position: fixed; bottom: 0; left: 0; width: 100%;</code>',
+      indices: [
+        "Le bandeau ne doit pas bouger quand on fait défiler : ce n’est donc ni <code>relative</code>, ni <code>absolute</code>.",
+        "<code>fixed</code> le cale sur la fenêtre, pas sur le document. Il faut ensuite lui dire où, et lui donner une largeur.",
+        "<code>position: fixed; bottom: 0; left: 0; width: 100%;</code>"
+      ],
       solution: '<style>\n  body { margin: 0; font-family: sans-serif; }\n  .bandeau {\n    background: #1e2432;\n    color: white;\n    padding: 14px 20px;\n    position: fixed;\n    bottom: 0;\n    left: 0;\n    width: 100%;\n  }\n</style>\n\n<h1>Un long article</h1>\n<p>Paragraphe 1...</p><p>Paragraphe 2...</p><p>Paragraphe 3...</p>\n<p>Paragraphe 4...</p><p>Paragraphe 5...</p><p>Paragraphe 6...</p>\n<p>Paragraphe 7...</p><p>Paragraphe 8...</p><p>Paragraphe 9...</p>\n\n<div class="bandeau">🍪 Ce site utilise des cookies (imaginaires).</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -194,7 +214,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: 'Range les 6 photos en galerie : active <code>display: grid;</code> sur <code>.galerie</code>, avec <code>grid-template-columns: 1fr 1fr 1fr;</code> (3 colonnes égales) et un <code>gap</code> de <code>12px</code>.',
       codeDepart: '<style>\n  .galerie {\n\n  }\n  .photo {\n    background: #4f6df5;\n    height: 80px;\n    border-radius: 10px;\n    color: white;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n</style>\n\n<div class="galerie">\n  <div class="photo">1</div>\n  <div class="photo">2</div>\n  <div class="photo">3</div>\n  <div class="photo">4</div>\n  <div class="photo">5</div>\n  <div class="photo">6</div>\n</div>',
-      indice: 'Trois déclarations dans .galerie : <code>display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;</code>',
+      indices: [
+        "Flexbox range sur une ligne ; ici on veut une vraie grille, avec des colonnes définies d’avance.",
+        "<code>display: grid</code> sur le parent, puis <code>grid-template-columns</code> pour décrire les colonnes. <code>1fr</code> veut dire « une part égale ».",
+        "<code>display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;</code>"
+      ],
       solution: '<style>\n  .galerie {\n    display: grid;\n    grid-template-columns: 1fr 1fr 1fr;\n    gap: 12px;\n  }\n  .photo {\n    background: #4f6df5;\n    height: 80px;\n    border-radius: 10px;\n    color: white;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n</style>\n\n<div class="galerie">\n  <div class="photo">1</div>\n  <div class="photo">2</div>\n  <div class="photo">3</div>\n  <div class="photo">4</div>\n  <div class="photo">5</div>\n  <div class="photo">6</div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -214,7 +238,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: '<strong>Entraînement : la mise en page d\'application.</strong> Reproduis la structure de ce logiciel : <code>.app</code> en grille de 2 colonnes — un menu FIXE de <code>150px</code> et un contenu qui prend le RESTE (<code>1fr</code>).',
       codeDepart: '<style>\n  body { margin: 0; font-family: sans-serif; }\n  .app {\n    height: 100vh;\n\n  }\n  .menu { background: #1e2432; color: white; padding: 16px; }\n  .contenu { background: #f6f7fb; padding: 16px; }\n</style>\n\n<div class="app">\n  <div class="menu">Menu</div>\n  <div class="contenu"><h1>Contenu principal</h1></div>\n</div>',
-      indice: 'Dans .app : <code>display: grid; grid-template-columns: 150px 1fr;</code>',
+      indices: [
+        "Deux colonnes de natures différentes : l’une a une largeur fixe, l’autre prend ce qui reste.",
+        "On peut mélanger les unités dans <code>grid-template-columns</code> : un pixel fixe, puis <code>1fr</code> pour le reste.",
+        "<code>display: grid; grid-template-columns: 150px 1fr;</code>"
+      ],
       solution: '<style>\n  body { margin: 0; font-family: sans-serif; }\n  .app {\n    height: 100vh;\n    display: grid;\n    grid-template-columns: 150px 1fr;\n  }\n  .menu { background: #1e2432; color: white; padding: 16px; }\n  .contenu { background: #f6f7fb; padding: 16px; }\n</style>\n\n<div class="app">\n  <div class="menu">Menu</div>\n  <div class="contenu"><h1>Contenu principal</h1></div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -282,7 +310,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: 'Fais flotter la carte : ajoute-lui une ombre douce <code>box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);</code> — puis compare avec l\'aperçu de départ (Recommencer) pour mesurer l\'effet.',
       codeDepart: '<style>\n  body { background: #f6f7fb; padding: 30px; font-family: sans-serif; }\n  .carte {\n    background: white;\n    border-radius: 14px;\n    padding: 24px;\n    width: 220px;\n  }\n</style>\n\n<div class="carte">\n  <h2>Carte plate</h2>\n  <p>Fais-moi décoller du fond !</p>\n</div>',
-      indice: 'Une seule ligne dans .carte : <code>box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);</code>',
+      indices: [
+        "Une ombre se décrit par quatre valeurs : deux décalages, un flou, et une couleur.",
+        "Ici le décalage horizontal est nul et le vertical positif : l’ombre tombe vers le bas, comme si la lumière venait d’en haut.",
+        "<code>box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);</code>"
+      ],
       solution: '<style>\n  body { background: #f6f7fb; padding: 30px; font-family: sans-serif; }\n  .carte {\n    background: white;\n    border-radius: 14px;\n    padding: 24px;\n    width: 220px;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\n  }\n</style>\n\n<div class="carte">\n  <h2>Carte plate</h2>\n  <p>Fais-moi décoller du fond !</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -298,7 +330,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: '<strong>Entraînement : la bannière en dégradé.</strong> Donne à <code>.banniere</code> un fond en dégradé <code>linear-gradient(135deg, #4f6df5, #7a5df5)</code>, un texte <code>white</code>, un <code>padding</code> de <code>30px</code> et des coins arrondis <code>16px</code> — la copie conforme de l\'accueil de ce logiciel !',
       codeDepart: '<style>\n  .banniere {\n\n  }\n</style>\n\n<div class="banniere">\n  <h1>Apprendre à coder</h1>\n  <p>de A à Z, sans internet</p>\n</div>',
-      indice: '<code>background: linear-gradient(135deg, #4f6df5, #7a5df5); color: white; padding: 30px; border-radius: 16px;</code>',
+      indices: [
+        "Un dégradé n’est pas une couleur : c’est une <strong>image</strong> générée. Il se pose donc là où l’on met un fond.",
+        "<code>linear-gradient</code> prend d’abord un angle, puis les couleurs à traverser.",
+        "<code>background: linear-gradient(135deg, #4f6df5, #7a5df5);</code> plus la couleur de texte et le padding."
+      ],
       solution: '<style>\n  .banniere {\n    background: linear-gradient(135deg, #4f6df5, #7a5df5);\n    color: white;\n    padding: 30px;\n    border-radius: 16px;\n  }\n</style>\n\n<div class="banniere">\n  <h1>Apprendre à coder</h1>\n  <p>de A à Z, sans internet</p>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -315,7 +351,11 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
       type: 'html',
       consigne: '<strong>Défi : le voile sur image.</strong> Le texte est illisible sur l\'image chargée. La solution des pros : un voile semi-transparent. Donne à <code>.voile</code> un fond <code>rgba(30, 36, 50, 0.65)</code>, la hauteur <code>100%</code>, et le centrage Flexbox complet — le texte blanc redeviendra lisible sur n\'importe quelle image.',
       codeDepart: '<style>\n  .visuel {\n    background: repeating-linear-gradient(45deg, #e9c46a, #e9c46a 12px, #2a9d8f 12px, #2a9d8f 24px);\n    border-radius: 14px;\n    height: 160px;\n    overflow: hidden;\n  }\n  .voile {\n    color: white;\n    font-size: 22px;\n    font-weight: bold;\n\n  }\n</style>\n\n<div class="visuel">\n  <div class="voile">Texte à sauver !</div>\n</div>',
-      indice: 'Dans .voile : <code>background: rgba(30, 36, 50, 0.65); height: 100%; display: flex; justify-content: center; align-items: center;</code>',
+      indices: [
+        "Le texte est illisible parce que l’image est trop claire. On ne touche pas à l’image : on glisse un voile entre elle et le texte.",
+        "Une couleur en <code>rgba</code> a une quatrième valeur : son opacité. À 0.65, on devine encore l’image dessous.",
+        "<code>background: rgba(30, 36, 50, 0.65);</code> sur <code>.voile</code>, avec Flexbox pour centrer."
+      ],
       solution: '<style>\n  .visuel {\n    background: repeating-linear-gradient(45deg, #e9c46a, #e9c46a 12px, #2a9d8f 12px, #2a9d8f 24px);\n    border-radius: 14px;\n    height: 160px;\n    overflow: hidden;\n  }\n  .voile {\n    color: white;\n    font-size: 22px;\n    font-weight: bold;\n    background: rgba(30, 36, 50, 0.65);\n    height: 100%;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n  }\n</style>\n\n<div class="visuel">\n  <div class="voile">Texte à sauver !</div>\n</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -357,7 +397,11 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
       type: 'html',
       consigne: 'Zèbre le tableau des scores : avec <code>nth-child</code>, colore les lignes impaires (<code>odd</code>) du tableau en <code>#eef1fe</code>. Aucune classe à ajouter — tout se joue dans le CSS !',
       codeDepart: '<style>\n  table { border-collapse: collapse; width: 100%; }\n  td, th { padding: 8px 12px; text-align: left; }\n\n</style>\n\n<table>\n  <tr><th>Joueur</th><th>Score</th></tr>\n  <tr><td>Léa</td><td>1250</td></tr>\n  <tr><td>Tom</td><td>980</td></tr>\n  <tr><td>Nina</td><td>1430</td></tr>\n  <tr><td>Sam</td><td>760</td></tr>\n</table>',
-      indice: 'Une seule règle : <code>tr:nth-child(odd) { background: #eef1fe; }</code>',
+      indices: [
+        "Une seule règle doit viser une ligne sur deux. Il existe un sélecteur qui sait compter les enfants.",
+        "<code>:nth-child()</code> accepte <code>odd</code> (impairs) et <code>even</code> (pairs), en plus des nombres.",
+        "<code>tr:nth-child(odd) { background: #eef1fe; }</code>"
+      ],
       solution: '<style>\n  table { border-collapse: collapse; width: 100%; }\n  td, th { padding: 8px 12px; text-align: left; }\n\n  tr:nth-child(odd) { background: #eef1fe; }\n</style>\n\n<table>\n  <tr><th>Joueur</th><th>Score</th></tr>\n  <tr><td>Léa</td><td>1250</td></tr>\n  <tr><td>Tom</td><td>980</td></tr>\n  <tr><td>Nina</td><td>1430</td></tr>\n  <tr><td>Sam</td><td>760</td></tr>\n</table>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -376,7 +420,11 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
       type: 'html',
       consigne: '<strong>Entraînement : les flèches décoratives.</strong> Avec <code>::before</code>, ajoute automatiquement <code>→ </code> (flèche + espace) devant chaque élément de classe <code>.etape</code>, en couleur <code>#4f6df5</code>. La flèche : copie-la d\'ici → ou tape <code>-></code> stylisé... non, copie-la !',
       codeDepart: '<style>\n  .etape { list-style: none; padding: 4px 0; }\n\n</style>\n\n<ul style="padding: 0">\n  <li class="etape">Préchauffer le four</li>\n  <li class="etape">Étaler la pâte</li>\n  <li class="etape">Garnir et enfourner</li>\n</ul>',
-      indice: '<code>.etape::before { content: "→ "; color: #4f6df5; }</code> — les deux-points doublés, et content entre guillemets.',
+      indices: [
+        "La flèche n’est pas dans le HTML, et n’a pas à y être : c’est une décoration, donc c’est le CSS qui la fabrique.",
+        "<code>::before</code> insère un contenu avant l’élément. Deux-points <strong>doublés</strong>, et la propriété <code>content</code> est obligatoire.",
+        "<code>.etape::before { content: \"→ \"; color: #4f6df5; }</code>"
+      ],
       solution: '<style>\n  .etape { list-style: none; padding: 4px 0; }\n\n  .etape::before {\n    content: "→ ";\n    color: #4f6df5;\n  }\n</style>\n\n<ul style="padding: 0">\n  <li class="etape">Préchauffer le four</li>\n  <li class="etape">Étaler la pâte</li>\n  <li class="etape">Garnir et enfourner</li>\n</ul>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -447,7 +495,11 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
       type: 'html',
       consigne: 'Fais battre le cœur : définis un bloc <code>@keyframes pulsation</code> (3 étapes : scale 1 → 1.2 → 1) et applique-le au <code>.coeur</code> avec <code>animation: pulsation 1s infinite;</code>.',
       codeDepart: '<style>\n  .coeur {\n    font-size: 60px;\n    display: inline-block;\n\n  }\n\n  /* Le @keyframes ici */\n\n</style>\n\n<div class="coeur">❤️</div>',
-      indice: '<code>@keyframes pulsation { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }</code> puis dans .coeur : <code>animation: pulsation 1s infinite;</code>',
+      indices: [
+        "Une animation s’écrit en deux temps : décrire les étapes, puis l’appliquer à un élément.",
+        "<code>@keyframes</code> nomme l’animation et décrit ses étapes en pourcentages. La propriété <code>animation</code>, elle, la déclenche.",
+        "<code>@keyframes pulsation { 0% {…} 50% {…} 100% {…} }</code>, puis <code>animation: pulsation …;</code>"
+      ],
       solution: '<style>\n  .coeur {\n    font-size: 60px;\n    display: inline-block;\n    animation: pulsation 1s infinite;\n  }\n\n  @keyframes pulsation {\n    0%   { transform: scale(1); }\n    50%  { transform: scale(1.2); }\n    100% { transform: scale(1); }\n  }\n</style>\n\n<div class="coeur">❤️</div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -465,7 +517,11 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
       type: 'html',
       consigne: '<strong>Entraînement : le spinner de chargement.</strong> L\'anneau est immobile. Anime-le : un <code>@keyframes tourne</code> qui va <code>to { transform: rotate(360deg); }</code>, appliqué avec <code>animation: tourne 1s linear infinite;</code>.',
       codeDepart: '<style>\n  .spinner {\n    width: 50px;\n    height: 50px;\n    border: 6px solid #e4e7ef;\n    border-top-color: #4f6df5;\n    border-radius: 50%;\n\n  }\n\n</style>\n\n<p>Chargement en cours...</p>\n<div class="spinner"></div>',
-      indice: '<code>@keyframes tourne { to { transform: rotate(360deg); } }</code> puis <code>animation: tourne 1s linear infinite;</code> dans .spinner.',
+      indices: [
+        "Une rotation sans fin : l’animation doit se répéter indéfiniment, et à vitesse constante.",
+        "Quand il n’y a qu’une étape d’arrivée, <code>to</code> suffit. Et trois mots comptent dans la déclaration : la durée, <code>linear</code>, et <code>infinite</code>.",
+        "<code>@keyframes tourne { to { transform: rotate(360deg); } }</code> puis <code>animation: tourne 1s linear infinite;</code>"
+      ],
       solution: '<style>\n  .spinner {\n    width: 50px;\n    height: 50px;\n    border: 6px solid #e4e7ef;\n    border-top-color: #4f6df5;\n    border-radius: 50%;\n    animation: tourne 1s linear infinite;\n  }\n\n  @keyframes tourne {\n    to { transform: rotate(360deg); }\n  }\n</style>\n\n<p>Chargement en cours...</p>\n<div class="spinner"></div>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -534,7 +590,11 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
       type: 'html',
       consigne: 'Centralise le thème : déclare dans <code>:root</code> deux variables — <code>--marque</code> valant <code>#e63946</code> et <code>--rayon</code> valant <code>14px</code> — puis utilise-les avec <code>var()</code> : le fond du bouton et la couleur du titre prennent <code>--marque</code>, le bouton prend le rayon.',
       codeDepart: '<style>\n  /* :root ici */\n\n  h1 {\n    /* couleur via var() */\n  }\n  .bouton {\n    color: white;\n    padding: 12px 24px;\n    border: none;\n    font-size: 16px;\n    /* fond et rayon via var() */\n  }\n</style>\n\n<h1>Boutique du sport</h1>\n<button class="bouton">Voir les offres</button>',
-      indice: '<code>:root { --marque: #e63946; --rayon: 14px; }</code> puis <code>h1 { color: var(--marque); }</code> et dans .bouton : <code>background: var(--marque); border-radius: var(--rayon);</code>',
+      indices: [
+        "Une couleur répétée à trois endroits est une couleur qu’on oubliera de changer quelque part. Il faut la déclarer une seule fois.",
+        "Les variables se déclarent dans <code>:root</code>, avec deux tirets devant leur nom, et se relisent avec <code>var(…)</code>.",
+        "<code>:root { --marque: #e63946; --rayon: 14px; }</code> puis <code>color: var(--marque);</code>"
+      ],
       solution: '<style>\n  :root {\n    --marque: #e63946;\n    --rayon: 14px;\n  }\n\n  h1 {\n    color: var(--marque);\n  }\n  .bouton {\n    color: white;\n    padding: 12px 24px;\n    border: none;\n    font-size: 16px;\n    background: var(--marque);\n    border-radius: var(--rayon);\n  }\n</style>\n\n<h1>Boutique du sport</h1>\n<button class="bouton">Voir les offres</button>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -554,7 +614,11 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
       type: 'html',
       consigne: '<strong>Entraînement : le combat de la cascade.</strong> Le paragraphe est ciblé par TROIS règles de couleurs différentes (balise, classe, id) et il s\'affiche... rouge (l\'id gagne). Sans toucher aux règles existantes, fais-le passer en <code>green</code> en modifiant la SEULE règle qui peut gagner : celle de l\'id.',
       codeDepart: '<style>\n  p { color: gray; }\n  .message { color: orange; }\n  #special { color: red; }\n</style>\n\n<p class="message" id="special">De quelle couleur vais-je finir ?</p>',
-      indice: 'La hiérarchie : id &gt; classe &gt; balise. Seul <code>#special</code> peut l\'emporter — change SA couleur en green.',
+      indices: [
+        "Trois règles visent le même paragraphe, et une seule gagne. Ce n’est pas l’ordre qui décide, mais la <strong>précision</strong> du sélecteur.",
+        "La hiérarchie est toujours la même : un id l’emporte sur une classe, qui l’emporte sur une balise. Modifier une règle perdante ne servira à rien.",
+        "Seul <code>#special</code> peut l’emporter : c’est SA couleur qu’il faut changer."
+      ],
       solution: '<style>\n  p { color: gray; }\n  .message { color: orange; }\n  #special { color: green; }\n</style>\n\n<p class="message" id="special">De quelle couleur vais-je finir ?</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
