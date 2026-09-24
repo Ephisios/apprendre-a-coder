@@ -78,9 +78,14 @@ Et dans une **chasse au bug**, l'éditeur se tait complètement : trouver la fau
 ### L'aide monte marche par marche
 
 Rien n'est proposé avant d'avoir essayé. Premier échec : un indice, qui dit **où regarder**, pas quoi
-écrire. Sur les exercices difficiles, l'indice se donne en **trois paliers** — où regarder, comment
-s'y prendre, puis presque la réponse — et il faut avoir réessayé entre chaque. La solution n'arrive
-qu'une fois les paliers épuisés.
+écrire. Puis un deuxième, qui dit comment s'y prendre. Puis un troisième, qui donne presque la
+réponse — et il faut avoir réessayé entre chaque. La solution n'arrive qu'une fois les paliers
+épuisés.
+
+**Les 425 exercices corrigés sont tous à trois paliers**, dans les sept langages. Le premier nomme
+le piège propre à l'exercice — qu'une règle CSS fausse est ignorée en silence, qu'une balise jamais
+refermée met en gras tout ce qui suit, que le premier élément d'une liste Python ne porte pas le
+numéro 1.
 
 ### Un bac à sable, pas une page de cours
 

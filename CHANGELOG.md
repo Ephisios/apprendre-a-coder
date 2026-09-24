@@ -6,6 +6,42 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.2.0 — 2026-09-24
+
+Une seule chose, mais partout : **les trois paliers d'indice couvrent désormais le cours entier**.
+
+### Changé
+
+- **425 exercices sur 425** passent de l'indice unique aux trois paliers — où regarder, comment s'y
+  prendre, puis presque la réponse. La version précédente en avait converti dix, à titre d'essai.
+  Restaient 415 exercices où l'on tombait d'une phrase allusive à la solution complète, sans rien
+  entre les deux.
+
+  Le premier palier ne paraphrase pas la consigne : il nomme le piège de l'exercice.
+
+  En CSS, qu'une règle fausse n'affiche aucune erreur et se contente d'être ignorée en silence ;
+  qu'un `z-index` parfaitement écrit peut ne rien faire, faute d'une condition d'existence. En HTML,
+  qu'une balise jamais refermée met en gras tout ce qui suit ; qu'un `label` et son champ peuvent
+  coexister sans que cliquer sur l'un active l'autre ; qu'une image qui décore et une image qui
+  informe n'ont pas le même `alt`. En Python, que `range()` n'atteint jamais sa borne de fin ; que
+  le premier élément d'une liste ne porte pas le numéro 1 ; que réclamer une clé absente avec des
+  crochets fait planter le programme. En C, qu'écrire *dans* le pointeur et écrire dans la case au
+  bout du pointeur ne sont pas le même geste.
+
+- Le champ `indice` (chaîne unique) reste lu par le moteur, mais plus aucun exercice ne l'utilise.
+
+### Pour qui reprend le projet
+
+```
+362 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
+358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
+ 63 correcteurs de mise en page   — 0 échec, 0 complaisant
+ 77 vérifications d'interface     — 0 échec
+425 exercices à paliers           — 0 à indice unique
+```
+
+---
+
 ## 3.1.0 — 2026-09-23
 
 Une version consacrée à deux choses : **ce que l'élève voit quand il se trompe**, et **ce qui
@@ -18,7 +54,7 @@ garantit que les corrections sont justes**.
   faut avoir réessayé avec le précédent. La solution n'apparaît qu'une fois les paliers épuisés.
   Entre « où regarder » et « voici la réponse », il n'y avait rien — et c'est là qu'on abandonne.
   Dix exercices convertis, choisis où l'on décroche vraiment : pointeurs en C, compréhensions
-  Python, classes Java, `HAVING` en SQL.
+  Python, classes Java, `HAVING` en SQL. (Les 415 autres ont suivi en 3.2.0.)
 - **Chaque exercice annonce sa nature** — Exercice, Entraînement, Défi, Étape, Chasse au bug — avec
   une explication au survol.
 - **Une page « Réviser »** (bouton 🔄) qui repropose les exercices déjà réussis ayant coûté le plus
