@@ -40,7 +40,11 @@ int main() {
       type: 'c',
       consigne: 'Écris le programme C complet qui affiche <code>Bonjour le monde !</code>. Il te faut le <code>int main()</code>, le <code>printf</code> et le <code>return 0;</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: 'À l\'intérieur des accolades de main : <code>printf("Bonjour le monde !\\n");</code> — sans oublier le point-virgule.',
+      indices: [
+        "Un programme C a toujours la même carcasse, et elle est déjà sous tes yeux dans la leçon. Il ne manque qu’une instruction à l’intérieur des accolades.",
+        "<code>printf</code> affiche ; le <code>\\n</code> à la fin du texte passe à la ligne. Et en C, chaque instruction se termine par un point-virgule — sans exception.",
+        "<code>printf(\"Bonjour le monde !\\n\");</code> entre les accolades de <code>main</code>."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    printf("Bonjour le monde !\\n");\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -56,7 +60,11 @@ int main() {
       type: 'c',
       consigne: '<strong>Entraînement :</strong> affiche trois lignes — <code>Ligne 1</code>, <code>Ligne 2</code>, <code>Ligne 3</code>. Attention : c\'est le <code>\\n</code> qui crée le passage à la ligne, pas le printf lui-même.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: 'Trois <code>printf</code>, chacun se terminant par <code>\\n</code> à l\'intérieur des guillemets.',
+      indices: [
+        "Le passage à la ligne n’est pas automatique en C : ce n’est pas <code>printf</code> qui le crée, c’est un caractère que tu écris toi-même.",
+        "Ce caractère est <code>\\n</code>, et il se place <strong>à l’intérieur</strong> des guillemets, à la fin du texte.",
+        "Trois <code>printf</code>, chacun terminé par <code>\\n</code> avant le guillemet fermant."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    printf("Ligne 1\\n");\n    printf("Ligne 2\\n");\n    printf("Ligne 3\\n");\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -132,7 +140,11 @@ printf("J'ai %d ans et je mesure %.2f m\\n", age, taille);</pre>
       type: 'c',
       consigne: 'Déclare un <code>int</code> nommé <code>age</code> valant 30, puis affiche <code>J\'ai 30 ans</code> en utilisant <code>%d</code> (pas en écrivant 30 à la main dans le texte !).',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: '<code>int age = 30;</code> puis <code>printf("J\'ai %d ans\\n", age);</code>',
+      indices: [
+        "Le texte et la valeur sont deux choses séparées : le <code>printf</code> laisse un <strong>trou</strong> dans la phrase, et la valeur arrive après.",
+        "Le trou pour un entier s’écrit <code>%d</code>. La variable se passe en second argument, après une virgule.",
+        "<code>printf(\"J’ai %d ans\\n\", age);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int age = 30;\n    printf("J\'ai %d ans\\n", age);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -147,7 +159,11 @@ printf("J'ai %d ans et je mesure %.2f m\\n", age, taille);</pre>
       type: 'c',
       consigne: '<strong>Entraînement :</strong> déclare un <code>double prix</code> valant <code>19.99</code> et affiche <code>Prix : 19.99 euros</code> avec exactement <strong>deux décimales</strong>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: 'Le format à deux décimales s\'écrit <code>%.2f</code> : <code>printf("Prix : %.2f euros\\n", prix);</code>',
+      indices: [
+        "Un nombre à virgule n’a pas le même trou qu’un entier — et il faut en plus préciser combien de décimales afficher.",
+        "Le trou d’un <code>double</code> est <code>%f</code>. Un point suivi d’un chiffre, glissé entre les deux, fixe le nombre de décimales.",
+        "<code>printf(\"Prix : %.2f euros\\n\", prix);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    double prix = 19.99;\n    printf("Prix : %.2f euros\\n", prix);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -163,7 +179,11 @@ printf("J'ai %d ans et je mesure %.2f m\\n", age, taille);</pre>
       type: 'c',
       consigne: '<strong>Défi :</strong> déclare les trois types à la fois — un <code>int</code> <code>annee</code> (2024), un <code>double</code> <code>note</code> (8.5) et un <code>char</code> <code>categorie</code> (<code>\'A\'</code>) — et affiche <code>2024 - 8.5 - A</code> en une seule ligne de printf.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: 'Trois trous dans le même texte : <code>printf("%d - %.1f - %c\\n", annee, note, categorie);</code> — le char va entre apostrophes simples.',
+      indices: [
+        "Trois valeurs de trois types différents dans un seul <code>printf</code> : chacune a son propre trou, et l’ordre compte.",
+        "<code>%d</code> pour l’entier, <code>%.1f</code> pour le décimal, <code>%c</code> pour le caractère. Les variables suivent dans le même ordre que les trous.",
+        "<code>printf(\"%d - %.1f - %c\\n\", annee, note, categorie);</code> — le <code>char</code> se déclare entre apostrophes simples."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int annee = 2024;\n    double note = 8.5;\n    char categorie = \'A\';\n    printf("%d - %.1f - %c\\n", annee, note, categorie);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -211,7 +231,11 @@ n--;         // enlève 1</pre>
       type: 'c',
       consigne: 'Affiche le résultat de <code>7 / 2</code> avec deux <code>int</code>, puis le vrai résultat décimal sur une seconde ligne. Tu dois voir <code>3</code> puis <code>3.50</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int a = 7;\n    int b = 2;\n    \n    return 0;\n}',
-      indice: 'Première ligne : <code>printf("%d\\n", a / b);</code>. Seconde : force le décimal avec <code>(double)a / b</code> et affiche-le en <code>%.2f</code>.',
+      indices: [
+        "Deux <code>int</code> divisés donnent un <code>int</code> : la partie décimale est jetée avant même que tu puisses la voir.",
+        "Pour obtenir le vrai résultat, il faut qu’au moins l’un des deux soit un décimal <strong>au moment de la division</strong>. On force cela avec une conversion.",
+        "<code>printf(\"%d\\n\", a / b);</code> puis <code>printf(\"%.2f\\n\", (double)a / b);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int a = 7;\n    int b = 2;\n    printf("%d\\n", a / b);\n    printf("%.2f\\n", (double)a / b);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -226,7 +250,11 @@ n--;         // enlève 1</pre>
       type: 'c',
       consigne: '<strong>Entraînement :</strong> 17 bonbons, 5 enfants. Affiche la part de chacun puis le reste — deux lignes, <code>3</code> puis <code>2</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int bonbons = 17;\n    int enfants = 5;\n    \n    return 0;\n}',
-      indice: 'En C, la division de deux int donne déjà la part entière : <code>bonbons / enfants</code>. Le reste s\'obtient avec <code>%</code> — mais attention, dans un printf il faut écrire <code>%%</code> pour afficher le symbole lui-même.',
+      indices: [
+        "Ici, la division entière n’est pas un piège : c’est exactement ce qu’on veut. Reste à obtenir ce qui ne se partage pas.",
+        "<code>/</code> donne la part, <code>%</code> donne le reste. Mais attention dans un <code>printf</code> : le <code>%</code> y a déjà un sens.",
+        "Pour afficher un vrai signe pourcent, on écrit <code>%%</code>. Le reste, lui, s’obtient avec <code>bonbons % enfants</code>."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int bonbons = 17;\n    int enfants = 5;\n    printf("%d\\n", bonbons / enfants);\n    printf("%d\\n", bonbons % enfants);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -241,7 +269,11 @@ n--;         // enlève 1</pre>
       type: 'c',
       consigne: '<strong>Chasse au bug :</strong> ce programme calcule une moyenne et affiche <code>0.00</code> au lieu de <code>13.50</code>. Lance-le pour voir, puis répare-le sans changer les valeurs.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int total = 27;\n    int nombre = 2;\n    double moyenne = total / nombre;\n    printf("%.2f\\n", moyenne);\n    return 0;\n}',
-      indice: 'La division <code>total / nombre</code> se fait ENTRE DEUX INT avant même d\'être rangée dans le double : 27/2 donne 13, la décimale est déjà perdue. Convertis avant : <code>(double)total / nombre</code>.',
+      indices: [
+        "<code>0.00</code>, ce n’est pas un problème d’affichage : la décimale a déjà été perdue avant d’arriver dans le <code>double</code>.",
+        "La division se fait entre deux <code>int</code>, donc 27/2 vaut 13 — et c’est 13 qu’on range dans le <code>double</code>. La conversion arrive trop tard.",
+        "Il faut convertir <strong>avant</strong> de diviser : <code>(double)total / nombre</code>."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int total = 27;\n    int nombre = 2;\n    double moyenne = (double)total / nombre;\n    printf("%.2f\\n", moyenne);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -297,7 +329,11 @@ if (note >= 10) {
       type: 'c',
       consigne: 'La note vaut 15. Écris un <code>if</code>/<code>else</code> : si <code>note >= 10</code>, affiche <code>Reçu</code>, sinon <code>Recalé</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int note = 15;\n    \n    return 0;\n}',
-      indice: '<code>if (note >= 10) { printf("Reçu\\n"); } else { printf("Recalé\\n"); }</code>',
+      indices: [
+        "La condition va entre parenthèses, et chaque branche entre accolades. Contrairement à Python, le décalage ne compte pas : ce sont les accolades qui décident.",
+        "« Supérieur ou égal » s’écrit <code>&gt;=</code>. Le <code>else</code> se place après l’accolade fermante du <code>if</code>.",
+        "<code>if (note &gt;= 10) { printf(\"Reçu\\n\"); } else { printf(\"Recalé\\n\"); }</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int note = 15;\n    if (note >= 10) {\n        printf("Reçu\\n");\n    } else {\n        printf("Recalé\\n");\n    }\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -313,7 +349,11 @@ if (note >= 10) {
       type: 'c',
       consigne: '<strong>Entraînement :</strong> avec <code>note = 14</code>, affiche la mention exacte : <code>Très bien</code> si ≥ 16, <code>Bien</code> si ≥ 12, <code>Passable</code> si ≥ 10, sinon <code>Insuffisant</code>. Une seule ligne doit s\'afficher.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int note = 14;\n    \n    return 0;\n}',
-      indice: 'Enchaîne avec <code>else if</code> : dès qu\'une condition est vraie, les suivantes sont ignorées. L\'ordre compte — du plus exigeant au moins exigeant.',
+      indices: [
+        "Quatre cas, et l’ordre décide de tout. Demande-toi ce qui arriverait à un 17 si tu testais d’abord « au moins 10 ».",
+        "Dès qu’une condition est vraie, les suivantes sont ignorées. Il faut donc commencer par le seuil le plus exigeant, et descendre.",
+        "<code>if (note &gt;= 16)</code>, puis <code>else if (note &gt;= 12)</code>, <code>&gt;= 10</code>, et un <code>else</code> final."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int note = 14;\n    if (note >= 16) {\n        printf("Très bien\\n");\n    } else if (note >= 12) {\n        printf("Bien\\n");\n    } else if (note >= 10) {\n        printf("Passable\\n");\n    } else {\n        printf("Insuffisant\\n");\n    }\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -328,7 +368,11 @@ if (note >= 10) {
       type: 'c',
       consigne: '<strong>Chasse au bug célèbre :</strong> ce programme affiche « Majeur » alors que l\'âge est 15. Trouve pourquoi et corrige.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int age = 15;\n    if (age = 18) {\n        printf("Majeur\\n");\n    } else {\n        printf("Mineur\\n");\n    }\n    return 0;\n}',
-      indice: 'Regarde très attentivement le signe dans la condition. Un seul <code>=</code> range une valeur ; il en faut <strong>deux</strong> pour comparer.',
+      indices: [
+        "Le programme affiche « Majeur » alors que l’âge est 15 : la condition est donc vraie alors qu’elle ne devrait pas l’être. Regarde-la de très près.",
+        "Un seul <code>=</code> <strong>range</strong> une valeur dans la variable, et c’est le résultat de ce rangement qui sert de condition. Pour comparer, il en faut deux.",
+        "<code>if (age == 18)</code> — deux signes égal, collés."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int age = 15;\n    if (age == 18) {\n        printf("Majeur\\n");\n    } else {\n        printf("Mineur\\n");\n    }\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -385,7 +429,11 @@ do {
       type: 'c',
       consigne: 'Affiche les nombres de 1 à 5 séparés par un espace, sur une seule ligne, avec une boucle <code>for</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    printf("\\n");\n    return 0;\n}',
-      indice: '<code>for (int i = 1; i <= 5; i++) { printf("%d ", i); }</code> — remarque le <code>&lt;=</code> pour inclure 5.',
+      indices: [
+        "Une boucle <code>for</code> a trois parties séparées par des points-virgules : d’où l’on part, jusqu’où l’on va, et comment on avance.",
+        "Pour inclure 5, la condition doit être « inférieur ou égal ». Et comme tout tient sur une ligne, le <code>\\n</code> ne va pas dans la boucle.",
+        "<code>for (int i = 1; i &lt;= 5; i++) { printf(\"%d \", i); }</code> puis un <code>printf(\"\\n\")</code> après."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    for (int i = 1; i <= 5; i++) {\n        printf("%d ", i);\n    }\n    printf("\\n");\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -403,7 +451,11 @@ do {
       type: 'c',
       consigne: '<strong>Entraînement :</strong> affiche la table de 7, de <code>7 x 1 = 7</code> jusqu\'à <code>7 x 10 = 70</code>, une ligne par résultat.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: '<code>printf("7 x %d = %d\\n", i, 7 * i);</code> — deux trous, deux valeurs.',
+      indices: [
+        "Une seule ligne de code, répétée dix fois avec une valeur qui change. Et le résultat doit être calculé, pas écrit à la main.",
+        "Deux valeurs à afficher dans la même phrase, donc deux trous <code>%d</code> — l’un pour le compteur, l’autre pour le produit.",
+        "<code>printf(\"7 x %d = %d\\n\", i, 7 * i);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    for (int i = 1; i <= 10; i++) {\n        printf("7 x %d = %d\\n", i, 7 * i);\n    }\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -419,7 +471,11 @@ do {
       type: 'c',
       consigne: '<strong>Défi :</strong> calcule la somme des nombres de 1 à 100 avec une boucle et affiche-la. (Le résultat est 5050 — mais c\'est la boucle qui doit le trouver, pas toi.)',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int somme = 0;\n    \n    return 0;\n}',
-      indice: 'L\'accumulateur : dans la boucle, <code>somme += i;</code> puis, après la boucle, un printf.',
+      indices: [
+        "Le motif de l’accumulateur : une variable qui garde le total, déclarée <strong>avant</strong> la boucle.",
+        "Dans la boucle, on ajoute le compteur au total. L’affichage vient après l’accolade fermante — sinon il sortirait cent fois.",
+        "<code>somme += i;</code> dans la boucle, puis un <code>printf</code> après."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int somme = 0;\n    for (int i = 1; i <= 100; i++) {\n        somme += i;\n    }\n    printf("%d\\n", somme);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -463,7 +519,11 @@ notes[2] = 10;              // on modifie la troisième case</pre>
       type: 'c',
       consigne: 'Crée un tableau <code>notes</code> contenant 12, 15, 9, 18, 14 puis affiche la <strong>première</strong> et la <strong>dernière</strong> note, sur deux lignes.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: '<code>int notes[] = {12, 15, 9, 18, 14};</code> — la première case est <code>notes[0]</code>, la dernière <code>notes[4]</code>.',
+      indices: [
+        "Un tableau se déclare avec des crochets et se remplit entre accolades. Les cases, elles, se comptent à partir de 0.",
+        "Avec 5 notes, les positions vont de 0 à 4. La dernière n’est donc pas <code>notes[5]</code>.",
+        "<code>int notes[] = {12, 15, 9, 18, 14};</code>, puis <code>notes[0]</code> et <code>notes[4]</code>."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    printf("%d\\n", notes[0]);\n    printf("%d\\n", notes[4]);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -478,7 +538,11 @@ notes[2] = 10;              // on modifie la troisième case</pre>
       type: 'c',
       consigne: '<strong>Entraînement :</strong> parcours le tableau avec une boucle et affiche la <strong>somme</strong> des 5 notes (68).',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int somme = 0;\n    \n    return 0;\n}',
-      indice: '<code>for (int i = 0; i < 5; i++) { somme += notes[i]; }</code> puis un printf après la boucle.',
+      indices: [
+        "Parcourir un tableau, c’est parcourir ses <strong>positions</strong> : de 0 jusqu’à la taille moins un.",
+        "Un accumulateur déclaré avant la boucle, qu’on augmente de <code>notes[i]</code> à chaque tour. L’affichage vient après.",
+        "<code>for (int i = 0; i &lt; 5; i++) { somme += notes[i]; }</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int somme = 0;\n    for (int i = 0; i < 5; i++) {\n        somme += notes[i];\n    }\n    printf("%d\\n", somme);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -492,7 +556,11 @@ notes[2] = 10;              // on modifie la troisième case</pre>
       type: 'c',
       consigne: '<strong>Défi :</strong> trouve la <strong>meilleure note</strong> du tableau sans l\'écrire à la main, et affiche-la.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int max = notes[0];\n    \n    return 0;\n}',
-      indice: 'Pars de la première note, parcours les suivantes, et remplace <code>max</code> chaque fois que tu trouves mieux : <code>if (notes[i] > max) { max = notes[i]; }</code>',
+      indices: [
+        "On garde le meilleur vu jusqu’ici, et on le remplace dès qu’on trouve mieux. Une seule variable suffit.",
+        "Pars de la <strong>première note</strong> plutôt que de 0 : si toutes les notes étaient négatives, partir de 0 donnerait un résultat faux.",
+        "<code>if (notes[i] &gt; max) { max = notes[i]; }</code> dans la boucle."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int max = notes[0];\n    for (int i = 1; i < 5; i++) {\n        if (notes[i] > max) {\n            max = notes[i];\n        }\n    }\n    printf("%d\\n", max);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -546,7 +614,11 @@ int main() {
       type: 'c',
       consigne: 'Écris une fonction <code>carre</code> qui prend un <code>int</code> et renvoie son carré, puis affiche <code>carre(7)</code> depuis le main.',
       codeDepart: '#include <stdio.h>\n\n// ta fonction ici (AVANT le main)\n\nint main() {\n    \n    return 0;\n}',
-      indice: '<code>int carre(int x) { return x * x; }</code> au-dessus du main, puis <code>printf("%d\\n", carre(7));</code> dedans.',
+      indices: [
+        "En C, une fonction se déclare <strong>au-dessus</strong> du <code>main</code> — sinon le compilateur ne la connaît pas encore quand il la rencontre.",
+        "La déclaration annonce le type de retour, puis le nom, puis les paramètres avec leur type. Ici : elle reçoit un <code>int</code> et rend un <code>int</code>.",
+        "<code>int carre(int x) { return x * x; }</code> puis <code>printf(\"%d\\n\", carre(7));</code>"
+      ],
       solution: '#include <stdio.h>\n\nint carre(int x) {\n    return x * x;\n}\n\nint main() {\n    printf("%d\\n", carre(7));\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -561,7 +633,11 @@ int main() {
       type: 'c',
       consigne: '<strong>Entraînement :</strong> écris une fonction <code>void afficher_ligne()</code> qui affiche <code>--------</code>, et appelle-la <strong>trois fois</strong> depuis le main.',
       codeDepart: '#include <stdio.h>\n\n\nint main() {\n    \n    return 0;\n}',
-      indice: '<code>void</code> veut dire « ne renvoie rien » : <code>void afficher_ligne() { printf("--------\\n"); }</code>',
+      indices: [
+        "Cette fonction ne rend rien : elle se contente d’afficher. Le C a un mot pour cela, à la place du type de retour.",
+        "<code>void</code> veut dire « ne renvoie rien ». Pas de <code>return</code> à écrire, et l’appel s’écrit seul sur sa ligne.",
+        "<code>void afficher_ligne() { printf(\"--------\\n\"); }</code>, appelée trois fois."
+      ],
       solution: '#include <stdio.h>\n\nvoid afficher_ligne() {\n    printf("--------\\n");\n}\n\nint main() {\n    afficher_ligne();\n    afficher_ligne();\n    afficher_ligne();\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -576,7 +652,11 @@ int main() {
       type: 'c',
       consigne: '<strong>Défi :</strong> écris <code>int max(int a, int b)</code> qui renvoie le plus grand des deux, puis affiche <code>max(12, 30)</code> puis <code>max(45, 8)</code> — deux lignes, <code>30</code> puis <code>45</code>.',
       codeDepart: '#include <stdio.h>\n\n\nint main() {\n    \n    return 0;\n}',
-      indice: 'Dans la fonction : <code>if (a > b) { return a; } else { return b; }</code>. Un <code>return</code> quitte immédiatement la fonction.',
+      indices: [
+        "Deux valeurs, un seul résultat à rendre. La fonction doit choisir, puis <strong>renvoyer</strong> — pas afficher.",
+        "Un <code>return</code> quitte la fonction immédiatement : ce qui suit n’est jamais exécuté. On peut donc en mettre un par branche.",
+        "<code>if (a &gt; b) { return a; } else { return b; }</code>"
+      ],
       solution: '#include <stdio.h>\n\nint max(int a, int b) {\n    if (a > b) {\n        return a;\n    } else {\n        return b;\n    }\n}\n\nint main() {\n    printf("%d\\n", max(12, 30));\n    printf("%d\\n", max(45, 8));\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -625,7 +705,11 @@ printf("%d\\n", strlen(nom));      // 4 — la longueur, sans le '\\0'</pre>
       type: 'c',
       consigne: 'Déclare <code>char nom[] = "Alex";</code> puis affiche, sur trois lignes : le nom entier, sa <strong>première lettre</strong>, et sa <strong>longueur</strong>.',
       codeDepart: '#include <stdio.h>\n#include <string.h>\n\nint main() {\n    \n    return 0;\n}',
-      indice: 'Trois formats différents : <code>%s</code> pour la chaîne, <code>%c</code> pour <code>nom[0]</code>, <code>%d</code> pour <code>strlen(nom)</code>.',
+      indices: [
+        "Trois choses différentes à tirer de la même variable : le texte entier, un seul caractère, et un nombre. Donc trois trous différents.",
+        "<code>%s</code> pour la chaîne, <code>%c</code> pour un caractère, <code>%d</code> pour la longueur — qui s’obtient avec <code>strlen</code>, et exige <code>#include &lt;string.h&gt;</code>.",
+        "<code>printf(\"%s\\n\", nom);</code>, <code>printf(\"%c\\n\", nom[0]);</code>, <code>printf(\"%d\\n\", strlen(nom));</code>"
+      ],
       solution: '#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char nom[] = "Alex";\n    printf("%s\\n", nom);\n    printf("%c\\n", nom[0]);\n    printf("%d\\n", strlen(nom));\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -641,7 +725,11 @@ printf("%d\\n", strlen(nom));      // 4 — la longueur, sans le '\\0'</pre>
       type: 'c',
       consigne: '<strong>Entraînement :</strong> affiche les lettres de <code>"Bonjour"</code> une par ligne, avec une boucle qui utilise <code>strlen</code> comme limite.',
       codeDepart: '#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char mot[] = "Bonjour";\n    \n    return 0;\n}',
-      indice: '<code>for (int i = 0; i < strlen(mot); i++) { printf("%c\\n", mot[i]); }</code>',
+      indices: [
+        "Une chaîne se parcourt comme un tableau : chaque case contient un caractère.",
+        "La limite de la boucle, c’est <code>strlen(mot)</code>. Et pour afficher une case, le trou est <code>%c</code>, pas <code>%s</code>.",
+        "<code>for (int i = 0; i &lt; strlen(mot); i++) { printf(\"%c\\n\", mot[i]); }</code>"
+      ],
       solution: '#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char mot[] = "Bonjour";\n    for (int i = 0; i < strlen(mot); i++) {\n        printf("%c\\n", mot[i]);\n    }\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -656,7 +744,11 @@ printf("%d\\n", strlen(nom));      // 4 — la longueur, sans le '\\0'</pre>
       type: 'c',
       consigne: '<strong>Défi :</strong> compte le nombre de <code>\'o\'</code> dans <code>"Bonjour tout le monde"</code> et affiche ce nombre.',
       codeDepart: '#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char phrase[] = "Bonjour tout le monde";\n    int compte = 0;\n    \n    return 0;\n}',
-      indice: 'Dans la boucle, compare la case au caractère : <code>if (phrase[i] == \'o\') { compte++; }</code> — apostrophes simples pour un char.',
+      indices: [
+        "Compter, c’est un accumulateur conditionnel : on parcourt, et on n’augmente que dans certains cas.",
+        "Un caractère se compare avec <code>==</code>, et s’écrit entre <strong>apostrophes simples</strong> — les guillemets doubles, eux, désignent une chaîne.",
+        "<code>if (phrase[i] == 'o') { compte++; }</code>"
+      ],
       solution: '#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char phrase[] = "Bonjour tout le monde";\n    int compte = 0;\n    for (int i = 0; i < strlen(phrase); i++) {\n        if (phrase[i] == \'o\') {\n            compte++;\n        }\n    }\n    printf("%d\\n", compte);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -813,7 +905,11 @@ int main() {
       type: 'c',
       consigne: 'Ce programme ne fonctionne pas : <code>x</code> vaut toujours 5 à la fin. Corrige la fonction <strong>et</strong> son appel pour qu\'il affiche <code>10</code>.',
       codeDepart: '#include <stdio.h>\n\nvoid doubler(int n) {\n    n = n * 2;\n}\n\nint main() {\n    int x = 5;\n    doubler(x);\n    printf("%d\\n", x);\n    return 0;\n}',
-      indice: 'Trois modifications : le paramètre devient <code>int *n</code>, la ligne devient <code>*n = *n * 2;</code>, et l\'appel devient <code>doubler(&x);</code>',
+      indices: [
+        "En C, une fonction reçoit une <strong>copie</strong> de la valeur : modifier cette copie ne change rien à l’original.",
+        "Pour modifier l’original, il faut lui passer son <strong>adresse</strong>. Trois choses changent alors : le type du paramètre, la ligne qui modifie, et l’appel.",
+        "<code>void doubler(int *n)</code> · <code>*n = *n * 2;</code> · <code>doubler(&amp;x);</code>"
+      ],
       solution: '#include <stdio.h>\n\nvoid doubler(int *n) {\n    *n = *n * 2;\n}\n\nint main() {\n    int x = 5;\n    doubler(&x);\n    printf("%d\\n", x);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -830,7 +926,11 @@ int main() {
       type: 'c',
       consigne: '<strong>Défi de l\'échange :</strong> écris <code>void echanger(int *a, int *b)</code> qui échange les deux valeurs. Le main affiche déjà le résultat — tu dois voir <code>2 1</code>.',
       codeDepart: '#include <stdio.h>\n\n// ta fonction echanger ici\n\nint main() {\n    int x = 1;\n    int y = 2;\n    echanger(&x, &y);\n    printf("%d %d\\n", x, y);\n    return 0;\n}',
-      indice: 'Il faut une variable temporaire, sinon la première valeur est perdue :<br><code>int temp = *a;</code><br><code>*a = *b;</code><br><code>*b = temp;</code>',
+      indices: [
+        "Le piège classique : si tu écris <code>*a = *b</code> en premier, l’ancienne valeur de <code>a</code> est écrasée et perdue.",
+        "Il faut la mettre à l’abri dans une variable temporaire avant de l’écraser. Trois affectations, dans cet ordre précis.",
+        "<code>int temp = *a;</code> · <code>*a = *b;</code> · <code>*b = temp;</code>"
+      ],
       solution: '#include <stdio.h>\n\nvoid echanger(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint main() {\n    int x = 1;\n    int y = 2;\n    echanger(&x, &y);\n    printf("%d %d\\n", x, y);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -847,7 +947,11 @@ int main() {
       type: 'c',
       consigne: '<strong>Entraînement :</strong> écris <code>void tout_doubler(int t[], int taille)</code> qui double chaque case du tableau. Le tableau doit vraiment être modifié — le main affiche <code>2 4 6</code>.',
       codeDepart: '#include <stdio.h>\n\n// ta fonction ici\n\nint main() {\n    int t[] = {1, 2, 3};\n    tout_doubler(t, 3);\n    for (int i = 0; i < 3; i++) {\n        printf("%d ", t[i]);\n    }\n    printf("\\n");\n    return 0;\n}',
-      indice: 'Pas besoin d\'étoiles ici : un tableau est déjà passé par adresse. Une simple boucle suffit : <code>t[i] = t[i] * 2;</code>',
+      indices: [
+        "Surprise : ici, aucune étoile n’est nécessaire — et pourtant le tableau sera bien modifié.",
+        "Un tableau est <strong>toujours</strong> passé par adresse en C : la fonction travaille directement sur l’original. Une simple boucle suffit.",
+        "<code>t[i] = t[i] * 2;</code> dans une boucle allant jusqu’à <code>taille</code>."
+      ],
       solution: '#include <stdio.h>\n\nvoid tout_doubler(int t[], int taille) {\n    for (int i = 0; i < taille; i++) {\n        t[i] = t[i] * 2;\n    }\n}\n\nint main() {\n    int t[] = {1, 2, 3};\n    tout_doubler(t, 3);\n    for (int i = 0; i < 3; i++) {\n        printf("%d ", t[i]);\n    }\n    printf("\\n");\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -898,7 +1002,11 @@ printf("%d\\n", grille[1][2]);   // 6 — deuxième ligne, troisième colonne</p
       type: 'c',
       consigne: 'Affiche la grille complète, une ligne par ligne, les nombres séparés par un espace. Tu dois obtenir trois lignes : <code>1 2 3</code>, <code>4 5 6</code>, <code>7 8 9</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int grille[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n    \n    return 0;\n}',
-      indice: 'Deux boucles imbriquées, et le <code>printf("\\n")</code> APRÈS la boucle intérieure mais DANS la boucle extérieure.',
+      indices: [
+        "Deux boucles emboîtées : celle du dehors parcourt les lignes, celle du dedans les colonnes.",
+        "Le retour à la ligne n’a lieu qu’une fois par ligne : il va donc <strong>après</strong> la boucle intérieure, mais <strong>dans</strong> la boucle extérieure.",
+        "<code>printf(\"%d \", grille[i][j]);</code> dans la boucle interne, puis <code>printf(\"\\n\");</code> juste après elle."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int grille[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            printf("%d ", grille[i][j]);\n        }\n        printf("\\n");\n    }\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -914,7 +1022,11 @@ printf("%d\\n", grille[1][2]);   // 6 — deuxième ligne, troisième colonne</p
       type: 'c',
       consigne: '<strong>Entraînement :</strong> calcule la somme de <strong>tous</strong> les nombres de la grille et affiche-la (45).',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int grille[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n    int somme = 0;\n    \n    return 0;\n}',
-      indice: 'Mêmes boucles imbriquées, mais au lieu d\'afficher : <code>somme += grille[i][j];</code>. Le printf vient après les deux boucles.',
+      indices: [
+        "Mêmes boucles emboîtées, mais au lieu d’afficher on accumule.",
+        "L’accumulateur se déclare avant les deux boucles, et le <code>printf</code> vient après les deux — pas entre.",
+        "<code>somme += grille[i][j];</code> dans la boucle interne."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int grille[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n    int somme = 0;\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            somme += grille[i][j];\n        }\n    }\n    printf("%d\\n", somme);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -928,7 +1040,11 @@ printf("%d\\n", grille[1][2]);   // 6 — deuxième ligne, troisième colonne</p
       type: 'c',
       consigne: '<strong>Défi :</strong> affiche uniquement la <strong>diagonale</strong> de la grille (1, 5, 9) séparée par des espaces. Astuce : une seule boucle suffit.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int grille[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n    \n    printf("\\n");\n    return 0;\n}',
-      indice: 'Sur la diagonale, la ligne et la colonne portent le même numéro : <code>grille[i][i]</code>.',
+      indices: [
+        "Une seule boucle suffit : sur la diagonale, il n’y a qu’une case par ligne, et sa position n’est pas un hasard.",
+        "Sur la diagonale, le numéro de ligne et celui de colonne sont <strong>identiques</strong>.",
+        "<code>grille[i][i]</code> dans une boucle simple."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int grille[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n    for (int i = 0; i < 3; i++) {\n        printf("%d ", grille[i][i]);\n    }\n    printf("\\n");\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -977,7 +1093,11 @@ printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
       type: 'c',
       consigne: 'Définis une structure <code>Point</code> avec deux champs <code>int x</code> et <code>int y</code>. Crée ensuite un point, mets-y 3 et 4, et affiche <code>3,4</code>.',
       codeDepart: '#include <stdio.h>\n\n// ta structure ici (avant le main)\n\nint main() {\n    \n    return 0;\n}',
-      indice: '<code>struct Point { int x; int y; };</code> — sans oublier le point-virgule final. Puis <code>struct Point p; p.x = 3; p.y = 4;</code>',
+      indices: [
+        "Une structure regroupe plusieurs champs sous un seul nom. Elle se définit en dehors du <code>main</code>, au-dessus de lui.",
+        "Attention au détail qui fait rater la compilation : la définition se termine par une accolade fermante <strong>suivie d’un point-virgule</strong>.",
+        "<code>struct Point { int x; int y; };</code> puis <code>struct Point p; p.x = 3; p.y = 4;</code>"
+      ],
       solution: '#include <stdio.h>\n\nstruct Point {\n    int x;\n    int y;\n};\n\nint main() {\n    struct Point p;\n    p.x = 3;\n    p.y = 4;\n    printf("%d,%d\\n", p.x, p.y);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -992,7 +1112,11 @@ printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
       type: 'c',
       consigne: '<strong>Entraînement :</strong> ajoute une structure <code>Etudiant</code> avec <code>int age</code> et <code>double moyenne</code>. Crée un étudiant de 20 ans avec 14.5 de moyenne et affiche <code>20 ans, moyenne 14.5</code>.',
       codeDepart: '#include <stdio.h>\n\n\nint main() {\n    \n    return 0;\n}',
-      indice: 'Format d\'affichage : <code>printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</code>',
+      indices: [
+        "Même geste qu’à l’exercice précédent, mais avec deux champs de types différents.",
+        "On accède à un champ avec un point : <code>e.age</code>, <code>e.moyenne</code>. Chacun a son trou : <code>%d</code> et <code>%.1f</code>.",
+        "<code>printf(\"%d ans, moyenne %.1f\\n\", e.age, e.moyenne);</code>"
+      ],
       solution: '#include <stdio.h>\n\nstruct Etudiant {\n    int age;\n    double moyenne;\n};\n\nint main() {\n    struct Etudiant e;\n    e.age = 20;\n    e.moyenne = 14.5;\n    printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1007,7 +1131,11 @@ printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
       type: 'c',
       consigne: '<strong>Défi :</strong> écris une fonction <code>int distance_origine(struct Point p)</code> qui renvoie <code>p.x + p.y</code> (une distance simplifiée), et affiche le résultat pour le point (3, 4) — soit <code>7</code>.',
       codeDepart: '#include <stdio.h>\n\nstruct Point {\n    int x;\n    int y;\n};\n\n// ta fonction ici\n\nint main() {\n    struct Point p;\n    p.x = 3;\n    p.y = 4;\n    \n    return 0;\n}',
-      indice: 'Une structure se passe en paramètre comme n\'importe quelle valeur : <code>int distance_origine(struct Point p) { return p.x + p.y; }</code>',
+      indices: [
+        "Une structure se passe à une fonction exactement comme un <code>int</code> : il n’y a rien de spécial à écrire.",
+        "Le type du paramètre s’écrit <code>struct Point</code> en entier. À l’intérieur, on lit ses champs avec un point.",
+        "<code>int distance_origine(struct Point p) { return p.x + p.y; }</code>"
+      ],
       solution: '#include <stdio.h>\n\nstruct Point {\n    int x;\n    int y;\n};\n\nint distance_origine(struct Point p) {\n    return p.x + p.y;\n}\n\nint main() {\n    struct Point p;\n    p.x = 3;\n    p.y = 4;\n    printf("%d\\n", distance_origine(p));\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1059,7 +1187,11 @@ printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
       type: 'c',
       consigne: 'Écris la fonction <code>factorielle</code> et affiche <code>factorielle(5)</code>, qui doit valoir <code>120</code>.',
       codeDepart: '#include <stdio.h>\n\n// ta fonction récursive ici\n\nint main() {\n    printf("%d\\n", factorielle(5));\n    return 0;\n}',
-      indice: 'Le cas d\'arrêt d\'abord : <code>if (n <= 1) return 1;</code>. Puis l\'appel récursif : <code>return n * factorielle(n - 1);</code>',
+      indices: [
+        "Une fonction récursive s’appelle elle-même. Sans un cas qui l’arrête, elle tourne jusqu’au plantage.",
+        "Le cas d’arrêt vient <strong>en premier</strong> : pour <code>n</code> valant 1 ou moins, on rend 1 sans rappeler la fonction.",
+        "<code>if (n &lt;= 1) { return 1; }</code> puis <code>return n * factorielle(n - 1);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint factorielle(int n) {\n    if (n <= 1) {\n        return 1;\n    }\n    return n * factorielle(n - 1);\n}\n\nint main() {\n    printf("%d\\n", factorielle(5));\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1075,7 +1207,11 @@ printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
       type: 'c',
       consigne: '<strong>Entraînement :</strong> écris <code>int somme_jusqu_a(int n)</code> qui renvoie 1+2+…+n de façon <strong>récursive</strong> (sans boucle), et affiche <code>somme_jusqu_a(10)</code> — soit <code>55</code>.',
       codeDepart: '#include <stdio.h>\n\n\nint main() {\n    printf("%d\\n", somme_jusqu_a(10));\n    return 0;\n}',
-      indice: 'La somme jusqu\'à n vaut n plus la somme jusqu\'à n-1. Cas d\'arrêt : <code>if (n <= 0) return 0;</code>',
+      indices: [
+        "Même structure que la factorielle. Une seule chose change : l’opération qui relie <code>n</code> au résultat du cas plus petit.",
+        "La somme jusqu’à <code>n</code> vaut <code>n</code> <strong>plus</strong> la somme jusqu’à <code>n-1</code>. Le cas d’arrêt, lui, rend 0.",
+        "<code>if (n &lt;= 0) { return 0; }</code> puis <code>return n + somme_jusqu_a(n - 1);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint somme_jusqu_a(int n) {\n    if (n <= 0) {\n        return 0;\n    }\n    return n + somme_jusqu_a(n - 1);\n}\n\nint main() {\n    printf("%d\\n", somme_jusqu_a(10));\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1132,7 +1268,11 @@ printf("%.2f\\n", x);           // affichage à 2 décimales</pre>
       type: 'c',
       consigne: '<strong>Étape 1 :</strong> calcule et affiche la <strong>moyenne</strong> des 5 notes avec deux décimales. Attention au piège de la division entière — le résultat attendu est <code>13.60</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int taille = 5;\n    int somme = 0;\n    \n    return 0;\n}',
-      indice: 'Totalise avec une boucle, puis divise en convertissant : <code>(double)somme / taille</code>. Affiche avec <code>%.2f</code>.',
+      indices: [
+        "Le piège de la division entière revient ici. La moyenne de nombres entiers n’est presque jamais un entier.",
+        "Totalise avec une boucle, puis convertis <strong>avant</strong> de diviser — sinon la décimale est perdue d’avance.",
+        "<code>(double)somme / taille</code>, affiché avec <code>%.2f</code>."
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int taille = 5;\n    int somme = 0;\n    for (int i = 0; i < taille; i++) {\n        somme += notes[i];\n    }\n    printf("%.2f\\n", (double)somme / taille);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1148,7 +1288,11 @@ printf("%.2f\\n", x);           // affichage à 2 décimales</pre>
       type: 'c',
       consigne: '<strong>Étape 2 :</strong> écris une <strong>fonction</strong> <code>int maximum(int t[], int taille)</code> qui renvoie la plus grande note, et affiche son résultat (<code>18</code>).',
       codeDepart: '#include <stdio.h>\n\n// ta fonction maximum ici\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    \n    return 0;\n}',
-      indice: 'Dans la fonction : pars de <code>t[0]</code>, parcours à partir de l\'indice 1, et remplace si tu trouves mieux. Puis <code>printf("%d\\n", maximum(notes, 5));</code>',
+      indices: [
+        "La fonction reçoit le tableau et sa taille, et doit <strong>renvoyer</strong> la plus grande valeur — pas l’afficher.",
+        "Pars de la première case, puis parcours à partir de l’indice 1 en remplaçant chaque fois que tu trouves mieux.",
+        "<code>int max = t[0];</code> puis une boucle depuis <code>i = 1</code>, et <code>return max;</code>"
+      ],
       solution: '#include <stdio.h>\n\nint maximum(int t[], int taille) {\n    int max = t[0];\n    for (int i = 1; i < taille; i++) {\n        if (t[i] > max) {\n            max = t[i];\n        }\n    }\n    return max;\n}\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    printf("%d\\n", maximum(notes, 5));\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1163,7 +1307,11 @@ printf("%.2f\\n", x);           // affichage à 2 décimales</pre>
       type: 'c',
       consigne: '<strong>Étape 3 — la finale :</strong> affiche le nombre de notes ≥ 10 sous la forme exacte <code>4 recus sur 5</code>.',
       codeDepart: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int taille = 5;\n    int recus = 0;\n    \n    return 0;\n}',
-      indice: 'Compteur conditionnel dans la boucle : <code>if (notes[i] >= 10) { recus++; }</code>. Puis <code>printf("%d recus sur %d\\n", recus, taille);</code>',
+      indices: [
+        "Encore un accumulateur, mais qui compte au lieu d’additionner — et seulement quand la condition est remplie.",
+        "Un compteur à 0 avant la boucle, un <code>if</code> dedans, et l’affichage après. La phrase demandée contient deux nombres.",
+        "<code>if (notes[i] &gt;= 10) { recus++; }</code> puis <code>printf(\"%d recus sur %d\\n\", recus, taille);</code>"
+      ],
       solution: '#include <stdio.h>\n\nint main() {\n    int notes[] = {12, 15, 9, 18, 14};\n    int taille = 5;\n    int recus = 0;\n    for (int i = 0; i < taille; i++) {\n        if (notes[i] >= 10) {\n            recus++;\n        }\n    }\n    printf("%d recus sur %d\\n", recus, taille);\n    return 0;\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };

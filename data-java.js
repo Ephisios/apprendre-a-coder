@@ -36,7 +36,11 @@ System.out.print("à la ligne");</pre>
       type: 'java',
       consigne: 'Complète le programme pour qu\'il affiche <code>Bonjour le monde !</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>System.out.println("Bonjour le monde !");</code> — sans oublier le point-virgule.',
+      indices: [
+        "Toute la carcasse est déjà là : la classe, le <code>main</code>. Il ne manque qu’une instruction à l’intérieur.",
+        "Afficher en Java, c’est <code>System.out.println(…)</code> — long, mais sans ambiguïté. Le texte va entre guillemets.",
+        "<code>System.out.println(\"Bonjour le monde !\");</code> — sans oublier le point-virgule."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Bonjour le monde !");\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -51,7 +55,11 @@ System.out.print("à la ligne");</pre>
       type: 'java',
       consigne: '<strong>Entraînement :</strong> affiche trois lignes — <code>Ligne 1</code>, <code>Ligne 2</code>, <code>Ligne 3</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: 'Trois <code>System.out.println(...)</code> l\'un sous l\'autre. Ici pas besoin de <code>\\n</code> : println passe à la ligne tout seul.',
+      indices: [
+        "Trois lignes à afficher, donc trois instructions. Mais contrairement au C, tu n’as rien à ajouter à la fin du texte.",
+        "Le <code>ln</code> de <code>println</code> veut dire « line » : il passe à la ligne tout seul.",
+        "Trois <code>System.out.println(…)</code>, l’un sous l’autre."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Ligne 1");\n        System.out.println("Ligne 2");\n        System.out.println("Ligne 3");\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -117,7 +125,11 @@ System.out.println(nom + " a " + age + " ans");   // Alex a 30 ans</pre>
       type: 'java',
       consigne: 'Déclare un <code>String nom</code> valant <code>Alex</code> et un <code>int age</code> valant 30, puis affiche <code>Alex a 30 ans</code> en assemblant les variables avec des <code>+</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>System.out.println(nom + " a " + age + " ans");</code> — attention aux espaces à l\'intérieur des guillemets.',
+      indices: [
+        "Le texte et les variables s’assemblent avec un <code>+</code>. Java devine qu’il s’agit de coller, pas d’additionner, dès qu’un texte est en jeu.",
+        "Chaque morceau de texte va entre guillemets, chaque variable sans. Attention aux espaces : ils doivent être <strong>dans</strong> les guillemets.",
+        "<code>System.out.println(nom + \" a \" + age + \" ans\");</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        String nom = "Alex";\n        int age = 30;\n        System.out.println(nom + " a " + age + " ans");\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -133,7 +145,11 @@ System.out.println(nom + " a " + age + " ans");   // Alex a 30 ans</pre>
       type: 'java',
       consigne: '<strong>Entraînement :</strong> déclare les cinq types (<code>int</code>, <code>double</code>, <code>boolean</code>, <code>char</code>, <code>String</code>) et affiche-les tous sur une seule ligne, séparés par des espaces : <code>30 1.75 true A Alex</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: 'Un seul println avec des <code>+ " " +</code> entre chaque variable. Le boolean s\'écrit <code>true</code> en minuscules.',
+      indices: [
+        "Cinq types à déclarer, chacun avec son mot-clé. Java exige de dire le type <strong>avant</strong> le nom, toujours.",
+        "Un piège : <code>true</code> et <code>false</code> s’écrivent tout en minuscules. Et un <code>char</code> va entre apostrophes simples, un <code>String</code> entre guillemets doubles.",
+        "Un seul <code>println</code>, avec des <code>+ \" \" +</code> entre chaque variable."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int age = 30;\n        double taille = 1.75;\n        boolean majeur = true;\n        char initiale = \'A\';\n        String nom = "Alex";\n        System.out.println(age + " " + taille + " " + majeur + " " + initiale + " " + nom);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -148,7 +164,11 @@ System.out.println(nom + " a " + age + " ans");   // Alex a 30 ans</pre>
       type: 'java',
       consigne: '<strong>Chasse au bug :</strong> ce programme devrait afficher <code>Total : 5</code> mais affiche autre chose. Lance-le pour voir, puis corrige — sans changer les nombres.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Total : " + 2 + 3);\n    }\n}',
-      indice: 'Java lit de gauche à droite : le texte absorbe le 2, puis le 3. Force le calcul d\'abord avec des parenthèses.',
+      indices: [
+        "Ce n’est pas une addition ratée : regarde l’ordre dans lequel Java lit la ligne.",
+        "Java lit de gauche à droite. Le texte vient en premier, donc il <strong>absorbe</strong> le 2, puis le 3 : tout devient du collage.",
+        "Force le calcul à se faire d’abord, en l’entourant de parenthèses."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Total : " + (2 + 3));\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -200,7 +220,11 @@ System.out.println(Math.round(3.7));  // 4</pre>
       type: 'java',
       consigne: 'Affiche le résultat de <code>7 / 2</code> entre deux <code>int</code>, puis le vrai résultat décimal. Tu dois voir <code>3</code> puis <code>3.5</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        int a = 7;\n        int b = 2;\n        \n    }\n}',
-      indice: 'La deuxième ligne a besoin d\'une conversion : <code>(double)a / b</code>.',
+      indices: [
+        "Deux <code>int</code> divisés donnent un <code>int</code> : la partie décimale est jetée avant que tu puisses la voir.",
+        "Pour le vrai résultat, il faut qu’au moins l’un des deux soit un décimal <strong>au moment de la division</strong>.",
+        "<code>(double)a / b</code> pour la seconde ligne."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int a = 7;\n        int b = 2;\n        System.out.println(a / b);\n        System.out.println((double)a / b);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -215,7 +239,11 @@ System.out.println(Math.round(3.7));  // 4</pre>
       type: 'java',
       consigne: '<strong>Entraînement :</strong> utilise <code>Math</code> pour afficher, sur trois lignes : la racine carrée de 144, 2 puissance 10, et le plus grand entre 17 et 42.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>Math.sqrt(144)</code>, <code>Math.pow(2, 10)</code>, <code>Math.max(17, 42)</code>.',
+      indices: [
+        "Trois calculs, tous fournis par une même boîte à outils du langage. Elle porte un nom évident.",
+        "La classe <code>Math</code> regroupe ces fonctions. Leurs noms viennent de l’anglais : <em>square root</em>, <em>power</em>, <em>maximum</em>.",
+        "<code>Math.sqrt(144)</code>, <code>Math.pow(2, 10)</code>, <code>Math.max(17, 42)</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println(Math.sqrt(144));\n        System.out.println(Math.pow(2, 10));\n        System.out.println(Math.max(17, 42));\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -232,7 +260,11 @@ System.out.println(Math.round(3.7));  // 4</pre>
       type: 'java',
       consigne: '<strong>Défi :</strong> convertis 100 minutes en heures et minutes. Affiche exactement <code>1 h 40 min</code>, en calculant les deux valeurs (pas en les écrivant).',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        int total = 100;\n        \n    }\n}',
-      indice: 'Les heures : <code>total / 60</code> (division entière, ce qui tombe bien). Les minutes restantes : <code>total % 60</code>.',
+      indices: [
+        "Deux valeurs à calculer : les heures pleines, et ce qui reste. Aucune des deux n’est une division ordinaire.",
+        "Ici la division entière tombe bien : elle donne déjà les heures. Le reste, c’est le modulo <code>%</code>.",
+        "<code>total / 60</code> pour les heures, <code>total % 60</code> pour les minutes."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int total = 100;\n        int heures = total / 60;\n        int minutes = total % 60;\n        System.out.println(heures + " h " + minutes + " min");\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -281,7 +313,11 @@ if (a.equals(b)) { ... }   // CORRECT</pre>
       type: 'java',
       consigne: 'La note vaut 15. Écris un <code>if</code>/<code>else</code> qui affiche <code>Reçu</code> si la note est ≥ 10, sinon <code>Recalé</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        int note = 15;\n        \n    }\n}',
-      indice: '<code>if (note >= 10) { ... } else { ... }</code>',
+      indices: [
+        "La condition va entre parenthèses, et chaque branche entre accolades — exactement comme en C et en JavaScript.",
+        "« Supérieur ou égal » s’écrit <code>&gt;=</code>. Le <code>else</code> se place après l’accolade fermante du <code>if</code>.",
+        "<code>if (note &gt;= 10) { … } else { … }</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int note = 15;\n        if (note >= 10) {\n            System.out.println("Reçu");\n        } else {\n            System.out.println("Recalé");\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -296,7 +332,11 @@ if (a.equals(b)) { ... }   // CORRECT</pre>
       type: 'java',
       consigne: '<strong>Chasse au bug :</strong> ce programme devrait afficher <code>Identiques</code> mais ne le fait pas. Corrige la comparaison de textes.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        String a = "bonjour";\n        String b = "bon" + "jour";\n        if (a == b) {\n            System.out.println("Identiques");\n        } else {\n            System.out.println("Différents");\n        }\n    }\n}',
-      indice: 'Pour comparer le <strong>contenu</strong> de deux String, on n\'utilise jamais <code>==</code> mais la méthode <code>.equals(...)</code> : <code>if (a.equals(b))</code>',
+      indices: [
+        "Les deux textes se ressemblent, et pourtant la comparaison échoue. En Java, deux <code>String</code> ne se comparent pas comme deux nombres.",
+        "<code>==</code> demande « est-ce le même objet en mémoire ? », pas « est-ce le même texte ? ». C’est l’erreur numéro un des débutants en Java.",
+        "<code>if (a.equals(b))</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        String a = "bonjour";\n        String b = "bon" + "jour";\n        if (a.equals(b)) {\n            System.out.println("Identiques");\n        } else {\n            System.out.println("Différents");\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -310,7 +350,11 @@ if (a.equals(b)) { ... }   // CORRECT</pre>
       type: 'java',
       consigne: '<strong>Entraînement :</strong> avec <code>note = 14</code>, affiche la mention : <code>Très bien</code> (≥16), <code>Bien</code> (≥12), <code>Passable</code> (≥10), sinon <code>Insuffisant</code>. Une seule ligne doit s\'afficher.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        int note = 14;\n        \n    }\n}',
-      indice: 'Enchaîne avec <code>else if</code>, du plus exigeant au moins exigeant.',
+      indices: [
+        "Quatre cas, et l’ordre décide de tout. Demande-toi ce qui arriverait à un 17 si tu testais d’abord « au moins 10 ».",
+        "Dès qu’une condition est vraie, les suivantes sont ignorées. Il faut donc commencer par le seuil le plus exigeant, et descendre.",
+        "<code>if (note &gt;= 16)</code>, puis <code>else if (note &gt;= 12)</code>, <code>&gt;= 10</code>, et un <code>else</code> final."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int note = 14;\n        if (note >= 16) {\n            System.out.println("Très bien");\n        } else if (note >= 12) {\n            System.out.println("Bien");\n        } else if (note >= 10) {\n            System.out.println("Passable");\n        } else {\n            System.out.println("Insuffisant");\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -365,7 +409,11 @@ for (int i = 1; i <= 5; i++) {
       type: 'java',
       consigne: 'Affiche les nombres de 1 à 5, un par ligne, avec une boucle <code>for</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>for (int i = 1; i <= 5; i++) { System.out.println(i); }</code>',
+      indices: [
+        "Une boucle <code>for</code> a trois parties séparées par des points-virgules : d’où l’on part, jusqu’où l’on va, et comment on avance.",
+        "Pour inclure 5, la condition doit être « inférieur ou égal ». Le compteur se déclare dans la boucle elle-même.",
+        "<code>for (int i = 1; i &lt;= 5; i++) { System.out.println(i); }</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 5; i++) {\n            System.out.println(i);\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -379,7 +427,11 @@ for (int i = 1; i <= 5; i++) {
       type: 'java',
       consigne: '<strong>Entraînement :</strong> affiche les nombres de 1 à 10 <strong>sauf le 7</strong>, un par ligne, en utilisant <code>continue</code>.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: 'Dans la boucle : <code>if (i == 7) { continue; }</code> avant l\'affichage.',
+      indices: [
+        "Il ne s’agit pas d’arrêter la boucle, seulement de <strong>sauter</strong> un tour.",
+        "<code>continue</code> passe immédiatement au tour suivant. Il doit donc venir <strong>avant</strong> l’affichage, sinon le 7 serait déjà sorti.",
+        "<code>if (i == 7) { continue; }</code> en première ligne de la boucle."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 10; i++) {\n            if (i == 7) {\n                continue;\n            }\n            System.out.println(i);\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -394,7 +446,11 @@ for (int i = 1; i <= 5; i++) {
       type: 'java',
       consigne: '<strong>Défi :</strong> trouve le premier multiple de 13 supérieur à 100, affiche-le, et arrête la boucle avec <code>break</code>. (Une seule ligne doit s\'afficher.)',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        for (int i = 101; i <= 200; i++) {\n            \n        }\n    }\n}',
-      indice: 'Un nombre est multiple de 13 si <code>i % 13 == 0</code>. Affiche puis <code>break;</code> pour sortir tout de suite.',
+      indices: [
+        "Une seule ligne doit sortir : dès que le bon nombre est trouvé, il faut quitter la boucle.",
+        "« Multiple de 13 » se teste avec le modulo : le reste de la division par 13 doit valoir 0. Et <code>break</code> sort de la boucle sur-le-champ.",
+        "<code>if (i % 13 == 0) { System.out.println(i); break; }</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        for (int i = 101; i <= 200; i++) {\n            if (i % 13 == 0) {\n                System.out.println(i);\n                break;\n            }\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -442,7 +498,11 @@ for (int note : notes) {
       type: 'java',
       consigne: 'Crée un tableau <code>int[] notes</code> contenant 12, 15, 9, 18, 14, puis affiche sa <strong>taille</strong> et sa <strong>première</strong> valeur, sur deux lignes.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>int[] notes = {12, 15, 9, 18, 14};</code> puis <code>notes.length</code> (sans parenthèses) et <code>notes[0]</code>.',
+      indices: [
+        "Un tableau se déclare avec des crochets accolés au type, et se remplit entre accolades.",
+        "Sa taille est une <strong>propriété</strong>, pas une méthode : elle s’écrit sans parenthèses. Et la première case porte le numéro 0.",
+        "<code>int[] notes = {12, 15, 9, 18, 14};</code>, puis <code>notes.length</code> et <code>notes[0]</code>."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int[] notes = {12, 15, 9, 18, 14};\n        System.out.println(notes.length);\n        System.out.println(notes[0]);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -458,7 +518,11 @@ for (int note : notes) {
       type: 'java',
       consigne: '<strong>Entraînement :</strong> parcours le tableau avec une boucle <strong>for-each</strong> et affiche la somme des notes (68).',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        int[] notes = {12, 15, 9, 18, 14};\n        int somme = 0;\n        \n    }\n}',
-      indice: '<code>for (int n : notes) { somme += n; }</code> puis un println après la boucle.',
+      indices: [
+        "Le <em>for-each</em> ne donne pas la position mais directement la valeur : pas de compteur, pas de crochets.",
+        "La forme est <code>for (int n : notes)</code> — le deux-points se lit « dans ». L’accumulateur, lui, se déclare avant la boucle.",
+        "<code>for (int n : notes) { somme += n; }</code> puis un <code>println</code> après."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int[] notes = {12, 15, 9, 18, 14};\n        int somme = 0;\n        for (int n : notes) {\n            somme += n;\n        }\n        System.out.println(somme);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -472,7 +536,11 @@ for (int note : notes) {
       type: 'java',
       consigne: '<strong>Défi :</strong> affiche chaque note précédée de son indice, sous la forme <code>0 : 12</code>, <code>1 : 15</code>, etc. (Ici le for-each ne suffit pas !)',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        int[] notes = {12, 15, 9, 18, 14};\n        \n    }\n}',
-      indice: 'Il te faut l\'indice, donc la boucle classique : <code>for (int i = 0; i < notes.length; i++)</code> et <code>System.out.println(i + " : " + notes[i]);</code>',
+      indices: [
+        "Cette fois il faut afficher le numéro de chaque note. Or le <em>for-each</em> ne le fournit pas.",
+        "Il faut donc revenir à la boucle classique avec un compteur, qui sert à la fois d’indice d’accès et de numéro à afficher.",
+        "<code>for (int i = 0; i &lt; notes.length; i++) { System.out.println(i + \" : \" + notes[i]); }</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        int[] notes = {12, 15, 9, 18, 14};\n        for (int i = 0; i < notes.length; i++) {\n            System.out.println(i + " : " + notes[i]);\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -525,7 +593,11 @@ for (int note : notes) {
       type: 'java',
       consigne: 'Écris une méthode <code>static int carre(int x)</code> qui renvoie le carré, et affiche <code>carre(7)</code> depuis le main.',
       codeDepart: 'public class Main {\n\n    // ta méthode ici\n\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>static int carre(int x) { return x * x; }</code> — n\'oublie pas <code>static</code>, sinon main ne pourra pas l\'appeler.',
+      indices: [
+        "Une méthode se déclare à l’intérieur de la classe, à côté du <code>main</code> — pas dedans.",
+        "Un mot-clé est indispensable : sans lui, la méthode appartiendrait à un objet, et le <code>main</code> ne pourrait pas l’appeler.",
+        "<code>static int carre(int x) { return x * x; }</code>"
+      ],
       solution: 'public class Main {\n\n    static int carre(int x) {\n        return x * x;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(carre(7));\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -540,7 +612,11 @@ for (int note : notes) {
       type: 'java',
       consigne: '<strong>Entraînement :</strong> écris <code>static void saluer(String nom)</code> qui affiche <code>Bonjour</code> suivi du nom, et appelle-la deux fois avec deux prénoms différents.',
       codeDepart: 'public class Main {\n\n\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>static void saluer(String nom) { System.out.println("Bonjour " + nom); }</code>',
+      indices: [
+        "Cette méthode ne rend rien : elle affiche. Le mot qui remplace le type de retour est le même qu’en C.",
+        "<code>void</code> veut dire « ne renvoie rien », et <code>static</code> reste nécessaire pour que le <code>main</code> puisse l’appeler.",
+        "<code>static void saluer(String nom) { System.out.println(\"Bonjour \" + nom); }</code>"
+      ],
       solution: 'public class Main {\n\n    static void saluer(String nom) {\n        System.out.println("Bonjour " + nom);\n    }\n\n    public static void main(String[] args) {\n        saluer("Nadia");\n        saluer("Karim");\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -556,7 +632,11 @@ for (int note : notes) {
       type: 'java',
       consigne: '<strong>Défi :</strong> écris <code>static boolean estPair(int n)</code> qui renvoie <code>true</code> si le nombre est pair, puis affiche le résultat pour 4 et pour 7 (deux lignes : <code>true</code> puis <code>false</code>).',
       codeDepart: 'public class Main {\n\n\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: 'Un nombre est pair si <code>n % 2 == 0</code>. Tu peux renvoyer directement le résultat de la comparaison : <code>return n % 2 == 0;</code>',
+      indices: [
+        "La méthode doit rendre <code>true</code> ou <code>false</code>. Son type de retour est donc <code>boolean</code>.",
+        "Inutile d’écrire un <code>if</code> : une comparaison <strong>est déjà</strong> un <code>true</code> ou un <code>false</code>, qu’on peut renvoyer telle quelle.",
+        "<code>return n % 2 == 0;</code>"
+      ],
       solution: 'public class Main {\n\n    static boolean estPair(int n) {\n        return n % 2 == 0;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(estPair(4));\n        System.out.println(estPair(7));\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -607,7 +687,11 @@ System.out.println(s);         // "BONJOUR"</pre>
       type: 'java',
       consigne: 'À partir de <code>"Bonjour le monde"</code>, affiche sur quatre lignes : la longueur, la version en majuscules, le premier caractère, et les 7 premiers caractères.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        String phrase = "Bonjour le monde";\n        \n    }\n}',
-      indice: '<code>phrase.length()</code>, <code>phrase.toUpperCase()</code>, <code>phrase.charAt(0)</code>, <code>phrase.substring(0, 7)</code>.',
+      indices: [
+        "Quatre informations à tirer de la même chaîne, chacune par une méthode différente.",
+        "En Java, <strong>toutes</strong> s’appellent avec des parenthèses — y compris la longueur, contrairement aux tableaux.",
+        "<code>phrase.length()</code>, <code>phrase.toUpperCase()</code>, <code>phrase.charAt(0)</code>, <code>phrase.substring(0, 7)</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        String phrase = "Bonjour le monde";\n        System.out.println(phrase.length());\n        System.out.println(phrase.toUpperCase());\n        System.out.println(phrase.charAt(0));\n        System.out.println(phrase.substring(0, 7));\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -624,7 +708,11 @@ System.out.println(s);         // "BONJOUR"</pre>
       type: 'java',
       consigne: '<strong>Chasse au bug :</strong> ce programme devrait afficher <code>BONJOUR</code> mais affiche <code>bonjour</code>. Trouve pourquoi.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        String s = "bonjour";\n        s.toUpperCase();\n        System.out.println(s);\n    }\n}',
-      indice: 'Les méthodes de String ne modifient jamais la chaîne : elles en renvoient une nouvelle. Il faut la récupérer : <code>s = s.toUpperCase();</code>',
+      indices: [
+        "La méthode est bien appelée, et pourtant rien ne change. Demande-toi ce que devient son résultat.",
+        "En Java, une chaîne ne se modifie <strong>jamais</strong> : les méthodes en renvoient une <em>nouvelle</em>. Si on ne récupère pas ce retour, il est perdu.",
+        "<code>s = s.toUpperCase();</code> — il faut ranger le résultat."
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        String s = "bonjour";\n        s = s.toUpperCase();\n        System.out.println(s);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -639,7 +727,11 @@ System.out.println(s);         // "BONJOUR"</pre>
       type: 'java',
       consigne: '<strong>Défi :</strong> compte le nombre de <code>o</code> dans <code>"Bonjour tout le monde"</code> et affiche ce nombre.',
       codeDepart: 'public class Main {\n    public static void main(String[] args) {\n        String phrase = "Bonjour tout le monde";\n        int compte = 0;\n        \n    }\n}',
-      indice: 'Parcours avec <code>for (int i = 0; i < phrase.length(); i++)</code> et compare : <code>if (phrase.charAt(i) == \'o\')</code> — apostrophes simples pour un char.',
+      indices: [
+        "Compter, c’est un accumulateur conditionnel : on parcourt, et on n’augmente que dans certains cas.",
+        "Un caractère s’obtient avec <code>charAt(i)</code>, se compare avec <code>==</code>, et s’écrit entre <strong>apostrophes simples</strong>.",
+        "<code>if (phrase.charAt(i) == 'o') { compte++; }</code>"
+      ],
       solution: 'public class Main {\n    public static void main(String[] args) {\n        String phrase = "Bonjour tout le monde";\n        int compte = 0;\n        for (int i = 0; i < phrase.length(); i++) {\n            if (phrase.charAt(i) == \'o\') {\n                compte++;\n            }\n        }\n        System.out.println(compte);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -807,7 +899,11 @@ public class Main {
       type: 'java',
       consigne: 'Ajoute un constructeur <code>Chien(String n, int a)</code> à la classe, puis crée <code>new Chien("Rex", 3)</code> et affiche <code>decrire()</code> — soit <code>Rex, 3 ans</code>.',
       codeDepart: 'class Chien {\n    String nom;\n    int age;\n\n    // ton constructeur ici\n\n    String decrire() {\n        return nom + ", " + age + " ans";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: '<code>Chien(String n, int a) { nom = n; age = a; }</code> — même nom que la classe, pas de type de retour.',
+      indices: [
+        "Un constructeur sert à remplir l’objet au moment de sa fabrication. Il ne ressemble pas tout à fait à une méthode ordinaire.",
+        "Il porte <strong>exactement</strong> le nom de la classe, et n’a <strong>aucun</strong> type de retour — pas même <code>void</code>.",
+        "<code>Chien(String n, int a) { nom = n; age = a; }</code>"
+      ],
       solution: 'class Chien {\n    String nom;\n    int age;\n\n    Chien(String n, int a) {\n        nom = n;\n        age = a;\n    }\n\n    String decrire() {\n        return nom + ", " + age + " ans";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex", 3);\n        System.out.println(rex.decrire());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -822,7 +918,11 @@ public class Main {
       type: 'java',
       consigne: '<strong>Entraînement :</strong> réécris le constructeur en donnant aux paramètres <strong>le même nom</strong> que les attributs, avec <code>this.</code> pour les distinguer.',
       codeDepart: 'class Chien {\n    String nom;\n    int age;\n\n    Chien(String nom, int age) {\n        // utilise this. ici\n        \n    }\n\n    String decrire() {\n        return nom + ", " + age + " ans";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex", 3);\n        System.out.println(rex.decrire());\n    }\n}',
-      indice: '<code>this.nom = nom;</code> — à gauche l\'attribut de l\'objet, à droite le paramètre reçu.',
+      indices: [
+        "Le paramètre et l’attribut portent désormais le même nom. Il faut donc un moyen de dire lequel on désigne.",
+        "<code>this</code> désigne l’objet en cours de fabrication : à gauche l’attribut de l’objet, à droite le paramètre reçu.",
+        "<code>this.nom = nom;</code>"
+      ],
       solution: 'class Chien {\n    String nom;\n    int age;\n\n    Chien(String nom, int age) {\n        this.nom = nom;\n        this.age = age;\n    }\n\n    String decrire() {\n        return nom + ", " + age + " ans";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex", 3);\n        System.out.println(rex.decrire());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -836,7 +936,11 @@ public class Main {
       type: 'java',
       consigne: '<strong>Défi :</strong> crée une classe <code>Rectangle</code> avec un constructeur <code>(int largeur, int hauteur)</code> et une méthode <code>aire()</code>. Affiche l\'aire d\'un rectangle 4×5 — soit <code>20</code>.',
       codeDepart: '\n\npublic class Main {\n    public static void main(String[] args) {\n        \n    }\n}',
-      indice: 'Utilise <code>this.largeur = largeur;</code> dans le constructeur, et <code>return largeur * hauteur;</code> dans <code>aire()</code>.',
+      indices: [
+        "Une classe complète à écrire : deux attributs, un constructeur, et une méthode qui calcule.",
+        "Le constructeur range les deux paramètres avec <code>this.</code>. La méthode <code>aire()</code>, elle, n’a besoin d’aucun paramètre : elle lit les attributs.",
+        "<code>this.largeur = largeur;</code> dans le constructeur, et <code>return largeur * hauteur;</code> dans <code>aire()</code>."
+      ],
       solution: 'class Rectangle {\n    int largeur;\n    int hauteur;\n\n    Rectangle(int largeur, int hauteur) {\n        this.largeur = largeur;\n        this.hauteur = hauteur;\n    }\n\n    int aire() {\n        return largeur * hauteur;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Rectangle r = new Rectangle(4, 5);\n        System.out.println(r.aire());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -892,7 +996,11 @@ public class Main {
       type: 'java',
       consigne: 'Complète la classe <code>Compte</code> : un attribut <code>private int solde</code>, un <code>getSolde()</code> qui le renvoie, et un <code>deposer(int montant)</code> qui l\'augmente. Le main dépose 50 sur un compte de 100 et doit afficher <code>150</code>.',
       codeDepart: 'class Compte {\n    private int solde;\n\n    Compte(int solde) {\n        this.solde = solde;\n    }\n\n    // getSolde et deposer ici\n\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Compte c = new Compte(100);\n        c.deposer(50);\n        System.out.println(c.getSolde());\n    }\n}',
-      indice: '<code>public int getSolde() { return solde; }</code> et <code>public void deposer(int montant) { solde = solde + montant; }</code>',
+      indices: [
+        "L’attribut est <code>private</code> : personne ne peut le lire ni l’écrire depuis l’extérieur. Il faut donc ouvrir deux portes contrôlées.",
+        "Une méthode qui <strong>rend</strong> la valeur, et une qui la <strong>modifie</strong>. Toutes deux <code>public</code>, sinon elles seraient inutiles.",
+        "<code>public int getSolde() { return solde; }</code> et <code>public void deposer(int montant) { solde = solde + montant; }</code>"
+      ],
       solution: 'class Compte {\n    private int solde;\n\n    Compte(int solde) {\n        this.solde = solde;\n    }\n\n    public int getSolde() {\n        return solde;\n    }\n\n    public void deposer(int montant) {\n        solde = solde + montant;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Compte c = new Compte(100);\n        c.deposer(50);\n        System.out.println(c.getSolde());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -907,7 +1015,11 @@ public class Main {
       type: 'java',
       consigne: '<strong>Entraînement :</strong> ajoute une <strong>vérification</strong> dans <code>deposer</code> : un montant négatif ou nul doit être ignoré. Le main tente un dépôt de -500 puis de 50 : le solde final doit être <code>150</code>.',
       codeDepart: 'class Compte {\n    private int solde;\n\n    Compte(int solde) {\n        this.solde = solde;\n    }\n\n    public int getSolde() {\n        return solde;\n    }\n\n    public void deposer(int montant) {\n        solde = solde + montant;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Compte c = new Compte(100);\n        c.deposer(-500);\n        c.deposer(50);\n        System.out.println(c.getSolde());\n    }\n}',
-      indice: 'Entoure la ligne d\'un <code>if (montant > 0) { ... }</code>.',
+      indices: [
+        "Tout l’intérêt de l’encapsulation est là : la méthode peut <strong>refuser</strong> ce qu’on lui demande.",
+        "Une seule ligne à protéger, avec une condition autour. Si le montant n’est pas positif, on ne fait rien du tout.",
+        "<code>if (montant &gt; 0) { solde = solde + montant; }</code>"
+      ],
       solution: 'class Compte {\n    private int solde;\n\n    Compte(int solde) {\n        this.solde = solde;\n    }\n\n    public int getSolde() {\n        return solde;\n    }\n\n    public void deposer(int montant) {\n        if (montant > 0) {\n            solde = solde + montant;\n        }\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Compte c = new Compte(100);\n        c.deposer(-500);\n        c.deposer(50);\n        System.out.println(c.getSolde());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -991,7 +1103,11 @@ System.out.println(rex);      // affiche « Chien : Rex »</pre>
       type: 'java',
       consigne: 'Crée une classe <code>Chien</code> qui <strong>hérite</strong> d\'<code>Animal</code>, avec un constructeur qui appelle <code>super(nom)</code> et une méthode <code>crier()</code> qui renvoie <code>« nom » fait Ouaf !</code>.',
       codeDepart: 'class Animal {\n    String nom;\n\n    Animal(String nom) {\n        this.nom = nom;\n    }\n\n    String crier() {\n        return "...";\n    }\n}\n\n// ta classe Chien ici\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex");\n        System.out.println(rex.crier());\n    }\n}',
-      indice: '<code>class Chien extends Animal { Chien(String nom) { super(nom); } String crier() { return nom + " fait Ouaf !"; } }</code>',
+      indices: [
+        "Hériter, c’est repartir d’une classe existante. Mais le parent a un constructeur qui attend un nom : il faut l’appeler.",
+        "<code>extends</code> établit le lien ; <code>super(nom)</code> appelle le constructeur du parent, et doit être la <strong>première</strong> instruction du constructeur enfant.",
+        "<code>class Chien extends Animal { Chien(String nom) { super(nom); } String crier() { return nom + \" fait Ouaf !\"; } }</code>"
+      ],
       solution: 'class Animal {\n    String nom;\n\n    Animal(String nom) {\n        this.nom = nom;\n    }\n\n    String crier() {\n        return "...";\n    }\n}\n\nclass Chien extends Animal {\n    Chien(String nom) {\n        super(nom);\n    }\n\n    String crier() {\n        return nom + " fait Ouaf !";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex");\n        System.out.println(rex.crier());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1008,7 +1124,11 @@ System.out.println(rex);      // affiche « Chien : Rex »</pre>
       type: 'java',
       consigne: '<strong>Entraînement :</strong> ajoute une classe <code>Chat</code> qui hérite aussi d\'<code>Animal</code> et dont <code>crier()</code> renvoie <code>« nom » fait Miaou !</code>. Le main doit afficher les deux cris.',
       codeDepart: 'class Animal {\n    String nom;\n\n    Animal(String nom) {\n        this.nom = nom;\n    }\n\n    String crier() {\n        return "...";\n    }\n}\n\nclass Chien extends Animal {\n    Chien(String nom) {\n        super(nom);\n    }\n\n    String crier() {\n        return nom + " fait Ouaf !";\n    }\n}\n\n// ta classe Chat ici\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex");\n        Chat felix = new Chat("Félix");\n        System.out.println(rex.crier());\n        System.out.println(felix.crier());\n    }\n}',
-      indice: 'Copie la structure de Chien en changeant le nom de la classe et le texte renvoyé.',
+      indices: [
+        "Rien de nouveau : c’est exactement la même construction que pour <code>Chien</code>.",
+        "Seuls changent le nom de la classe et le texte renvoyé par <code>crier()</code>. Le lien au parent et l’appel à <code>super</code> restent identiques.",
+        "<code>class Chat extends Animal { Chat(String nom) { super(nom); } String crier() { return nom + \" fait Miaou !\"; } }</code>"
+      ],
       solution: 'class Animal {\n    String nom;\n\n    Animal(String nom) {\n        this.nom = nom;\n    }\n\n    String crier() {\n        return "...";\n    }\n}\n\nclass Chien extends Animal {\n    Chien(String nom) {\n        super(nom);\n    }\n\n    String crier() {\n        return nom + " fait Ouaf !";\n    }\n}\n\nclass Chat extends Animal {\n    Chat(String nom) {\n        super(nom);\n    }\n\n    String crier() {\n        return nom + " fait Miaou !";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex");\n        Chat felix = new Chat("Félix");\n        System.out.println(rex.crier());\n        System.out.println(felix.crier());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1024,7 +1144,11 @@ System.out.println(rex);      // affiche « Chien : Rex »</pre>
       type: 'java',
       consigne: '<strong>Défi :</strong> ajoute à <code>Chien</code> une méthode <code>toString()</code> qui renvoie <code>Chien : « nom »</code>. Le main affiche directement l\'objet — tu dois voir <code>Chien : Rex</code>.',
       codeDepart: 'class Animal {\n    String nom;\n\n    Animal(String nom) {\n        this.nom = nom;\n    }\n}\n\nclass Chien extends Animal {\n    Chien(String nom) {\n        super(nom);\n    }\n\n    // ta méthode toString ici\n\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex");\n        System.out.println(rex);\n    }\n}',
-      indice: '<code>public String toString() { return "Chien : " + nom; }</code> — Java l\'appelle automatiquement quand on affiche l\'objet.',
+      indices: [
+        "Afficher un objet donne normalement quelque chose d’illisible. Une méthode au nom précis permet de décider ce que Java en montre.",
+        "Elle s’appelle <code>toString()</code>, ne prend aucun paramètre, et rend un <code>String</code>. Java l’appelle tout seul quand on affiche l’objet.",
+        "<code>public String toString() { return \"Chien : \" + nom; }</code>"
+      ],
       solution: 'class Animal {\n    String nom;\n\n    Animal(String nom) {\n        this.nom = nom;\n    }\n}\n\nclass Chien extends Animal {\n    Chien(String nom) {\n        super(nom);\n    }\n\n    public String toString() {\n        return "Chien : " + nom;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Chien rex = new Chien("Rex");\n        System.out.println(rex);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1084,7 +1208,11 @@ System.out.println("Total : " + total + " pages");</pre>
       type: 'java',
       consigne: 'Parcours la bibliothèque avec un <strong>for-each</strong> et affiche chaque livre sous la forme <code>Le Petit Prince (96 p.)</code>.',
       codeDepart: 'class Livre {\n    String titre;\n    int pages;\n\n    Livre(String titre, int pages) {\n        this.titre = titre;\n        this.pages = pages;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Livre[] biblio = {\n            new Livre("Le Petit Prince", 96),\n            new Livre("Les Misérables", 1500),\n            new Livre("L\'Étranger", 159)\n        };\n        \n    }\n}',
-      indice: '<code>for (Livre l : biblio) { System.out.println(l.titre + " (" + l.pages + " p.)"); }</code>',
+      indices: [
+        "Un tableau d’objets : chaque tour de boucle te donne un <code>Livre</code> entier, dont il faut lire les attributs.",
+        "Le <em>for-each</em> fonctionne aussi sur des objets — il suffit d’annoncer leur type : <code>for (Livre l : biblio)</code>.",
+        "<code>System.out.println(l.titre + \" (\" + l.pages + \" p.)\");</code>"
+      ],
       solution: 'class Livre {\n    String titre;\n    int pages;\n\n    Livre(String titre, int pages) {\n        this.titre = titre;\n        this.pages = pages;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Livre[] biblio = {\n            new Livre("Le Petit Prince", 96),\n            new Livre("Les Misérables", 1500),\n            new Livre("L\'Étranger", 159)\n        };\n        for (Livre l : biblio) {\n            System.out.println(l.titre + " (" + l.pages + " p.)");\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1099,7 +1227,11 @@ System.out.println("Total : " + total + " pages");</pre>
       type: 'java',
       consigne: '<strong>Entraînement :</strong> calcule et affiche le <strong>nombre total de pages</strong> de la bibliothèque, sous la forme <code>Total : 1755 pages</code>.',
       codeDepart: 'class Livre {\n    String titre;\n    int pages;\n\n    Livre(String titre, int pages) {\n        this.titre = titre;\n        this.pages = pages;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Livre[] biblio = {\n            new Livre("Le Petit Prince", 96),\n            new Livre("Les Misérables", 1500),\n            new Livre("L\'Étranger", 159)\n        };\n        int total = 0;\n        \n    }\n}',
-      indice: 'Dans le for-each : <code>total += l.pages;</code> puis un println après la boucle.',
+      indices: [
+        "Encore l’accumulateur, mais sur un attribut des objets parcourus.",
+        "Le total se déclare avant la boucle, s’augmente à chaque tour, et ne s’affiche qu’après — sinon il sortirait une fois par livre.",
+        "<code>total += l.pages;</code> dans la boucle, puis un <code>println</code> après."
+      ],
       solution: 'class Livre {\n    String titre;\n    int pages;\n\n    Livre(String titre, int pages) {\n        this.titre = titre;\n        this.pages = pages;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Livre[] biblio = {\n            new Livre("Le Petit Prince", 96),\n            new Livre("Les Misérables", 1500),\n            new Livre("L\'Étranger", 159)\n        };\n        int total = 0;\n        for (Livre l : biblio) {\n            total += l.pages;\n        }\n        System.out.println("Total : " + total + " pages");\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1113,7 +1245,11 @@ System.out.println("Total : " + total + " pages");</pre>
       type: 'java',
       consigne: '<strong>Défi :</strong> trouve le livre le <strong>plus long</strong> et affiche son titre (<code>Les Misérables</code>).',
       codeDepart: 'class Livre {\n    String titre;\n    int pages;\n\n    Livre(String titre, int pages) {\n        this.titre = titre;\n        this.pages = pages;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Livre[] biblio = {\n            new Livre("Le Petit Prince", 96),\n            new Livre("Les Misérables", 1500),\n            new Livre("L\'Étranger", 159)\n        };\n        Livre plusLong = biblio[0];\n        \n    }\n}',
-      indice: 'Même motif que la recherche du maximum, mais sur des objets : <code>if (l.pages > plusLong.pages) { plusLong = l; }</code>',
+      indices: [
+        "Même motif que la recherche du maximum, mais ce qu’on garde n’est plus un nombre : c’est l’objet entier.",
+        "On compare les <strong>attributs</strong>, mais on retient l’<strong>objet</strong> — sinon on perdrait son titre en cours de route.",
+        "<code>if (l.pages &gt; plusLong.pages) { plusLong = l; }</code>"
+      ],
       solution: 'class Livre {\n    String titre;\n    int pages;\n\n    Livre(String titre, int pages) {\n        this.titre = titre;\n        this.pages = pages;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Livre[] biblio = {\n            new Livre("Le Petit Prince", 96),\n            new Livre("Les Misérables", 1500),\n            new Livre("L\'Étranger", 159)\n        };\n        Livre plusLong = biblio[0];\n        for (Livre l : biblio) {\n            if (l.pages > plusLong.pages) {\n                plusLong = l;\n            }\n        }\n        System.out.println(plusLong.titre);\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1155,7 +1291,11 @@ for (X e : tab) { ... }                   // parcours</pre>
       type: 'java',
       consigne: '<strong>Étape 1 :</strong> complète la classe <code>Media</code> avec une méthode <code>emprunter()</code> qui passe <code>emprunte</code> à <code>true</code>, et <code>estEmprunte()</code> qui renvoie son état. Le main doit afficher <code>false</code> puis <code>true</code>.',
       codeDepart: 'class Media {\n    String titre;\n    private boolean emprunte;\n\n    Media(String titre) {\n        this.titre = titre;\n        this.emprunte = false;\n    }\n\n    // emprunter() et estEmprunte() ici\n\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Media m = new Media("Dune");\n        System.out.println(m.estEmprunte());\n        m.emprunter();\n        System.out.println(m.estEmprunte());\n    }\n}',
-      indice: '<code>public void emprunter() { emprunte = true; }</code> et <code>public boolean estEmprunte() { return emprunte; }</code>',
+      indices: [
+        "Deux méthodes aux rôles opposés : l’une <strong>change</strong> l’état, l’autre se contente de le <strong>lire</strong>.",
+        "Celle qui change ne rend rien : son type est <code>void</code>. Celle qui lit rend un <code>boolean</code>.",
+        "<code>public void emprunter() { emprunte = true; }</code> et <code>public boolean estEmprunte() { return emprunte; }</code>"
+      ],
       solution: 'class Media {\n    String titre;\n    private boolean emprunte;\n\n    Media(String titre) {\n        this.titre = titre;\n        this.emprunte = false;\n    }\n\n    public void emprunter() {\n        emprunte = true;\n    }\n\n    public boolean estEmprunte() {\n        return emprunte;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Media m = new Media("Dune");\n        System.out.println(m.estEmprunte());\n        m.emprunter();\n        System.out.println(m.estEmprunte());\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1172,7 +1312,11 @@ for (X e : tab) { ... }                   // parcours</pre>
       type: 'java',
       consigne: '<strong>Étape 2 :</strong> emprunte le premier et le troisième média, puis affiche le nombre de médias <strong>encore disponibles</strong> sous la forme <code>1 disponible(s)</code>.',
       codeDepart: 'class Media {\n    String titre;\n    private boolean emprunte;\n\n    Media(String titre) {\n        this.titre = titre;\n        this.emprunte = false;\n    }\n\n    public void emprunter() {\n        emprunte = true;\n    }\n\n    public boolean estEmprunte() {\n        return emprunte;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Media[] medias = {\n            new Media("Dune"),\n            new Media("Blade Runner"),\n            new Media("Solaris")\n        };\n        medias[0].emprunter();\n        medias[2].emprunter();\n        int dispo = 0;\n        \n    }\n}',
-      indice: 'Parcours avec un for-each et compte ceux qui ne sont PAS empruntés : <code>if (m.estEmprunte() == false) { dispo++; }</code> — ou plus élégant, <code>if (!m.estEmprunte())</code>.',
+      indices: [
+        "Compter les disponibles, c’est compter ceux qui ne sont <strong>pas</strong> empruntés — donc un compteur conditionnel, avec une condition inversée.",
+        "On peut écrire <code>== false</code>, mais Java a plus court : un point d’exclamation devant une condition la renverse.",
+        "<code>if (!m.estEmprunte()) { dispo++; }</code>"
+      ],
       solution: 'class Media {\n    String titre;\n    private boolean emprunte;\n\n    Media(String titre) {\n        this.titre = titre;\n        this.emprunte = false;\n    }\n\n    public void emprunter() {\n        emprunte = true;\n    }\n\n    public boolean estEmprunte() {\n        return emprunte;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Media[] medias = {\n            new Media("Dune"),\n            new Media("Blade Runner"),\n            new Media("Solaris")\n        };\n        medias[0].emprunter();\n        medias[2].emprunter();\n        int dispo = 0;\n        for (Media m : medias) {\n            if (!m.estEmprunte()) {\n                dispo++;\n            }\n        }\n        System.out.println(dispo + " disponible(s)");\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
@@ -1188,7 +1332,11 @@ for (X e : tab) { ... }                   // parcours</pre>
       type: 'java',
       consigne: '<strong>Étape 3 — la finale :</strong> affiche la liste complète avec l\'état de chacun, sous la forme <code>Dune : emprunté</code> ou <code>Blade Runner : disponible</code>.',
       codeDepart: 'class Media {\n    String titre;\n    private boolean emprunte;\n\n    Media(String titre) {\n        this.titre = titre;\n        this.emprunte = false;\n    }\n\n    public void emprunter() {\n        emprunte = true;\n    }\n\n    public boolean estEmprunte() {\n        return emprunte;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Media[] medias = {\n            new Media("Dune"),\n            new Media("Blade Runner"),\n            new Media("Solaris")\n        };\n        medias[0].emprunter();\n        medias[2].emprunter();\n        \n    }\n}',
-      indice: 'Dans la boucle, un <code>if</code>/<code>else</code> choisit le mot à afficher — ou, plus court, l\'opérateur ternaire : <code>(m.estEmprunte() ? "emprunté" : "disponible")</code>.',
+      indices: [
+        "Pour chaque média, un mot à choisir entre deux. C’est un <code>if/else</code>… qui ne fait que choisir une valeur.",
+        "Dans ce cas précis, l’opérateur ternaire tient sur une ligne : une condition, un <code>?</code>, la valeur si vrai, un <code>:</code>, la valeur si faux.",
+        "<code>m.estEmprunte() ? \"emprunté\" : \"disponible\"</code>"
+      ],
       solution: 'class Media {\n    String titre;\n    private boolean emprunte;\n\n    Media(String titre) {\n        this.titre = titre;\n        this.emprunte = false;\n    }\n\n    public void emprunter() {\n        emprunte = true;\n    }\n\n    public boolean estEmprunte() {\n        return emprunte;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Media[] medias = {\n            new Media("Dune"),\n            new Media("Blade Runner"),\n            new Media("Solaris")\n        };\n        medias[0].emprunter();\n        medias[2].emprunter();\n        for (Media m : medias) {\n            if (m.estEmprunte()) {\n                System.out.println(m.titre + " : emprunté");\n            } else {\n                System.out.println(m.titre + " : disponible");\n            }\n        }\n    }\n}',
       verifier: function (ctx) {
         if (ctx.erreur) return { ok: false, message: ctx.erreur };
