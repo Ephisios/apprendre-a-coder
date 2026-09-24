@@ -2,18 +2,18 @@
 
 // ---- Assemblage des modules (les données viennent des fichiers data-*.js) ----
 const MODULES = [
-  { id: 'intro', icone: '👋', teinte: 'var(--m-intro)', titre: 'Bienvenue', desc: 'Comprendre ce qu\'est le code et comment utiliser ce logiciel.', lecons: DATA_INTRO },
-  { id: 'html',  icone: '🧱', teinte: 'var(--m-html)',  titre: 'HTML — La structure', desc: 'Le squelette de toute page web : textes, liens, images, formulaires, sémantique, SEO.', lecons: DATA_HTML.concat(DATA_HTML2, DATA_HTML3) },
-  { id: 'css',   icone: '🎨', teinte: 'var(--m-css)',   titre: 'CSS — L\'apparence', desc: 'Couleurs, mise en page, Grid, animations, variables : rendre une page belle.', lecons: DATA_CSS.concat(DATA_CSS2, DATA_CSS3) },
-  { id: 'js',    icone: '⚡', teinte: 'var(--m-js)',    titre: 'JavaScript — La logique', desc: 'Le vrai langage de programmation : variables, conditions, boucles, fonctions.', lecons: DATA_JS1.concat(DATA_JS2) },
-  { id: 'js2',   icone: '🧠', teinte: 'var(--m-js2)',   titre: 'JavaScript — La suite', desc: 'switch, tri, reduce, boucles imbriquées, dates, clavier... et un jeu complet.', lecons: DATA_JS3 },
-  { id: 'jsav',  icone: '🔥', teinte: 'var(--m-jsav)',  titre: 'JavaScript avancé', desc: 'Les outils des pros : méthodes modernes, DOM dynamique, sauvegarde de données.', lecons: DATA_JSAVANCE.concat(DATA_JS4) },
-  { id: 'proj',  icone: '🛠️', teinte: 'var(--m-proj)',  titre: 'Projets guidés', desc: 'Construire de vraies applications, de la première ligne à la dernière.', lecons: DATA_PROJETS },
-  { id: 'py',    icone: '🐍', teinte: 'var(--m-py)',    titre: 'Python — Un second langage', desc: 'Le langage des scripts, des données et de l\'IA : mêmes idées, nouvelle grammaire.', lecons: DATA_PYTHON.concat(DATA_PYTHON2, DATA_PYTHON3) },
-  { id: 'sql',   icone: '🗄', teinte: 'var(--m-sql)',   titre: 'SQL — Les bases de données', desc: 'Interroger, filtrer, résumer et relier des données : le langage des rapports.', lecons: DATA_SQL.concat(DATA_SQL2) },
-  { id: 'c',     icone: '🔧', teinte: 'var(--m-c)',     titre: 'C — Le langage des fondations', desc: 'Types, mémoire, pointeurs : comprendre ce qui se passe vraiment sous le capot.', lecons: DATA_C },
-  { id: 'java',  icone: '☕', teinte: 'var(--m-java)',  titre: 'Java — Les grandes applications', desc: 'Classes, objets, héritage : la programmation orientée objet des entreprises.', lecons: DATA_JAVA },
-  { id: 'fin',   icone: '🚀', teinte: 'var(--m-fin)',   titre: 'Et après ?', desc: 'Les autres langages, et comment continuer à apprendre seul.', lecons: DATA_FIN },
+  { id: 'intro', icone: '00', teinte: 'var(--m-intro)', titre: 'Bienvenue', desc: 'Comprendre ce qu\'est le code et comment utiliser ce logiciel.', lecons: DATA_INTRO },
+  { id: 'html',  icone: '01', teinte: 'var(--m-html)',  titre: 'HTML — La structure', desc: 'Le squelette de toute page web : textes, liens, images, formulaires, sémantique, SEO.', lecons: DATA_HTML.concat(DATA_HTML2, DATA_HTML3) },
+  { id: 'css',   icone: '02', teinte: 'var(--m-css)',   titre: 'CSS — L\'apparence', desc: 'Couleurs, mise en page, Grid, animations, variables : rendre une page belle.', lecons: DATA_CSS.concat(DATA_CSS2, DATA_CSS3) },
+  { id: 'js',    icone: '03', teinte: 'var(--m-js)',    titre: 'JavaScript — La logique', desc: 'Le vrai langage de programmation : variables, conditions, boucles, fonctions.', lecons: DATA_JS1.concat(DATA_JS2) },
+  { id: 'js2',   icone: '04', teinte: 'var(--m-js2)',   titre: 'JavaScript — La suite', desc: 'switch, tri, reduce, boucles imbriquées, dates, clavier... et un jeu complet.', lecons: DATA_JS3 },
+  { id: 'jsav',  icone: '05', teinte: 'var(--m-jsav)',  titre: 'JavaScript avancé', desc: 'Les outils des pros : méthodes modernes, DOM dynamique, sauvegarde de données.', lecons: DATA_JSAVANCE.concat(DATA_JS4) },
+  { id: 'proj',  icone: '06', teinte: 'var(--m-proj)',  titre: 'Projets guidés', desc: 'Construire de vraies applications, de la première ligne à la dernière.', lecons: DATA_PROJETS },
+  { id: 'py',    icone: '07', teinte: 'var(--m-py)',    titre: 'Python — Un second langage', desc: 'Le langage des scripts, des données et de l\'IA : mêmes idées, nouvelle grammaire.', lecons: DATA_PYTHON.concat(DATA_PYTHON2, DATA_PYTHON3) },
+  { id: 'sql',   icone: '08', teinte: 'var(--m-sql)',   titre: 'SQL — Les bases de données', desc: 'Interroger, filtrer, résumer et relier des données : le langage des rapports.', lecons: DATA_SQL.concat(DATA_SQL2) },
+  { id: 'c',     icone: '09', teinte: 'var(--m-c)',     titre: 'C — Le langage des fondations', desc: 'Types, mémoire, pointeurs : comprendre ce qui se passe vraiment sous le capot.', lecons: DATA_C },
+  { id: 'java',  icone: '10', teinte: 'var(--m-java)',  titre: 'Java — Les grandes applications', desc: 'Classes, objets, héritage : la programmation orientée objet des entreprises.', lecons: DATA_JAVA },
+  { id: 'fin',   icone: '11', teinte: 'var(--m-fin)',   titre: 'Et après ?', desc: 'Les autres langages, et comment continuer à apprendre seul.', lecons: DATA_FIN },
 ];
 
 /* ---- Le genre d'un exercice -------------------------------------------
@@ -26,12 +26,12 @@ const MODULES = [
    de retoucher 481 enregistrements, on le lit là où il se trouve déjà. Un
    exercice peut toujours le déclarer franchement avec `genre:`, qui gagne. */
 const GENRES = {
-  guide:        { mot: 'Exercice',      icone: '💪', aide: 'On avance pas à pas avec toi.' },
-  entrainement: { mot: 'Entraînement',  icone: '🏋️', aide: 'À toi de jouer, sur le même modèle.' },
-  defi:         { mot: 'Défi',          icone: '🎯', aide: 'Plus difficile : on ne montre plus le chemin.' },
-  bug:          { mot: 'Chasse au bug', icone: '🐛', aide: 'Le code est cassé. Trouver la faute EST l\'exercice — l\'éditeur ne souligne donc rien.' },
-  etape:        { mot: 'Étape',         icone: '🧩', aide: 'Une pièce du projet en cours.' },
-  qcm:          { mot: 'Question',      icone: '❓', aide: 'Vérifie que la notion est comprise.' }
+  guide:        { mot: 'Exercice',      aide: 'On avance pas à pas avec toi.' },
+  entrainement: { mot: 'Entraînement',  aide: 'À toi de jouer, sur le même modèle.' },
+  defi:         { mot: 'Défi',          aide: 'Plus difficile : on ne montre plus le chemin.' },
+  bug:          { mot: 'Chasse au bug', aide: 'Le code est cassé. Trouver la faute EST l\'exercice — l\'éditeur ne souligne donc rien.' },
+  etape:        { mot: 'Étape',         aide: 'Une pièce du projet en cours.' },
+  qcm:          { mot: 'Question',      aide: 'Vérifie que la notion est comprise.' }
 };
 
 function genreDe(ex) {
@@ -529,7 +529,7 @@ function rendreRevision() {
         '<span class="revision-puce" aria-hidden="true">' + r.mod.icone + '</span>' +
         '<span class="revision-corps">' +
         '<span class="revision-titre">' + echapper(r.lecon.titre) + rang + '</span>' +
-        '<span class="revision-detail">' + g.icone + ' ' + g.mot + ' · ' + echapper(raisons.join(' · ')) + '</span>' +
+        '<span class="revision-detail">' + g.mot + ' · ' + echapper(raisons.join(' · ')) + '</span>' +
         '</span></button>';
     }
     html += '</div>';
@@ -636,16 +636,16 @@ function rendreExercice(lecon, ex, i, total) {
   // L'étiquette suivait la POSITION : le troisième exercice s'appelait « Défi »
   // même quand c'était une chasse au bug. Elle suit maintenant le genre réel.
   const genre = GENRES[genreDe(ex)];
-  const etiquette = ex.etiquette || (total === 1 ? '✏️ À toi de jouer !'
+  const etiquette = ex.etiquette || (total === 1 ? 'À toi de jouer !'
     : '<span class="etiquette-genre" title="' + echapperAttr(genre.aide) + '">' +
-      genre.icone + ' ' + genre.mot + '</span> ' + (i + 1) + '/' + total);
+      genre.mot + '</span> ' + (i + 1) + '/' + total);
   // Nom parlé de l'exercice : sans emoji, et distinct des autres cartes de la
   // page — trois éditeurs nommés « Éditeur de code » sont trois inconnus.
   const nomExo = total === 1 ? 'l\'exercice' : 'l\'exercice ' + (i + 1) + ' sur ' + total;
   // L'exercice est un titre de niveau 2 : c'est l'objet de la page, il doit
   // exister dans le plan du document (h1 leçon › h2 exercice › h3 résultat).
   let html = '<div class="exercice" id="exercice-' + i + '">' +
-    '<h2 class="exercice-entete">' + etiquette + (fait ? '<span class="badge-fait">✔ réussi</span>' : '') + '</h2>' +
+    '<h2 class="exercice-entete">' + etiquette + (fait ? '<span class="badge-fait">Acquis</span>' : '') + '</h2>' +
     '<div class="exercice-corps">' +
     '<div class="consigne" id="consigne-' + i + '">' + ex.consigne + '</div>';
 
@@ -734,12 +734,12 @@ function rendreExercice(lecon, ex, i, total) {
    le seul repère qui survit quand on a défilé loin du fil d'Ariane. */
 function panneauEtabli(mod, lecon, index, exos) {
   const faits = exos.filter((_, i) => exoFait(lecon.id, i)).length;
-  const etiquettes = ['💪 Exercice', '🏋️ Entraînement', '🎯 Défi', '🚩 Bonus'];
 
   let liste = '';
   exos.forEach((ex, i) => {
     const fait = exoFait(lecon.id, i);
-    const nom = ex.etiquette || (exos.length === 1 ? '✏️ À toi de jouer !' : etiquettes[Math.min(i, 3)] + ' ' + (i + 1) + '/' + exos.length);
+    // Même nom que l'en-tête de la carte : le genre réel, pas la position.
+    const nom = ex.etiquette || (exos.length === 1 ? 'À toi de jouer !' : GENRES[genreDe(ex)].mot + ' ' + (i + 1) + '/' + exos.length);
     liste += '<li class="etabli-exo' + (fait ? ' fait' : '') + '">' +
       '<a href="#exercice-' + i + '" onclick="allerExercice(' + i + '); return false;">' +
       '<span class="etabli-coche" aria-hidden="true">' + (fait ? '✔' : '○') + '</span>' +
@@ -1536,7 +1536,7 @@ function afficherVerdict(i, v) {
       carte.classList.add('celebre');
     }
     const entete = document.querySelector('#exercice-' + i + ' .exercice-entete');
-    if (entete && !entete.querySelector('.badge-fait')) entete.innerHTML += '<span class="badge-fait">✔ réussi</span>';
+    if (entete && !entete.querySelector('.badge-fait')) entete.innerHTML += '<span class="badge-fait">Acquis</span>';
 
     majRecuLecon();
     if (progression.faits[leconCourante.id]) {
