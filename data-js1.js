@@ -32,7 +32,7 @@ console.log("Troisième ligne");</pre>
       indices: [
         "Un <code>console.log</code> affiche un message, et un seul. Pour trois messages, il en faut donc trois — la première ligne te sert de modèle.",
         "Chaque ligne suit le même moule : <code>console.log(\"…\");</code>. Le texte va entre guillemets, les guillemets entre parenthèses, et la ligne se termine par un point-virgule.",
-        "Trois lignes, l’une sous l’autre. L’apostrophe de « je m’appelle » ne pose aucun problème à l’intérieur de guillemets doubles."
+        "<code>console.log(\"je m’appelle …\");</code> puis <code>console.log(\"et j’apprends le JavaScript\");</code>, sous la ligne déjà présente. L’apostrophe ne gêne pas : elle est à l’intérieur de guillemets doubles."
       ],
       solution: 'console.log("Bonjour");\nconsole.log("je m\'appelle Mathéo");\nconsole.log("et j\'apprends le JavaScript");',
       verifier: function (ctx) {

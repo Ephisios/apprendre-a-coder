@@ -197,6 +197,58 @@ function exercicesDe(lecon) {
   return [];
 }
 
+/* ---- Les paliers d'indice : ce qui se lit, pas seulement ce qui existe ----
+   425 exercices sont passés à trois paliers d'un coup, par scripts. Vérifier
+   qu'un indice est « une chaîne non vide » ne dit rien de ce que l'élève lit :
+   un palier peut être du HTML cassé, le jumeau du précédent, ou livrer la
+   solution dès le premier échec — ce qui vide l'escalade de son sens.
+
+   Les contrôles ci-dessous ont été mesurés sur le corpus AVANT d'être écrits.
+   Deux candidats ont été retirés à ce moment-là, et c'est le plus utile à
+   savoir si l'on veut en ajouter : « cet identifiant cité n'existe pas dans
+   l'exercice » donnait 156 résultats dont aucun n'était une faute (href, img,
+   label sont précisément ce que l'élève doit ajouter), et « le dernier palier
+   recopie la solution » en donnait huit, tous légitimes — sur une solution de
+   deux lignes, le dernier palier EST censé la donner. Un contrôle qui crie
+   sans raison finit désactivé, et emporte les vrais avec lui. */
+
+const BALISES_INDICE = ['code', 'strong', 'em', 'b', 'i', 'br', 'kbd'];
+const ENTITES = { '&lt;': '<', '&gt;': '>', '&amp;': '&', '&quot;': '"', '&#39;': "'", '&nbsp;': ' ' };
+
+function texteNu(html) {
+  return String(html).replace(/<[^>]*>/g, '')
+    .replace(/&(lt|gt|amp|quot|#39|nbsp);/g, (m) => ENTITES[m]);
+}
+function normalise(html) { return texteNu(html).replace(/\s+/g, ' ').trim(); }
+
+// Le volume de code littéral montré : c'est lui qui doit croître de palier en palier.
+function volumeCode(html) {
+  return (String(html).match(/<code>[\s\S]*?<\/code>/g) || [])
+    .reduce((n, bloc) => n + texteNu(bloc).length, 0);
+}
+
+function htmlMalForme(html) {
+  const maux = [], pile = [], re = /<(\/?)([a-zA-Z][a-zA-Z0-9]*)\s*\/?>/g;
+  let m;
+  while ((m = re.exec(html))) {
+    const nom = m[2].toLowerCase();
+    if (BALISES_INDICE.indexOf(nom) === -1) { maux.push('balise <' + m[2] + '> non prévue dans un indice'); continue; }
+    if (nom === 'br') continue;
+    if (m[1]) { if (pile.pop() !== nom) maux.push('</' + nom + '> sans ouverture correspondante'); }
+    else pile.push(nom);
+  }
+  if (pile.length) maux.push('<' + pile.join('>, <') + '> jamais refermé');
+  const reste = String(html).replace(/<\/?[a-zA-Z][a-zA-Z0-9]*\s*\/?>/g, '');
+  if (reste.indexOf('<') !== -1) maux.push('un « < » brut — il faut &lt;, sinon le navigateur avale la suite');
+  return maux;
+}
+
+// Les lignes d'une solution qui portent du sens : ni accolade seule, ni commentaire.
+function lignesPorteuses(solution) {
+  return String(solution).split('\n').map((l) => l.trim())
+    .filter((l) => l.length > 3 && !/^[{}();\s]*$/.test(l) && !/^(\/\/|#|\/\*|\*)/.test(l));
+}
+
 const travail = [];   // { ou, fichier, leconId, index, ex, famille } — les exercices à rejouer
 
 for (const item of lecons) {
@@ -243,9 +295,46 @@ for (const item of lecons) {
     if (Array.isArray(ex.indices)) {
       if (!ex.indices.length) pb.push(tag + ' : indices est un tableau vide');
       ex.indices.forEach((t, k) => {
-        if (typeof t !== 'string' || !t.trim()) pb.push(tag + ' : indices[' + k + '] vide ou non textuel');
+        if (typeof t !== 'string' || !t.trim()) { pb.push(tag + ' : indices[' + k + '] vide ou non textuel'); return; }
+        const p = ' : palier ' + (k + 1) + ' — ';
+        for (const mal of htmlMalForme(t)) pb.push(tag + p + mal);
+        // Un antislash échappé deux fois de trop affiche quatre barres là où le
+        // code n'en montre que deux. C'est arrivé une fois, à js-1, et personne
+        // ne l'a vu avant de le lire à l'écran.
+        const trop = t.match(/\\{3,}/);
+        if (trop) pb.push(tag + p + trop[0].length + ' antislashs de suite : sur-échappement probable');
       });
       if (ex.indice) notes.push(tag + ' : indice ET indices definis — seul indices sera lu');
+
+      const lisibles = ex.indices.filter((t) => typeof t === 'string' && t.trim());
+      const vus = new Map();
+      lisibles.forEach((t, k) => {
+        const n = normalise(t);
+        if (vus.has(n)) pb.push(tag + ' : paliers ' + (vus.get(n) + 1) + ' et ' + (k + 1) + ' identiques — l\'élève a réessayé pour rien');
+        else vus.set(n, k);
+        if (ex.consigne && n === normalise(ex.consigne)) pb.push(tag + ' : le palier ' + (k + 1) + ' recopie la consigne');
+      });
+
+      if (lisibles.length > 1) {
+        // L'aide doit monter. Un premier palier qui montre plus de code que le
+        // dernier inverse l'escalade : l'élève est puni d'avoir persévéré.
+        const premier = volumeCode(lisibles[0]);
+        const dernier = volumeCode(lisibles[lisibles.length - 1]);
+        if (premier > dernier) {
+          pb.push(tag + ' : escalade inversée — le palier 1 montre ' + premier
+            + ' caractères de code, le dernier seulement ' + dernier);
+        }
+        // Et le premier palier doit dire OÙ REGARDER, pas quoi écrire.
+        const porteuses = ex.solution ? lignesPorteuses(ex.solution) : [];
+        if (porteuses.length >= 2) {
+          const debut = normalise(lisibles[0]);
+          const livrees = porteuses.filter((l) => debut.indexOf(l.replace(/\s+/g, ' ')) !== -1).length;
+          if (livrees / porteuses.length >= 0.5) {
+            pb.push(tag + ' : le palier 1 livre déjà ' + livrees + ' des ' + porteuses.length
+              + ' lignes de la solution — il ne reste rien à chercher');
+          }
+        }
+      }
     }
 
     if (t === 'qcm') {
