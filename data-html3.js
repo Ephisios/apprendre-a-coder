@@ -36,7 +36,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Crée une liste de définition avec deux termes : <code>HTML</code> et <code>CSS</code>, chacun suivi de son explication.',
       codeDepart: '<h2>Glossaire</h2>\n\n',
-      indice: '<code>&lt;dl&gt;</code> autour du tout, puis alternance de <code>&lt;dt&gt;</code> (le terme) et <code>&lt;dd&gt;</code> (l\'explication).',
+      indices: [
+        "Une liste de définition n’a pas un mais <strong>deux</strong> types d’éléments : le terme, et son explication.",
+        "Le <code>&lt;dl&gt;</code> enveloppe le tout. Le <code>&lt;dt&gt;</code> porte le terme, le <code>&lt;dd&gt;</code> sa définition, et ils alternent.",
+        "<code>&lt;dl&gt;</code> autour, puis dt, dd, dt, dd."
+      ],
       solution: '<h2>Glossaire</h2>\n\n<dl>\n  <dt>HTML</dt>\n  <dd>Le langage qui décrit la structure d\'une page.</dd>\n  <dt>CSS</dt>\n  <dd>Le langage qui décrit son apparence.</dd>\n</dl>',
       verifier: function (ctx) {
         const dl = ctx.doc.querySelector('dl');
@@ -55,7 +59,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> décris un produit avec une liste de définition : <code>Prix</code>, <code>Couleur</code> et <code>Poids</code>, chacun avec sa valeur.',
       codeDepart: '<h2>Fiche produit</h2>\n\n',
-      indice: 'Même structure : trois <code>&lt;dt&gt;</code> et trois <code>&lt;dd&gt;</code> dans un <code>&lt;dl&gt;</code>.',
+      indices: [
+        "Exactement la même structure qu’à l’exercice précédent, avec un couple de plus.",
+        "Trois caractéristiques, donc trois <code>&lt;dt&gt;</code> et trois <code>&lt;dd&gt;</code>, toujours dans un seul <code>&lt;dl&gt;</code>.",
+        "Prix, Couleur, Poids en <code>&lt;dt&gt;</code> ; leurs valeurs en <code>&lt;dd&gt;</code>."
+      ],
       solution: '<h2>Fiche produit</h2>\n\n<dl>\n  <dt>Prix</dt>\n  <dd>29,90 €</dd>\n  <dt>Couleur</dt>\n  <dd>Bleu nuit</dd>\n  <dt>Poids</dt>\n  <dd>340 g</dd>\n</dl>',
       verifier: function (ctx) {
         const dl = ctx.doc.querySelector('dl');
@@ -123,7 +131,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Écris une phrase contenant une <strong>abréviation</strong> <code>HTML</code> dont le <code>title</code> donne la signification complète, et une <strong>date</strong> du 14 juillet 2024 balisée avec son attribut <code>datetime</code>.',
       codeDepart: '<p>Cours publié le ...</p>\n',
-      indice: '<code>&lt;abbr title="HyperText Markup Language"&gt;HTML&lt;/abbr&gt;</code> et <code>&lt;time datetime="2024-07-14"&gt;14 juillet 2024&lt;/time&gt;</code>',
+      indices: [
+        "Deux balises peu connues, mais toutes deux au service des machines autant que des humains.",
+        "L’<code>&lt;abbr&gt;</code> porte la signification dans son <code>title</code> ; le <code>&lt;time&gt;</code> porte une date lisible par machine dans <code>datetime</code>.",
+        "<code>&lt;abbr title=\"HyperText Markup Language\"&gt;HTML&lt;/abbr&gt;</code> et <code>&lt;time datetime=\"2024-07-14\"&gt;</code>"
+      ],
       solution: '<p>Cours de <abbr title="HyperText Markup Language">HTML</abbr> publié le <time datetime="2024-07-14">14 juillet 2024</time>.</p>',
       verifier: function (ctx) {
         const abbr = ctx.doc.querySelector('abbr');
@@ -142,7 +154,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> écris <code>La surface est de 25 m2</code> en mettant le 2 en <strong>exposant</strong>, et surligne le nombre <code>25</code> avec <code>&lt;mark&gt;</code>.',
       codeDepart: '<p>La surface est de ...</p>\n',
-      indice: '<code>&lt;mark&gt;25&lt;/mark&gt; m&lt;sup&gt;2&lt;/sup&gt;</code>',
+      indices: [
+        "Deux effets différents sur la même phrase : surligner, et mettre en exposant.",
+        "Le <code>&lt;mark&gt;</code> surligne. L’exposant, c’est <code>&lt;sup&gt;</code> — et l’indice, son frère <code>&lt;sub&gt;</code>.",
+        "<code>&lt;mark&gt;25&lt;/mark&gt; m&lt;sup&gt;2&lt;/sup&gt;</code>"
+      ],
       solution: '<p>La surface est de <mark>25</mark> m<sup>2</sup></p>',
       verifier: function (ctx) {
         const sup = ctx.doc.querySelector('sup');
@@ -158,7 +174,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Défi :</strong> compose une citation longue avec <code>&lt;blockquote&gt;</code> contenant un paragraphe, suivie de son auteur dans un <code>&lt;cite&gt;</code>.',
       codeDepart: '',
-      indice: '<code>&lt;blockquote&gt;&lt;p&gt;Le texte cité&lt;/p&gt;&lt;/blockquote&gt;</code> puis <code>&lt;p&gt;&lt;cite&gt;Nom de l\'auteur&lt;/cite&gt;&lt;/p&gt;</code>',
+      indices: [
+        "Une citation longue et sa source sont deux choses distinctes, et HTML les sépare.",
+        "Le <code>&lt;blockquote&gt;</code> contient la citation (dans un paragraphe) ; le <code>&lt;cite&gt;</code>, placé après, nomme son auteur.",
+        "<code>&lt;blockquote&gt;&lt;p&gt;…&lt;/p&gt;&lt;/blockquote&gt;</code> puis <code>&lt;p&gt;&lt;cite&gt;…&lt;/cite&gt;&lt;/p&gt;</code>"
+      ],
       solution: '<blockquote>\n  <p>Le code est lu bien plus souvent qu\'il n\'est écrit.</p>\n</blockquote>\n<p><cite>Guido van Rossum</cite></p>',
       verifier: function (ctx) {
         const bq = ctx.doc.querySelector('blockquote');
@@ -219,7 +239,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Structure ce tableau correctement : ajoute un <code>&lt;caption&gt;</code>, mets la ligne d\'en-tête dans un <code>&lt;thead&gt;</code> avec des <code>&lt;th&gt;</code>, et les données dans un <code>&lt;tbody&gt;</code>.',
       codeDepart: '<table>\n  <tr><td>Mois</td><td>Montant</td></tr>\n  <tr><td>Janvier</td><td>1200 €</td></tr>\n  <tr><td>Février</td><td>1450 €</td></tr>\n</table>',
-      indice: 'Le <code>&lt;caption&gt;</code> se place juste après <code>&lt;table&gt;</code>. La première ligne passe dans <code>&lt;thead&gt;</code> avec des <code>&lt;th&gt;</code> à la place des <code>&lt;td&gt;</code>.',
+      indices: [
+        "Un tableau bien structuré a trois zones, comme un document : un titre, une tête, un corps.",
+        "Le <code>&lt;caption&gt;</code> se place juste après <code>&lt;table&gt;</code>. La ligne d’en-tête va dans un <code>&lt;thead&gt;</code>, le reste dans un <code>&lt;tbody&gt;</code>.",
+        "Caption, puis thead avec des <code>&lt;th&gt;</code>, puis tbody avec les <code>&lt;tr&gt;</code> de données."
+      ],
       solution: '<table>\n  <caption>Ventes du trimestre</caption>\n  <thead>\n    <tr><th>Mois</th><th>Montant</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>Janvier</td><td>1200 €</td></tr>\n    <tr><td>Février</td><td>1450 €</td></tr>\n  </tbody>\n</table>',
       verifier: function (ctx) {
         const table = ctx.doc.querySelector('table');
@@ -241,7 +265,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> ajoute une ligne de total dans un <code>&lt;tfoot&gt;</code>, où la cellule « Total » s\'étend sur <strong>deux colonnes</strong> grâce à <code>colspan</code>.',
       codeDepart: '<table>\n  <thead>\n    <tr><th>Mois</th><th>Montant</th><th>TVA</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>Janvier</td><td>1200 €</td><td>240 €</td></tr>\n  </tbody>\n  <!-- ton tfoot ici -->\n</table>',
-      indice: '<code>&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan="2"&gt;Total&lt;/td&gt;&lt;td&gt;1440 €&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;</code>',
+      indices: [
+        "Une ligne de total n’est ni un en-tête ni une donnée ordinaire : elle a sa propre zone.",
+        "Le <code>&lt;tfoot&gt;</code> porte le pied du tableau. Et pour qu’une cellule s’étale sur deux colonnes, il existe un attribut.",
+        "<code>&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=\"2\"&gt;Total&lt;/td&gt;&lt;td&gt;…&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;</code>"
+      ],
       solution: '<table>\n  <thead>\n    <tr><th>Mois</th><th>Montant</th><th>TVA</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>Janvier</td><td>1200 €</td><td>240 €</td></tr>\n  </tbody>\n  <tfoot>\n    <tr><td colspan="2">Total</td><td>1440 €</td></tr>\n  </tfoot>\n</table>',
       verifier: function (ctx) {
         const tfoot = ctx.doc.querySelector('tfoot');
@@ -257,7 +285,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Défi accessibilité :</strong> ajoute <code>scope="col"</code> aux en-têtes de colonne, et transforme la première cellule de chaque ligne de données en <code>&lt;th scope="row"&gt;</code>.',
       codeDepart: '<table>\n  <thead>\n    <tr><th>Mois</th><th>Montant</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>Janvier</td><td>1200 €</td></tr>\n    <tr><td>Février</td><td>1450 €</td></tr>\n  </tbody>\n</table>',
-      indice: 'Dans le thead : <code>&lt;th scope="col"&gt;</code>. Dans le tbody, remplace le premier <code>&lt;td&gt;</code> de chaque ligne par <code>&lt;th scope="row"&gt;</code>.',
+      indices: [
+        "Un lecteur d’écran ne voit pas la grille : il a besoin qu’on lui dise ce que chaque en-tête gouverne.",
+        "<code>scope=\"col\"</code> dit « cet en-tête vaut pour toute la colonne » ; <code>scope=\"row\"</code>, pour toute la ligne — ce qui suppose un <code>&lt;th&gt;</code> en début de ligne.",
+        "Dans le thead : <code>&lt;th scope=\"col\"&gt;</code>. Dans le tbody, le premier <code>&lt;td&gt;</code> devient <code>&lt;th scope=\"row\"&gt;</code>."
+      ],
       solution: '<table>\n  <thead>\n    <tr><th scope="col">Mois</th><th scope="col">Montant</th></tr>\n  </thead>\n  <tbody>\n    <tr><th scope="row">Janvier</th><td>1200 €</td></tr>\n    <tr><th scope="row">Février</th><td>1450 €</td></tr>\n  </tbody>\n</table>',
       verifier: function (ctx) {
         const cols = ctx.doc.querySelectorAll('thead th[scope="col"]');
@@ -306,7 +338,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Crée un champ « Prénom » correctement étiqueté : un <code>&lt;label&gt;</code> relié au champ par <code>for</code> / <code>id</code>, et le champ doit être <strong>obligatoire</strong>.',
       codeDepart: '<form>\n  \n</form>',
-      indice: '<code>&lt;label for="prenom"&gt;Prénom&lt;/label&gt;</code> puis <code>&lt;input type="text" id="prenom" name="prenom" required&gt;</code>',
+      indices: [
+        "Étiqueter un champ n’est pas le mettre à côté : il faut un lien explicite entre les deux.",
+        "L’attribut <code>for</code> du label doit valoir exactement l’<code>id</code> du champ. C’est ce qui rend le libellé cliquable.",
+        "<code>&lt;label for=\"prenom\"&gt;Prénom&lt;/label&gt;</code> et <code>&lt;input id=\"prenom\" name=\"prenom\" required&gt;</code>"
+      ],
       solution: '<form>\n  <label for="prenom">Prénom</label>\n  <input type="text" id="prenom" name="prenom" required>\n</form>',
       verifier: function (ctx) {
         const label = ctx.doc.querySelector('label');
@@ -324,7 +360,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> regroupe deux boutons radio (« Oui » et « Non ») dans un <code>&lt;fieldset&gt;</code> avec une <code>&lt;legend&gt;</code> posant la question. Les deux radios doivent partager le même <code>name</code>.',
       codeDepart: '<form>\n  \n</form>',
-      indice: 'Le même <code>name</code> pour les deux radios les rend exclusifs. Chacun a son propre <code>id</code> et son label.',
+      indices: [
+        "Deux choses à faire : rendre les deux boutons exclusifs, et les regrouper visuellement sous un intitulé.",
+        "Le <code>name</code> identique rend les radios exclusifs. Le <code>&lt;fieldset&gt;</code> les encadre, et la <code>&lt;legend&gt;</code> le titre.",
+        "Même <code>name</code>, mais un <code>id</code> et un label distincts pour chacun."
+      ],
       solution: '<form>\n  <fieldset>\n    <legend>Souhaitez-vous être recontacté ?</legend>\n    <input type="radio" id="oui" name="rappel" value="oui">\n    <label for="oui">Oui</label>\n    <input type="radio" id="non" name="rappel" value="non">\n    <label for="non">Non</label>\n  </fieldset>\n</form>',
       verifier: function (ctx) {
         const fs = ctx.doc.querySelector('fieldset');
@@ -344,7 +384,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Défi :</strong> crée un champ « Code postal » qui n\'accepte qu\'<strong>exactement 5 chiffres</strong>, grâce à l\'attribut <code>pattern</code>. Ajoute son label et rends-le obligatoire.',
       codeDepart: '<form>\n  \n</form>',
-      indice: '<code>pattern="[0-9]{5}"</code> — entre crochets les caractères autorisés, entre accolades le nombre exact.',
+      indices: [
+        "Le type <code>number</code> ne suffirait pas : un code postal peut commencer par zéro, et sa longueur est fixe.",
+        "<code>pattern</code> accepte un motif : entre crochets les caractères autorisés, entre accolades leur nombre exact.",
+        "<code>pattern=\"[0-9]{5}\"</code>, avec <code>required</code>."
+      ],
       solution: '<form>\n  <label for="cp">Code postal</label>\n  <input type="text" id="cp" name="cp" pattern="[0-9]{5}" required>\n</form>',
       verifier: function (ctx) {
         const champ = ctx.doc.querySelector('input[pattern]');
@@ -392,7 +436,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Corrige les deux images : celle qui porte de l\'information doit avoir un <code>alt</code> <strong>descriptif</strong>, et celle qui est décorative un <code>alt</code> <strong>vide</strong>.',
       codeDepart: '<img id="info" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'50\'%3E%3Crect width=\'80\' height=\'50\' fill=\'%234f6df5\'/%3E%3C/svg%3E">\n<img id="deco" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'8\'%3E%3Crect width=\'80\' height=\'8\' fill=\'%23ccc\'/%3E%3C/svg%3E">',
-      indice: 'Sur la première : un <code>alt</code> qui décrit l\'information (au moins quelques mots). Sur la seconde : <code>alt=""</code> exactement.',
+      indices: [
+        "Les deux images ne jouent pas le même rôle : l’une informe, l’autre décore. Leur <code>alt</code> ne doit donc pas être le même.",
+        "Une image porteuse d’information a besoin d’un <code>alt</code> qui la décrit. Une image décorative doit avoir un <code>alt</code> <strong>vide</strong> — pour que le lecteur d’écran la saute.",
+        "Un <code>alt</code> descriptif sur la première, et <code>alt=\"\"</code> exactement sur la seconde."
+      ],
       solution: '<img id="info" alt="Graphique montrant des ventes en hausse" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'50\'%3E%3Crect width=\'80\' height=\'50\' fill=\'%234f6df5\'/%3E%3C/svg%3E">\n<img id="deco" alt="" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'8\'%3E%3Crect width=\'80\' height=\'8\' fill=\'%23ccc\'/%3E%3C/svg%3E">',
       verifier: function (ctx) {
         const info = ctx.doc.getElementById('info');
@@ -410,7 +458,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> ce bouton ne contient qu\'une croix. Ajoute-lui un <code>aria-label</code> qui explique ce qu\'il fait.',
       codeDepart: '<button id="fermer">X</button>',
-      indice: '<code>&lt;button aria-label="Fermer la fenêtre"&gt;X&lt;/button&gt;</code>',
+      indices: [
+        "Une croix ne veut rien dire pour qui ne la voit pas. Il faut donner au bouton un nom accessible.",
+        "<code>aria-label</code> remplace le contenu visible pour les technologies d’assistance.",
+        "<code>&lt;button aria-label=\"Fermer la fenêtre\"&gt;X&lt;/button&gt;</code>"
+      ],
       solution: '<button id="fermer" aria-label="Fermer la fenêtre">X</button>',
       verifier: function (ctx) {
         const b = ctx.doc.getElementById('fermer');
@@ -425,7 +477,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Chasse au bug :</strong> ce « bouton » est une <code>&lt;div&gt;</code> : il est inatteignable au clavier. Remplace-le par la balise correcte, sans rien perdre.',
       codeDepart: '<div id="valider" style="background:#4f6df5;color:white;padding:10px;display:inline-block">Valider</div>',
-      indice: 'Un <code>&lt;button&gt;</code> est focusable et activable à la touche Entrée sans aucun effort. Remplace simplement <code>div</code> par <code>button</code>.',
+      indices: [
+        "Une <code>&lt;div&gt;</code> n’est pas atteignable au clavier, et ne réagit ni à Entrée ni à Espace. Aucune classe CSS ne corrigera cela.",
+        "La bonne solution n’est pas d’ajouter des attributs : c’est d’utiliser la balise prévue, qui a tout cela d’origine.",
+        "Remplace simplement la <code>&lt;div&gt;</code> par un <code>&lt;button&gt;</code>."
+      ],
       solution: '<button id="valider" style="background:#4f6df5;color:white;padding:10px">Valider</button>',
       verifier: function (ctx) {
         const el = ctx.doc.getElementById('valider');
@@ -473,7 +529,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Complète cette image avec les trois attributs qui évitent les sauts de mise en page et le chargement inutile : <code>width</code>, <code>height</code> et <code>loading="lazy"</code>. (Elle fait 80 par 50.)',
       codeDepart: '<img id="photo" alt="Un rectangle bleu" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'50\'%3E%3Crect width=\'80\' height=\'50\' fill=\'%234f6df5\'/%3E%3C/svg%3E">',
-      indice: 'Ajoute <code>width="80" height="50" loading="lazy"</code> dans la balise.',
+      indices: [
+        "Trois attributs, pour deux problèmes : la page qui sursaute au chargement, et les images inutilement téléchargées.",
+        "<code>width</code> et <code>height</code> réservent la place à l’avance ; <code>loading=\"lazy\"</code> diffère le chargement jusqu’à ce que l’image approche de l’écran.",
+        "<code>width=\"80\" height=\"50\" loading=\"lazy\"</code>"
+      ],
       solution: '<img id="photo" alt="Un rectangle bleu" width="80" height="50" loading="lazy" src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'50\'%3E%3Crect width=\'80\' height=\'50\' fill=\'%234f6df5\'/%3E%3C/svg%3E">',
       verifier: function (ctx) {
         const img = ctx.doc.getElementById('photo');
@@ -492,7 +552,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> construis un <code>&lt;picture&gt;</code> qui affiche une image <strong>différente</strong> en dessous de 600px de large, avec une <code>&lt;img&gt;</code> de repli obligatoire.',
       codeDepart: '<!-- les deux images à utiliser :\n     mobile : data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'90\'%3E%3Crect width=\'60\' height=\'90\' fill=\'%23c04f45\'/%3E%3C/svg%3E\n     bureau : data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'60\'%3E%3Crect width=\'120\' height=\'60\' fill=\'%234f6df5\'/%3E%3C/svg%3E -->\n\n',
-      indice: '<code>&lt;picture&gt;&lt;source media="(max-width: 600px)" srcset="..."&gt;&lt;img src="..." alt="..."&gt;&lt;/picture&gt;</code>',
+      indices: [
+        "Une seule image ne peut pas convenir à tous les écrans. Le <code>&lt;picture&gt;</code> permet d’en proposer plusieurs et de laisser le navigateur choisir.",
+        "Chaque <code>&lt;source&gt;</code> porte sa condition dans <code>media</code> et son image dans <code>srcset</code>. L’<code>&lt;img&gt;</code> final est <strong>obligatoire</strong> : c’est le repli.",
+        "<code>&lt;picture&gt;&lt;source media=\"(max-width: 600px)\" srcset=\"…\"&gt;&lt;img src=\"…\" alt=\"…\"&gt;&lt;/picture&gt;</code>"
+      ],
       solution: '<picture>\n  <source media="(max-width: 600px)" srcset="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'90\'%3E%3Crect width=\'60\' height=\'90\' fill=\'%23c04f45\'/%3E%3C/svg%3E">\n  <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'60\'%3E%3Crect width=\'120\' height=\'60\' fill=\'%234f6df5\'/%3E%3C/svg%3E" alt="Bannière du site">\n</picture>',
       verifier: function (ctx) {
         const pic = ctx.doc.querySelector('picture');
@@ -567,7 +631,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Ajoute les trois métadonnées Open Graph essentielles : <code>og:title</code>, <code>og:description</code> et <code>og:image</code> (avec une adresse absolue).',
       codeDepart: '<head>\n  <meta charset="UTF-8">\n  <title>Mon cours de code</title>\n  \n</head>\n<body>\n  <h1>Mon cours</h1>\n</body>',
-      indice: '<code>&lt;meta property="og:title" content="..."&gt;</code> — attention, c\'est <code>property</code> et non <code>name</code>.',
+      indices: [
+        "Ces métadonnées ne servent ni à l’affichage ni au référencement : elles décident de l’aperçu quand on partage le lien.",
+        "Elles s’écrivent avec <code>property</code>, et non <code>name</code> — c’est la particularité d’Open Graph, et le piège le plus courant.",
+        "<code>&lt;meta property=\"og:title\" content=\"…\"&gt;</code>, et de même pour <code>og:description</code> et <code>og:image</code>."
+      ],
       solution: '<head>\n  <meta charset="UTF-8">\n  <title>Mon cours de code</title>\n  <meta property="og:title" content="Mon cours de code">\n  <meta property="og:description" content="Apprendre à programmer depuis zéro.">\n  <meta property="og:image" content="https://exemple.fr/apercu.jpg">\n</head>\n<body>\n  <h1>Mon cours</h1>\n</body>',
       verifier: function (ctx) {
         const trouve = p => ctx.doc.querySelector('meta[property="' + p + '"]');
@@ -594,7 +662,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Entraînement :</strong> complète le <code>&lt;head&gt;</code> avec les deux métadonnées indispensables à toute page : le <code>viewport</code> et la <code>description</code>.',
       codeDepart: '<head>\n  <meta charset="UTF-8">\n  <title>Mon site</title>\n  \n</head>\n<body>\n  <h1>Bienvenue</h1>\n</body>',
-      indice: '<code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> et <code>&lt;meta name="description" content="..."&gt;</code>',
+      indices: [
+        "Deux balises qu’on trouve sur absolument toutes les pages professionnelles, et dont l’absence se voit immédiatement.",
+        "Sans le <code>viewport</code>, la page s’affiche en miniature sur mobile. Sans la <code>description</code>, le moteur de recherche invente le texte sous ton lien.",
+        "<code>&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"&gt;</code> et <code>&lt;meta name=\"description\" content=\"…\"&gt;</code>"
+      ],
       solution: '<head>\n  <meta charset="UTF-8">\n  <title>Mon site</title>\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <meta name="description" content="Un site pour apprendre à coder depuis zéro.">\n</head>\n<body>\n  <h1>Bienvenue</h1>\n</body>',
       verifier: function (ctx) {
         const vp = ctx.doc.querySelector('meta[name="viewport"]');
@@ -668,7 +740,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: 'Cette page contient <strong>une balise jamais fermée</strong>, ce qui met tout le texte en gras. Trouve-la et corrige.',
       codeDepart: '<h2>Mon article</h2>\n<p>Un mot <strong>important dans la phrase.</p>\n<p id="suite">Ce paragraphe ne devrait PAS être en gras.</p>',
-      indice: 'La balise <code>&lt;strong&gt;</code> est ouverte mais jamais refermée : tout ce qui suit hérite du gras. Ajoute <code>&lt;/strong&gt;</code> au bon endroit.',
+      indices: [
+        "Tout le texte est en gras à partir d’un certain point : c’est le signe qu’une balise ouverte n’a jamais été refermée.",
+        "Il ne s’agit pas de la supprimer, mais de la <strong>fermer</strong> au bon endroit — juste après le mot à mettre en valeur.",
+        "Ajoute <code>&lt;/strong&gt;</code> après le mot important."
+      ],
       solution: '<h2>Mon article</h2>\n<p>Un mot <strong>important</strong> dans la phrase.</p>\n<p id="suite">Ce paragraphe ne devrait PAS être en gras.</p>',
       verifier: function (ctx) {
         const win = ctx.doc.defaultView;
@@ -686,7 +762,11 @@ window.DATA_HTML3 = [
       type: 'html',
       consigne: '<strong>Chasse au bug :</strong> cliquer sur le libellé « Email » ne place pas le curseur dans le champ. Répare le lien entre les deux.',
       codeDepart: '<label for="courriel">Email</label>\n<input type="email" id="email" name="email">',
-      indice: 'Le <code>for</code> du label vaut « courriel » mais l\'<code>id</code> du champ vaut « email » : les deux doivent être identiques.',
+      indices: [
+        "Le label existe, le champ aussi, et pourtant cliquer sur l’un n’active pas l’autre. C’est que le lien entre eux est rompu.",
+        "Le <code>for</code> du label doit valoir <strong>exactement</strong> l’<code>id</code> du champ. Ici, les deux ne portent pas le même mot.",
+        "Aligne les deux : soit le <code>for</code>, soit l’<code>id</code> — mais ils doivent être identiques."
+      ],
       solution: '<label for="email">Email</label>\n<input type="email" id="email" name="email">',
       verifier: function (ctx) {
         const label = ctx.doc.querySelector('label');

@@ -30,7 +30,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: 'Prépare le lecteur vidéo d\'un site de recettes : une balise <code>&lt;video&gt;</code> avec <code>src="recette.mp4"</code>, l\'attribut <code>controls</code>, une largeur de <code>400</code>, et l\'attribut <code>loop</code> pour qu\'elle tourne en boucle. (L\'aperçu montrera un lecteur vide : normal, le fichier n\'existe pas — c\'est la structure qui compte.)',
       codeDepart: '<h1>Ma recette en vidéo</h1>\n',
-      indice: 'Tout dans la balise ouvrante : <code>&lt;video src="recette.mp4" controls width="400" loop&gt;&lt;/video&gt;</code> — controls et loop s\'écrivent seuls, sans ="..."',
+      indices: [
+        "Une vidéo n’a pas de contenu à écrire : tout ce qui la règle tient dans ses attributs.",
+        "Certains attributs prennent une valeur (<code>src</code>, <code>width</code>), d’autres non : leur seule présence suffit, comme <code>controls</code> ou <code>loop</code>.",
+        "<code>&lt;video src=\"recette.mp4\" controls width=\"400\" loop&gt;&lt;/video&gt;</code>"
+      ],
       solution: '<h1>Ma recette en vidéo</h1>\n<video src="recette.mp4" controls width="400" loop></video>',
       verifier: function (ctx) {
         const v = ctx.doc.querySelector('video');
@@ -46,7 +50,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Entraînement : la page dans la page.</strong> Grâce à l\'attribut <code>srcdoc</code>, une iframe peut contenir directement du HTML ! Crée une <code>&lt;iframe&gt;</code> avec <code>srcdoc="&lt;h1&gt;Coucou depuis l\'intérieur !&lt;/h1&gt;"</code>, une largeur de <code>300</code> et une hauteur de <code>150</code>. Tu verras une mini-page vivre dans ta page.',
       codeDepart: '<h1>Ma page principale</h1>\n<p>Et voici une page incrustée :</p>\n',
-      indice: '<code>&lt;iframe srcdoc="&lt;h1&gt;Coucou depuis l\'intérieur !&lt;/h1&gt;" width="300" height="150"&gt;&lt;/iframe&gt;</code> — attention, le HTML intérieur vit DANS les guillemets de srcdoc.',
+      indices: [
+        "Une iframe affiche normalement une autre page. Ici, on lui donne directement le HTML à afficher.",
+        "L’attribut <code>srcdoc</code> contient du HTML entre guillemets. Attention donc aux guillemets intérieurs, qui fermeraient l’attribut trop tôt.",
+        "<code>&lt;iframe srcdoc=\"&lt;h1&gt;Coucou&lt;/h1&gt;\" width=\"300\" height=\"150\"&gt;&lt;/iframe&gt;</code>"
+      ],
       solution: '<h1>Ma page principale</h1>\n<p>Et voici une page incrustée :</p>\n<iframe srcdoc="<h1>Coucou depuis l\'intérieur !</h1>" width="300" height="150"></iframe>',
       verifier: function (ctx) {
         const f = ctx.doc.querySelector('iframe');
@@ -109,7 +117,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: 'Un lexique interactif : ajoute à chaque mot technique un attribut <code>title</code> contenant sa définition — <code>HTML</code> → <code>Langage de structure des pages</code>, et <code>CSS</code> → <code>Langage d\'apparence</code>. Survole les mots dans l\'aperçu pour voir tes infobulles !',
       codeDepart: '<p>Pour faire un site, il faut du <strong>HTML</strong> et du <strong>CSS</strong>.</p>',
-      indice: 'L\'attribut va dans la balise ouvrante du strong : <code>&lt;strong title="Langage de structure des pages"&gt;HTML&lt;/strong&gt;</code>',
+      indices: [
+        "L’info-bulle ne se voit qu’au survol : elle n’est donc pas dans le texte, mais dans un attribut.",
+        "<code>title</code> s’ajoute dans la balise <strong>ouvrante</strong>, comme n’importe quel attribut.",
+        "<code>&lt;strong title=\"Langage de structure des pages\"&gt;HTML&lt;/strong&gt;</code>"
+      ],
       solution: '<p>Pour faire un site, il faut du <strong title="Langage de structure des pages">HTML</strong> et du <strong title="Langage d\'apparence">CSS</strong>.</p>',
       verifier: function (ctx) {
         const strongs = ctx.doc.querySelectorAll('strong');
@@ -125,7 +137,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Entraînement : afficher du code sans l\'exécuter.</strong> Écris un paragraphe qui AFFICHE littéralement le texte <code>&lt;h1&gt;Bonjour&lt;/h1&gt;</code> à l\'écran (les chevrons visibles, sans créer de titre !). Il te faudra les entités <code>&amp;lt;</code> et <code>&amp;gt;</code>.',
       codeDepart: '<p>Pour faire un grand titre, on écrit : </p>',
-      indice: 'Dans le paragraphe : <code>&amp;lt;h1&amp;gt;Bonjour&amp;lt;/h1&amp;gt;</code> — chaque chevron devient son entité.',
+      indices: [
+        "Écrire un chevron tel quel créerait une vraie balise. Pour l’<em>afficher</em>, il faut le déguiser.",
+        "Une entité HTML commence par <code>&amp;</code> et finit par <code>;</code>. Celles des chevrons s’appellent <code>lt</code> et <code>gt</code>.",
+        "<code>&amp;lt;h1&amp;gt;Bonjour&amp;lt;/h1&amp;gt;</code>"
+      ],
       solution: '<p>Pour faire un grand titre, on écrit : &lt;h1&gt;Bonjour&lt;/h1&gt;</p>',
       verifier: function (ctx) {
         if (ctx.doc.querySelector('h1')) return { ok: false, message: 'Oups : un VRAI titre h1 s\'est créé ! Les chevrons tapés directement forment une balise — remplace-les par les entités <code>&amp;lt;</code> et <code>&amp;gt;</code>.' };
@@ -139,7 +155,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Défi : les data-attributes.</strong> Une boutique en préparation : ajoute à chaque article un attribut <code>data-prix</code> avec sa valeur (pomme : <code>0.50</code>, pain : <code>1.20</code>) et un attribut <code>data-stock</code> (pomme : <code>12</code>, pain : <code>0</code>). Invisible à l\'écran, mais ton futur JavaScript pourra les lire !',
       codeDepart: '<ul>\n  <li>Pomme</li>\n  <li>Pain</li>\n</ul>',
-      indice: 'Modèle : <code>&lt;li data-prix="0.50" data-stock="12"&gt;Pomme&lt;/li&gt;</code>',
+      indices: [
+        "On veut ranger de l’information sur un élément sans qu’elle s’affiche. HTML prévoit une famille d’attributs pour cela.",
+        "Tout attribut commençant par <code>data-</code> est libre : tu choisis la suite du nom.",
+        "<code>&lt;li data-prix=\"0.50\" data-stock=\"12\"&gt;Pomme&lt;/li&gt;</code>"
+      ],
       solution: '<ul>\n  <li data-prix="0.50" data-stock="12">Pomme</li>\n  <li data-prix="1.20" data-stock="0">Pain</li>\n</ul>',
       verifier: function (ctx) {
         const lis = ctx.doc.querySelectorAll('li');
@@ -179,7 +199,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: 'Le choix de la cuisson : crée un groupe de <strong>trois</strong> boutons radio (<code>Saignant</code>, <code>À point</code>, <code>Bien cuit</code>) partageant le <code>name="cuisson"</code>, chacun avec un <code>value</code> différent et suivi de son <code>&lt;label&gt;</code>. Teste dans l\'aperçu : un seul doit être cochable à la fois !',
       codeDepart: '<h2>Votre cuisson ?</h2>\n',
-      indice: 'Trois fois le modèle : <code>&lt;input type="radio" name="cuisson" value="saignant"&gt; &lt;label&gt;Saignant&lt;/label&gt;</code> — même name partout, value différents.',
+      indices: [
+        "Trois boutons, mais un seul choix possible : ce qui les rend exclusifs n’est pas leur type, c’est autre chose.",
+        "C’est le <code>name</code> <strong>identique</strong> qui les regroupe. Le <code>value</code>, lui, diffère pour chacun.",
+        "<code>&lt;input type=\"radio\" name=\"cuisson\" value=\"saignant\"&gt;</code>, trois fois avec le même <code>name</code>."
+      ],
       solution: '<h2>Votre cuisson ?</h2>\n<input type="radio" name="cuisson" value="saignant"> <label>Saignant</label>\n<input type="radio" name="cuisson" value="apoint"> <label>À point</label>\n<input type="radio" name="cuisson" value="biencuit"> <label>Bien cuit</label>',
       verifier: function (ctx) {
         const radios = ctx.doc.querySelectorAll('input[type="radio"]');
@@ -199,7 +223,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Entraînement : borner les saisies.</strong> Ce formulaire de réservation accepte n\'importe quoi. Verrouille-le : le champ nom devient <code>required</code> avec <code>maxlength="30"</code> ; le nombre de personnes reçoit <code>min="1"</code>, <code>max="8"</code> et <code>required</code>.',
       codeDepart: '<h2>Réserver une table</h2>\n<label>Nom :</label>\n<input type="text" id="nom">\n<label>Personnes :</label>\n<input type="number" id="nb">\n<button>Réserver</button>',
-      indice: 'Ajoute les attributs dans les balises : <code>&lt;input type="text" id="nom" required maxlength="30"&gt;</code> et <code>&lt;input type="number" id="nb" min="1" max="8" required&gt;</code>',
+      indices: [
+        "Le navigateur sait valider un formulaire tout seul, pour peu qu’on lui dise quoi exiger.",
+        "<code>required</code> rend le champ obligatoire ; <code>maxlength</code> limite le nombre de caractères. Tous deux dans la balise ouvrante.",
+        "<code>&lt;input type=\"text\" id=\"nom\" required maxlength=\"30\"&gt;</code>"
+      ],
       solution: '<h2>Réserver une table</h2>\n<label>Nom :</label>\n<input type="text" id="nom" required maxlength="30">\n<label>Personnes :</label>\n<input type="number" id="nb" min="1" max="8" required>\n<button>Réserver</button>',
       verifier: function (ctx) {
         const nom = ctx.doc.querySelector('#nom');
@@ -260,7 +288,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: 'Une photo bien présentée : enveloppe l\'image fournie dans une balise <code>&lt;figure&gt;</code> et ajoute-lui une légende <code>&lt;figcaption&gt;</code> avec le texte de ton choix.',
       codeDepart: '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'120\'%3E%3Crect width=\'200\' height=\'120\' fill=\'%232a9d8f\'/%3E%3Ccircle cx=\'160\' cy=\'30\' r=\'18\' fill=\'%23e9c46a\'/%3E%3C/svg%3E" alt="Un paysage vert avec un soleil">',
-      indice: 'Structure : <code>&lt;figure&gt;</code> puis l\'image, puis <code>&lt;figcaption&gt;Ma légende&lt;/figcaption&gt;</code>, puis <code>&lt;/figure&gt;</code>.',
+      indices: [
+        "Une légende n’est pas un paragraphe ordinaire : elle est <strong>liée</strong> à l’image, et HTML sait exprimer ce lien.",
+        "Le <code>&lt;figure&gt;</code> enveloppe l’ensemble ; le <code>&lt;figcaption&gt;</code> porte la légende, à l’intérieur.",
+        "<code>&lt;figure&gt;</code>, puis l’image, puis <code>&lt;figcaption&gt;</code>Ma légende<code>&lt;/figcaption&gt;</code>, puis <code>&lt;/figure&gt;</code>."
+      ],
       solution: '<figure>\n  <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'120\'%3E%3Crect width=\'200\' height=\'120\' fill=\'%232a9d8f\'/%3E%3Ccircle cx=\'160\' cy=\'30\' r=\'18\' fill=\'%23e9c46a\'/%3E%3C/svg%3E" alt="Un paysage vert avec un soleil">\n  <figcaption>Prairie au soleil couchant, aquarelle numérique.</figcaption>\n</figure>',
       verifier: function (ctx) {
         const figure = ctx.doc.querySelector('figure');
@@ -275,7 +307,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Entraînement : le blog structuré.</strong> Transforme cette soupe de div en HTML sémantique : le premier bloc (l\'article du jour) devient un <code>&lt;article&gt;</code>, le deuxième (le saviez-vous) devient un <code>&lt;aside&gt;</code>. Garde tout le contenu intérieur !',
       codeDepart: '<div>\n  <h2>Pourquoi le ciel est bleu</h2>\n  <p>La lumière du soleil se disperse dans l\'atmosphère...</p>\n</div>\n\n<div>\n  <h3>Le saviez-vous ?</h3>\n  <p>Sur Mars, le coucher de soleil est bleu !</p>\n</div>',
-      indice: 'Remplace les <code>&lt;div&gt;</code>/<code>&lt;/div&gt;</code> : le premier par <code>&lt;article&gt;</code>/<code>&lt;/article&gt;</code>, le second par <code>&lt;aside&gt;</code>/<code>&lt;/aside&gt;</code>.',
+      indices: [
+        "Une <code>&lt;div&gt;</code> ne veut rien dire : c’est une boîte neutre. Les balises sémantiques, elles, annoncent un rôle.",
+        "Le contenu autonome devient un <code>&lt;article&gt;</code>, le contenu secondaire un <code>&lt;aside&gt;</code>, le pied de page un <code>&lt;footer&gt;</code>.",
+        "Remplace chaque <code>&lt;div&gt;</code> et sa fermante par la balise correspondante."
+      ],
       solution: '<article>\n  <h2>Pourquoi le ciel est bleu</h2>\n  <p>La lumière du soleil se disperse dans l\'atmosphère...</p>\n</article>\n\n<aside>\n  <h3>Le saviez-vous ?</h3>\n  <p>Sur Mars, le coucher de soleil est bleu !</p>\n</aside>',
       verifier: function (ctx) {
         const article = ctx.doc.querySelector('article');
@@ -334,7 +370,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: 'Crée une ancre : en haut, un lien <code>Voir la conclusion</code> qui pointe vers <code>#conclusion</code> ; en bas (après les paragraphes), un titre <code>&lt;h2&gt;</code> avec <code>id="conclusion"</code>. Clique sur le lien dans l\'aperçu : ça saute !',
       codeDepart: '<h1>Mon grand dossier</h1>\n\n\n<p>Beaucoup de contenu...</p>\n<p>Encore du contenu...</p>\n<p>Toujours du contenu...</p>\n\n',
-      indice: 'En haut : <code>&lt;a href="#conclusion"&gt;Voir la conclusion&lt;/a&gt;</code>. En bas : <code>&lt;h2 id="conclusion"&gt;Conclusion&lt;/h2&gt;</code> — le # dans le lien, PAS dans l\'id.',
+      indices: [
+        "Un lien peut viser un endroit de la <em>même</em> page. Il faut alors une cible identifiée.",
+        "Le <code>href</code> commence par un <code>#</code> suivi du nom. Ce nom doit correspondre à l’<code>id</code> de l’élément visé.",
+        "<code>&lt;a href=\"#conclusion\"&gt;…&lt;/a&gt;</code> en haut, et <code>&lt;h2 id=\"conclusion\"&gt;</code> en bas."
+      ],
       solution: '<h1>Mon grand dossier</h1>\n<a href="#conclusion">Voir la conclusion</a>\n\n<p>Beaucoup de contenu...</p>\n<p>Encore du contenu...</p>\n<p>Toujours du contenu...</p>\n\n<h2 id="conclusion">Conclusion</h2>',
       verifier: function (ctx) {
         const a = ctx.doc.querySelector('a[href^="#"]');
@@ -350,7 +390,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Entraînement : le sommaire complet.</strong> Construis une mini-page documentée : un sommaire (liste <code>&lt;ul&gt;</code> de 2 liens ancres) qui pointe vers 2 sections <code>&lt;h2&gt;</code> (<code>id="partie1"</code> et <code>id="partie2"</code>), et tout en bas un lien <code>Retour en haut</code> vers <code>id="haut"</code> posé sur le h1.',
       codeDepart: '<h1>Guide du potager</h1>\n\n<!-- le sommaire ici -->\n\n<!-- les 2 sections ici -->\n\n<!-- le retour en haut ici -->',
-      indice: 'h1 avec <code>id="haut"</code> ; sommaire : <code>&lt;ul&gt;&lt;li&gt;&lt;a href="#partie1"&gt;...&lt;/a&gt;&lt;/li&gt;...&lt;/ul&gt;</code> ; deux <code>&lt;h2 id="partie1"&gt;</code>/<code>partie2</code> avec un peu de contenu ; et <code>&lt;a href="#haut"&gt;Retour en haut&lt;/a&gt;</code>.',
+      indices: [
+        "Un sommaire, ce sont plusieurs ancres à la fois — et un retour vers le haut, qui a lui aussi besoin de sa cible.",
+        "Chaque entrée du sommaire pointe vers un <code>id</code> différent. Le h1 lui-même en reçoit un, pour servir de destination au « retour ».",
+        "<code>id=\"haut\"</code> sur le h1, puis un <code>&lt;ul&gt;</code> de liens en <code>#partie1</code>, <code>#partie2</code>…"
+      ],
       solution: '<h1 id="haut">Guide du potager</h1>\n\n<ul>\n  <li><a href="#partie1">Semer</a></li>\n  <li><a href="#partie2">Récolter</a></li>\n</ul>\n\n<h2 id="partie1">Semer</h2>\n<p>Tout commence par une graine.</p>\n\n<h2 id="partie2">Récolter</h2>\n<p>La récompense de la patience.</p>\n\n<a href="#haut">Retour en haut</a>',
       verifier: function (ctx) {
         const liens = ctx.doc.querySelectorAll('ul li a[href^="#"]');
@@ -369,7 +413,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Défi sécurité.</strong> Ces trois liens externes s\'ouvrent dans l\'onglet courant (le visiteur quitte le site !) : ajoute à CHACUN le duo <code>target="_blank"</code> + <code>rel="noopener"</code>.',
       codeDepart: '<h2>Nos partenaires</h2>\n<ul>\n  <li><a href="https://exemple-a.com">Partenaire A</a></li>\n  <li><a href="https://exemple-b.com">Partenaire B</a></li>\n  <li><a href="https://exemple-c.com">Partenaire C</a></li>\n</ul>',
-      indice: 'Chaque lien devient : <code>&lt;a href="https://..." target="_blank" rel="noopener"&gt;...&lt;/a&gt;</code>',
+      indices: [
+        "Ouvrir dans un nouvel onglet ne suffit pas : cela ouvre aussi une faille, car la page appelée garde un lien vers la tienne.",
+        "<code>target=\"_blank\"</code> ouvre l’onglet ; <code>rel=\"noopener\"</code> coupe ce lien de retour. Les deux vont ensemble.",
+        "<code>&lt;a href=\"https://…\" target=\"_blank\" rel=\"noopener\"&gt;</code>"
+      ],
       solution: '<h2>Nos partenaires</h2>\n<ul>\n  <li><a href="https://exemple-a.com" target="_blank" rel="noopener">Partenaire A</a></li>\n  <li><a href="https://exemple-b.com" target="_blank" rel="noopener">Partenaire B</a></li>\n  <li><a href="https://exemple-c.com" target="_blank" rel="noopener">Partenaire C</a></li>\n</ul>',
       verifier: function (ctx) {
         const liens = ctx.doc.querySelectorAll('a[href^="https"]');
@@ -414,7 +462,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: 'Écris une page COMPLÈTE pour une pizzeria : <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html lang="fr"&gt;</code>, un <code>&lt;head&gt;</code> avec charset UTF-8, un <code>&lt;title&gt;</code> contenant <code>Pizzeria</code>, une <code>meta description</code> non vide — et un <code>&lt;body&gt;</code> avec un h1.',
       codeDepart: '<!DOCTYPE html>\n<html lang="fr">\n<head>\n\n</head>\n<body>\n\n</body>\n</html>',
-      indice: 'Dans le head : <code>&lt;meta charset="UTF-8"&gt;</code>, <code>&lt;title&gt;Pizzeria Bella — Pizzas au feu de bois&lt;/title&gt;</code>, <code>&lt;meta name="description" content="..."&gt;</code>. Dans le body : un h1.',
+      indices: [
+        "Une page complète a deux parties : ce que le navigateur doit savoir, et ce qu’il doit afficher.",
+        "Le <code>&lt;head&gt;</code> porte l’encodage, le titre d’onglet et la description ; le <code>&lt;body&gt;</code> porte le contenu visible.",
+        "<code>&lt;meta charset=\"UTF-8\"&gt;</code>, un <code>&lt;title&gt;</code>, et une <code>meta description</code> dans le head."
+      ],
       solution: '<!DOCTYPE html>\n<html lang="fr">\n<head>\n  <meta charset="UTF-8">\n  <title>Pizzeria Bella — Pizzas au feu de bois</title>\n  <meta name="description" content="Pizzas artisanales au feu de bois, en plein centre-ville. Sur place ou à emporter.">\n</head>\n<body>\n  <h1>Pizzeria Bella</h1>\n</body>\n</html>',
       verifier: function (ctx) {
         if (ctx.doc.documentElement.getAttribute('lang') !== 'fr') return { ok: false, message: 'La balise html doit déclarer la langue : <code>&lt;html lang="fr"&gt;</code>.' };
@@ -448,7 +500,11 @@ window.DATA_HTML2 = [
       type: 'html',
       consigne: '<strong>Défi SEO : l\'audit.</strong> Cette page cumule 4 fautes de référencement : deux <code>&lt;h1&gt;</code>, un saut direct de h1 à h4, une image sans <code>alt</code>, et un <code>&lt;title&gt;</code> vide. Corrige tout : un seul h1, le h4 devient h2, un alt rempli, un title rempli.',
       codeDepart: '<!DOCTYPE html>\n<html lang="fr">\n<head>\n  <meta charset="UTF-8">\n  <title></title>\n</head>\n<body>\n  <h1>Atelier vélo</h1>\n  <h1>Réparations toutes marques</h1>\n  <h4>Nos services</h4>\n  <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'%3E%3Ccircle cx=\'40\' cy=\'40\' r=\'35\' fill=\'none\' stroke=\'%231e2432\' stroke-width=\'6\'/%3E%3C/svg%3E">\n  <p>Freins, pneus, chaînes : on répare tout.</p>\n</body>\n</html>',
-      indice: 'Le 2e h1 peut devenir un <code>&lt;p&gt;</code> ou un h2 ; « Nos services » passe en <code>&lt;h2&gt;</code> ; ajoute <code>alt="Une roue de vélo"</code> ; écris un vrai titre dans <code>&lt;title&gt;</code>.',
+      indices: [
+        "Quatre fautes, toutes invisibles à l’œil : la page s’affiche très bien. Ce sont les moteurs de recherche et les lecteurs d’écran qui souffrent.",
+        "Une page n’a qu’<strong>un</strong> h1. Les sous-titres sont des h2. Et toute image porteuse d’information a besoin d’un <code>alt</code>.",
+        "Le second h1 devient un h2 ou un <code>&lt;p&gt;</code>, « Nos services » passe en h2, et l’image reçoit son <code>alt</code>."
+      ],
       solution: '<!DOCTYPE html>\n<html lang="fr">\n<head>\n  <meta charset="UTF-8">\n  <title>Atelier vélo — Réparations toutes marques</title>\n</head>\n<body>\n  <h1>Atelier vélo</h1>\n  <p>Réparations toutes marques</p>\n  <h2>Nos services</h2>\n  <img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'%3E%3Ccircle cx=\'40\' cy=\'40\' r=\'35\' fill=\'none\' stroke=\'%231e2432\' stroke-width=\'6\'/%3E%3C/svg%3E" alt="Une roue de vélo">\n  <p>Freins, pneus, chaînes : on répare tout.</p>\n</body>\n</html>',
       verifier: function (ctx) {
         if (ctx.doc.querySelectorAll('h1').length !== 1) return { ok: false, message: 'Il doit rester UN seul <code>&lt;h1&gt;</code> (transforme l\'autre en p ou en h2).' };

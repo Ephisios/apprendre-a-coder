@@ -200,7 +200,11 @@ window.DATA_INTRO = [
       type: 'html',
       consigne: 'Le code ci-dessous affiche « Bonjour ». Remplace le mot <code>Bonjour</code> par <code>Bonjour, je code !</code> puis clique sur <strong>Exécuter</strong> pour voir le résultat, et enfin sur <strong>Vérifier ma réponse</strong>.',
       codeDepart: '<h1>Bonjour</h1>',
-      indice: 'Clique dans le cadre sombre, modifie le texte entre <code>&lt;h1&gt;</code> et <code>&lt;/h1&gt;</code>, sans toucher aux chevrons.',
+      indices: [
+        "Le code est déjà écrit et il fonctionne. Une seule chose est à changer, et ce n’est pas du code : c’est du texte.",
+        "Les chevrons <code>&lt;h1&gt;</code> et <code>&lt;/h1&gt;</code> encadrent le texte affiché. C’est ce qui est <strong>entre</strong> les deux qu’il faut remplacer.",
+        "Clique dans le cadre sombre et remplace le mot, sans toucher aux chevrons de part et d’autre."
+      ],
       solution: '<h1>Bonjour, je code !</h1>',
       verifier: function (ctx) {
         const h1 = ctx.doc.querySelector('h1');
@@ -217,7 +221,11 @@ window.DATA_INTRO = [
       type: 'html',
       consigne: '<strong>Déjà un défi !</strong> Sans regarder la leçon suivante : ajoute une <strong>deuxième ligne</strong> sous le titre, en recopiant ce modèle avec ta propre phrase : <code>&lt;p&gt;Ma phrase.&lt;/p&gt;</code> — tu viens de découvrir la balise « paragraphe ».',
       codeDepart: '<h1>Bonjour, je code !</h1>\n',
-      indice: 'Sur la ligne du dessous, écris <code>&lt;p&gt;</code>, puis ta phrase, puis <code>&lt;/p&gt;</code> pour refermer.',
+      indices: [
+        "Tu viens de voir qu’un titre s’écrit entre deux balises. Un paragraphe suit exactement la même logique, avec un autre nom.",
+        "La balise du paragraphe s’appelle <code>p</code>. Comme pour le titre, il en faut une pour ouvrir et une pour fermer.",
+        "Sur la ligne du dessous : <code>&lt;p&gt;</code>, puis ta phrase, puis <code>&lt;/p&gt;</code>."
+      ],
       solution: '<h1>Bonjour, je code !</h1>\n<p>Et voici ma toute première phrase en HTML.</p>',
       verifier: function (ctx) {
         const p = ctx.doc.querySelector('p');

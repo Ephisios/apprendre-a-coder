@@ -32,7 +32,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Crée une page contenant un titre <code>&lt;h1&gt;</code> avec le texte de ton choix, suivi d\'un paragraphe <code>&lt;p&gt;</code> qui contient au moins quelques mots.',
       codeDepart: '<!-- Écris ton code ici (cette ligne est un commentaire, tu peux l\'effacer) -->\n',
-      indice: 'Structure attendue : <code>&lt;h1&gt;Un titre&lt;/h1&gt;</code> puis en dessous <code>&lt;p&gt;Une phrase.&lt;/p&gt;</code>',
+      indices: [
+        "Une balise HTML va presque toujours par paire : une ouvrante, une fermante, et le contenu au milieu.",
+        "Le titre principal, c’est <code>&lt;h1&gt;</code> ; un paragraphe, c’est <code>&lt;p&gt;</code>. La fermante reprend le même nom, précédé d’une barre oblique.",
+        "<code>&lt;h1&gt;</code>Un titre<code>&lt;/h1&gt;</code> puis, en dessous, <code>&lt;p&gt;</code>Une phrase.<code>&lt;/p&gt;</code>"
+      ],
       solution: '<h1>Ma première page</h1>\n<p>Je suis en train d\'apprendre le HTML, et ça marche !</p>',
       verifier: function (ctx) {
         const h1 = ctx.doc.querySelector('h1');
@@ -48,7 +52,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Chasse au bug !</strong> Ce code est cassé : l\'affichage dans l\'aperçu est bizarre (tout est énorme). Trouve l\'erreur et répare-la. C\'est ton premier débogage — un moment historique.',
       codeDepart: '<h1>Mon journal<h1>\n<p>Aujourd\'hui, j\'ai réparé mon premier bug.</p>\n<p>Je suis officiellement en route pour devenir codeur.</p>',
-      indice: 'Regarde bien la fin de la première ligne : la balise fermante d\'un <code>&lt;h1&gt;</code> doit contenir une barre oblique : <code>&lt;/h1&gt;</code>.',
+      indices: [
+        "Tout s’affiche énorme : c’est que le titre n’a jamais été refermé, et que tout ce qui suit en hérite.",
+        "Une balise fermante se distingue de l’ouvrante par une seule chose : une barre oblique juste après le chevron.",
+        "Regarde la fin de la première ligne : c’est cette barre qui manque."
+      ],
       solution: '<h1>Mon journal</h1>\n<p>Aujourd\'hui, j\'ai réparé mon premier bug.</p>\n<p>Je suis officiellement en route pour devenir codeur.</p>',
       verifier: function (ctx) {
         if (!/<\/h1>/i.test(ctx.code)) return { ok: false, message: 'Le problème est toujours là : la première ligne se termine par <code>&lt;h1&gt;</code> au lieu de <code>&lt;/h1&gt;</code> (il manque la barre oblique <code>/</code>).' };
@@ -60,7 +68,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Défi, de mémoire</strong> (sans regarder plus haut !) : crée une page « Mes objectifs » avec un grand titre et <strong>trois</strong> paragraphes : un objectif par paragraphe.',
       codeDepart: '',
-      indice: 'Un <code>&lt;h1&gt;...&lt;/h1&gt;</code> puis trois blocs <code>&lt;p&gt;...&lt;/p&gt;</code> à la suite.',
+      indices: [
+        "Rien de nouveau : un titre, puis trois paragraphes, chacun dans sa propre paire de balises.",
+        "Trois paragraphes, c’est trois paires <code>&lt;p&gt;</code> — pas un seul paragraphe avec des retours à la ligne.",
+        "Un <code>&lt;h1&gt;</code> puis trois blocs <code>&lt;p&gt;</code> à la suite."
+      ],
       solution: '<h1>Mes objectifs</h1>\n<p>Apprendre les bases du HTML.</p>\n<p>Créer mon premier site web.</p>\n<p>Coder un petit jeu en JavaScript.</p>',
       verifier: function (ctx) {
         const h1 = ctx.doc.querySelectorAll('h1');
@@ -108,7 +120,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Construis une mini page « Mon carnet » : un <code>&lt;h1&gt;</code> principal, puis <strong>deux</strong> sections ayant chacune un sous-titre <code>&lt;h2&gt;</code> et un paragraphe <code>&lt;p&gt;</code>.',
       codeDepart: '<h1>Mon carnet</h1>\n',
-      indice: 'Après le h1, enchaîne : <code>&lt;h2&gt;...&lt;/h2&gt;</code> <code>&lt;p&gt;...&lt;/p&gt;</code> <code>&lt;h2&gt;...&lt;/h2&gt;</code> <code>&lt;p&gt;...&lt;/p&gt;</code>',
+      indices: [
+        "Les titres ont des niveaux, comme les chapitres d’un livre : un seul titre principal, puis des sous-titres.",
+        "Le <code>&lt;h1&gt;</code> vient en premier. Chaque section commence ensuite par un <code>&lt;h2&gt;</code> suivi de son paragraphe.",
+        "Après le h1 : <code>&lt;h2&gt;</code> puis <code>&lt;p&gt;</code>, et de nouveau <code>&lt;h2&gt;</code> puis <code>&lt;p&gt;</code>."
+      ],
       solution: '<h1>Mon carnet</h1>\n\n<h2>Lundi</h2>\n<p>Première leçon de code : les balises HTML.</p>\n\n<h2>Mardi</h2>\n<p>Je continue avec les titres et paragraphes.</p>',
       verifier: function (ctx) {
         const h1 = ctx.doc.querySelectorAll('h1');
@@ -127,7 +143,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Remets de l\'ordre !</strong> Cette page utilise n\'importe quels niveaux de titre : le titre principal est en <code>&lt;h4&gt;</code>, les sections en <code>&lt;h6&gt;</code> et <code>&lt;h3&gt;</code>. Corrige la hiérarchie : le titre principal en <code>&lt;h1&gt;</code>, les deux sections en <code>&lt;h2&gt;</code>.',
       codeDepart: '<h4>Guide du jardinage</h4>\n\n<h6>Planter au printemps</h6>\n<p>Tomates, courgettes et basilic.</p>\n\n<h3>Récolter en été</h3>\n<p>Le meilleur moment de l\'année.</p>',
-      indice: 'Change les balises ouvrantes ET fermantes : <code>&lt;h4&gt;</code>→<code>&lt;h1&gt;</code>, <code>&lt;h6&gt;</code>→<code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>→<code>&lt;h2&gt;</code>.',
+      indices: [
+        "Les niveaux de titre ne se choisissent pas pour leur taille : ils disent la <strong>hiérarchie</strong> du document.",
+        "Le titre principal doit être un h1, ses sous-titres des h2. Attention : chaque changement se fait à <strong>deux</strong> endroits.",
+        "Change la balise ouvrante ET la fermante : h4 devient h1, h6 devient h2, h3 devient h2."
+      ],
       solution: '<h1>Guide du jardinage</h1>\n\n<h2>Planter au printemps</h2>\n<p>Tomates, courgettes et basilic.</p>\n\n<h2>Récolter en été</h2>\n<p>Le meilleur moment de l\'année.</p>',
       verifier: function (ctx) {
         if (ctx.doc.querySelectorAll('h1').length !== 1) return { ok: false, message: 'Le titre principal « Guide du jardinage » doit devenir un <code>&lt;h1&gt;</code> (pense à changer aussi la balise fermante).' };
@@ -140,7 +160,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Défi.</strong> Écris un petit poème (ou une chanson inventée) : un titre <code>&lt;h1&gt;</code>, puis un paragraphe de 3 lignes séparées par des <code>&lt;br&gt;</code>, puis une ligne de séparation <code>&lt;hr&gt;</code>, puis un paragraphe avec le nom de l\'auteur.',
       codeDepart: '',
-      indice: 'Dans le paragraphe : <code>&lt;p&gt;ligne 1&lt;br&gt;ligne 2&lt;br&gt;ligne 3&lt;/p&gt;</code>. Puis <code>&lt;hr&gt;</code> seul, puis un dernier <code>&lt;p&gt;</code>.',
+      indices: [
+        "Deux balises particulières ici : elles ne contiennent rien, donc elles ne se ferment pas.",
+        "<code>&lt;br&gt;</code> force un retour à la ligne <em>dans</em> un paragraphe ; <code>&lt;hr&gt;</code> trace un trait de séparation entre deux blocs.",
+        "Dans le paragraphe : ligne 1, <code>&lt;br&gt;</code>, ligne 2, <code>&lt;br&gt;</code>, ligne 3 — puis un <code>&lt;hr&gt;</code> seul."
+      ],
       solution: '<h1>Ode au code</h1>\n<p>Les balises s\'ouvrent<br>\nLes balises se ferment<br>\nEt la page prend vie.</p>\n<hr>\n<p>Écrit par un futur développeur.</p>',
       verifier: function (ctx) {
         if (!ctx.doc.querySelector('h1')) return { ok: false, message: 'Il manque le titre <code>&lt;h1&gt;</code>.' };
@@ -187,7 +211,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Crée une page « Top 3 » : un titre <code>&lt;h1&gt;</code>, un paragraphe contenant un mot en <code>&lt;strong&gt;</code>, puis une liste <strong>numérotée</strong> (<code>&lt;ol&gt;</code>) de 3 éléments (tes 3 films, plats ou jeux préférés).',
       codeDepart: '',
-      indice: 'La liste numérotée s\'écrit : <code>&lt;ol&gt; &lt;li&gt;...&lt;/li&gt; &lt;li&gt;...&lt;/li&gt; &lt;li&gt;...&lt;/li&gt; &lt;/ol&gt;</code>. Le <code>&lt;strong&gt;</code> se place autour d\'un mot, à l\'intérieur du <code>&lt;p&gt;</code>.',
+      indices: [
+        "Une liste, c’est deux niveaux de balises : le conteneur qui dit quel type de liste, et un élément par ligne.",
+        "Numérotée, c’est <code>&lt;ol&gt;</code> (<em>ordered list</em>). Chaque ligne est un <code>&lt;li&gt;</code>.",
+        "<code>&lt;ol&gt;</code> autour, et trois <code>&lt;li&gt;</code> à l’intérieur."
+      ],
       solution: '<h1>Mon top 3 des plats</h1>\n<p>Voici mes plats <strong>préférés</strong> de tous les temps :</p>\n<ol>\n  <li>Les lasagnes</li>\n  <li>Le couscous</li>\n  <li>La raclette</li>\n</ol>',
       verifier: function (ctx) {
         if (!ctx.doc.querySelector('h1')) return { ok: false, message: 'Il manque le titre <code>&lt;h1&gt;</code>.' };
@@ -204,7 +232,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Entraînement.</strong> Transforme ce texte plat en liste à puces (<code>&lt;ul&gt;</code>) de 4 éléments, et mets le mot <code>urgent</code> du premier élément en <code>&lt;strong&gt;</code> et le mot <code>tranquillement</code> du dernier en <code>&lt;em&gt;</code>.',
       codeDepart: '<h1>Ma journée</h1>\n<p>Répondre au mail urgent. Faire les courses. Appeler le garage. Lire tranquillement.</p>',
-      indice: 'Remplace le paragraphe par : <code>&lt;ul&gt;</code> puis 4 <code>&lt;li&gt;...&lt;/li&gt;</code> puis <code>&lt;/ul&gt;</code>. Dans le premier li : <code>&lt;strong&gt;urgent&lt;/strong&gt;</code>.',
+      indices: [
+        "Même structure qu’à l’exercice précédent, mais avec des puces au lieu de numéros.",
+        "À puces, c’est <code>&lt;ul&gt;</code> (<em>unordered list</em>). Les <code>&lt;li&gt;</code>, eux, ne changent pas.",
+        "Remplace le paragraphe par <code>&lt;ul&gt;</code>, quatre <code>&lt;li&gt;</code>, puis <code>&lt;/ul&gt;</code>."
+      ],
       solution: '<h1>Ma journée</h1>\n<ul>\n  <li>Répondre au mail <strong>urgent</strong></li>\n  <li>Faire les courses</li>\n  <li>Appeler le garage</li>\n  <li>Lire <em>tranquillement</em></li>\n</ul>',
       verifier: function (ctx) {
         const ul = ctx.doc.querySelector('ul');
@@ -220,7 +252,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Défi : le menu du restaurant.</strong> De mémoire : un <code>&lt;h1&gt;</code> avec le nom du restaurant, puis deux sections « Entrées » et « Desserts » — chacune avec un <code>&lt;h2&gt;</code> suivi d\'une liste à puces d\'au moins 2 plats.',
       codeDepart: '',
-      indice: 'Squelette : h1, puis (h2 + ul avec 2 li), puis encore (h2 + ul avec 2 li).',
+      indices: [
+        "Deux sections, chacune avec son sous-titre et sa liste. La structure se répète à l’identique.",
+        "Un <code>&lt;h1&gt;</code> pour le nom du restaurant, puis deux fois : un <code>&lt;h2&gt;</code> suivi d’un <code>&lt;ul&gt;</code> de deux <code>&lt;li&gt;</code>.",
+        "h1, puis (h2 + ul avec 2 li), puis de nouveau (h2 + ul avec 2 li)."
+      ],
       solution: '<h1>Chez Mathéo</h1>\n\n<h2>Entrées</h2>\n<ul>\n  <li>Salade de chèvre chaud</li>\n  <li>Soupe à l\'oignon</li>\n</ul>\n\n<h2>Desserts</h2>\n<ul>\n  <li>Tarte tatin</li>\n  <li>Mousse au chocolat</li>\n</ul>',
       verifier: function (ctx) {
         if (!ctx.doc.querySelector('h1')) return { ok: false, message: 'Il manque le nom du restaurant en <code>&lt;h1&gt;</code>.' };
@@ -263,7 +299,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Crée un paragraphe contenant un lien vers <code>https://fr.wikipedia.org</code> dont le texte cliquable est <code>Mon site préféré</code>. (Dans l\'aperçu, le clic ne chargera pas la vraie page — c\'est normal, on vérifie juste ton code.)',
       codeDepart: '<p>\n\n</p>',
-      indice: 'Modèle : <code>&lt;a href="l\'adresse"&gt;le texte&lt;/a&gt;</code> — n\'oublie pas les guillemets autour de l\'adresse.',
+      indices: [
+        "Un lien a deux parties distinctes : où il mène, et ce qu’on lit à l’écran. Elles ne sont pas au même endroit.",
+        "L’adresse va dans l’attribut <code>href</code>, à l’intérieur de la balise ouvrante. Le texte cliquable, lui, va entre les deux balises.",
+        "<code>&lt;a href=\"l’adresse\"&gt;le texte&lt;/a&gt;</code> — sans oublier les guillemets autour de l’adresse."
+      ],
       solution: '<p>\n  <a href="https://fr.wikipedia.org">Mon site préféré</a>\n</p>',
       verifier: function (ctx) {
         const a = ctx.doc.querySelector('a');
@@ -279,7 +319,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Entraînement : le menu de navigation.</strong> Crée une liste à puces de <strong>3 liens</strong> (un par <code>&lt;li&gt;</code>) vers trois sites de ton choix — chaque lien doit avoir un <code>href</code> qui commence par <code>https://</code> et un texte cliquable.',
       codeDepart: '<h1>Mes sites favoris</h1>\n<ul>\n\n</ul>',
-      indice: 'Dans chaque <code>&lt;li&gt;</code>, place un lien complet : <code>&lt;li&gt;&lt;a href="https://..."&gt;Nom du site&lt;/a&gt;&lt;/li&gt;</code>',
+      indices: [
+        "Une liste de liens, c’est deux structures emboîtées : la liste, et un lien dans chaque élément.",
+        "Le lien complet se place <strong>à l’intérieur</strong> du <code>&lt;li&gt;</code>, pas à côté.",
+        "<code>&lt;li&gt;&lt;a href=\"https://…\"&gt;Nom du site&lt;/a&gt;&lt;/li&gt;</code>, trois fois."
+      ],
       solution: '<h1>Mes sites favoris</h1>\n<ul>\n  <li><a href="https://fr.wikipedia.org">Wikipédia</a></li>\n  <li><a href="https://www.youtube.com">YouTube</a></li>\n  <li><a href="https://developer.mozilla.org">MDN</a></li>\n</ul>',
       verifier: function (ctx) {
         const liens = ctx.doc.querySelectorAll('ul li a');
@@ -341,7 +385,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Le code contient une image sans attribut <code>alt</code> — ajoute-lui une description (par exemple <code>Un carré violet</code>). Ajoute ensuite un titre <code>&lt;h1&gt;</code> au-dessus de l\'image.',
       codeDepart: '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'16\' fill=\'%237a5df5\'/%3E%3C/svg%3E">',
-      indice: 'L\'attribut s\'ajoute dans la balise, après le src : <code>&lt;img src="..." alt="ta description"&gt;</code>. Le h1 se place sur une ligne avant.',
+      indices: [
+        "Une image ne se ferme pas : tout ce qui la concerne tient dans ses attributs.",
+        "<code>alt</code> décrit l’image pour qui ne la voit pas — lecteur d’écran, ou image qui ne charge pas. Il s’ajoute après le <code>src</code>.",
+        "<code>&lt;img src=\"…\" alt=\"ta description\"&gt;</code>"
+      ],
       solution: '<h1>Ma galerie</h1>\n<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'%3E%3Crect width=\'120\' height=\'120\' rx=\'16\' fill=\'%237a5df5\'/%3E%3C/svg%3E" alt="Un carré violet">',
       verifier: function (ctx) {
         const img = ctx.doc.querySelector('img');
@@ -357,7 +405,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Entraînement : la galerie.</strong> Voici deux images (un carré violet et un rond vert). Construis une galerie : un <code>&lt;h1&gt;</code>, puis chaque image précédée d\'un <code>&lt;h2&gt;</code> qui la décrit. Les deux images doivent avoir un <code>alt</code> rempli.',
       codeDepart: '<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'%3E%3Crect width=\'100\' height=\'100\' rx=\'12\' fill=\'%237a5df5\'/%3E%3C/svg%3E">\n<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'48\' fill=\'%2322c55e\'/%3E%3C/svg%3E">',
-      indice: 'Structure : <code>&lt;h1&gt;</code>, puis <code>&lt;h2&gt;Le carré&lt;/h2&gt;</code> + première image avec alt, puis <code>&lt;h2&gt;Le rond&lt;/h2&gt;</code> + deuxième image avec alt.',
+      indices: [
+        "Deux images, chacune présentée par son propre sous-titre. La structure se répète.",
+        "Un <code>&lt;h1&gt;</code>, puis deux fois : un <code>&lt;h2&gt;</code> suivi d’une image. Chaque image a besoin de son <code>alt</code>.",
+        "<code>&lt;h2&gt;</code>Le carré<code>&lt;/h2&gt;</code> + l’image, puis <code>&lt;h2&gt;</code>Le rond<code>&lt;/h2&gt;</code> + l’autre."
+      ],
       solution: '<h1>Ma galerie de formes</h1>\n\n<h2>Le carré violet</h2>\n<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'%3E%3Crect width=\'100\' height=\'100\' rx=\'12\' fill=\'%237a5df5\'/%3E%3C/svg%3E" alt="Un carré violet aux coins arrondis">\n\n<h2>Le rond vert</h2>\n<img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'48\' fill=\'%2322c55e\'/%3E%3C/svg%3E" alt="Un rond vert">',
       verifier: function (ctx) {
         if (!ctx.doc.querySelector('h1')) return { ok: false, message: 'Il manque le titre <code>&lt;h1&gt;</code> de la galerie.' };
@@ -432,7 +484,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Construis une page avec les 3 zones : un <code>&lt;header&gt;</code> contenant un <code>&lt;h1&gt;</code>, un <code>&lt;main&gt;</code> contenant un paragraphe, et un <code>&lt;footer&gt;</code> contenant aussi un paragraphe (par exemple ton nom).',
       codeDepart: '<header>\n\n</header>\n\n<main>\n\n</main>\n\n<footer>\n\n</footer>',
-      indice: 'Place un <code>&lt;h1&gt;...&lt;/h1&gt;</code> entre <code>&lt;header&gt;</code> et <code>&lt;/header&gt;</code>, puis un <code>&lt;p&gt;...&lt;/p&gt;</code> dans le main et un autre dans le footer.',
+      indices: [
+        "Ces trois balises ne changent rien à l’apparence : elles disent le <strong>rôle</strong> de chaque zone.",
+        "Le <code>&lt;header&gt;</code> porte l’en-tête, le <code>&lt;main&gt;</code> le contenu principal, le <code>&lt;footer&gt;</code> le pied de page. Chacun doit contenir quelque chose.",
+        "Un <code>&lt;h1&gt;</code> dans le header, un <code>&lt;p&gt;</code> dans le main, un <code>&lt;p&gt;</code> dans le footer."
+      ],
       solution: '<header>\n  <h1>Mon site</h1>\n</header>\n\n<main>\n  <p>Bienvenue sur ma page d\'accueil.</p>\n</main>\n\n<footer>\n  <p>Créé par moi, avec mes propres mains.</p>\n</footer>',
       verifier: function (ctx) {
         if (!ctx.doc.querySelector('header h1')) return { ok: false, message: 'Il faut un <code>&lt;h1&gt;</code> à l\'intérieur du <code>&lt;header&gt;</code>.' };
@@ -445,7 +501,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Entraînement.</strong> Ajoute un menu de navigation dans le header : une balise <code>&lt;nav&gt;</code> (après le h1, toujours dans le header) contenant une liste <code>&lt;ul&gt;</code> de 2 liens.',
       codeDepart: '<header>\n  <h1>Mon site</h1>\n\n</header>\n\n<main>\n  <p>Bienvenue sur ma page d\'accueil.</p>\n</main>',
-      indice: 'Dans le header : <code>&lt;nav&gt;&lt;ul&gt; &lt;li&gt;&lt;a href="..."&gt;Accueil&lt;/a&gt;&lt;/li&gt; &lt;li&gt;&lt;a href="..."&gt;Contact&lt;/a&gt;&lt;/li&gt; &lt;/ul&gt;&lt;/nav&gt;</code>',
+      indices: [
+        "Le menu fait partie de l’en-tête : il se place donc <em>dans</em> le header, pas à côté.",
+        "Quatre niveaux s’emboîtent : le <code>&lt;nav&gt;</code> qui annonce la navigation, un <code>&lt;ul&gt;</code>, des <code>&lt;li&gt;</code>, et un lien dans chacun.",
+        "<code>&lt;nav&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=\"…\"&gt;Accueil&lt;/a&gt;&lt;/li&gt;…&lt;/ul&gt;&lt;/nav&gt;</code>"
+      ],
       solution: '<header>\n  <h1>Mon site</h1>\n  <nav>\n    <ul>\n      <li><a href="index.html">Accueil</a></li>\n      <li><a href="contact.html">Contact</a></li>\n    </ul>\n  </nav>\n</header>\n\n<main>\n  <p>Bienvenue sur ma page d\'accueil.</p>\n</main>',
       verifier: function (ctx) {
         const nav = ctx.doc.querySelector('header nav');
@@ -513,7 +573,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Crée un tableau de 3 lignes : une ligne d\'en-têtes avec deux <code>&lt;th&gt;</code> (<code>Jour</code> et <code>Activité</code>), puis deux lignes de données avec deux <code>&lt;td&gt;</code> chacune.',
       codeDepart: '<table>\n  <tr>\n\n  </tr>\n</table>',
-      indice: 'Première ligne : deux <code>&lt;th&gt;</code>. Ajoute ensuite deux autres blocs <code>&lt;tr&gt;...&lt;/tr&gt;</code> contenant chacun deux <code>&lt;td&gt;</code>.',
+      indices: [
+        "Un tableau s’écrit ligne par ligne, et chaque ligne contient ses cellules. Deux sortes de cellules existent.",
+        "Le <code>&lt;tr&gt;</code> est une ligne. Le <code>&lt;th&gt;</code> est une cellule d’en-tête ; le <code>&lt;td&gt;</code> une cellule ordinaire.",
+        "Première ligne : deux <code>&lt;th&gt;</code>. Puis deux autres <code>&lt;tr&gt;</code> contenant chacun deux <code>&lt;td&gt;</code>."
+      ],
       solution: '<table>\n  <tr>\n    <th>Jour</th>\n    <th>Activité</th>\n  </tr>\n  <tr>\n    <td>Samedi</td>\n    <td>Cinéma</td>\n  </tr>\n  <tr>\n    <td>Dimanche</td>\n    <td>Randonnée</td>\n  </tr>\n</table>',
       verifier: function (ctx) {
         const table = ctx.doc.querySelector('table');
@@ -532,7 +596,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Entraînement.</strong> Ce tableau d\'horaires n\'a que 2 colonnes. Ajoute une <strong>troisième colonne</strong> « Salle » : un <code>&lt;th&gt;</code> de plus dans la première ligne, et un <code>&lt;td&gt;</code> de plus dans chaque ligne de données.',
       codeDepart: '<table>\n  <tr>\n    <th>Heure</th>\n    <th>Film</th>\n  </tr>\n  <tr>\n    <td>18h00</td>\n    <td>Le Grand Voyage</td>\n  </tr>\n  <tr>\n    <td>20h30</td>\n    <td>Nuit Étoilée</td>\n  </tr>\n</table>',
-      indice: 'Ajoute <code>&lt;th&gt;Salle&lt;/th&gt;</code> après le th « Film », puis un <code>&lt;td&gt;...&lt;/td&gt;</code> à la fin de chaque ligne de données (avant le <code>&lt;/tr&gt;</code>).',
+      indices: [
+        "Ajouter une colonne, ce n’est pas ajouter une ligne : il faut toucher à <strong>chaque</strong> ligne du tableau.",
+        "Une cellule de plus dans l’en-tête, et une cellule de plus dans chaque ligne de données — sinon le tableau se décale.",
+        "Un <code>&lt;th&gt;</code> après celui du film, puis un <code>&lt;td&gt;</code> à la fin de chaque ligne."
+      ],
       solution: '<table>\n  <tr>\n    <th>Heure</th>\n    <th>Film</th>\n    <th>Salle</th>\n  </tr>\n  <tr>\n    <td>18h00</td>\n    <td>Le Grand Voyage</td>\n    <td>Salle 1</td>\n  </tr>\n  <tr>\n    <td>20h30</td>\n    <td>Nuit Étoilée</td>\n    <td>Salle 3</td>\n  </tr>\n</table>',
       verifier: function (ctx) {
         const trs = ctx.doc.querySelectorAll('table tr');
@@ -548,7 +616,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Défi, de mémoire.</strong> Un tableau de scores de jeu : une ligne d\'en-têtes (<code>Joueur</code>, <code>Points</code>), puis <strong>trois</strong> lignes de données. Sans regarder les exemples plus haut !',
       codeDepart: '',
-      indice: 'table > tr(2 th) puis 3 × tr(2 td). Chaque balise ouverte doit être refermée.',
+      indices: [
+        "Un tableau de mémoire : rien de nouveau, mais chaque niveau doit être refermé dans le bon ordre.",
+        "Le <code>&lt;table&gt;</code> contient des <code>&lt;tr&gt;</code>, qui contiennent des <code>&lt;th&gt;</code> ou des <code>&lt;td&gt;</code>. Rien d’autre entre les deux.",
+        "Un <code>&lt;tr&gt;</code> de deux <code>&lt;th&gt;</code>, puis trois <code>&lt;tr&gt;</code> de deux <code>&lt;td&gt;</code>."
+      ],
       solution: '<table>\n  <tr>\n    <th>Joueur</th>\n    <th>Points</th>\n  </tr>\n  <tr>\n    <td>Léa</td>\n    <td>1250</td>\n  </tr>\n  <tr>\n    <td>Tom</td>\n    <td>980</td>\n  </tr>\n  <tr>\n    <td>Nina</td>\n    <td>1430</td>\n  </tr>\n</table>',
       verifier: function (ctx) {
         const table = ctx.doc.querySelector('table');
@@ -597,7 +669,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: 'Crée un mini formulaire de contact : un <code>&lt;label&gt;</code>, un champ <code>&lt;input type="text"&gt;</code> avec un <code>placeholder</code> de ton choix, et un <code>&lt;button&gt;</code> avec le texte <code>Envoyer</code>.',
       codeDepart: '<h1>Contact</h1>\n',
-      indice: 'Dans l\'ordre : <code>&lt;label&gt;...&lt;/label&gt;</code>, puis <code>&lt;input type="text" placeholder="..."&gt;</code>, puis <code>&lt;button&gt;Envoyer&lt;/button&gt;</code>.',
+      indices: [
+        "Trois éléments qui vont ensemble : ce qu’on demande, où l’on répond, et ce qui valide.",
+        "Le <code>&lt;label&gt;</code> se ferme ; l’<code>&lt;input&gt;</code> ne se ferme pas ; le <code>&lt;button&gt;</code> se ferme et porte son texte entre les balises.",
+        "Dans l’ordre : <code>&lt;label&gt;</code>, puis <code>&lt;input type=\"text\" placeholder=\"…\"&gt;</code>, puis <code>&lt;button&gt;</code>."
+      ],
       solution: '<h1>Contact</h1>\n<label>Ton message :</label>\n<input type="text" placeholder="Écris ici...">\n<button>Envoyer</button>',
       verifier: function (ctx) {
         const label = ctx.doc.querySelector('label');
@@ -616,7 +692,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Entraînement.</strong> Ajoute au formulaire : un menu déroulant <code>&lt;select&gt;</code> avec 3 <code>&lt;option&gt;</code> (Question, Bug, Autre) précédé d\'un <code>&lt;label&gt;</code>, et une case à cocher <code>&lt;input type="checkbox"&gt;</code> suivie d\'un <code>&lt;label&gt;</code> « Recevoir une copie ».',
       codeDepart: '<h1>Contact</h1>\n<label>Ton message :</label>\n<input type="text" placeholder="Écris ici...">\n\n<!-- Ajoute le menu déroulant et la case à cocher ici -->\n\n<button>Envoyer</button>',
-      indice: 'Menu : <code>&lt;select&gt;&lt;option&gt;Question&lt;/option&gt;...&lt;/select&gt;</code>. Case : <code>&lt;input type="checkbox"&gt; &lt;label&gt;Recevoir une copie&lt;/label&gt;</code>',
+      indices: [
+        "Deux ajouts de natures différentes : l’un est une balise à part entière, l’autre un simple type d’<code>input</code>.",
+        "Le menu déroulant est un <code>&lt;select&gt;</code> contenant des <code>&lt;option&gt;</code>. La case à cocher, elle, est un <code>input</code> d’un type particulier.",
+        "<code>&lt;select&gt;&lt;option&gt;…&lt;/option&gt;…&lt;/select&gt;</code> et <code>&lt;input type=\"checkbox\"&gt;</code>"
+      ],
       solution: '<h1>Contact</h1>\n<label>Ton message :</label>\n<input type="text" placeholder="Écris ici...">\n\n<label>Sujet :</label>\n<select>\n  <option>Question</option>\n  <option>Bug</option>\n  <option>Autre</option>\n</select>\n\n<input type="checkbox"> <label>Recevoir une copie</label>\n\n<button>Envoyer</button>',
       verifier: function (ctx) {
         const select = ctx.doc.querySelector('select');
@@ -631,7 +711,11 @@ window.DATA_HTML = [
       type: 'html',
       consigne: '<strong>Défi : le formulaire d\'inscription.</strong> De mémoire, crée un formulaire complet : un titre, un label + champ texte (prénom), un label + champ <code>type="number"</code> (âge), un menu déroulant d\'au moins 2 options (niveau : Débutant / Confirmé), et un bouton <code>S\'inscrire</code>.',
       codeDepart: '',
-      indice: 'Enchaîne : h1, label + input text, label + input number, label + select(2 options), button. Le type number s\'écrit <code>&lt;input type="number"&gt;</code>.',
+      indices: [
+        "Un formulaire complet, de mémoire. Chaque champ va par paire : son étiquette, puis le champ lui-même.",
+        "Trois types de champs différents, dont un pour les nombres. Le bouton vient en dernier.",
+        "h1, puis label + input texte, label + input <code>type=\"number\"</code>, label + <code>&lt;select&gt;</code> à deux options, et le bouton."
+      ],
       solution: '<h1>Inscription au club de code</h1>\n\n<label>Prénom :</label>\n<input type="text" placeholder="Ton prénom">\n\n<label>Âge :</label>\n<input type="number" placeholder="Ton âge">\n\n<label>Niveau :</label>\n<select>\n  <option>Débutant</option>\n  <option>Confirmé</option>\n</select>\n\n<button>S\'inscrire</button>',
       verifier: function (ctx) {
         if (!ctx.doc.querySelector('h1')) return { ok: false, message: 'Il manque le titre.' };
