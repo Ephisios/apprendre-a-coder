@@ -2117,11 +2117,36 @@ function pageComplete(p, avecPont) {
     'var vrai=console.log;console.log=function(){envoyer("log",joindre(arguments));vrai.apply(console,arguments);};\n' +
     'var vraiErr=console.error;console.error=function(){envoyer("err",joindre(arguments));vraiErr.apply(console,arguments);};\n' +
     'window.onerror=function(m,s,l){var n=l-DECALAGE;envoyer("err",m+(n>0?" (ligne "+n+" de ton JavaScript)":""));return false;};\n' +
+    // Le localStorage de l'origine opaque : lecture immédiate depuis la copie
+    // posée ici, écriture renvoyée au parent qui la conserve. Le « < » est
+    // échappé parce qu'une valeur contenant </script> refermerait la balise.
+    'var __D=' + JSON.stringify(stockageBac()).replace(/</g, '\\u003c') + ';\n' +
+    'function __persister(){try{parent.postMessage({__bac:1,genre:"stockage",d:__D},"*");}catch(e){}}\n' +
+    'function __magasin(d,dur){var m={getItem:function(k){k=String(k);' +
+    'return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null;},' +
+    'setItem:function(k,v){d[String(k)]=String(v);if(dur)__persister();},' +
+    'removeItem:function(k){delete d[String(k)];if(dur)__persister();},' +
+    'clear:function(){for(var k in d)delete d[k];if(dur)__persister();},' +
+    'key:function(i){var c=Object.keys(d);return c[i]===undefined?null:c[i];}};' +
+    'Object.defineProperty(m,"length",{get:function(){return Object.keys(d).length;}});return m;}\n' +
+    'try{Object.defineProperty(window,"localStorage",{value:__magasin(__D,true),writable:true,configurable:true});}catch(e){}\n' +
+    'try{Object.defineProperty(window,"sessionStorage",{value:__magasin({},false),writable:true,configurable:true});}catch(e){}\n' +
     '})();<\/script>';
 
   const prefixe = tete + pont + CALQUE_REPERAGE + '<script>\n';
   const decalage = prefixe.split('\n').length - 1;   // lignes avant la 1re ligne de JS
   return prefixe.replace('__DECALAGE__', decalage) + p.js + '\n<\/script>\n</body>\n</html>';
+}
+
+// Le stockage du bac à sable, tenu par le parent pour le compte de l'aperçu.
+// Une origine opaque n'a pas de localStorage : y toucher lève une
+// SecurityError. Or le cours l'enseigne (jsav-6, proj-4) et le bac est
+// justement où l'on vient l'essayer. On en tient donc un, à part, sous sa
+// propre clé — jamais mêlé à la progression, qui est ce qu'on protège.
+const CLE_STOCK_BAC = 'aac-bac-stockage';
+
+function stockageBac() {
+  try { return JSON.parse(localStorage.getItem(CLE_STOCK_BAC)) || {}; } catch (e) { return {}; }
 }
 
 // Un seul écouteur global pour tous les messages venant de l'aperçu
@@ -2133,6 +2158,11 @@ function installerPont() {
     if (!e.data || !e.data.__bac) return;
     // La souris se promène dans l'aperçu : on éclaire la ligne correspondante.
     if (e.data.genre === 'survol') { viserLigneCode(e.data.ligne); return; }
+    // L'aperçu a écrit dans son localStorage de remplacement : on garde.
+    if (e.data.genre === 'stockage') {
+      try { localStorage.setItem(CLE_STOCK_BAC, JSON.stringify(e.data.d || {})); } catch (x) {}
+      return;
+    }
     const zone = document.getElementById('console-bac');
     if (!zone) return;
     if (zone.querySelector('.vide')) zone.innerHTML = '';
@@ -2232,7 +2262,17 @@ function rendreBac() {
       '<div class="etiquette-zone etiquette-barre">Aperçu' +
       '<button class="lien-discret" id="btn-apercu" onclick="ouvrirApercuOnglet()" title="Voir ta page en grand">⤢ Ouvrir dans un onglet</button>' +
       '</div>' +
-      '<iframe id="apercu-bac" class="apercu apercu-plein" title="Aperçu de ta page"></iframe></div>' +
+      // sandbox SANS allow-same-origin : l'aperçu tombe dans une origine
+      // opaque, d'où il ne peut plus lire parent.document ni surtout
+      // parent.localStorage — c'est-à-dire toute la progression et tous les
+      // projets. Le bac est l'endroit où l'on colle du code trouvé ailleurs ;
+      // c'était la seule porte ouverte dessus. Le pont ne souffre pas : il
+      // passe par postMessage, qui traverse les origines.
+      //   allow-popups  — le cours enseigne target="_blank" (7 fois)
+      //   allow-forms   — et les formulaires
+      //   allow-modals  — pour qu'un alert() d'essai ne soit pas avalé
+      '<iframe id="apercu-bac" class="apercu apercu-plein" title="Aperçu de ta page"' +
+      ' sandbox="allow-scripts allow-popups allow-forms allow-modals"></iframe></div>' +
       '<div class="sortie-bloc sortie-console">' +
       '<div class="etiquette-zone">Console</div>' +
       '<div id="console-bac" class="console-sortie console-plein"><span class="vide">Les console.log de ton JavaScript s\'afficheront ici.</span></div></div>';

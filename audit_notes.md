@@ -100,6 +100,46 @@ Non couvert par le verifier (Node), à noter pour plus tard.
 srcdoc sans sandbox, cohérent hors ligne, à vérifier si on veut renforcer
 la sécurité dans le futur (sans casser le pont postMessage).
 
+RÉSOLU le 2026-09-24, pour le bac à sable seul.
+
+L'aperçu du bac porte désormais
+  sandbox="allow-scripts allow-popups allow-forms allow-modals"
+donc SANS allow-same-origin : il tombe dans une origine opaque. Mesuré dans
+un Chrome réel, avant et après : parent.document et parent.localStorage
+lèvent maintenant SecurityError. C'était la seule porte ouverte sur la
+progression et les projets — et le bac est précisément l'endroit où l'on
+colle du code trouvé ailleurs.
+
+Le pont n'a pas souffert : il passait déjà entièrement par postMessage,
+qui traverse les origines. Les deux sens ont été vérifiés dans un vrai
+navigateur, sondes temporaires à l'appui :
+  - iframe -> parent : le survol d'un élément remonte {genre:"survol",
+    ligne:2} et la gouttière s'allume ;
+  - parent -> iframe : le survol d'une ligne de code envoie {__aac:"ligne"}
+    et le calque retrouve bien l'élément visé (trouves: 1).
+
+PIÈGE DE MESURE, à connaître avant de retoucher à cela. Une iframe
+sandboxée passe hors-processus, et les événements souris synthétiques
+envoyés par le protocole DevTools n'y entrent PAS. Un premier test a donc
+conclu que le repérage était cassé, alors qu'il fonctionnait. Il a fallu
+faire déclencher le mouseover DEPUIS l'iframe pour voir juste. Une vraie
+souris n'a jamais été concernée.
+
+CE QUI AURAIT ÉTÉ CASSÉ, ET COMMENT ON L'A GARDÉ. Une origine opaque n'a
+pas de localStorage : y toucher lève. Or le cours l'enseigne (jsav-6,
+proj-4) et le bac est où l'on vient l'essayer. Le pont installe donc un
+localStorage de remplacement : la lecture se fait sur une copie posée dans
+la page au moment du rendu (donc synchrone, comme la vraie API), et chaque
+écriture est renvoyée au parent, qui la garde sous « aac-bac-stockage » —
+une clé à part, jamais mêlée à la progression. sessionStorage existe aussi,
+mais sans persistance, ce qui est sa sémantique exacte.
+
+CE QUI RESTE HORS SANDBOX, ET POURQUOI. Les iframes d'exercice (apercu-<i>)
+gardent l'accès même origine : le correcteur lit ctx.doc et ctx.win, donc
+iframe.contentDocument. Les sandboxer casserait les 140 correcteurs DOM et
+de mise en page. Le compromis est différent là-bas : le code exécuté est
+celui que l'élève écrit pour répondre à une consigne, pas du code collé.
+
 
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
@@ -141,8 +181,9 @@ Fichier : outils/verifier-contenu.js
 2. FAIT (2026-09-22) — lister nommément les exercices non éprouvés.
    Ce sont ces deux lignes qui ont permis de trouver les cinq défauts du
    saboteur décrits en 4.1 : un compte anonyme ne les aurait jamais révélés.
-3. Renforcer la sécurité des iframes du bac (sandbox) si besoin, après
-   vérification du pont postMessage.
+3. FAIT (2026-09-24) — sandbox sans allow-same-origin sur l'aperçu du bac,
+   avec un localStorage de remplacement pour ne pas casser ce que le cours
+   enseigne. Détail, mesures et piège de mesure en 4.3.
 4. (Plus tard) couverture du fallback JS "sans Worker" en conditions réelles.
 5. FAIT (2026-09-23) — les 63 correcteurs qui mesurent la page n'étaient
    rejoués par personne : ni le verifier (Node ne calcule pas de largeur),

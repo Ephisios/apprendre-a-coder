@@ -96,6 +96,11 @@ Et un **repérage code ↔ page** : survole une ligne de HTML, l'élément qu'el
 l'aperçu. Survole une règle CSS, et ce sont *tous* les éléments qu'elle touche qui s'entourent, avec
 leur compte (`<li> × 3`). C'est le meilleur moyen de comprendre ce que fait un sélecteur.
 
+L'aperçu est **isolé** : il tourne dans une origine à part, d'où il ne peut atteindre ni la page de
+l'application, ni ta progression. Un bac à sable est fait pour qu'on y colle du code trouvé ailleurs
+— il ne fallait pas que ce code puisse effacer six mois de travail. Ton propre `localStorage` y
+fonctionne quand même, dans un coin qui n'appartient qu'à lui.
+
 ### Une page pour revenir en arrière
 
 Réussir un exercice ne veut pas dire l'avoir compris pour toujours — surtout celui qu'on a arraché en
