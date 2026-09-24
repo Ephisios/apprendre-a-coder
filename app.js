@@ -65,7 +65,7 @@ function choisirTheme(nom) {
   requestAnimationFrame(() => requestAnimationFrame(() => racine.classList.remove('sans-transition')));
 }
 function majBoutonsTheme() {
-  const actuel = document.documentElement.getAttribute('data-theme') || 'clair';
+  const actuel = document.documentElement.getAttribute('data-theme') || 'sombre';
   const clair = document.getElementById('theme-clair');
   const sombre = document.getElementById('theme-sombre');
   // aria-pressed : sans lui, ☀️ et 🌙 s'annoncent à l'identique quel que soit
@@ -645,7 +645,7 @@ function rendreExercice(lecon, ex, i, total) {
   // L'exercice est un titre de niveau 2 : c'est l'objet de la page, il doit
   // exister dans le plan du document (h1 leçon › h2 exercice › h3 résultat).
   let html = '<div class="exercice" id="exercice-' + i + '">' +
-    '<h2 class="exercice-entete">' + etiquette + (fait ? '<span class="badge-fait">Acquis</span>' : '') + '</h2>' +
+    '<h2 class="exercice-entete">' + etiquette + (fait ? '<span class="badge-fait">✔ réussi</span>' : '') + '</h2>' +
     '<div class="exercice-corps">' +
     '<div class="consigne" id="consigne-' + i + '">' + ex.consigne + '</div>';
 
@@ -1536,7 +1536,7 @@ function afficherVerdict(i, v) {
       carte.classList.add('celebre');
     }
     const entete = document.querySelector('#exercice-' + i + ' .exercice-entete');
-    if (entete && !entete.querySelector('.badge-fait')) entete.innerHTML += '<span class="badge-fait">Acquis</span>';
+    if (entete && !entete.querySelector('.badge-fait')) entete.innerHTML += '<span class="badge-fait">✔ réussi</span>';
 
     majRecuLecon();
     if (progression.faits[leconCourante.id]) {

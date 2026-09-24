@@ -1,24 +1,25 @@
 /* =========================================================================
    Apprendre à coder — système visuel
-   Le cahier : encre bleue pour agir, stylo rouge pour corriger, surligneur
-   pour retenir, ardoise pour coder. On lit en sérif, on agit en sans, on
-   code en mono.
+   Veilleuse : l'atelier du soir, une lampe ambrée sur du graphite. Le code
+   est le héros, le reste s'efface. On se repère en mono, on lit en sans.
+   Pensé d'abord pour le thème sombre ; le clair suit, en « listing ».
    ========================================================================= */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
   /* --- Typographies (aucune police web : tout est déjà sur la machine) ---
-     Sérif de lecture d'écran d'abord : Charter / Iowan sur Mac, Sitka sur
-     Windows. Georgia n'est plus que le filet de sécurité. */
-  --f-lecture: Charter, "Bitstream Charter", "Iowan Old Style", "Sitka Text", Georgia, "DejaVu Serif", serif;
+     Le cours se lit en sans, large et calme. Titres, repères et code sont en
+     mono : c'est la voix de l'atelier. */
+  --f-lecture: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
   --f-interface: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --f-code: "Cascadia Mono", "Cascadia Code", Consolas, ui-monospace, "SF Mono", monospace;
+  --f-code: "Cascadia Mono", "Cascadia Code", Consolas, ui-monospace, "SF Mono", "DejaVu Sans Mono", monospace;
+  --f-titre: var(--f-code);
 
-  /* --- Rayons --- */
-  --r1: 8px;
-  --r2: 10px;
-  --r3: 14px;
+  /* --- Rayons : des angles francs, presque des bornes de terminal --- */
+  --r1: 4px;
+  --r2: 6px;
+  --r3: 8px;
   --rond: 999px;
 
   /* --- Mouvement --- */
@@ -26,136 +27,119 @@
   --vite: 130ms var(--sortie);
   --calme: 260ms var(--sortie);
 
-  /* --- Teintes des modules : les couleurs des intercalaires ---
+  /* --- Teintes des modules ---
      Elles ne portent plus seules l'identité du module : c'est son NUMÉRO
-     (00 à 11) qui le fait. La teinte ne fait que la souligner — d'où des
-     valeurs de même clarté, et aucune qui imite le rouge des erreurs ni le
-     vert des réussites. */
-  --m-intro: #6b6f7b;
-  --m-html:  #c75b2a;
-  --m-css:   #2f6fb5;
-  --m-js:    #b08a12;
-  --m-js2:   #7c5cb0;
-  --m-jsav:  #a63d6b;
-  --m-proj:  #5f7d22;
-  --m-py:    #2e7d6b;
-  --m-sql:   #8a6a3a;
-  --m-c:     #4a5a8c;
-  --m-java:  #8c3f2b;
-  --m-fin:   #1f4fb8;
+     (00 à 11) qui le fait. La teinte ne fait que le souligner. */
+  --m-intro: #8f897c;
+  --m-html:  #e0784a;
+  --m-css:   #5b9be0;
+  --m-js:    #d9b43a;
+  --m-js2:   #a88be0;
+  --m-jsav:  #e06a8c;
+  --m-proj:  #8fbf4a;
+  --m-py:    #4fb8a0;
+  --m-sql:   #c79a5b;
+  --m-c:     #8a9ad0;
+  --m-java:  #d0785b;
+  --m-fin:   #f2a93b;
 }
 
-/* ---------- Thème clair : le cahier ---------- */
+/* ---------- Thème sombre : l'atelier de nuit (le thème de référence) ---------- */
 :root,
-:root[data-theme="clair"] {
-  color-scheme: light;
-
-  --papier: #f6f3ec;
-  --surface: #fffefa;
-  --surface-2: #efeadf;
-  --surface-3: #e6e0d2;
-
-  --encre: #1b1f2a;
-  --encre-2: #3e4455;
-  --encre-3: #5f6371;
-
-  --trait: #e4ded1;
-  --trait-net: #d3cbb9;
-
-  /* L'encre bleue du stylo-plume : c'est la couleur de l'action (7,6:1 sous
-     du texte blanc). */
-  --accent: #1f4fb8;
-  --accent-fonce: #163b8c;
-  --accent-clair: #4f7be0;
-  --accent-voile: #e6ecfa;
-  --accent-sur: #ffffff;
-
-  --vert: #2e7d4f;
-  --vert-voile: #e4f1e8;
-  --orange: #9a5b0c;
-  --orange-voile: #fbefd9;
-  /* Le stylo rouge du correcteur : réservé à ce qui ne va pas. */
-  --rouge: #b3261e;
-  --rouge-voile: #fbe9e6;
-
-  /* Les trois accessoires du cahier. */
-  --surligneur: #ffe57a;
-  --surligneur-voile: #fff3b8;
-  --marge: #e0a39c;
-  --seyes: #e3e8f2;
-
-  /* L'ardoise : le code s'écrit à la craie, dans les deux thèmes. */
-  --code-fond: #23272f;
-  --code-fond-2: #2b303a;
-  --code-texte: #e8e4da;
-  --code-attenue: #9aa0ae;
-  --code-trait: #353b47;
-
-  /* La mesure de lecture, en pixels et à un seul endroit. En `em` elle se
-     recalculait sur la taille de police du parent : posée sur une grille en
-     16px, `32em` valait 512 et non 544, et la prose rétrécissait sans qu'on
-     touche à la règle. Une valeur, une source. */
-  --mesure-prose: 544px;
-
-  /* Anneau de focus posé sur l'ardoise. Il tient des deux côtés du bord
-     (3,7:1 contre l'ardoise, 3,7:1 contre le papier). */
-  --focus-code: var(--accent-clair);
-
-  /* Trois niveaux, tous à deux couches : un contact court et net, puis une
-     diffusion large et basse. Plus plates qu'avant : une feuille posée sur
-     une table, pas une carte qui flotte. */
-  --ombre-1: 0 1px 2px rgba(27, 31, 42, .05), 0 3px 10px -3px rgba(27, 31, 42, .08);
-  --ombre-carte: 0 1px 2px rgba(27, 31, 42, .06), 0 8px 20px -8px rgba(27, 31, 42, .14);
-  --ombre-2: 0 2px 4px rgba(27, 31, 42, .05), 0 16px 34px -12px rgba(27, 31, 42, .16);
-  --ombre-accent: 0 1px 2px rgba(22, 59, 140, .2), 0 6px 14px -6px rgba(22, 59, 140, .35);
-}
-
-/* ---------- Thème sombre : le cahier à la lampe ---------- */
 :root[data-theme="sombre"] {
   color-scheme: dark;
 
-  --papier: #15171c;
-  --surface: #1c1f26;
-  --surface-2: #252932;
-  --surface-3: #2e333d;
+  --papier: #111315;        /* graphite */
+  --surface: #1a1d20;       /* l'établi */
+  --surface-2: #22262a;
+  --surface-3: #2b2f33;
+  --barre: #0c0e10;         /* la barre latérale, un cran sous la page */
 
-  --encre: #f1eee6;
-  --encre-2: #cfcabf;
-  --encre-3: #9a958a;
+  /* Craie plutôt que blanc pur : moins de fatigue sur un fond presque noir. */
+  --encre: #e9e4d8;
+  --encre-2: #c9c3b5;
+  --encre-3: #8f897c;       /* 5,3:1 sur le graphite */
 
-  --trait: #2a2e37;
-  --trait-net: #3a3f4a;
+  --trait: #262a2e;
+  --trait-net: #3a3f44;
 
-  --accent: #8fb0ff;
-  --accent-fonce: #b3c9ff;
-  --accent-clair: #8fb0ff;
-  --accent-voile: #1f2740;
-  --accent-sur: #0e1426;
+  /* L'ambre de la lampe : la seule couleur d'action. Le texte posé dessus
+     est sombre (9,6:1). */
+  --accent: #f2a93b;
+  --accent-fonce: #ffc46b;
+  --accent-clair: #f2a93b;
+  --accent-voile: #2a2114;
+  --accent-sur: #1a1206;
 
-  --vert: #6cc592;
-  --vert-voile: #1a2b22;
-  --orange: #e0a65e;
-  --orange-voile: #2c2418;
-  --rouge: #ff8a7a;
-  --rouge-voile: #301e1c;
+  --vert: #7bd88f;          /* phosphore : ce qui passe */
+  --vert-voile: #16261b;
+  --orange: #e8a15a;
+  --orange-voile: #2a2016;
+  --rouge: #ff7a6b;         /* ce qui casse */
+  --rouge-voile: #2a1b19;
+  --lien: #8ec5ff;
 
-  /* À la lampe, le surligneur se fait transparent : le texte reste clair. */
-  --surligneur: rgba(255, 214, 90, .30);
-  --surligneur-voile: rgba(255, 214, 90, .16);
-  --marge: #6a3a36;
-  --seyes: #1b1e25;
+  --code-fond: #0c0e10;
+  --code-fond-2: #15181b;
+  --code-texte: #e9e4d8;
+  --code-attenue: #8f897c;
+  --code-trait: #22262a;
 
-  --code-fond: #0f1116;
-  --code-fond-2: #171a21;
-  --code-texte: #e8e4da;
-  --code-attenue: #9aa0ae;
-  --code-trait: #262a33;
+  --mesure-prose: 580px;
+  --focus-code: var(--accent);
 
-  /* Dans le noir, une ombre douce ne se voit pas : mêmes niveaux, plus opaques. */
-  --ombre-1: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 14px -3px rgba(0, 0, 0, .55);
-  --ombre-carte: 0 1px 2px rgba(0, 0, 0, .45), 0 12px 28px -8px rgba(0, 0, 0, .7);
-  --ombre-2: 0 2px 6px rgba(0, 0, 0, .45), 0 20px 42px -12px rgba(0, 0, 0, .74);
-  --ombre-accent: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 18px -8px rgba(90, 120, 220, .4);
+  --ombre-1: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 14px -3px rgba(0, 0, 0, .5);
+  --ombre-carte: 0 1px 2px rgba(0, 0, 0, .45), 0 10px 24px -8px rgba(0, 0, 0, .6);
+  --ombre-2: 0 2px 6px rgba(0, 0, 0, .45), 0 20px 42px -12px rgba(0, 0, 0, .7);
+  --ombre-accent: none;
+}
+
+/* ---------- Thème clair : le listing imprimé ---------- */
+:root[data-theme="clair"] {
+  color-scheme: light;
+
+  --papier: #f4f1e8;
+  --surface: #fbf9f3;
+  --surface-2: #ebe7dc;
+  --surface-3: #e2ddd0;
+  --barre: #ece8dd;
+
+  --encre: #1d1b16;
+  --encre-2: #45413a;
+  --encre-3: #6b665c;
+
+  --trait: #e0dbcf;
+  --trait-net: #cdc6b6;
+
+  /* L'ambre assombri jusqu'à ce que le blanc passe dessus (5,5:1). */
+  --accent: #9a5b00;
+  --accent-fonce: #7a4700;
+  --accent-clair: #c77a0a;
+  --accent-voile: #f6e8cf;
+  --accent-sur: #ffffff;
+
+  --vert: #2c7a51;
+  --vert-voile: #e3f2e8;
+  --orange: #a76410;
+  --orange-voile: #fbeeda;
+  --rouge: #b8362c;
+  --rouge-voile: #fbe7e4;
+  --lien: #2a5fb0;
+
+  /* Le code reste sombre dans les deux thèmes : c'est lui, l'atelier. */
+  --code-fond: #16181b;
+  --code-fond-2: #1f2226;
+  --code-texte: #e9e4d8;
+  --code-attenue: #9a9487;
+  --code-trait: #2b2f33;
+
+  --mesure-prose: 580px;
+  --focus-code: #f2a93b;
+
+  --ombre-1: 0 1px 2px rgba(29, 27, 22, .05), 0 3px 10px -3px rgba(29, 27, 22, .08);
+  --ombre-carte: 0 1px 2px rgba(29, 27, 22, .06), 0 8px 20px -8px rgba(29, 27, 22, .14);
+  --ombre-2: 0 2px 4px rgba(29, 27, 22, .05), 0 16px 34px -12px rgba(29, 27, 22, .16);
+  --ombre-accent: none;
 }
 
 /* Bascule de thème : on coupe les transitions le temps du changement.
@@ -173,10 +157,7 @@ html { height: 100%; }
 body {
   min-height: 100%;
   font-family: var(--f-interface);
-  /* Le réglure Seyès, en filigrane : une ligne tous les 32 px. Elle reste
-     sous tout le reste — cartes, code et barre latérale ont leur surface. */
-  background-color: var(--papier);
-  background-image: repeating-linear-gradient(180deg, transparent 0 31px, var(--seyes) 31px 32px);
+  background: var(--papier);
   color: var(--encre-2);
   display: flex;
   font-size: 16px;
@@ -235,7 +216,7 @@ body {
 #sidebar {
   width: 300px;
   min-width: 300px;
-  background: var(--surface);
+  background: var(--barre);
   border-right: 1px solid var(--trait);
   /* dvh : sur les navigateurs à barre d'outils escamotable, 100vh dépasse. */
   height: 100dvh;
@@ -274,27 +255,24 @@ body {
   width: 38px;
   height: 38px;
   flex: none;
-  /* Une page de cahier miniature : la marge rouge, puis « az » à l'encre. */
-  background:
-    linear-gradient(90deg, transparent 8px, var(--marge) 8px, var(--marge) 9.5px, transparent 9.5px),
-    var(--surface);
-  color: var(--accent);
-  font-family: var(--f-lecture);
-  font-style: italic;
+  /* Une invite de commande, à l'ambre sur le fond du code. */
+  background: var(--code-fond);
+  color: #f2a93b;
+  font-family: var(--f-code);
   font-weight: 700;
-  font-size: 17px;
-  padding-left: 4px;
-  border-radius: 9px;
-  box-shadow: inset 0 0 0 1.5px var(--accent);
+  font-size: 15px;
+  letter-spacing: -.04em;
+  border-radius: var(--r2);
+  box-shadow: inset 0 0 0 1px var(--trait-net);
   transition: transform var(--vite);
 }
 .logo:hover .logo-icone { transform: translateY(-1px) rotate(-3deg); }
 .logo-texte { min-width: 0; }
 .logo-titre {
   display: block;
-  font-family: var(--f-lecture);
+  font-family: var(--f-titre);
   font-weight: 700;
-  font-size: 16.5px;
+  font-size: 15px;
   color: var(--encre);
   letter-spacing: -.01em;
 }
@@ -323,9 +301,9 @@ body {
   width: 24px;
   height: 24px;
   flex: none;
-  border-radius: 6px;
+  border-radius: var(--r1);
   background: color-mix(in srgb, var(--teinte) 10%, var(--surface));
-  box-shadow: inset 0 3px 0 var(--teinte), inset 0 0 0 1px color-mix(in srgb, var(--teinte) 26%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teinte) 34%, transparent);
 }
 .repere-nom {
   font-weight: 700;
@@ -385,22 +363,20 @@ body {
   width: 26px;
   height: 26px;
   flex: none;
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--teinte) 10%, var(--surface));
-  box-shadow: inset 0 3px 0 var(--teinte), inset 0 0 0 1px color-mix(in srgb, var(--teinte) 24%, transparent);
+  border-radius: var(--r1);
+  background: color-mix(in srgb, var(--teinte) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teinte) 34%, transparent);
 }
-/* Le numéro d'intercalaire : il remplace les émojis, qui changeaient de
-   dessin d'un système à l'autre. Même règle partout où le module apparaît. */
+/* Le numéro du module (00 à 11) remplace l'émoji, qui changeait de dessin
+   d'un système à l'autre. Même règle partout où le module apparaît. */
 .module-puce, .repere-puce, .etabli-puce, .fil-ariane .puce-module, .etape-puce, .revision-puce {
   font-family: var(--f-code);
   font-size: 11.5px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -.02em;
-  padding-top: 2px;
-  color: color-mix(in srgb, var(--teinte, var(--accent)) 62%, var(--encre));
+  color: color-mix(in srgb, var(--teinte, var(--accent)) 70%, var(--encre));
 }
-.etape-puce, .revision-puce { font-size: 14px; }
+.etape-puce, .revision-puce { font-size: 13.5px; }
 .module-nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .module-pastille {
@@ -438,10 +414,11 @@ body {
   transition: background-color var(--vite), color var(--vite);
 }
 .nav-lecon:hover { background: var(--surface-2); color: var(--encre); }
-/* La leçon en cours est surlignée, comme dans un sommaire de cahier. */
+/* La leçon ouverte : un bloc ambre plein, comme la ligne sélectionnée d'un
+   explorateur de fichiers. On ne peut pas la rater. */
 .nav-lecon.active {
-  background: linear-gradient(transparent 22%, var(--surligneur) 22%, var(--surligneur) 86%, transparent 86%);
-  color: var(--encre);
+  background: var(--accent);
+  color: var(--accent-sur);
   font-weight: 700;
 }
 .nav-lecon .coche {
@@ -451,7 +428,7 @@ body {
   color: var(--encre-3);
   font-variant-numeric: tabular-nums;
 }
-.nav-lecon.active .coche { color: var(--encre-2); }
+.nav-lecon.active .coche { color: var(--accent-sur); }
 .nav-lecon .coche.fait { color: var(--vert); }
 .nav-lecon .detail { font-size: 11px; opacity: .75; }
 
@@ -459,7 +436,7 @@ body {
 .sidebar-bas {
   padding: 12px 14px 14px;
   border-top: 1px solid var(--trait);
-  background: var(--surface);
+  background: var(--barre);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -520,7 +497,7 @@ body {
   background: none;
   cursor: pointer;
   padding: 5px 6px;
-  border-radius: 6px;
+  border-radius: var(--r1);
   font-size: 12px;
   line-height: 1;
   filter: grayscale(1);
@@ -565,8 +542,6 @@ body {
   padding: 48px 52px 88px;
   max-width: 1180px;   /* la page occupe l'écran ; c'est la PROSE qui reste étroite */
   margin: 0 auto;
-  /* La marge rouge du cahier, tirée le long de la colonne. */
-  background: linear-gradient(90deg, transparent 22px, var(--marge) 22px, var(--marge) 23.5px, transparent 23.5px) no-repeat;
   /* Conteneur nommé : le porte-outils se décide sur la largeur de la PAGE,
      la carte d'exercice sur la sienne. Deux échelles, deux conteneurs. */
   container: page / inline-size;
@@ -644,9 +619,9 @@ body {
   width: 24px;
   height: 24px;
   flex: none;
-  border-radius: 6px;
+  border-radius: var(--r1);
   background: color-mix(in srgb, var(--teinte) 10%, var(--surface));
-  box-shadow: inset 0 3px 0 var(--teinte), inset 0 0 0 1px color-mix(in srgb, var(--teinte) 26%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teinte) 34%, transparent);
 }
 
 .etabli-titre {
@@ -732,9 +707,9 @@ body {
   place-items: center;
   width: 22px;
   height: 22px;
-  border-radius: 6px;
+  border-radius: var(--r1);
   background: color-mix(in srgb, var(--teinte) 10%, var(--surface));
-  box-shadow: inset 0 3px 0 var(--teinte), inset 0 0 0 1px color-mix(in srgb, var(--teinte) 26%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teinte) 34%, transparent);
 }
 /* Et un filet teinté sous le nom du module : c'est lui qui porte la couleur
    quand la pastille est trop petite pour la faire lire. */
@@ -746,10 +721,10 @@ body {
 .fil-ariane .sep { color: var(--encre-3); }
 
 h1.titre-lecon {
-  font-family: var(--f-lecture);
-  font-size: clamp(28px, 3.4vw, 38px);
-  line-height: 1.18;
-  letter-spacing: -.015em;
+  font-family: var(--f-titre);
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -.02em;
   color: var(--encre);
   margin-bottom: 26px;
   text-wrap: balance;
@@ -758,12 +733,13 @@ h1.titre-lecon {
 /* ---------- Prose de leçon ---------- */
 .contenu-lecon {
   font-family: var(--f-lecture);
-  font-size: 17px;
+  font-size: 16.5px;
   line-height: 1.72;
   color: var(--encre-2);
 }
+.contenu-lecon h2, .contenu-lecon h3 { font-family: var(--f-titre); letter-spacing: -.01em; }
 .contenu-lecon h2 {
-  font-size: 22px;
+  font-size: 21px;
   line-height: 1.3;
   letter-spacing: -.015em;
   color: var(--encre);
@@ -780,17 +756,8 @@ h1.titre-lecon {
 .contenu-lecon ul, .contenu-lecon ol { margin: 0 0 16px 22px; }
 .contenu-lecon li { margin-bottom: 7px; padding-left: 3px; }
 .contenu-lecon li::marker { color: var(--encre-3); }
-/* Ce qu'il faut retenir est passé au surligneur — un trait bas, qui laisse
-   le haut des lettres dégagé. */
-.contenu-lecon strong {
-  color: var(--encre);
-  font-weight: 700;
-  background: linear-gradient(transparent 58%, var(--surligneur-voile) 58%, var(--surligneur-voile) 94%, transparent 94%);
-  padding: 0 1px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-.contenu-lecon a { color: var(--accent-fonce); text-underline-offset: 2px; }
+.contenu-lecon strong { color: var(--encre); font-weight: 700; }
+.contenu-lecon a { color: var(--lien); text-underline-offset: 2px; }
 
 .contenu-lecon code,
 .consigne code,
@@ -861,8 +828,8 @@ h1.titre-lecon {
    <strong> — devenait une cellule à elle seule : le bloc se disloquait en
    colonnes. 134 encadrés sur 162 étaient dans ce cas. Le texte doit rester
    un seul flot, quoi qu'il contienne. */
-/* Des annotations de cahier : un mot en capitales dit de quoi il s'agit.
-   Plus d'émoji — son dessin changeait d'un système à l'autre. */
+/* Des commentaires de code : « // astuce », « // attention »… Plus
+   d'émoji — son dessin changeait d'un système à l'autre. */
 .astuce, .attention, .info {
   position: relative;
   padding: 12px 16px 14px;
@@ -874,31 +841,29 @@ h1.titre-lecon {
 }
 .astuce::before, .attention::before, .info::before {
   display: block;
-  margin-bottom: 3px;
-  font-family: var(--f-interface);
-  font-size: 11.5px;
+  margin-bottom: 4px;
+  font-family: var(--f-code);
+  font-size: 12.5px;
   font-weight: 700;
-  letter-spacing: .07em;
-  text-transform: uppercase;
 }
 .astuce {
-  background: var(--surligneur-voile);
-  border-color: color-mix(in srgb, var(--surligneur) 70%, var(--trait-net));
+  background: var(--vert-voile);
+  border-color: color-mix(in srgb, var(--vert) 26%, transparent);
   color: var(--encre-2);
 }
-.astuce::before { content: "Astuce"; color: var(--encre); }
+.astuce::before { content: "// astuce"; color: var(--vert); }
 .attention {
   background: var(--rouge-voile);
-  border-color: color-mix(in srgb, var(--rouge) 24%, transparent);
-  color: color-mix(in srgb, var(--rouge) 30%, var(--encre-2));
+  border-color: color-mix(in srgb, var(--rouge) 28%, transparent);
+  color: var(--encre-2);
 }
-.attention::before { content: "Attention"; color: var(--rouge); }
+.attention::before { content: "// attention"; color: var(--rouge); }
 .info {
   background: var(--accent-voile);
-  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
-  color: color-mix(in srgb, var(--accent-fonce) 26%, var(--encre-2));
+  border-color: color-mix(in srgb, var(--accent) 26%, transparent);
+  color: var(--encre-2);
 }
-.info::before { content: "À retenir"; color: var(--accent-fonce); }
+.info::before { content: "// à retenir"; color: var(--accent-fonce); }
 .astuce strong, .attention strong, .info strong { color: inherit; }
 .astuce code, .attention code, .info code { background: rgba(128, 128, 128, .16); color: inherit; }
 
@@ -925,28 +890,28 @@ h1.titre-lecon {
   margin: 0;                 /* c'est un <h2> : sa marge par défaut casserait le bandeau */
   padding: 13px 20px;
   background: var(--surface-2);
-  border-radius: 17px 17px 0 0;   /* --r3 moins l'épaisseur de la bordure */
+  border-radius: 7px 7px 0 0;   /* --r3 moins l'épaisseur de la bordure */
   border-bottom: 1px solid var(--trait);
+  font-family: var(--f-code);
   font-weight: 700;
-  font-size: 13.5px;
-  letter-spacing: .01em;
+  font-size: 13px;
+  letter-spacing: 0;
   color: var(--encre);
 }
 .badge-fait {
   margin-left: auto;
   display: inline-flex;
   align-items: center;
-  /* Un coup de tampon, pas une pastille : bordé, penché, en capitales. */
-  padding: 2px 9px;
-  border: 2px solid var(--vert);
-  border-radius: 5px;
+  gap: 5px;
+  /* Une ligne de sortie de test, pas une pastille. */
+  background: var(--vert-voile);
   color: var(--vert);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vert) 40%, transparent);
   font-family: var(--f-code);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  transform: rotate(-4deg);
+  padding: 2px 9px;
+  border-radius: var(--r1);
   animation: badge-entre 420ms var(--sortie);
 }
 
@@ -1059,22 +1024,22 @@ h1.titre-lecon {
 .editeur { position: relative; background: none; }
 /* Le texte devient invisible, mais pas le curseur ni la sélection. */
 .editeur-couleurs + .editeur { color: transparent; }
-.editeur-couleurs + .editeur::selection { background: rgba(143, 162, 255, .32); }
+.editeur-couleurs + .editeur::selection { background: rgba(242, 169, 59, .28); }
 
 /* Les couleurs nomment la structure ; elles ne décorent pas.
    Toutes mesurées à 4,5:1 minimum sur le fond sombre de l'éditeur. */
-.j-com  { color: #9aa0ae; font-style: italic; }
-.j-txt  { color: #a8d8a0; }
-.j-num  { color: #f5a97f; }
-.j-mot  { color: #c7a6ff; font-weight: 600; }
+.j-com  { color: #8f897c; font-style: italic; }
+.j-txt  { color: #7bd88f; }
+.j-num  { color: #f78c6c; }
+.j-mot  { color: #c9a0ff; font-weight: 600; }
 .j-type { color: #7fd1c7; }
-.j-fn   { color: #8fb8ff; }
+.j-fn   { color: #8ec5ff; }
 .j-val  { color: #f4a6c0; }
-.j-bal  { color: #8fb8ff; }
-.j-att  { color: #f2c879; }
-.j-sel  { color: #8fb8ff; font-weight: 600; }
+.j-bal  { color: #8ec5ff; }
+.j-att  { color: #f2a93b; }
+.j-sel  { color: #8ec5ff; font-weight: 600; }
 .j-prop { color: #7fd1c7; }
-.j-op   { color: #b4b9c6; }
+.j-op   { color: #b3ad9f; }
 /* Ce qui est cassé se voit avant d'exécuter : chaîne jamais refermée,
    commentaire laissé ouvert, balise sans son chevron final. */
 .j-err  { color: #ff9c92; text-decoration: underline wavy #ff9c92; text-underline-offset: 3px; }
@@ -1100,9 +1065,9 @@ h1.titre-lecon {
    Bleu foncé imposé (et non var(--accent)) : la gouttière est sombre dans les
    deux thèmes, et #4f6df5 ne donnait que 4,34:1 avec du texte blanc. */
 .editeur-lignes span.ligne-visee {
-  color: #fff;
+  color: #1a1206;
   font-weight: 700;
-  background: #4560e0;
+  background: #f2a93b;
   border-radius: 0 3px 3px 0;
 }
 
@@ -1130,7 +1095,7 @@ h1.titre-lecon {
   overflow-y: auto;
   caret-color: var(--accent-clair);
 }
-.editeur::selection { background: rgba(143, 162, 255, .32); color: inherit; }
+.editeur::selection { background: rgba(242, 169, 59, .28); color: inherit; }
 
 /* ---------- Boutons ---------- */
 .exercice-boutons { display: flex; gap: 9px; margin-top: 14px; flex-wrap: wrap; }
@@ -1170,8 +1135,8 @@ h1.titre-lecon {
   align-items: center;
   gap: 11px;
   margin: 0 0 4px;
-  font-family: var(--f-lecture);
-  font-size: 22px;
+  font-family: var(--f-titre);
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -.015em;
   color: var(--encre);
@@ -1363,16 +1328,11 @@ h1.titre-lecon {
   border-color: color-mix(in srgb, var(--vert) 26%, transparent);
   color: color-mix(in srgb, var(--vert) 32%, var(--encre-2));
 }
-/* Le stylo rouge du correcteur : la remarque s'écrit à la main, en sérif,
-   et c'est l'encre qui est rouge — pas tout le bloc. */
 .feedback.ko {
   background: var(--rouge-voile);
-  border-color: color-mix(in srgb, var(--rouge) 26%, transparent);
-  color: color-mix(in srgb, var(--rouge) 78%, var(--encre));
-  font-family: var(--f-lecture);
-  font-size: 16px;
+  border-color: color-mix(in srgb, var(--rouge) 30%, transparent);
+  color: color-mix(in srgb, var(--rouge) 70%, var(--encre));
 }
-.feedback.ko code { font-size: .82em; }
 .feedback strong { color: inherit; }
 .feedback code { background: rgba(128, 128, 128, .18); color: inherit; }
 
@@ -1495,10 +1455,9 @@ h1.titre-lecon {
   width: 34px;
   height: 34px;
   flex: none;
-  border-radius: 7px;
-  font-size: 13px;
+  border-radius: var(--r1);
   background: color-mix(in srgb, var(--teinte, var(--accent)) 10%, var(--surface));
-  box-shadow: inset 0 3px 0 var(--teinte, var(--accent)), inset 0 0 0 1px color-mix(in srgb, var(--teinte, var(--accent)) 26%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teinte, var(--accent)) 34%, transparent);
 }
 .revision-corps { display: grid; gap: 3px; min-width: 0; }
 .revision-titre { font-weight: 600; }
@@ -1576,62 +1535,64 @@ h1.titre-lecon {
 /* =========================================================================
    Accueil
    ========================================================================= */
-/* La page de garde du cahier : du papier, la marge rouge, la réglure, et
-   l'encre bleue pour la seule action. Plus de dégradé : il ne ressemblait
-   qu'aux autres logiciels. */
+/* L'accueil : un terminal qui vient de s'ouvrir. Plus de dégradé — il ne
+   ressemblait qu'aux autres logiciels. */
 .accueil-hero {
   position: relative;
   overflow: hidden;
-  background-color: var(--surface);
-  background-image:
-    linear-gradient(90deg, transparent 30px, var(--marge) 30px, var(--marge) 32px, transparent 32px),
-    repeating-linear-gradient(180deg, transparent 0 31px, var(--seyes) 31px 32px);
+  background: var(--surface);
   color: var(--encre);
   border: 1px solid var(--trait);
   border-radius: var(--r3);
-  padding: 42px 44px 36px 64px;
+  padding: 40px 44px 34px;
   margin-bottom: 44px;
-  box-shadow: var(--ombre-carte);
 }
 .accueil-hero::before {
-  /* filigrane : le sigle, écrit à la plume */
-  content: "az";
+  /* l'invite, en filigrane */
+  content: ">_";
   position: absolute;
-  right: 18px;
-  bottom: -46px;
-  font-family: var(--f-lecture);
-  font-style: italic;
-  font-size: clamp(150px, 15vw, 230px);
+  right: 28px;
+  bottom: -22px;
+  font-family: var(--f-code);
+  font-size: clamp(140px, 14vw, 210px);
   font-weight: 700;
-  color: color-mix(in srgb, var(--accent) 7%, transparent);
+  letter-spacing: -.08em;
+  color: color-mix(in srgb, var(--accent) 9%, transparent);
   pointer-events: none;
   line-height: 1;
 }
 .accueil-hero > * { position: relative; }
 .accueil-hero h1 {
-  font-family: var(--f-lecture);
-  font-size: clamp(32px, 4.2vw, 46px);
-  line-height: 1.1;
+  font-family: var(--f-titre);
+  font-size: clamp(28px, 3.6vw, 40px);
+  line-height: 1.15;
   letter-spacing: -.02em;
   margin-bottom: 14px;
-  max-width: 15ch;
+  max-width: 18ch;
   text-wrap: balance;
   color: var(--encre);
 }
+/* Le curseur qui clignote après le titre : la seule chose qui bouge. */
+.accueil-hero h1::after {
+  content: "_";
+  color: var(--accent);
+  animation: curseur 1.1s steps(1) infinite;
+}
+@keyframes curseur { 50% { opacity: 0; } }
 .accueil-hero p {
-  font-family: var(--f-lecture);
-  font-size: 17.5px;
-  line-height: 1.6;
+  font-size: 16.5px;
+  line-height: 1.65;
   color: var(--encre-2);
-  max-width: 46ch;
+  max-width: 50ch;
 }
 .accueil-hero .btn {
   margin-top: 24px;
   background: var(--accent);
   color: var(--accent-sur);
-  font-size: 15px;
+  font-family: var(--f-code);
+  font-size: 14.5px;
+  font-weight: 700;
   padding: 11px 20px;
-  box-shadow: var(--ombre-accent);
 }
 .accueil-hero .btn:hover { background: var(--accent-fonce); }
 
@@ -1641,16 +1602,17 @@ h1.titre-lecon {
   margin-top: 26px;
   padding-top: 18px;
   border-top: 1px solid var(--trait);
-  font-size: 13.5px;
-  color: var(--encre-2);
+  font-family: var(--f-code);
+  font-size: 12.5px;
+  color: var(--encre-3);
   flex-wrap: wrap;
 }
-.hero-chiffres b { color: var(--encre); font-weight: 700; font-variant-numeric: tabular-nums; }
+.hero-chiffres b { color: var(--accent-fonce); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* ---------- Parcours (sommaire du cours) ---------- */
 .parcours-titre {
-  font-family: var(--f-lecture);
-  font-size: 22px;
+  font-family: var(--f-titre);
+  font-size: 21px;
   color: var(--encre);
   margin-bottom: 4px;
 }
@@ -1688,16 +1650,15 @@ h1.titre-lecon {
   place-items: center;
   width: 44px;
   height: 44px;
-  border-radius: 9px;
-  font-size: 15px;
+  border-radius: var(--r2);
   background: var(--surface);
-  box-shadow: inset 0 4px 0 var(--teinte), inset 0 0 0 1px color-mix(in srgb, var(--teinte) 30%, var(--trait)), var(--ombre-1);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teinte) 40%, var(--trait));
 }
 .etape-module.encours .etape-puce {
   background: color-mix(in srgb, var(--teinte) 12%, var(--surface));
-  box-shadow: inset 0 4px 0 var(--teinte), inset 0 0 0 2px var(--teinte), var(--ombre-1);
+  box-shadow: inset 0 0 0 2px var(--teinte);
 }
-.etape-module.finie .etape-puce { box-shadow: inset 0 4px 0 var(--teinte), inset 0 0 0 1px var(--vert), var(--ombre-1); }
+.etape-module.finie .etape-puce { box-shadow: inset 0 0 0 1px var(--vert); }
 
 .etape-corps { min-width: 0; }
 .etape-nom {
@@ -1817,7 +1778,6 @@ h1.titre-lecon {
 /* L'atelier n'est pas un document : il occupe l'écran, sans marge perdue. */
 #contenu.atelier {
   max-width: none;
-  background: none;
   margin: 0;
   padding: 16px 20px 18px;
   height: 100vh;
@@ -2425,11 +2385,8 @@ mark {
      on épingle la largeur pour que le débordement reste dans le bloc. */
   #contenu { padding: 28px 20px 72px; width: 100%; max-width: 100%; }
   .bloc-code, .console-sortie, .editeur-cadre, .memo-table { max-width: 100%; }
-  .accueil-hero { padding: 30px 22px 28px 44px; }
-  .accueil-hero { background-image: linear-gradient(90deg, transparent 20px, var(--marge) 20px, var(--marge) 22px, transparent 22px), repeating-linear-gradient(180deg, transparent 0 31px, var(--seyes) 31px 32px); }
+  .accueil-hero { padding: 30px 22px 26px; }
   .accueil-hero::before { bottom: -38px; }
-  /* Plus assez de marge à gauche pour y tirer le trait rouge. */
-  #contenu { background: none; }
   .etape-module { grid-template-columns: 40px 1fr; padding-right: 8px; }
   .etape-etat { display: none; }
   .pied-lecon { flex-direction: column; }
