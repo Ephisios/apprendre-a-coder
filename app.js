@@ -1190,12 +1190,52 @@ function executerJS(code, rappel) {
       '};';
     worker = new Worker(URL.createObjectURL(new Blob([source], { type: 'application/javascript' })));
   } catch (e) {
-    // Repli si les Workers sont indisponibles : exécution directe
+    /* Repli quand les Workers sont indisponibles : exécution directe.
+
+       Il doit rendre EXACTEMENT le même { logs, erreur } que le Worker, sinon
+       deux élèves voient deux résultats pour le même code. Les minuteurs sont
+       donc suivis ici aussi : sans cela, la leçon jsav-18 (setTimeout,
+       setInterval) n'afficherait rien et son correcteur refuserait une
+       réponse juste.
+
+       On les passe en paramètres plutôt que de toucher aux globales : le code
+       de l'élève les voit, le reste de l'application garde les siennes.
+
+       CE QUE LE REPLI NE SAIT PAS FAIRE : arrêter une boucle infinie. Le
+       Worker se fait terminate() au bout de 3 s ; ici tout se passe sur le
+       fil principal, où rien ne peut interrompre du code synchrone. Une
+       boucle sans fin fige l'onglet, et le message « ton code tourne sans
+       s'arrêter » n'apparaîtra jamais. C'est le prix du repli — et la raison
+       pour laquelle il reste un repli. */
     const logs = [];
     const fauxConsole = { log: (...a) => logs.push(a.map(v => typeof v === 'object' && v !== null ? JSON.stringify(v) : String(v)).join(' ')) };
+    let attente = 0;
+    const programmes = [];
+    const monTimeout = (f, d) => {
+      d = Number(d) || 0;
+      if (d > attente) attente = d;
+      const id = setTimeout(f, d); programmes.push(['t', id]); return id;
+    };
+    const monInterval = (f, d) => {
+      d = Number(d) || 0;
+      const total = Math.min(d * 6, 1200);
+      if (total > attente) attente = total;
+      const id = setInterval(f, d); programmes.push(['i', id]); return id;
+    };
     let erreur = null;
-    try { new Function('console', code)(fauxConsole); } catch (err) { erreur = err.message; }
-    return rappel({ logs, erreur });
+    try {
+      new Function('console', 'setTimeout', 'setInterval', code)(fauxConsole, monTimeout, monInterval);
+    } catch (err) { erreur = err.message; }
+    const terminer = () => {
+      // Le Worker se fait terminate() : ses minuteurs meurent avec lui. Ici
+      // il faut les éteindre à la main, sans quoi un setInterval de l'élève
+      // continuerait de tourner longtemps après l'affichage du résultat.
+      for (const [genre, id] of programmes) (genre === 't' ? clearTimeout : clearInterval)(id);
+      rappel({ logs, erreur });
+    };
+    if (attente > 0) setTimeout(terminer, Math.min(attente + 100, 1600));
+    else terminer();
+    return;
   }
   const minuteur = setTimeout(() => {
     worker.terminate();

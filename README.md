@@ -156,7 +156,7 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 362 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
 358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
- 85 vérifications d'interface     — 0 échec, dont 8 d'accessibilité
+ 95 vérifications d'interface     — 0 échec, dont 8 d'accessibilité
 425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
 ```
 

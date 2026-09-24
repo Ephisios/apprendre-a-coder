@@ -79,7 +79,8 @@ sources.push(`
     rendreAccueil: () => rendreAccueil(),
     rendreLecon: id => rendreLecon(id),
     rendreBac: () => rendreBac(),
-    rendreMemos: o => rendreMemos(o)
+    rendreMemos: o => rendreMemos(o),
+    executerJS: (code, rappel) => executerJS(code, rappel)
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -474,5 +475,62 @@ for (const [titre, rendre] of VUES) {
   verifie('a11y — « ' + titre + ' » a un titre de niveau 1 et un seul', h1, 1);
 }
 
-console.log('\n' + ok + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
-process.exit(echecs ? 1 : 0);
+/* ========================================================================
+   Le moteur JavaScript quand les Workers manquent
+   ========================================================================
+   executerJS lance le code de l'élève dans un Worker, et retombe sur une
+   exécution directe si le navigateur n'en donne pas. Ce repli n'avait jamais
+   été exécuté par personne : ni ici, ni dans verifier-contenu.js, qui a son
+   propre moteur.
+
+   jsdom ne fournit ni Worker ni URL.createObjectURL. C'est donc TOUJOURS le
+   repli qui s'exécute dans ce fichier — la couverture était gratuite, il
+   suffisait de l'appeler. Les assertions ci-dessous valent pour lui seul ;
+   le chemin Worker a été mesuré à la main dans Chrome, y compris depuis
+   file://, où il fonctionne (contrairement à ce que l'on pouvait craindre
+   d'une origine réputée opaque).
+
+   Ce que ce repli NE SAIT PAS faire, et qu'aucun test ne peut donc prouver :
+   arrêter une boucle infinie. Rien n'interrompt du code synchrone sur le fil
+   principal. C'est écrit dans app.js, à l'endroit où ça se joue. */
+
+const lancerJS = (code) => new Promise((resolve) => pont.executerJS(code, resolve));
+
+(async () => {
+  console.log('\n=== Le repli « sans Worker » rend-il la même chose ? ===\n');
+
+  verifie('repli — c\'est bien lui qui s\'exécute ici', typeof win.Worker, 'undefined');
+
+  const simple = await lancerJS('console.log("bonjour"); console.log(1 + 1);');
+  verifie('repli — les console.log sont captés', simple.logs.join('|'), 'bonjour|2');
+  verifie('repli — pas d\'erreur quand il n\'y en a pas', simple.erreur, null);
+
+  const objet = await lancerJS('console.log({ a: 1 }); console.log([1, 2]); console.log(null);');
+  verifie('repli — un objet est rendu en JSON, comme dans le Worker',
+          objet.logs.join('|'), '{"a":1}|[1,2]|null');
+
+  const plante = await lancerJS('console.log("avant"); nexistePas();');
+  verifie('repli — ce qui précède l\'erreur reste affiché', plante.logs.join('|'), 'avant');
+  verifie('repli — l\'erreur est rapportée', /nexistePas/.test(plante.erreur || ''), true);
+
+  // Le vrai manque d'avant : le repli rendait la main tout de suite, donc
+  // tout ce qui était différé se perdait — et jsav-18 n'affichait rien.
+  const differe = await lancerJS(
+    'console.log("tout de suite"); setTimeout(function () { console.log("plus tard"); }, 120);');
+  verifie('repli — un setTimeout est attendu, pas ignoré',
+          differe.logs.join('|'), 'tout de suite|plus tard');
+
+  // Le Worker se fait terminate() ; ici il faut éteindre les minuteurs à la
+  // main, sinon l'intervalle de l'élève tourne encore après le verdict.
+  const repete = await lancerJS('var n = 0; setInterval(function () { console.log("tic" + (++n)); }, 40);');
+  verifie('repli — un setInterval a bien parlé', repete.logs.length > 0, true);
+  const apresVerdict = repete.logs.length;
+  await new Promise((r) => setTimeout(r, 500));
+  verifie('repli — et il s\'arrête une fois le verdict rendu', repete.logs.length, apresVerdict);
+
+  verifie('repli — la réponse n\'a que les deux champs attendus',
+          Object.keys(simple).sort().join(','), 'erreur,logs');
+
+  console.log('\n' + ok + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
+  process.exit(echecs ? 1 : 0);
+})();

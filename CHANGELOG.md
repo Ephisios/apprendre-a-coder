@@ -6,6 +6,40 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.3.1 — 2026-09-25
+
+### Corrigé
+
+- **Le repli « sans Worker » faisait échouer une bonne réponse.** `executerJS` lance le code de
+  l'élève dans un Worker, et retombe sur une exécution directe quand le navigateur n'en donne pas.
+  Ce repli n'avait jamais été exécuté par personne — et il était faux : il rendait la main
+  immédiatement, sans attendre les `setTimeout` et `setInterval` que le Worker, lui, surveille.
+
+  Mesuré dans un Chrome réel, Worker désactivé à la main, sur les deux exercices de `jsav-18`
+  (« Le temps qui passe ») : **tous deux refusés**, avec « J'attends trois lignes — j'en compte 2 ».
+  Un élève écrivant la bonne réponse se voyait reprocher un nombre de lignes, sans le moindre moyen
+  de comprendre. Le repli suit désormais les minuteurs, et les éteint avant de rendre la main —
+  le Worker le faisait implicitement, en se terminant.
+
+  > Une crainte levée au passage, et c'est l'essentiel de ce qu'on apprend ici : on pouvait redouter
+  > que les Workers soient refusés en `file://`, donc que ce repli soit le chemin *normal* d'un
+  > projet qui s'ouvre par double-clic. Mesure faite : le Worker fonctionne parfaitement depuis
+  > `file://`. Le repli reste un repli.
+
+### Ajouté
+
+- **Dix vérifications sur ce repli.** jsdom ne fournit ni `Worker` ni `URL.createObjectURL` : c'est
+  donc toujours lui qui s'exécute dans `test-interface.js`. La couverture était gratuite depuis le
+  début, il suffisait de l'appeler.
+
+### Connu, et assumé
+
+- Le repli ne peut pas arrêter une boucle infinie. Le Worker se fait `terminate()` au bout de trois
+  secondes et affiche « ton code tourne sans s'arrêter » ; le repli s'exécute sur le fil principal,
+  où rien n'interrompt du code synchrone. C'est écrit dans `app.js`, à l'endroit où ça se joue.
+
+---
+
 ## 3.3.0 — 2026-09-24
 
 Quatre chantiers, un seul fil : **ce que personne ne vérifiait**.

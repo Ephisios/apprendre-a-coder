@@ -94,6 +94,55 @@ regarder, 0 exercice sans copie à présenter.
 
 Non couvert par le verifier (Node), à noter pour plus tard.
 
+RÉSOLU le 2026-09-25. Le repli n'était pas seulement non testé : il était
+FAUX, et d'une façon qui accusait l'élève.
+
+D'ABORD, UNE CRAINTE LEVÉE PAR LA MESURE. On pouvait redouter que les
+Workers soient refusés en file://, donc que le repli soit le chemin NORMAL
+du projet — qui s'ouvre par double-clic. Mesuré dans un Chrome réel :
+new Worker(URL.createObjectURL(new Blob(...))) fonctionne parfaitement
+depuis file://, l'origine y vaut "file://" et non "null". Le repli reste
+donc bien un repli.
+
+CE QUI ÉTAIT FAUX. Le Worker surveille les setTimeout / setInterval de
+l'élève et attend qu'ils aient parlé avant de rendre son verdict. Le repli,
+lui, rendait la main immédiatement : tout ce qui était différé se perdait.
+Conséquence mesurée dans Chrome, Worker désactivé à la main, sur les deux
+exercices de jsav-18 (« Le temps qui passe ») :
+
+  exo 0 : REFUSÉ — « J'attends trois lignes — j'en compte 2. »
+  exo 1 : REFUSÉ — « J'attends au moins 3 lignes — j'en compte 0. »
+
+Un élève écrivant la bonne réponse se voyait donc reprocher un nombre de
+lignes, sans aucun moyen de comprendre pourquoi.
+
+Second défaut, plus discret : le Worker se fait terminate(), ce qui tue ses
+minuteurs. Le repli ne coupait rien, et un setInterval de l'élève continuait
+de tourner après le verdict. Le test le montre : sur l'ancien repli, le
+tableau de logs comptait 0 ligne au verdict et 10 une demi-seconde plus tard.
+
+CE QUI A ÉTÉ FAIT. Le repli suit les minuteurs comme le Worker, et les
+éteint avant de rendre la main. setTimeout et setInterval sont passés en
+PARAMÈTRES de new Function plutôt que posés sur les globales : le code de
+l'élève les voit, le reste de l'application garde les siennes.
+
+Vérifié dans Chrome en comparant les deux chemins sur cinq cas (log simple,
+objet, erreur, setTimeout, setInterval) : zéro écart, y compris le nombre de
+lignes produites par l'intervalle. Et les deux exercices de jsav-18 sont
+désormais acceptés à l'identique avec et sans Worker.
+
+CE QUI RESTE HORS DE PORTÉE, ET QU'AUCUN TEST NE PROUVERA. Le repli ne peut
+pas arrêter une boucle infinie. Le Worker se fait terminate() au bout de 3 s
+et affiche « ton code tourne sans s'arrêter » ; le repli s'exécute sur le fil
+principal, où rien n'interrompt du code synchrone. Une boucle sans fin y fige
+l'onglet. C'est écrit dans app.js à l'endroit où ça se joue, et c'est la
+raison pour laquelle le Worker reste le chemin normal.
+
+COUVERTURE. jsdom ne fournit ni Worker ni URL.createObjectURL : c'est donc
+TOUJOURS le repli qui s'exécute dans test-interface.js. Dix vérifications
+l'y attendent maintenant. Le chemin Worker, lui, n'est pas couvert par un
+harnais — il a été mesuré à la main.
+
 
 ### 4.3 Sandbox des iframes du bac à sable
 
@@ -184,7 +233,9 @@ Fichier : outils/verifier-contenu.js
 3. FAIT (2026-09-24) — sandbox sans allow-same-origin sur l'aperçu du bac,
    avec un localStorage de remplacement pour ne pas casser ce que le cours
    enseigne. Détail, mesures et piège de mesure en 4.3.
-4. (Plus tard) couverture du fallback JS "sans Worker" en conditions réelles.
+4. FAIT (2026-09-25) — le repli « sans Worker » est couvert par dix
+   vérifications, et surtout corrigé : il ignorait les minuteurs et faisait
+   refuser les deux exercices de jsav-18. Détail et mesures en 4.2.
 5. FAIT (2026-09-23) — les 63 correcteurs qui mesurent la page n'étaient
    rejoués par personne : ni le verifier (Node ne calcule pas de largeur),
    ni une relecture. outils/verifier-navigateur.html les exécute dans un
