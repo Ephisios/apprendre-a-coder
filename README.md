@@ -128,8 +128,18 @@ ce que la recherche retrouve.
 
 **`outils/verifier-navigateur.html`** couvre les 63 correcteurs que Node laisse de côté : ceux qui
 *mesurent* la page — une largeur, une position, une couleur calculée, une media query. Ni Node ni
-jsdom ne savent faire de mise en page ; seul un vrai navigateur en est capable. Cette page s'ouvre
-donc à la main, dans l'esprit du reste du projet, et pose les deux mêmes questions.
+jsdom ne savent faire de mise en page ; seul un vrai navigateur en est capable. Cette page pose les
+deux mêmes questions, et reste ouvrable à la main.
+
+**`outils/verifier-navigateur.js`** l'ouvre à ta place. Tant qu'il fallait y penser, un correcteur
+de mise en page pouvait partir cassé sans que rien ne crie — 13 % des exercices reposaient sur la
+mémoire de quelqu'un. Le pilote lance le Chrome ou l'Edge **déjà installé** sur la machine, en mode
+sans fenêtre, et lit le verdict. Pas de Chromium téléchargé, pas de Puppeteer : depuis Node 22,
+`WebSocket` et `fetch` sont natifs, et parler le protocole DevTools tient en quarante lignes. Le
+projet garde donc son unique dépendance de développement, jsdom.
+
+Sans navigateur sur la machine, il le dit en gros et rend la main sans faire échouer le reste —
+`VERIF_NAVIGATEUR=exige` inverse ce choix, `NAVIGATEUR=/chemin/vers/chrome` impose un binaire.
 
 État actuel :
 
@@ -138,9 +148,11 @@ donc à la main, dans l'esprit du reste du projet, et pose les deux mêmes quest
 358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
  77 vérifications d'interface     — 0 échec
+425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
 ```
 
-Soit **425 correcteurs sur 425** mis à l'épreuve, et pas seulement exécutés.
+Soit **425 correcteurs sur 425** mis à l'épreuve, et pas seulement exécutés — le tout en une seule
+commande, sans que personne ait à ouvrir quoi que ce soit.
 
 ## Pourquoi hors ligne
 

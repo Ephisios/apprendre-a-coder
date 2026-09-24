@@ -11,7 +11,8 @@
   "scripts": {
     "verifier": "node outils/verifier-contenu.js",
     "test-interface": "node outils/test-interface.js",
-    "tout-verifier": "npm run verifier && npm run test-interface"
+    "verifier-nav": "node outils/verifier-navigateur.js",
+  "tout-verifier": "npm run verifier && npm run test-interface && npm run verifier-nav"
   },
   "devDependencies": {
     "jsdom": "^30.1.0"

@@ -215,7 +215,12 @@ function sansLaCible(code, src) {
   return null;
 }
 
+// Le pilote Node (verifier-navigateur.js) relit ces lignes. On les garde donc
+// en mémoire en plus de les peindre, pour qu'il n'ait pas à gratter le DOM.
+var RETENU = [];
+
 function ligne(classe, ou, texte) {
+  RETENU.push({ classe: classe, ou: ou, texte: String(texte).replace(/<[^>]+>/g, '') });
   var d = document.createElement('div');
   d.className = 'ligne';
   d.innerHTML = '<span class="' + classe + '">' +
@@ -229,6 +234,8 @@ async function lancer() {
   var bouton = document.getElementById('lancer');
   bouton.disabled = true;
   document.getElementById('rapport').innerHTML = '';
+  RETENU.length = 0;
+  window.__bilan = null;   // le pilote attend qu'il redevienne non nul
   var largeur = Number(document.getElementById('largeur').value) || 520;
   var travail = aMesurer();
   var debut = Date.now();
@@ -278,6 +285,13 @@ async function lancer() {
     (nonEprouves ? ', ' + nonEprouves + ' non éprouvé(s)' : '');
   b.className = (ko || complaisants) ? 'ko' : 'ok';
   bouton.disabled = false;
+
+  // Dernier geste : le pilote ne lit que ceci.
+  window.__bilan = {
+    juges: juges, ko: ko, complaisants: complaisants, nonEprouves: nonEprouves,
+    duree: duree, texte: b.textContent,
+    ennuis: RETENU.filter(function (l) { return l.classe !== 'ok'; })
+  };
 }
 
 document.getElementById('lancer').addEventListener('click', lancer);
