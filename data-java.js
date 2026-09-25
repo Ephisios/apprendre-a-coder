@@ -373,17 +373,46 @@ if (a.equals(b)) { ... }   // CORRECT</pre>
   id: 'j-5',
   titre: 'Les boucles',
   contenu: `
-<p>Rien de neuf si tu as fait le module C : <code>for</code>, <code>while</code> et <code>do...while</code> s'écrivent exactement pareil.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Afficher les nombres de 1 à 100, parcourir les 3 000 commandes d'une boutique, redemander un mot de passe tant qu'il est faux : dès qu'il faut <strong>répéter</strong>, on n'écrit pas cent fois la même ligne, on écrit une <strong>boucle</strong>. Une boucle, c'est un bloc de code que Java rejoue tant qu'une condition reste vraie. Java en propose trois, qui répondent chacune à une situation différente.</p>
 
+<h2>for : quand on sait combien de tours</h2>
 <pre class="bloc-code">for (int i = 1; i <= 5; i++) {
     System.out.println(i);
-}
+}</pre>
+<p>La parenthèse contient trois morceaux, séparés par des points-virgules :</p>
+<ul>
+<li><code>int i = 1</code> : le <strong>départ</strong>, exécuté une seule fois. On crée un compteur ;</li>
+<li><code>i &lt;= 5</code> : la <strong>condition</strong>, vérifiée avant chaque tour. Tant qu'elle est vraie, on continue ;</li>
+<li><code>i++</code> : le <strong>pas</strong>, exécuté après chaque tour. Ici, on ajoute 1 au compteur.</li>
+</ul>
 
-int i = 3;
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Valeur de i</th><th>Condition i &lt;= 5</th><th>Ce qui se passe</th></tr>
+<tr><td>1</td><td>vraie</td><td>affiche 1, puis <code>i++</code></td></tr>
+<tr><td>2</td><td>vraie</td><td>affiche 2, puis <code>i++</code></td></tr>
+<tr><td>…</td><td>…</td><td>…</td></tr>
+<tr><td>5</td><td>vraie</td><td>affiche 5, puis <code>i++</code></td></tr>
+<tr><td>6</td><td>fausse</td><td>la boucle s'arrête ; Java passe à la suite du programme</td></tr>
+</table>
+<p>Remarque que la condition est testée <em>six</em> fois pour cinq tours : la dernière vérification, celle qui échoue, est ce qui arrête la boucle.</p>
+
+<h2>while et do...while : quand on ne sait pas</h2>
+<pre class="bloc-code">int i = 3;
 while (i > 0) {
     System.out.println(i);
     i--;
-}</pre>
+}
+System.out.println("Partez !");</pre>
+<p><code>while</code> (« tant que ») ne garde que la condition. On s'en sert quand on ne connaît pas le nombre de tours à l'avance : diviser un nombre par deux tant qu'il dépasse 1, lire des lignes tant qu'il en reste. Le compteur, s'il y en a un, c'est à toi de le faire évoluer dans le corps.</p>
+<p><code>do { … } while (condition);</code> est la même chose à un détail près : la condition est vérifiée <em>après</em> le tour, donc le corps s'exécute <strong>au moins une fois</strong>. C'est la boucle des menus : on affiche le menu, puis on recommence tant que l'utilisateur n'a pas choisi « quitter ».</p>
+<table class="memo-table">
+<tr><th>Boucle</th><th>À choisir quand…</th></tr>
+<tr><td>for</td><td>on connaît le nombre de tours (de 1 à 10, chaque case d'un tableau)</td></tr>
+<tr><td>while</td><td>on s'arrête sur une condition, peut-être sans faire un seul tour</td></tr>
+<tr><td>do...while</td><td>on doit faire au moins un tour avant de vérifier</td></tr>
+</table>
 
 <h2>break et continue</h2>
 <pre class="bloc-code">for (int i = 1; i <= 10; i++) {
@@ -399,10 +428,35 @@ for (int i = 1; i <= 5; i++) {
     }
     System.out.println(i);   // affiche 1 2 4 5
 }</pre>
+<p><code>break</code> arrête tout ; <code>continue</code> abandonne seulement le tour en cours. On sort <code>break</code> quand on a trouvé ce qu'on cherchait : inutile de parcourir la suite.</p>
 
-<p><code>break</code> arrête tout ; <code>continue</code> abandonne seulement le tour en cours. Ces deux mots existent aussi en C, en JavaScript et en Python — tu les retrouveras partout.</p>
+<h2>Les pièges</h2>
+<p><strong>La boucle qui ne s'arrête jamais.</strong> Dans un <code>while</code>, si tu oublies <code>i--</code>, <code>i</code> vaut 3 pour toujours et la condition reste vraie pour toujours. L'éditeur coupe le programme et te prévient : « ton programme affiche beaucoup trop de texte (boucle sans fin ?) », ou, si la boucle n'affiche rien, « ton programme tourne sans s'arrêter (boucle infinie ?) ». Réflexe : vérifie que quelque chose, dans le corps, rapproche la condition de <code>false</code>.</p>
+<p><strong>Un tour de trop, ou de moins.</strong> <code>i &lt; 5</code> fait 4 tours en partant de 1 ; <code>i &lt;= 5</code> en fait 5. Quand un résultat est décalé de un, c'est presque toujours cette comparaison. Déroule le premier et le dernier tour à la main, comme dans le tableau plus haut.</p>
+<p><strong>Utiliser i après la boucle.</strong> Un compteur déclaré dans la parenthèse du <code>for</code> n'existe que dans la boucle. Écrire <code>System.out.println(i);</code> après l'accolade fermante est une erreur, et l'éditeur te répond que « la variable <code>i</code> n'existe pas ». S'il te faut sa valeur après, déclare-la avant la boucle.</p>
 
-<div class="astuce"><div>Une boucle avec plusieurs <code>break</code> et <code>continue</code> devient vite illisible. Si tu en accumules, c'est souvent le signe que la condition de boucle mériterait d'être repensée.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>Un jeu vidéo tourne dans une grande boucle : lire les touches, déplacer les personnages, redessiner l'écran, recommencer, soixante fois par seconde. Un serveur web attend dans une boucle la requête suivante. Et ces trois boucles s'écrivent presque à l'identique en C et en JavaScript : ce que tu apprends ici te servira partout.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>for</code> quand on connaît le nombre de tours ; <code>while</code> quand on s'arrête sur une condition ; <code>do...while</code> pour au moins un tour.</li>
+<li>Toute boucle doit faire évoluer ce que teste sa condition, sinon elle ne s'arrête jamais.</li>
+<li><code>break</code> sort de la boucle ; <code>continue</code> passe au tour suivant.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les boucles imbriquées</summary>
+<p>Une boucle peut en contenir une autre. Pour chaque tour de la boucle extérieure, la boucle intérieure fait tous ses tours :</p>
+<pre class="bloc-code">for (int ligne = 1; ligne <= 3; ligne++) {
+    for (int col = 1; col <= 3; col++) {
+        System.out.print(ligne * col + " ");
+    }
+    System.out.println();
+}</pre>
+<p>Cela affiche une table de multiplication de 3 sur 3 : 9 tours au total. C'est la forme qu'on retrouve pour parcourir une grille, un plateau de jeu ou une image, pixel par pixel. Attention au coût : 1 000 tours dans 1 000 tours, c'est un million.</p>
+</details>
 `,
   exercices: [
     {

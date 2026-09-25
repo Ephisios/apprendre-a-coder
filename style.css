@@ -864,6 +864,52 @@ h1.titre-lecon {
   color: var(--encre-2);
 }
 .info::before { content: "// à retenir"; color: var(--accent-fonce); }
+/* ---------- Gabarit de leçon : « À retenir » et « Aller plus loin » ----------
+   Le récapitulatif ferme la leçon : trois lignes, pas plus, qu'on doit pouvoir
+   relire seules la veille d'un exercice. « Aller plus loin » est replié : le
+   « sous le capot » reste à portée des curieux sans alourdir la leçon. */
+.a-retenir {
+  margin: 28px 0 18px;
+  padding: 14px 18px 12px;
+  border: 1px solid var(--trait-net);
+  border-radius: var(--r2);
+  background: var(--surface);
+  font-size: 15.5px;
+}
+.a-retenir::before {
+  content: "// à retenir";
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--f-code);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent-fonce);
+}
+.contenu-lecon .a-retenir ul { margin: 0 0 2px 20px; }
+.contenu-lecon .a-retenir li { margin-bottom: 5px; }
+
+.plus-loin {
+  margin: 0 0 20px;
+  border: 1px dashed var(--trait-net);
+  border-radius: var(--r2);
+  font-size: 15.5px;
+}
+.plus-loin > summary {
+  padding: 11px 16px;
+  cursor: pointer;
+  font-family: var(--f-code);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--encre-2);
+}
+.plus-loin > summary:hover { color: var(--encre); }
+.plus-loin[open] > summary { border-bottom: 1px dashed var(--trait-net); }
+.plus-loin > :not(summary) { margin-left: 16px; margin-right: 16px; }
+.plus-loin > :not(summary):first-of-type { margin-top: 12px; }
+
+/* La trace d'exécution : une ligne par étape, les valeurs en mono. */
+.contenu-lecon .trace td:first-child { font-family: var(--f-code); white-space: nowrap; }
+
 .astuce strong, .attention strong, .info strong { color: inherit; }
 .astuce code, .attention code, .info code { background: rgba(128, 128, 128, .16); color: inherit; }
 
