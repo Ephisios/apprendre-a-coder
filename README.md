@@ -197,6 +197,7 @@ outils/             les harnais de vérification (développement)
   verifier-contenu.js       rejoue les exercices et sabote les copies (Node)
   test-interface.js         l'aide, les genres, la recherche, la sauvegarde (jsdom)
   verifier-navigateur.html  les correcteurs qui mesurent la page (à ouvrir)
+  gabarit-lecon.md          la structure qu'une leçon doit suivre
 ```
 
 ### Et côté développement
