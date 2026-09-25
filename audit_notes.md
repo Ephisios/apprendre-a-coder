@@ -269,6 +269,34 @@ STRICTE, pas par JSON. Comparer deux tableaux échoue toujours. On compare
 des chaînes.
 
 
+### 4.7 L'affichage et la navigation
+
+RÉSOLU le 2026-09-25, en partie et délibérément. 32 vérifications dans
+test-interface.js sur ce qui a un vrai comportement : la console, le
+verdict, et ce que la navigation retient (thème, onglet du bac, plein
+écran, aria-expanded du sommaire).
+
+CE QUI N'A PAS ÉTÉ ÉCRIT, ET POURQUOI. Les enveloppes d'une ligne —
+allerLeconExo vaut allerLecon suivi d'un setTimeout, versBacASable et
+allerMemos sont des redirections — n'ont pas reçu de contrôle. Les quatre
+vues de la section 4.x sur l'accessibilité les traversent déjà, et les
+éprouver une à une n'ajouterait que des assertions incapables d'échouer.
+
+LE POINT PÉDAGOGIQUE À NE PAS CASSER : verdictRepeteLaConsole. Quand un
+correcteur renvoie l'erreur du moteur telle quelle, le verdict est remplacé
+par une phrase qui désigne la console au lieu de répéter le même texte —
+sans quoi l'élève croit à deux problèmes distincts. C'est vérifié dans les
+deux sens : un message identique est remplacé, un message différent est
+laissé intact.
+
+DEUX PIÈGES RENCONTRÉS, à connaître avant d'ajouter ici :
+- un contrôle sous « if (element) » disparaît en silence si le balisage
+  change. L'absence de l'élément doit être un échec à part entière ;
+- app.js contient trois setAttribute('aria-expanded'), et String.replace
+  ne remplace que la PREMIÈRE occurrence. Un sabotage de contrôle mal visé
+  fait conclure à tort qu'une vérification ne mord pas.
+
+
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
 ### 5.1 Relancer le verifier (source de vérité)

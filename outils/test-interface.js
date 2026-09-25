@@ -44,6 +44,11 @@ const win = dom.window;
 // hors d'un écran, et l'aide ne dépend pas d'eux.
 win.Element.prototype.scrollIntoView = function () {};
 win.scrollTo = function () {};
+// jsdom ne peint pas, donc pas de rafale d images non plus. app.js s en sert
+// pour retablir les transitions APRES un changement de theme : on execute le
+// rappel tout de suite, ce qui revient au meme hors ecran.
+win.requestAnimationFrame = function (f) { f(0); return 0; };
+win.cancelAnimationFrame = function () {};
 
 // Le corps du vrai index.html, avant que le moindre test ne le remplace :
 // les fonctions de rendu ecrivent dans ses conteneurs, pas dans le vide.
@@ -99,7 +104,21 @@ sources.push(`
     indenter: (z, p) => indenterEditeur(z, p),
     desindenter: (z, p) => desindenterEditeur(z, p),
     brancherClavier: (z, p, id, r, v) => brancherClavierEditeur(z, p, id, r, v),
-    majLignes: (i) => majLignes(i)
+    majLignes: (i) => majLignes(i),
+
+    // Ce qui s'affiche, et ce qui se navigue.
+    afficherConsole: (i, r) => afficherConsole(i, r),
+    afficherVerdict: (i, v) => afficherVerdict(i, v),
+    repeteLaConsole: (i, m) => verdictRepeteLaConsole(i, m),
+    essais: () => essaisRates,
+    viderEssais: () => { essaisRates = {}; },
+    basculerSommaire: () => basculerSommaire(),
+    choisirTheme: (n) => choisirTheme(n),
+    cleTheme: () => CLE_THEME,
+    changerOngletBac: (n) => changerOngletBac(n),
+    basculerPleinEcran: () => basculerPleinEcran(),
+    majZoneMemo: () => majZoneMemo(),
+    poserMemo: (onglet, recherche) => { ongletMemo = onglet; rechercheMemo = recherche; }
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -706,6 +725,177 @@ const avant = zoneClavier.value;
 verifie('éditeur — et Tab n\'indente plus', zoneClavier.value, avant);
 
 verifie('éditeur — Ctrl+Entrée lance la vérification', (touche('Enter', { ctrlKey: true }), valide), 1);
+
+/* ========================================================================
+   Ce qui s'affiche, et ce qui se navigue
+   ========================================================================
+   Deux familles restaient hors de portée : les fonctions d'affichage et
+   celles de navigation. On n'en couvre ici qu'une partie, et c'est
+   délibéré — beaucoup sont des enveloppes d'une ligne (allerLeconExo vaut
+   allerLecon suivi d'un setTimeout) que les quatre vues de la section
+   accessibilité exercent déjà. Les éprouver une à une n'ajouterait que des
+   contrôles incapables d'échouer, et un harnais qui ne peut pas rougir ne
+   sert qu'à se rassurer.
+
+   Ce qui suit porte donc sur ce qui a un vrai comportement, et surtout sur
+   ce que l'élève LIT : la console, le verdict, et le refus délibéré de
+   répéter deux fois la même erreur. */
+
+console.log("\n=== Ce que l'élève lit : console et verdict ===\n");
+
+function sceneExercice() {
+  poserScene();
+  const d = win.document.getElementById('contenu');
+  d.innerHTML =
+    '<div id="exercice-0" class="exercice">' +
+    '<div class="exercice-entete">Exercice</div>' +
+    '<pre id="console-sortie-0"></pre>' +
+    '<div id="feedback-0"></div>' +
+    '</div>';
+  return d;
+}
+
+// --- la console ---
+sceneExercice();
+pont.afficherConsole(0, { logs: ['bonjour', '42'], erreur: null });
+verifie('console — les lignes sont affichées dans l\'ordre',
+        win.document.getElementById('console-sortie-0').textContent.trim(), 'bonjour\n42');
+
+sceneExercice();
+pont.afficherConsole(0, { logs: ['avant'], erreur: 'NameError: x' });
+const avecErreur = win.document.getElementById('console-sortie-0');
+verifie('console — ce qui précède l\'erreur reste visible', /avant/.test(avecErreur.textContent), true);
+verifie('console — et l\'erreur est signalée à part',
+        !!avecErreur.querySelector('.ligne-erreur'), true);
+
+sceneExercice();
+pont.afficherConsole(0, { logs: [], erreur: null });
+verifie('console — un code muet le dit, au lieu de rester vide',
+        /rien affiché/.test(win.document.getElementById('console-sortie-0').textContent), true);
+
+/* Un élève qui affiche du HTML doit LIRE son HTML, pas le voir interprété.
+   Sans échappement, print("<b>x</b>") mettrait la console en gras et ferait
+   disparaître les balises — précisément ce que la leçon lui apprend à voir. */
+sceneExercice();
+pont.afficherConsole(0, { logs: ['<b>gras</b>'], erreur: null });
+const echappee = win.document.getElementById('console-sortie-0');
+verifie('console — le HTML affiché par l\'élève reste du texte',
+        echappee.textContent.indexOf('<b>gras</b>') !== -1, true);
+verifie('console — et n\'est surtout pas interprété', echappee.querySelector('b'), null);
+
+// --- le verdict ---
+// Une VRAIE leçon du cours : marquerExo passe par trouverLecon, qui ne
+// connaît que celles-là. Une leçon inventée le ferait planter.
+const leconEssai = pont.modules()[0].lecons[0];
+pont.poserLecon(leconEssai);
+pont.poserProgression({ faits: {}, exos: {} });
+
+sceneExercice();
+pont.afficherVerdict(0, { neutre: true, message: 'Coche une réponse.' });
+verifie('verdict — ne rien avoir coché n\'est pas une faute',
+        win.document.getElementById('feedback-0').className, 'feedback neutre');
+
+sceneExercice();
+pont.viderEssais();
+pont.afficherVerdict(0, { ok: false, message: 'Il manque le point-virgule.' });
+verifie('verdict — un échec se voit', win.document.getElementById('feedback-0').className, 'feedback ko');
+verifie('verdict — et il compte, car c\'est lui qui fait monter l\'aide',
+        Object.values(pont.essais())[0], 1);
+
+sceneExercice();
+pont.viderEssais();
+pont.afficherVerdict(0, { ok: false });
+verifie('verdict — sans message, on dit quand même quoi faire',
+        /Relis la consigne/.test(win.document.getElementById('feedback-0').textContent), true);
+
+sceneExercice();
+pont.poserProgression({ faits: {}, exos: {} });
+pont.afficherVerdict(0, { ok: true, message: 'Bien vu.' });
+verifie('verdict — une réussite se voit', win.document.getElementById('feedback-0').className, 'feedback ok');
+verifie('verdict — et l\'exercice porte sa marque',
+        !!win.document.querySelector('#exercice-0 .badge-fait'), true);
+pont.afficherVerdict(0, { ok: true, message: 'Bien vu.' });
+verifie('verdict — revalider n\'ajoute pas une deuxième marque',
+        win.document.querySelectorAll('#exercice-0 .badge-fait').length, 1);
+
+/* Beaucoup de correcteurs renvoient l'erreur du moteur telle quelle. Elle
+   est déjà imprimée dans la console, à quelques centimètres : la répéter mot
+   pour mot ferait croire à DEUX problèmes différents. Le verdict est alors
+   remplacé par une phrase qui désigne la console. Décision fine, et que
+   personne ne vérifiait. */
+sceneExercice();
+const memeTexte = "NameError: name 'total' is not defined on line 3";
+pont.afficherConsole(0, { logs: [], erreur: memeTexte });
+verifie('verdict — un verdict identique à la console est reconnu comme tel',
+        pont.repeteLaConsole(0, memeTexte), true);
+pont.viderEssais();
+pont.afficherVerdict(0, { ok: false, message: memeTexte });
+const fb = win.document.getElementById('feedback-0').textContent;
+verifie('verdict — il ne répète pas l\'erreur, il montre où elle est déjà écrite',
+        /juste à côté/.test(fb) && fb.indexOf('NameError') === -1, true);
+
+sceneExercice();
+pont.afficherConsole(0, { logs: [], erreur: 'NameError: x' });
+verifie('verdict — un message vraiment différent, lui, est laissé intact',
+        pont.repeteLaConsole(0, 'Relis la consigne : il faut afficher la somme.'), false);
+
+console.log('\n=== La navigation garde-t-elle sa trace ? ===\n');
+
+poserScene();
+const btnSommaire = win.document.getElementById('btn-sommaire');
+// Sans cette ligne, un bouton renommé ferait disparaître les trois contrôles
+// suivants sans que personne ne le remarque : un test qui sait se taire ne
+// vaut pas mieux que pas de test.
+verifie('sommaire — le bouton est bien dans la page', !!btnSommaire, true);
+if (btnSommaire) {
+  verifie('sommaire — replié au départ', btnSommaire.getAttribute('aria-expanded'), 'false');
+  pont.basculerSommaire();
+  verifie('sommaire — l\'ouvrir l\'annonce aux lecteurs d\'écran', btnSommaire.getAttribute('aria-expanded'), 'true');
+  pont.basculerSommaire();
+  verifie('sommaire — et le refermer aussi', btnSommaire.getAttribute('aria-expanded'), 'false');
+}
+
+poserScene();
+LS.removeItem(pont.cleTheme());
+pont.choisirTheme('sombre');
+verifie('thème — il est posé sur la page', win.document.documentElement.getAttribute('data-theme'), 'sombre');
+verifie('thème — et retenu pour la prochaine ouverture', LS.getItem(pont.cleTheme()), 'sombre');
+pont.choisirTheme('clair');
+verifie('thème — en changer suit', LS.getItem(pont.cleTheme()), 'clair');
+
+poserScene();
+bacNeuf({ 'A': { html: 'a', css: '', js: '', py: '', sql: '', c: '', java: '' } }, 'A', 'web');
+pont.changerOngletBac('python');
+verifie('bac — changer d\'onglet est retenu', pont.bacEtat().onglet, 'python');
+verifie('bac — et écrit tout de suite', JSON.parse(LS.getItem(pont.cleBac())).onglet, 'python');
+
+poserScene();
+bacNeuf({ 'A': { html: 'a', css: '', js: '', py: '', sql: '', c: '', java: '' } }, 'A', 'web');
+pont.basculerPleinEcran();
+verifie('bac — le plein écran se retient', pont.bacEtat().plein, true);
+verifie('bac — et marque la page', win.document.body.classList.contains('plein-ecran'), true);
+pont.basculerPleinEcran();
+verifie('bac — en sortir aussi', win.document.body.classList.contains('plein-ecran'), false);
+
+// --- l'encyclopédie : onglet ou recherche, jamais les deux ---
+poserScene();
+win.document.getElementById('contenu').innerHTML =
+  '<div id="memo-onglets"><button class="memo-onglet" data-memo="html">HTML</button>' +
+  '<button class="memo-onglet" data-memo="css">CSS</button></div>' +
+  '<button id="memo-effacer"></button><div id="memo-zone"></div>';
+pont.poserMemo('css', '');
+pont.majZoneMemo();
+verifie('encyclopédie — sans recherche, l\'onglet choisi est actif',
+        win.document.querySelector('.memo-onglet[data-memo="css"]').classList.contains('actif'), true);
+verifie('encyclopédie — et le bouton d\'effacement reste caché',
+        win.document.getElementById('memo-effacer').style.display, 'none');
+
+pont.poserMemo('css', 'boucle');
+pont.majZoneMemo();
+verifie('encyclopédie — en recherche, plus aucun onglet n\'est actif',
+        win.document.querySelectorAll('.memo-onglet.actif').length, 0);
+verifie('encyclopédie — et on peut effacer sa recherche',
+        win.document.getElementById('memo-effacer').style.display, 'grid');
 
 /* ========================================================================
    Le moteur JavaScript quand les Workers manquent

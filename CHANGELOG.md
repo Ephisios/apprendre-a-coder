@@ -6,6 +6,46 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.4.3 — 2026-09-25
+
+**Rien ne change pour l'élève** — 32 vérifications de plus, sur ce qu'il lit et sur ce que
+l'application retient.
+
+### Ajouté
+
+- **La console et le verdict**, c'est-à-dire les deux textes qu'on regarde après chaque essai. On
+  vérifie qu'un code muet le dit au lieu de laisser un cadre vide, que ce qui précède une erreur
+  reste affiché, et qu'un élève qui écrit `print("<b>gras</b>")` **lit ses balises** au lieu de les
+  voir interprétées — c'est précisément ce que la leçon lui apprend à observer.
+
+- **Le refus de répéter la console.** Beaucoup de correcteurs renvoient l'erreur du moteur telle
+  quelle. Elle est déjà imprimée à quelques centimètres : la répéter mot pour mot ferait croire à
+  *deux* problèmes. Le verdict est alors remplacé par une phrase qui désigne la console. Décision
+  pédagogique fine, et que rien ne vérifiait.
+
+- **Ce que la navigation retient** : le thème, l'onglet du bac, le plein écran, et l'annonce
+  `aria-expanded` du sommaire aux lecteurs d'écran.
+
+### Ce qui n'a pas été écrit, et pourquoi
+
+Les enveloppes d'une ligne — `allerLeconExo` vaut `allerLecon` suivi d'un `setTimeout` — n'ont pas
+reçu de contrôle. Les éprouver n'ajouterait que des assertions incapables d'échouer, et les quatre
+vues de la section accessibilité les traversent déjà. Un harnais qui ne peut pas rougir ne sert qu'à
+se rassurer.
+
+### Ce que les sabotages ont appris
+
+Deux échecs de ma part, aucun du produit.
+
+Un contrôle vivait sous un `if (btnSommaire)` : si le bouton était renommé, **trois vérifications
+disparaissaient en silence**. L'absence du bouton est désormais un échec à part entière.
+
+Et mon propre sabotage a raté sa cible : `app.js` contient trois `setAttribute('aria-expanded')`, et
+`String.replace` ne remplace que la première occurrence — j'ai donc neutralisé une autre fonction et
+conclu à tort que le contrôle ne mordait pas. Visé sur la bonne ligne, il mord.
+
+---
+
 ## 3.4.2 — 2026-09-25
 
 **Rien ne change pour l'élève** — 41 vérifications de plus, sur deux endroits que personne ne
