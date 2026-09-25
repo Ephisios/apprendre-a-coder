@@ -5,24 +5,58 @@ window.DATA_JS1 = [
   id: 'js-1',
   titre: 'Ton premier programme',
   contenu: `
-<p>Bienvenue dans le grand bain : le <strong>JavaScript</strong> est un vrai langage de programmation — celui qui anime la quasi-totalité des sites web, et le plus utilisé au monde. Tout ce que tu vas apprendre ici (variables, conditions, boucles, fonctions) existe dans <em>tous</em> les autres langages.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un ordinateur ne devine rien. Il ne fait que suivre, à la lettre et dans l'ordre, une liste d'instructions : c'est ça, un <strong>programme</strong>. Le JavaScript est le langage de ces instructions pour les pages web. C'est lui qui fait réagir un bouton, défiler un carrousel ou valider un formulaire, sur la quasi-totalité des sites. C'est aussi le langage le plus utilisé au monde. Tout ce que tu vas apprendre ici (variables, conditions, boucles, fonctions) existe dans <em>tous</em> les autres langages.</p>
+<p>Premier problème à régler : un programme travaille en silence. Pour savoir ce qu'il fait, il faut qu'il nous le <em>montre</em>. D'où la toute première instruction de ce cours.</p>
 
 <h2>Afficher quelque chose : console.log</h2>
-<p>Le premier outil de tout programmeur, c'est afficher un message pour voir ce que fait son programme :</p>
 <pre class="bloc-code">console.log("Bonjour tout le monde !");</pre>
 <ul>
-<li><code>console.log(...)</code> — une <strong>instruction</strong> qui affiche ce qu'on lui donne dans la « console » (chez nous : le cadre de résultat noir en bas) ;</li>
-<li><code>"Bonjour tout le monde !"</code> — un texte, toujours entouré de <strong>guillemets</strong> ;</li>
-<li><code>;</code> — le point-virgule termine l'instruction, comme un point termine une phrase.</li>
+<li><code>console.log(...)</code> est une <strong>instruction</strong> : elle affiche ce qu'on lui donne dans la « console ». Chez nous, c'est le cadre de résultat, à côté de l'éditeur ;</li>
+<li><code>"Bonjour tout le monde !"</code> est un texte, toujours entouré de <strong>guillemets</strong>. Sans eux, JavaScript croirait lire des instructions ;</li>
+<li><code>;</code> termine l'instruction, comme un point termine une phrase.</li>
 </ul>
 
 <h2>Un programme = des instructions dans l'ordre</h2>
 <pre class="bloc-code">console.log("Première ligne");
 console.log("Deuxième ligne");
 console.log("Troisième ligne");</pre>
-<p>L'ordinateur exécute les instructions <strong>de haut en bas, une par une</strong>. Ça paraît évident, mais c'est le principe de base de toute la programmation.</p>
+<p>L'ordinateur exécute les instructions <strong>de haut en bas, une par une</strong>. Ça paraît évident, mais c'est le principe de toute la programmation : le résultat dépend de l'ordre dans lequel tu écris les lignes.</p>
 
-<div class="attention">⚠️ Le JavaScript est pointilleux : <code>console.log</code> s'écrit exactement comme ça (tout attaché, en minuscules, avec le point). <code>Console.Log</code> ou <code>console log</code> provoquent une erreur. Si ça arrive : lis le message d'erreur, il t'indique le problème — c'est ton allié, pas ton ennemi.</div>
+<h2>Pas à pas</h2>
+<p>Voici un programme avec une faute à la deuxième ligne. Que se passe-t-il exactement ?</p>
+<pre class="bloc-code">console.log("a");
+Console.log("b");
+console.log("c");</pre>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>Ce qui se passe</th></tr>
+<tr><td>1</td><td>L'instruction est correcte : <code>a</code> s'affiche.</td></tr>
+<tr><td>2</td><td><code>Console</code> avec une majuscule n'existe pas. JavaScript s'arrête net et affiche une erreur.</td></tr>
+<tr><td>3</td><td>Jamais exécutée : le programme s'est arrêté à la ligne 2. Le <code>c</code> ne s'affiche pas.</td></tr>
+</table>
+<p>Retiens ce comportement : ce qui est <em>avant</em> l'erreur a déjà tourné, ce qui est <em>après</em> n'a jamais tourné. C'est un premier indice pour trouver où est le problème.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Une majuscule de trop.</strong> JavaScript distingue les majuscules des minuscules. <code>Console.log</code> donne le message « Console is not defined », c'est-à-dire « Console n'existe pas ». Il faut écrire <code>console.log</code>, tout en minuscules, avec le point.</p>
+<p><strong>Un guillemet oublié.</strong> <code>console.log("Bonjour);</code> : le texte n'est jamais refermé, et JavaScript répond « Invalid or unexpected token », « symbole invalide ou inattendu ». Compte tes guillemets : ils vont toujours par deux.</p>
+<p><strong>Une parenthèse oubliée.</strong> <code>console.log("Bonjour";</code> donne « missing ) after argument list », littéralement « il manque une ) après la liste ». Là, le message dit exactement quoi faire.</p>
+<p>Les messages sont en anglais, mais ils sont courts et toujours construits pareil. Les lire est la compétence la plus utile de ce cours : un message d'erreur n'est pas un reproche, c'est un indice.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Tous les navigateurs ont une console. Sur n'importe quel site, appuie sur <kbd>F12</kbd> et ouvre l'onglet « Console » : tu y verras parfois les messages que les développeurs ont laissés. Eux aussi passent leurs journées à afficher des valeurs avec <code>console.log</code> pour comprendre ce que fait leur programme.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>console.log("texte");</code> affiche un message : c'est ta fenêtre sur ce que fait le programme.</li>
+<li>Les instructions s'exécutent de haut en bas ; à la première erreur, tout s'arrête.</li>
+<li>Un message d'erreur se lit : il dit ce qui ne va pas, et souvent où.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le point-virgule est-il obligatoire ?</summary>
+<p>En JavaScript, pas tout à fait : si tu l'oublies en fin de ligne, le langage en ajoute souvent un tout seul. Mais « souvent » n'est pas « toujours », et certaines situations rares donnent alors un résultat surprenant. La plupart des équipes l'écrivent systématiquement, et ce cours aussi : c'est une habitude qui ne coûte rien et évite des erreurs difficiles à trouver.</p>
+</details>
 `,
   exercices: [
     {
@@ -90,7 +124,8 @@ console.log("Troisième ligne");</pre>
   id: 'js-2',
   titre: 'Les variables : la mémoire du programme',
   contenu: `
-<p>Un programme a besoin de retenir des choses : un score, un prénom, un prix... C'est le rôle des <strong>variables</strong> — la notion la plus fondamentale de toute la programmation.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un programme a besoin de retenir des choses : le score d'une partie, le prénom de la personne connectée, le prix d'un panier. Et ces choses changent : le score monte, le panier se remplit. Une <strong>variable</strong> est une boîte avec une étiquette : on range une valeur dedans, on la relit plus tard par son nom, et on peut remplacer ce qu'elle contient. C'est la notion la plus fondamentale de toute la programmation.</p>
 
 <h2>Créer une variable</h2>
 <pre class="bloc-code">let prenom = "Camille";
@@ -99,23 +134,56 @@ let age = 28;
 console.log(prenom);   // affiche : Camille
 console.log(age);      // affiche : 28</pre>
 <ul>
-<li><code>let</code> — le mot-clé qui crée une variable (<em>let</em> = « soit... ») ;</li>
-<li><code>prenom</code> — le <strong>nom</strong> qu'on lui choisit (sans espaces ni accents ; pour un nom composé on colle les mots : <code>scoreJoueur</code>) ;</li>
-<li><code>=</code> — l'<strong>affectation</strong> : « range cette valeur dans cette boîte » ;</li>
+<li><code>let</code> est le mot-clé qui crée une variable (<em>let</em>, « soit… ») ;</li>
+<li><code>prenom</code> est le <strong>nom</strong> choisi : sans espaces ni accents. Pour un nom composé, on colle les mots avec une majuscule au milieu : <code>scoreJoueur</code> ;</li>
+<li><code>=</code> est l'<strong>affectation</strong> : « range cette valeur dans cette boîte ». Ce n'est pas le « égal » des mathématiques ;</li>
 <li>la valeur : un texte entre guillemets, ou un nombre <strong>sans</strong> guillemets.</li>
 </ul>
-<p>Une fois créée, on utilise la variable par son nom, <strong>sans guillemets</strong>. Remarque aussi le <code>//</code> : tout ce qui le suit sur la ligne est un <strong>commentaire</strong>, ignoré par l'ordinateur.</p>
+<p>Une fois créée, on utilise la variable par son nom, <strong>sans guillemets</strong>. Et le <code>//</code> ? Tout ce qui le suit sur la ligne est un <strong>commentaire</strong> : une note pour les humains, que l'ordinateur ignore.</p>
 
-<h2>Une variable peut... varier</h2>
+<h2>Une variable peut… varier</h2>
 <pre class="bloc-code">let score = 0;
 console.log(score);   // 0
-score = 10;           // on change la valeur (plus besoin de let)
+score = 10;           // plus de let : la boîte existe déjà
 console.log(score);   // 10</pre>
+<p>On n'écrit <code>let</code> qu'une fois, à la création. Ensuite, on se contente de ranger une nouvelle valeur : l'ancienne est remplacée, pas ajoutée.</p>
 
 <h2>let ou const ?</h2>
-<p>Pour une valeur qui ne changera <strong>jamais</strong>, on utilise <code>const</code> (constante) au lieu de <code>let</code>. Le réflexe des pros : <code>const</code> par défaut, <code>let</code> seulement si la valeur doit changer.</p>
+<p>Pour une valeur qui ne changera <strong>jamais</strong> (un taux de TVA, le nom d'un jeu), on utilise <code>const</code> (constante) au lieu de <code>let</code>. Le réflexe des pros : <code>const</code> par défaut, <code>let</code> seulement si la valeur doit changer. Ainsi, en lisant le code, on sait tout de suite ce qui bouge et ce qui ne bouge pas.</p>
 
-<div class="attention">⚠️ Piège classique : <code>console.log("score")</code> affiche le mot « score », alors que <code>console.log(score)</code> affiche le <em>contenu</em> de la variable. Guillemets = texte littéral ; sans guillemets = variable.</div>
+<h2>Pas à pas</h2>
+<pre class="bloc-code">let score = 0;
+score = 10;
+score = score + 5;</pre>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>Ce qui se passe</th><th>score vaut</th></tr>
+<tr><td>1</td><td>La boîte <code>score</code> est créée, avec 0 dedans.</td><td>0</td></tr>
+<tr><td>2</td><td>10 remplace 0.</td><td>10</td></tr>
+<tr><td>3</td><td>JavaScript calcule d'abord la droite : 10 + 5 = 15. Puis il range 15 dans la boîte.</td><td>15</td></tr>
+</table>
+<p>La ligne 3 choque les matheux, mais elle se lit simplement : « prends la valeur actuelle de score, ajoute 5, range le résultat dans score ».</p>
+
+<h2>Les pièges</h2>
+<p><strong>Des guillemets autour du nom.</strong> <code>console.log("score")</code> affiche le mot « score » ; <code>console.log(score)</code> affiche ce que <em>contient</em> la variable. Guillemets = texte tel quel ; sans guillemets = variable.</p>
+<p><strong>Une faute de frappe dans le nom.</strong> <code>console.log(scor)</code> donne « scor is not defined » : JavaScript ne connaît aucune boîte qui s'appelle <code>scor</code>. Il ne corrige jamais tes fautes, et <code>Score</code> avec une majuscule serait aussi une autre boîte.</p>
+<p><strong>Créer deux fois la même variable.</strong> Deux <code>let score</code> dans le même programme donnent « Identifier 'score' has already been declared » : ce nom existe déjà. Pour changer la valeur, on écrit <code>score = …</code>, sans <code>let</code>.</p>
+<p><strong>Changer une constante.</strong> <code>const</code> puis une nouvelle affectation donne « Assignment to constant variable. » : c'est justement le rôle de <code>const</code> de l'interdire. Si la valeur doit changer, c'était un <code>let</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Quand un site affiche « Bonjour Léa » ou « 3 articles dans ton panier », ces mots et ces nombres sortent de variables. Le jour où tu ajoutes un article, le programme ne réécrit pas la page : il change la variable, puis réaffiche ce qu'elle contient.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>let nom = valeur;</code> crée une variable ; <code>nom = autreValeur;</code> la remplace.</li>
+<li><code>const</code> pour ce qui ne change jamais, <code>let</code> pour ce qui change.</li>
+<li>Sans guillemets, c'est une variable ; avec des guillemets, c'est un texte.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : bien nommer ses variables</summary>
+<p>Un bon nom dit ce que contient la boîte : <code>prixTotal</code> plutôt que <code>p</code>, <code>nombreDeVies</code> plutôt que <code>x</code>. Certains mots sont réservés par le langage et ne peuvent pas servir de nom (<code>let</code>, <code>if</code>, <code>for</code>…). Et un nom ne peut pas commencer par un chiffre : <code>2joueurs</code> est refusé, <code>joueur2</code> est accepté. Le code se lit bien plus souvent qu'il ne s'écrit : les noms clairs sont un cadeau pour la personne qui le relira, toi y compris.</p>
+</details>
 `,
   exercices: [
     {
@@ -179,32 +247,64 @@ console.log(score);   // 10</pre>
   id: 'js-3',
   titre: 'Nombres et calculs',
   contenu: `
-<p>Un ordinateur, à la base, c'est une machine à calculer. Autant en profiter.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Le total d'un panier, la moyenne d'un bulletin, le temps restant avant la fin d'une vidéo : derrière presque chaque écran, il y a des calculs. Un ordinateur est d'abord une machine à calculer, extrêmement rapide et qui ne se trompe jamais… à condition qu'on lui pose le bon calcul. Toute la difficulté est là.</p>
 
 <h2>Les opérateurs</h2>
 <pre class="bloc-code">console.log(5 + 3);   // 8   addition
 console.log(10 - 4);  // 6   soustraction
 console.log(6 * 7);   // 42  multiplication (l'étoile)
 console.log(20 / 5);  // 4   division (la barre)
-console.log(10 % 3);  // 1   le RESTE de la division (10 = 3×3, reste 1)</pre>
-<p>Le <code>%</code> (« modulo ») surprend au début, mais il est très utile : par exemple, <code>n % 2</code> vaut 0 si <code>n</code> est pair. Retiens juste qu'il existe.</p>
+console.log(10 % 3);  // 1   le RESTE de la division</pre>
+<p>Le <code>%</code> (« modulo ») donne le reste d'une division : 10 = 3 × 3, reste 1. Il surprend au début mais sert tout le temps. <code>n % 2</code> vaut 0 si <code>n</code> est pair. Et pour convertir 200 minutes : <code>200 % 60</code> donne les minutes restantes, 20.</p>
+<p>Pour la partie entière d'une division (combien de fois 60 « rentre » dans 200), JavaScript a <code>Math.floor(...)</code>, qui arrondit vers le bas : <code>Math.floor(200 / 60)</code> vaut 3.</p>
+
+<h2>L'ordre des opérations</h2>
+<p>Comme en maths, <code>*</code>, <code>/</code> et <code>%</code> passent avant <code>+</code> et <code>-</code>. Les parenthèses imposent un autre ordre :</p>
+<pre class="bloc-code">console.log(2 + 3 * 4);     // 14 : la multiplication d'abord
+console.log((2 + 3) * 4);   // 20 : les parenthèses d'abord</pre>
 
 <h2>Calculer avec des variables</h2>
-<p>Toute la puissance vient de là : les calculs marchent avec les variables, et on peut ranger un résultat dans une nouvelle variable.</p>
 <pre class="bloc-code">let prixArticle = 25;
 let quantite = 3;
 let total = prixArticle * quantite;
 
 console.log(total);   // 75</pre>
+<p>Les calculs marchent avec des variables, et le résultat se range dans une autre variable. Change <code>quantite</code>, et <code>total</code> sera juste au prochain lancement : c'est tout l'intérêt.</p>
 
-<h2>Modifier une variable existante</h2>
+<h2>Pas à pas</h2>
 <pre class="bloc-code">let score = 100;
-score = score + 50;   // on prend l'ancienne valeur, on ajoute 50
-console.log(score);   // 150
-score += 10;          // raccourci pour : score = score + 10
-console.log(score);   // 160</pre>
+score = score + 50;
+score += 10;</pre>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>Calcul à droite</th><th>score vaut ensuite</th></tr>
+<tr><td>1</td><td>—</td><td>100</td></tr>
+<tr><td>2</td><td><code>score + 50</code>, soit 100 + 50 = 150</td><td>150</td></tr>
+<tr><td>3</td><td><code>+=</code> est un raccourci pour <code>score = score + 10</code> : 150 + 10</td><td>160</td></tr>
+</table>
+<p>Il existe aussi <code>-=</code>, <code>*=</code> et <code>/=</code>, sur le même modèle.</p>
 
-<div class="info">💬 <code>score = score + 50</code> choque les matheux, mais en programmation <code>=</code> ne signifie pas « est égal à » : il signifie « range la valeur de droite dans la variable de gauche ». On calcule d'abord la droite, puis on range.</div>
+<h2>Les pièges</h2>
+<p><strong>L'ordre des opérations.</strong> Pour la moyenne de 10, 14 et 18, <code>10 + 14 + 18 / 3</code> donne 30 et non 14 : seul le 18 est divisé par 3. Il faut <code>(10 + 14 + 18) / 3</code>. Aucune erreur ne s'affiche, le résultat est juste faux : c'est le pire genre de bug.</p>
+<p><strong>Un nombre entre guillemets.</strong> <code>"5" + 3</code> donne <code>"53"</code> : entre guillemets, 5 est un texte, et <code>+</code> colle deux textes au lieu de les additionner. Curieusement, <code>"5" * 3</code> donne bien 15. Garde tes nombres sans guillemets.</p>
+<p><strong>Les décimales.</strong> Les nombres à virgule s'écrivent avec un point : <code>12.5</code>. Et <code>0.1 + 0.2</code> donne <code>0.30000000000000004</code> : l'ordinateur stocke les décimales en binaire, avec une infime approximation. Pour afficher un prix, on arrondit.</p>
+<p><strong>Diviser par zéro.</strong> <code>10 / 0</code> ne provoque pas d'erreur : le résultat vaut <code>Infinity</code> (l'infini). Si ce mot apparaît dans ton affichage, cherche la division.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un site de commerce calcule un sous-total, ajoute la livraison, applique une remise en pourcentage. Un lecteur vidéo convertit des secondes en « 2 min 15 » avec exactement <code>Math.floor</code> et <code>%</code>. Et un tableau dont une ligne sur deux est grisée utilise souvent <code>% 2</code> pour savoir si le numéro de ligne est pair.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>+ - * /</code> comme en maths, et <code>%</code> pour le reste d'une division.</li>
+<li>Multiplication et division passent avant l'addition : en cas de doute, des parenthèses.</li>
+<li><code>score += 10</code> est un raccourci pour <code>score = score + 10</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : arrondir</summary>
+<p><code>Math.floor(4.7)</code> arrondit vers le bas (4), <code>Math.ceil(4.2)</code> vers le haut (5), <code>Math.round(4.5)</code> au plus proche (5). Pour un prix à deux décimales, <code>(19.9 * 3).toFixed(2)</code> donne le texte <code>"59.70"</code>. Attention : <code>toFixed</code> renvoie un texte, fait pour l'affichage, pas pour continuer à calculer.</p>
+</details>
 `,
   exercices: [
     {
@@ -272,28 +372,60 @@ console.log(score);   // 160</pre>
   id: 'js-4',
   titre: 'Les textes (chaînes de caractères)',
   contenu: `
-<p>En programmation, un texte s'appelle une <strong>chaîne de caractères</strong> (<em>string</em>). Tu sais déjà les écrire entre guillemets — voyons comment les manipuler.</p>
+<h2>Pourquoi ça existe</h2>
+<p>La plupart de ce qu'un programme montre, c'est du texte : « Bonjour Camille », « 3 nouveaux messages », « Mot de passe trop court ». Et ce texte est presque toujours <em>fabriqué</em> à partir de variables. En programmation, un texte s'appelle une <strong>chaîne de caractères</strong> (<em>string</em>). Tu sais déjà l'écrire entre guillemets ; voyons comment l'assembler et le transformer.</p>
 
 <h2>Coller des textes ensemble</h2>
-<p>Le <code>+</code> entre deux textes les colle (on dit « concaténer ») :</p>
+<p>Le <code>+</code> entre deux textes les colle bout à bout (on dit « concaténer ») :</p>
 <pre class="bloc-code">let prenom = "Camille";
 console.log("Bonjour " + prenom + " !");   // Bonjour Camille !</pre>
-<p>Attention aux espaces : ils ne s'ajoutent pas tout seuls, il faut les mettre dans les guillemets (<code>"Bonjour&nbsp;"</code>).</p>
+<p>Les espaces ne s'ajoutent pas tout seuls : il faut les mettre dans les guillemets, comme après <code>"Bonjour&nbsp;"</code>.</p>
 
 <h2>La méthode moderne : les backticks</h2>
-<p>Il existe une troisième sorte de guillemets : les <strong>accents graves</strong> <code>\`...\`</code> (backticks — sur Windows : <kbd>AltGr + 7</kbd>, puis une lettre ou espace). Leur superpouvoir : insérer une variable directement dans le texte avec <code>\${...}</code> :</p>
+<p>Il existe une troisième sorte de guillemets : les <strong>accents graves</strong> <code>\`...\`</code>, appelés <em>backticks</em>. Sur Windows : <kbd>AltGr + 7</kbd>, puis une espace. Leur superpouvoir : insérer une variable directement dans le texte avec <code>\${...}</code> :</p>
 <pre class="bloc-code">let prenom = "Camille";
 let age = 28;
 console.log(\`Bonjour \${prenom}, tu as \${age} ans.\`);
 // Bonjour Camille, tu as 28 ans.</pre>
-<p>Plus lisible, moins d'erreurs d'espaces : c'est la méthode préférée des développeurs aujourd'hui. Les deux façons restent correctes.</p>
+<p>Plus lisible, et plus d'espaces oubliés : c'est la méthode préférée des développeurs aujourd'hui. Les deux façons restent correctes.</p>
 
 <h2>Quelques outils sur les textes</h2>
 <pre class="bloc-code">let ville = "Marseille";
 console.log(ville.length);          // 9  (nombre de caractères)
 console.log(ville.toUpperCase());   // MARSEILLE
 console.log(ville.toLowerCase());   // marseille</pre>
-<p>Ces « outils attachés » aux valeurs par un point s'appellent des <strong>méthodes</strong>. Tu en connais déjà une sans le savoir : <code>log</code> est une méthode de <code>console</code> !</p>
+<p>Ces outils attachés aux valeurs par un point s'appellent des <strong>méthodes</strong>. Tu en connais déjà une sans le savoir : <code>log</code> est une méthode de <code>console</code>. Remarque la différence d'écriture : <code>length</code> est une information qu'on lit, sans parenthèses ; <code>toUpperCase()</code> est une action qu'on déclenche, avec des parenthèses.</p>
+
+<h2>Pas à pas</h2>
+<p>Comment JavaScript construit-il <code>"Bonjour " + prenom + " !"</code> ?</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>1</td><td><code>prenom</code> est remplacé par sa valeur : <code>"Bonjour " + "Camille" + " !"</code>.</td></tr>
+<tr><td>2</td><td>Le premier <code>+</code> colle les deux premiers morceaux : <code>"Bonjour Camille"</code>.</td></tr>
+<tr><td>3</td><td>Le second <code>+</code> ajoute la fin : <code>"Bonjour Camille !"</code>.</td></tr>
+<tr><td>4</td><td><code>console.log</code> affiche le texte terminé.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>L'espace oublié.</strong> <code>"Bonjour" + prenom</code> affiche « BonjourCamille ». Le <code>+</code> colle exactement ce qu'on lui donne, ni plus ni moins.</p>
+<p><strong>Le <code>\${}</code> dans de mauvais guillemets.</strong> <code>"Bonjour \${prenom}"</code> entre guillemets droits affiche littéralement « Bonjour \${prenom} ». Le remplacement ne marche qu'entre backticks. Et entre backticks, sans le <code>$</code>, <code>\`Bonjour {prenom}\`</code> affiche « Bonjour {prenom} ».</p>
+<p><strong>Les parenthèses des méthodes.</strong> <code>ville.length()</code> donne « ville.length is not a function » : <code>length</code> n'est pas une action, pas de parenthèses. À l'inverse, <code>ville.toUpperCase</code> sans parenthèses n'affiche pas MARSEILLE mais la description de l'outil lui-même : « function toUpperCase() { [native code] } ».</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les messages personnalisés d'une application se construisent exactement ainsi. Et les méthodes de texte servent à nettoyer ce que tape l'utilisateur : une adresse e-mail est souvent mise en minuscules avant d'être comparée, pour que « Lea@Mail.fr » et « lea@mail.fr » soient reconnues comme la même.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>+</code> colle des textes, espaces compris ; les backticks insèrent des variables avec <code>\${...}</code>.</li>
+<li><code>.length</code> donne le nombre de caractères, sans parenthèses.</li>
+<li><code>.toUpperCase()</code> et <code>.toLowerCase()</code> changent la casse, avec parenthèses.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : un texte ne change jamais</summary>
+<p><code>ville.toUpperCase()</code> ne modifie pas <code>ville</code> : il fabrique un <em>nouveau</em> texte en majuscules. Après la ligne, <code>ville</code> vaut toujours « Marseille ». Pour garder la version en majuscules, il faut la ranger : <code>let villeMaj = ville.toUpperCase();</code>. C'est vrai de toutes les méthodes de texte : elles renvoient une copie transformée et laissent l'original intact.</p>
+</details>
 `,
   exercices: [
     {
@@ -368,7 +500,8 @@ console.log(ville.toLowerCase());   // marseille</pre>
   id: 'js-5',
   titre: 'Les conditions : si... alors',
   contenu: `
-<p>Jusqu'ici, tes programmes exécutent toujours tout, dans l'ordre. Les <strong>conditions</strong> leur apprennent à <strong>choisir</strong> : « SI il pleut, prends un parapluie, SINON prends des lunettes de soleil ».</p>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici, tes programmes exécutent toujours tout, dans l'ordre. Mais un vrai programme doit <strong>réagir</strong> : afficher « Mot de passe incorrect » seulement si le mot de passe est faux, terminer la partie seulement quand les vies tombent à zéro. Les <strong>conditions</strong> lui apprennent à choisir : « SI il pleut, prends un parapluie, SINON prends des lunettes de soleil ».</p>
 
 <h2>La structure if / else</h2>
 <pre class="bloc-code">let age = 20;
@@ -379,27 +512,61 @@ if (age >= 18) {
   console.log("Tu es mineur");
 }</pre>
 <ul>
-<li><code>if (condition) { ... }</code> — <strong>si</strong> la condition est vraie, exécute ce qui est entre les accolades ;</li>
-<li><code>else { ... }</code> — <strong>sinon</strong>, exécute cet autre bloc (optionnel).</li>
+<li><code>if (condition) { ... }</code> : <strong>si</strong> la condition est vraie, exécute ce qui est entre les accolades ;</li>
+<li><code>else { ... }</code> : <strong>sinon</strong>, exécute cet autre bloc. Il est facultatif : sans lui, on ne fait rien quand la condition est fausse.</li>
 </ul>
+<p>Une condition est une question dont la réponse est oui ou non. En JavaScript, ces deux réponses sont des valeurs à part entière : <code>true</code> (vrai) et <code>false</code> (faux). <code>console.log(20 >= 18)</code> affiche <code>true</code>.</p>
 
 <h2>Les comparaisons</h2>
 <pre class="bloc-code">a === b    // a est égal à b        (OUI, trois signes =)
 a !== b    // a est différent de b
 a > b      // a est plus grand que b
 a >= b     // plus grand ou égal
-a < b      // plus petit
-a <= b     // plus petit ou égal</pre>
+a &lt; b      // plus petit
+a &lt;= b     // plus petit ou égal</pre>
 
-<div class="attention">⚠️ LE piège n°1 du JavaScript : <code>=</code> range une valeur dans une variable, alors que <code>===</code> compare deux valeurs. Dans un <code>if</code>, c'est toujours <code>===</code> qu'il faut. (Tu croiseras aussi <code>==</code> à deux signes : il existe, mais il a des comportements surprenants — prends l'habitude du <code>===</code>.)</div>
+<h2>Plus de deux cas : else if</h2>
+<p>Quand il y a trois possibilités ou plus, on enchaîne avec <code>else if</code> (« sinon, si… ») :</p>
+<pre class="bloc-code">let heure = 14;
 
-<h2>Une condition, ça se lit</h2>
-<pre class="bloc-code">let temperature = 30;
-
-if (temperature > 25) {
-  console.log("Il fait chaud !");
+if (heure &lt; 12) {
+  console.log("Bonjour");
+} else if (heure &lt; 18) {
+  console.log("Bon après-midi");
+} else {
+  console.log("Bonsoir");
 }</pre>
-<p>« Si la température dépasse 25, affiche "Il fait chaud !" » — le code bien écrit se lit presque comme une phrase.</p>
+<p>La leçon suivante y revient en détail, avec un piège d'ordre à connaître.</p>
+
+<h2>Pas à pas</h2>
+<p>Le premier exemple, avec <code>age</code> qui vaut 20, puis 15 :</p>
+<table class="memo-table trace">
+<tr><th>age</th><th>age &gt;= 18</th><th>Ce qui s'exécute</th></tr>
+<tr><td>20</td><td><code>true</code></td><td>le bloc du <code>if</code> : « Tu es majeur ». Le <code>else</code> est sauté.</td></tr>
+<tr><td>15</td><td><code>false</code></td><td>le bloc du <code>if</code> est sauté ; le <code>else</code> s'exécute : « Tu es mineur ».</td></tr>
+</table>
+<p>Un seul des deux blocs s'exécute, jamais les deux, jamais aucun.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Un seul <code>=</code> au lieu de trois.</strong> C'est LE piège du JavaScript. <code>if (age = 18)</code> ne compare pas : il <em>range</em> 18 dans <code>age</code>, et la condition est considérée comme vraie. Aucune erreur ne s'affiche, le bloc s'exécute toujours, et <code>age</code> a changé en douce. Pour comparer : <code>===</code>, toujours.</p>
+<p><strong>Comparer un texte et un nombre.</strong> <code>"18" === 18</code> vaut <code>false</code> : pour <code>===</code>, un texte n'est jamais égal à un nombre, même s'ils se ressemblent. Ça arrive dès qu'on lit ce que tape un utilisateur, qui est toujours du texte. Tu apprendras à convertir plus tard.</p>
+<p><strong>Tester les deux cas.</strong> Un <code>if/else</code> a deux chemins ; si tu n'en essaies qu'un, l'autre peut cacher une faute. Change la valeur de la variable et relance : c'est le réflexe qui distingue un programme qui marche d'un programme qui a l'air de marcher.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Chaque message d'un formulaire (« Ce champ est obligatoire », « Adresse e-mail invalide ») est au bout d'une condition. Un jeu vérifie à chaque instant si les vies sont à zéro ; une boutique, si le stock est vide avant d'afficher « Rupture ».</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>if (condition) { ... } else { ... }</code> : un seul des deux blocs s'exécute.</li>
+<li>On compare avec <code>===</code>, <code>!==</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code> ; le résultat est <code>true</code> ou <code>false</code>.</li>
+<li><code>=</code> range une valeur, <code>===</code> compare : dans un <code>if</code>, c'est toujours <code>===</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : et le double égal ?</summary>
+<p>Tu croiseras aussi <code>==</code>, avec deux signes. Il compare en convertissant d'abord les valeurs : <code>"18" == 18</code> vaut <code>true</code>. Ça paraît pratique, mais ses règles de conversion réservent des surprises, au point que la plupart des équipes l'interdisent. Une leçon du module avancé y revient. D'ici là, <code>===</code> partout.</p>
+</details>
 `,
   exercices: [
     {
@@ -480,8 +647,10 @@ if (temperature > 25) {
   id: 'js-6',
   titre: 'Conditions avancées : et, ou, sinon si',
   contenu: `
+<h2>Pourquoi ça existe</h2>
+<p>La vraie vie a rarement deux cas seulement. Un tarif dépend de plusieurs tranches d'âge, une mention de plusieurs seuils de notes. Et une décision dépend souvent de plusieurs critères à la fois : on entre au concert si on est majeur <em>et</em> qu'on a un billet ; c'est le week-end si on est samedi <em>ou</em> dimanche. Cette leçon donne les deux outils pour ça : les chaînes <code>else if</code>, et les mots « et » et « ou » du JavaScript.</p>
+
 <h2>Enchaîner les cas : else if</h2>
-<p>Quand il y a plus de deux possibilités, on enchaîne avec <code>else if</code> (« sinon, si... ») :</p>
 <pre class="bloc-code">let note = 14;
 
 if (note >= 16) {
@@ -493,11 +662,20 @@ if (note >= 16) {
 } else {
   console.log("Insuffisant");
 }</pre>
-<p>Le programme teste les conditions <strong>dans l'ordre</strong> et exécute le <strong>premier</strong> bloc dont la condition est vraie — puis ignore tout le reste. Ici : 14 &lt; 16, mais 14 ≥ 12 → « Bien ».</p>
+<p>Le programme teste les conditions <strong>dans l'ordre</strong> et exécute le <strong>premier</strong> bloc dont la condition est vraie. Puis il ignore tout le reste de la chaîne, même les conditions qui auraient aussi été vraies.</p>
+
+<h2>Pas à pas</h2>
+<p>Avec <code>note</code> qui vaut 14 :</p>
+<table class="memo-table trace">
+<tr><th>Test</th><th>Résultat</th><th>Ce qui se passe</th></tr>
+<tr><td>note &gt;= 16</td><td><code>false</code></td><td>on passe au test suivant</td></tr>
+<tr><td>note &gt;= 12</td><td><code>true</code></td><td>« Bien » s'affiche</td></tr>
+<tr><td>note &gt;= 10</td><td>jamais testé</td><td>la chaîne est terminée : un bloc a déjà été choisi</td></tr>
+</table>
 
 <h2>Combiner des conditions : ET, OU</h2>
 <pre class="bloc-code">// && signifie ET : les DEUX conditions doivent être vraies
-if (age >= 18 && aBillet) {
+if (age >= 18 &amp;&amp; aBillet) {
   console.log("Bienvenue au concert !");
 }
 
@@ -506,11 +684,31 @@ if (jour === "samedi" || jour === "dimanche") {
   console.log("C'est le week-end !");
 }</pre>
 <ul>
-<li><code>&amp;&amp;</code> — « et » (les deux esperluettes : <kbd>&amp;</kbd> deux fois) ;</li>
-<li><code>||</code> — « ou » (deux barres verticales : sur Windows, <kbd>AltGr + 6</kbd>).</li>
+<li><code>&amp;&amp;</code> : « et » (deux esperluettes, <kbd>&amp;</kbd> deux fois) ;</li>
+<li><code>||</code> : « ou » (deux barres verticales ; sur Windows, <kbd>AltGr + 6</kbd>).</li>
 </ul>
+<p>Le cas le plus courant : vérifier qu'une valeur est <strong>entre deux bornes</strong>. « L'âge est entre 6 et 17 inclus » s'écrit <code>age >= 6 &amp;&amp; age &lt;= 17</code> : deux comparaisons, reliées par un ET.</p>
 
-<div class="astuce">✅ Astuce de lecture : remplace mentalement <code>&&</code> par « et » et <code>||</code> par « ou », et relis ta condition à voix haute. Si la phrase est logique, le code l'est probablement aussi.</div>
+<h2>Les pièges</h2>
+<p><strong>Le mauvais ordre dans la chaîne.</strong> Si le test <code>note >= 10</code> vient en premier, une note de 18 le passe déjà : elle affiche « Passable », et « Très bien » n'est jamais atteint. Dans une chaîne de seuils, on commence par le plus exigeant.</p>
+<p><strong>Le OU raccourci.</strong> <code>jour === "samedi" || "dimanche"</code> a l'air de dire « samedi ou dimanche », mais c'est toujours vrai, même un lundi : la partie droite, <code>"dimanche"</code> tout seul, est un texte non vide, que JavaScript considère comme vrai. Chaque côté du <code>||</code> doit être une comparaison complète.</p>
+<p><strong>ET à la place de OU.</strong> <code>jour === "samedi" &amp;&amp; jour === "dimanche"</code> n'est jamais vrai : un jour ne peut pas être les deux à la fois. Relis ta condition à voix haute en remplaçant <code>&amp;&amp;</code> par « et » et <code>||</code> par « ou » : si la phrase est absurde, le code l'est aussi.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>« Livraison gratuite dès 50 € d'achat en France métropolitaine » : c'est un ET entre un montant et une destination. « Accès réservé aux administrateurs ou au propriétaire de la page » : un OU. Les grilles de tarifs, les frais de port et les droits d'accès sont faits de ces chaînes et de ces combinaisons.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>else if</code> teste dans l'ordre et s'arrête au premier cas vrai : on commence par le seuil le plus exigeant.</li>
+<li><code>&amp;&amp;</code> = les deux vraies ; <code>||</code> = au moins une vraie.</li>
+<li>Chaque côté d'un <code>&amp;&amp;</code> ou d'un <code>||</code> est une comparaison complète.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le NON</summary>
+<p>Le point d'exclamation inverse une condition : <code>!ilPleut</code> vaut <code>true</code> quand <code>ilPleut</code> vaut <code>false</code>. <code>if (!ilPleut)</code> se lit « s'il ne pleut pas », et dit la même chose que <code>if (ilPleut === false)</code>, en plus court. Quand une condition devient longue, rien n'interdit des parenthèses pour la rendre lisible : <code>(age >= 18 &amp;&amp; aBillet) || estInvite</code>.</p>
+</details>
 `,
   exercices: [
     {
