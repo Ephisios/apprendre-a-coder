@@ -6,6 +6,32 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.4.1 — 2026-09-25
+
+**Rien ne change pour l'élève.** Cette version n'ajoute que des vérifications — mais sur le dernier
+morceau de contenu pédagogique que personne ne relisait.
+
+### Ajouté
+
+- **26 vérifications sur les seize messages d'erreur Python.** Skulpt est une bibliothèque tierce et
+  ne parle qu'anglais : « bad input on line 2 » pour à peu près toutes les fautes de structure. Deux
+  fonctions d'`app.js` relisent le code à la place de l'élève et écrivent en français ce qui cloche.
+  C'est du contenu pédagogique pur — ce qu'on lit à l'instant précis où l'on est le plus perdu — et
+  aucun harnais ne le touchait, parce que tous rejouent des *solutions*, qui ne plantent pas.
+
+  Les contrôles partent de **vraies fautes exécutées par le vrai Skulpt**, pas de chaînes anglaises
+  recopiées à la main. C'est la différence qui compte : le jour où la bibliothèque changera ses
+  tournures, toutes les traductions tomberaient silencieusement dans leur dernier `return m` et
+  l'élève lirait l'anglais brut. Une ligne compte désormais ces retombées, et doit rester à zéro.
+
+  > Mesure du jour : **14 fautes sur 14 traduites, zéro anglais**, et chaque diagnostic vise juste —
+  > y compris la distinction entre « il manque l'indentation à la ligne 2 » et « la ligne 2 est
+  > décalée alors que rien ne l'annonce », qui sont des conseils **opposés**. Les intervertir ne
+  > laisserait passer aucun anglais : c'est le contrôle de chaque cas qui l'attrape, pas la
+  > sentinelle. Les deux sabotages ont été joués avant de garder la section.
+
+---
+
 ## 3.4.0 — 2026-09-25
 
 Cinq angles morts, dont deux cachaient un vrai défaut.

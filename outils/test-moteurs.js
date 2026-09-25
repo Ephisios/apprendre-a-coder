@@ -6,7 +6,8 @@
    ===========================================================================
 
    sql-moteur.js (29 Ko) et moteur-cj.js (53 Ko) sont des interprètes écrits
-   de bout en bout pour ce cours. Jusqu'ici, rien ne les éprouvait autrement
+   de bout en bout pour ce cours — et, depuis la dernière section, les seize
+   messages français qui traduisent les erreurs Python de Skulpt. Jusqu'ici, rien ne les éprouvait autrement
    qu'à travers les exercices : 44 requêtes SQL et 78 programmes C/Java, qui
    ne touchent qu'une partie de ce que les moteurs acceptent. Tout ce qu'aucun
    exercice n'utilise n'était vérifié par personne — et un moteur qui répond
@@ -248,6 +249,131 @@ for (const [langage, nom, source, attendu] of REFUS_CJ) {
    comprend jusqu'où son programme est allé avant de trébucher. */
 const avantErreur = cj('c', enC('printf("premiere\\n"); printf("%d\\n", 1/0);'));
 verifie('ce qui a été affiché avant l\'erreur est conservé', avantErreur.logs, ['premiere']);
+
+/* ========================================================================
+   Ce que l'élève lit quand son Python casse
+   ========================================================================
+   Skulpt est une bibliothèque tierce et ne parle qu'anglais : « bad input on
+   line 2 » pour à peu près toutes les fautes de structure. Deux fonctions
+   d'app.js relisent le code à la place de l'élève et écrivent en français ce
+   qui cloche — diagnostiquerSyntaxe (9 diagnostics) et traduirePython (7
+   branches). Seize textes, qui sont du contenu pédagogique pur : c'est ce
+   qu'on lit à l'instant précis où l'on est le plus perdu.
+
+   Rien ne les vérifiait. Les autres harnais rejouent des SOLUTIONS, qui par
+   définition ne plantent pas : le chemin d'erreur n'était emprunté par
+   personne. Et le risque n'est pas qu'un message soit laid — c'est qu'il
+   envoie chercher au mauvais endroit, ou qu'il ne se déclenche pas du tout
+   et laisse l'anglais brut.
+
+   On part donc de VRAIES fautes, exécutées par le VRAI Skulpt : si un jour
+   la bibliothèque change ses tournures, toutes les traductions tomberaient
+   silencieusement dans leur dernier « return m » et ces contrôles le
+   diraient. Comparer des chaînes anglaises écrites à la main ne prouverait
+   rien de tel.
+
+   POURQUOI EXTRAIRE LES DEUX FONCTIONS plutôt que charger app.js : app.js a
+   besoin d'un DOM et fait beaucoup de choses au chargement, alors que ces
+   deux-là sont pures — des chaînes en entrée, une chaîne en sortie. On les
+   découpe donc du fichier source. Si le découpage échoue, on s'arrête net
+   plutôt que de sauter la section en silence. */
+
+console.log('\n=== Python : ce que l\'élève lit quand son code casse ===\n');
+
+function extraireFonction(source, nom) {
+  const debut = source.indexOf('function ' + nom + '(');
+  if (debut === -1) return null;
+  let profondeur = 0;
+  for (let k = source.indexOf('{', debut); k < source.length; k++) {
+    if (source[k] === '{') profondeur++;
+    else if (source[k] === '}') { profondeur--; if (!profondeur) return source.slice(debut, k + 1); }
+  }
+  return null;
+}
+
+let traduirePython = null;
+{
+  const app = fs.readFileSync(path.join(RACINE, 'app.js'), 'utf8');
+  const morceaux = ['diagnostiquerSyntaxe', 'traduirePython'].map((n) => extraireFonction(app, n));
+  if (morceaux.some((m) => !m)) {
+    console.error('  Impossible de retrouver diagnostiquerSyntaxe ou traduirePython dans app.js.');
+    console.error('  Elles ont été renommées ou déplacées : ces contrôles ne peuvent plus rien juger.');
+    process.exit(2);
+  }
+  const boite = { exports: {} };
+  new Function('module', morceaux.join('\n') + '\nmodule.exports = { traduirePython };')(boite);
+  traduirePython = boite.exports.traduirePython;
+}
+
+// Skulpt : la même mise en route que verifier-contenu.js.
+let Sk = null;
+try {
+  const bac = { console, setTimeout, clearTimeout, Date, Math, JSON, RegExp, Error };
+  bac.window = bac; bac.self = bac; bac.globalThis = bac;
+  vm.createContext(bac);
+  for (const f of ['skulpt.min.js', 'skulpt-stdlib.js']) {
+    vm.runInContext(fs.readFileSync(path.join(RACINE, f), 'utf8'), bac, { filename: f });
+  }
+  if (bac.Sk && bac.Sk.builtinFiles) Sk = bac.Sk;
+} catch (e) { Sk = null; }
+
+if (!Sk) {
+  // Même convention que le reste du projet : on le dit, on ne le cache pas.
+  console.log('  Skulpt n\'a pas pu être chargé : les seize messages français ne sont PAS jugés.');
+  verifie('python — l\'interpréteur est disponible', false, true);
+} else {
+  const lancerPython = (code) => {
+    Sk.configure({
+      output: () => {},
+      read: (x) => {
+        if (Sk.builtinFiles === undefined || Sk.builtinFiles.files[x] === undefined) throw "File not found: '" + x + "'";
+        return Sk.builtinFiles.files[x];
+      },
+      __future__: Sk.python3,
+      execLimit: 3000
+    });
+    try { Sk.importMainWithBody('<stdin>', false, code, true); return null; }
+    catch (e) { return (e && e.toString) ? e.toString() : String(e); }
+  };
+
+  /* Chaque cas : une faute de débutant, et le mot que le message DOIT
+     contenir pour envoyer l'élève au bon endroit. Les trois diagnostics de
+     structure sont les plus délicats — « il manque l'indentation » et « la
+     ligne est décalée alors que rien ne l'annonce » sont des conseils
+     OPPOSÉS, et les confondre serait pire que se taire. */
+  const FAUTES = [
+    ['un nom inconnu', 'print(mavariable)', /« mavariable » est inconnu/],
+    ['une majuscule de trop', 'age = 3\nprint(Age)', /« Age » est inconnu/],
+    ['l\'indentation manquante', 'if True:\nprint("x")', /manque l'indentation à la ligne 2/],
+    ['l\'indentation en trop', 'a = 1\n    b = 2', /ligne 2 est décalée alors que rien ne l'annonce/],
+    ['les deux-points oubliés, if', 'if True\n    print("x")', /manque le « : » à la fin de la ligne 1/],
+    ['les deux-points oubliés, for', 'for i in range(3)\n    print(i)', /manque le « : » à la fin de la ligne 1/],
+    ['une parenthèse jamais refermée', 'print("bonjour"', /manque une fermeture/],
+    ['une clé absente', 'd = {"a": 1}\nprint(d["b"])', /clé n'existe pas dans le dictionnaire/],
+    ['un indice hors de la liste', 't = [1, 2, 3]\nprint(t[9])', /premier est à l'indice 0/],
+    ['une division par zéro', 'print(1 / 0)', /division par zéro/],
+    ['du texte ajouté à un nombre', 'print(3 + "3")', /types incompatibles/],
+    ['une boucle sans fin', 'while True:\n    pass', /sans s'arrêter/]
+  ];
+
+  let restesEnAnglais = 0;
+  for (const [nom, code, attendu] of FAUTES) {
+    const brut = lancerPython(code);
+    verifie('python — ' + nom + ' : Skulpt signale bien une erreur', typeof brut === 'string' && brut.length > 0, true);
+    const lu = traduirePython(brut, code);
+    if (lu === brut) restesEnAnglais++;
+    verifie('python — ' + nom + ' : le message vise le bon endroit', attendu.test(String(lu)), true);
+  }
+
+  /* L'invariant qui compte le plus : aucune de ces fautes ne doit laisser
+     passer l'anglais de Skulpt. Le jour où la bibliothèque changera ses
+     tournures, c'est cette ligne qui le dira. */
+  verifie('python — aucune de ces fautes ne laisse l\'anglais brut', restesEnAnglais, 0);
+
+  // Et un programme juste ne doit évidemment rien signaler du tout.
+  verifie('python — un programme correct ne produit aucune erreur',
+          lancerPython('for i in range(3):\n    print(i)'), null);
+}
 
 console.log('\n' + passees + ' vérification(s) passée(s), ' + echecs + ' échec(s).\n');
 process.exit(echecs ? 1 : 0);

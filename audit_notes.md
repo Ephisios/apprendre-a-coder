@@ -218,6 +218,32 @@ souvent là qu'il comprend jusqu'où il était allé. Corrigé. Les 78 correcteu
 C/Java et leurs copies sabotées passent toujours.
 
 
+### 4.5 Les messages d'erreur Python
+
+RÉSOLU le 2026-09-25. Seize textes français — diagnostiquerSyntaxe (9) et
+traduirePython (7) dans app.js — traduisent les erreurs de Skulpt. Aucun
+harnais ne les touchait : tous rejouent des SOLUTIONS, qui ne plantent pas,
+donc le chemin d'erreur n'était emprunté par personne.
+
+26 vérifications dans outils/test-moteurs.js, qui partent de VRAIES fautes
+exécutées par le VRAI Skulpt. C'est le point important : comparer des
+chaînes anglaises écrites à la main ne prouverait rien. Si Skulpt change ses
+tournures, toutes les branches tombent dans leur « return m » final et
+l'élève lit l'anglais ; une ligne compte ces retombées et doit rester à 0.
+
+MESURE DU JOUR : 14 fautes sur 14 traduites, 0 anglais. Chaque diagnostic
+vise juste, y compris la distinction entre « il manque l'indentation » et
+« la ligne est décalée alors que rien ne l'annonce » — deux conseils
+OPPOSÉS. Les intervertir ne laisse passer aucun anglais : seul le contrôle
+de chaque cas l'attrape. Les deux sabotages ont été joués avant de garder
+la section.
+
+UNE BRANCHE MORTE, à savoir avant d'y toucher : traduirePython teste
+« IndentationError », que Skulpt n'émet jamais — il dit « bad input » pour
+toutes les fautes de structure. La branche est inoffensive et défensive,
+mais elle ne s'exécute pas ici.
+
+
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
 ### 5.1 Relancer le verifier (source de vérité)

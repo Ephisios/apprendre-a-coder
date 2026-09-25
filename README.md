@@ -164,7 +164,7 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
  95 vérifications d'interface     — 0 échec, dont 8 d'accessibilité
-121 vérifications des moteurs     — 0 échec (SQL, C, Java)
+147 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
  10 vérifications au navigateur   — 0 échec (Worker, contraste, focus)
 425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
 ```
