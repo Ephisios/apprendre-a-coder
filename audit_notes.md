@@ -190,6 +190,34 @@ de mise en page. Le compromis est différent là-bas : le code exécuté est
 celui que l'élève écrit pour répondre à une consigne, pas du code collé.
 
 
+### 4.4 Les moteurs maison, hors du contexte d'un exercice
+
+RÉSOLU le 2026-09-25. sql-moteur.js (29 Ko) et moteur-cj.js (53 Ko) n'étaient
+exercés qu'à travers les 44 exercices SQL et 78 C/Java, donc seulement sur ce
+que ces exercices se trouvent utiliser. outils/test-moteurs.js fixe leur
+contrat en 121 vérifications, toutes mesurées sur le moteur avant d'être
+écrites.
+
+CE QUE LE MOTEUR SQL FAIT JUSTE, et qui méritait d'être épinglé : COUNT(*)
+compte les lignes, COUNT(colonne) saute les valeurs absentes (8 contre 7 sur
+la table films), AVG les ignore également, UNION dédoublonne là où UNION ALL
+garde tout, LEFT JOIN conserve les lignes sans correspondance (11 contre 8).
+Ce sont les vraies sémantiques SQL.
+
+UNE LIMITE CONNUE, épinglée pour qu'un changement se voie : les alias de
+table ne sont pas gérés dans un JOIN. « SELECT f.titre FROM films AS f »
+échoue. Aucun exercice n'en utilise — tous écrivent « films.titre » en
+entier. Le test vérifie que le refus reste lisible, pas que la requête passe.
+
+UN VRAI DÉFAUT TROUVÉ, dès la première exécution du harnais : en C et en
+Java, tout ce que le programme avait AFFICHÉ avant une erreur d'exécution
+était perdu. executerCJ déclarait sa machine dans le try ; le catch ne
+pouvait pas l'atteindre et renvoyait « logs: [] » en dur. L'élève ne voyait
+que le message d'erreur, sans rien de ce qui précédait — alors que c'est
+souvent là qu'il comprend jusqu'où il était allé. Corrigé. Les 78 correcteurs
+C/Java et leurs copies sabotées passent toujours.
+
+
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
 ### 5.1 Relancer le verifier (source de vérité)

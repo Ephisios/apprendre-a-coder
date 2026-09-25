@@ -1,6 +1,6 @@
 {
   "name": "apprendre-a-coder",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "private": true,
   "license": "MIT AND CC-BY-SA-4.0",
   "repository": {
@@ -11,8 +11,9 @@
   "scripts": {
     "verifier": "node outils/verifier-contenu.js",
     "test-interface": "node outils/test-interface.js",
-    "verifier-nav": "node outils/verifier-navigateur.js",
-  "tout-verifier": "npm run verifier && npm run test-interface && npm run verifier-nav"
+    "test-moteurs": "node outils/test-moteurs.js",
+  "verifier-nav": "node outils/verifier-navigateur.js",
+  "tout-verifier": "npm run verifier && npm run test-interface && npm run test-moteurs && npm run verifier-nav"
   },
   "devDependencies": {
     "jsdom": "^30.1.0"

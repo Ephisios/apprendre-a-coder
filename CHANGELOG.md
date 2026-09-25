@@ -6,6 +6,74 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.4.0 — 2026-09-25
+
+Cinq angles morts, dont deux cachaient un vrai défaut.
+
+### Ajouté
+
+- **`outils/test-moteurs.js`** — 121 vérifications sur les deux interprètes écrits à la main. 82 Ko
+  de `sql-moteur.js` et `moteur-cj.js` n'étaient exercés qu'à travers les exercices, donc seulement
+  sur ce qu'un exercice se trouve utiliser. Tout le reste n'était vérifié par personne — et un moteur
+  qui répond *faux* est pire qu'un moteur qui refuse, parce qu'il enseigne l'erreur.
+
+  Le moteur SQL s'en sort remarquablement : `COUNT(*)` compte les lignes tandis que `COUNT(colonne)`
+  saute les valeurs absentes, `AVG` les ignore aussi, `UNION` dédoublonne quand `UNION ALL` garde
+  tout, `LEFT JOIN` conserve les lignes sans correspondance. Ce sont les vraies sémantiques SQL, pas
+  des approximations.
+
+  > Chaque attente a été mesurée sur le moteur **avant** d'être écrite. Une attente qui tombera plus
+  > tard signalera donc un changement de comportement, pas une opinion.
+
+- **Le chemin Worker du moteur JavaScript**, enfin couvert. jsdom n'en fournit pas, donc les dix
+  vérifications de la 3.3.1 n'éprouvaient que le *repli*. Le pilote navigateur compare désormais les
+  deux chemins sur cinq cas — zéro écart — et met à l'épreuve le garde-fou que **seul** le Worker
+  peut offrir : une boucle infinie arrêtée au bout de trois secondes. C'est la seule protection de
+  l'élève contre son erreur la plus banale, et personne ne l'avait jamais vérifiée.
+
+- **Le contraste et la visibilité du focus** entrent dans le harnais : ils demandent une mise en
+  page, donc jsdom ne pouvait rien en dire.
+
+### Corrigé
+
+- **Ce que le programme avait affiché avant de trébucher était perdu.** En C et en Java, une division
+  par zéro ou une case hors du tableau ne rendait que le message d'erreur : `executerCJ` déclarait sa
+  machine *dans* le `try`, donc le `catch` ne pouvait pas l'atteindre et renvoyait `logs: []` en
+  dur. L'élève perdait la seule chose qui lui disait jusqu'où son programme était allé. Trouvé par le
+  nouveau harnais, à sa première exécution.
+
+- **Le bandeau craquait sur téléphone.** Le plus petit palier du CSS était 980 px ; en dessous, la
+  rangée du logo tombait à 131 px pour un contenu de 323, et le titre débordait *sous* les boutons —
+  on lisait « Apprendr ». Elle prend désormais la ligne entière et les outils passent dessous.
+  Mesuré à 375, 560, 700 et 980 px.
+
+- **Sept fichiers restaient en CRLF** alors que `.gitattributes` impose `eol=lf`. Git annonçait une
+  réécriture complète à chaque commit.
+
+### Pour qui reprend le projet
+
+```bash
+npm run tout-verifier        # les quatre harnais, sans rien ouvrir à la main
+```
+
+```
+362 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
+358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
+ 63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
+ 95 vérifications d'interface     — 0 échec, dont 8 d'accessibilité
+121 vérifications des moteurs     — 0 échec (SQL, C, Java)
+ 10 vérifications au navigateur   — 0 échec (Worker, contraste, focus)
+425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
+```
+
+Un contrôle a encore menti avant d'être corrigé, et c'est le troisième de cette série : la sonde de
+contraste mesurait la page **avant** que l'accueil ne soit peint. Elle trouvait zéro défaut parce
+qu'il n'y avait presque rien à mesurer. Elle compte désormais les éléments examinés — 106 sur
+l'accueil — et échoue s'il y en a moins de quarante. Un harnais qui ne peut pas échouer n'est pas un
+harnais.
+
+---
+
 ## 3.3.1 — 2026-09-25
 
 ### Corrigé

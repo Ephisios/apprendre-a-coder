@@ -140,6 +140,13 @@ d'accueil étaient des `<div onclick>`, inatteignables au clavier.
 jsdom ne savent faire de mise en page ; seul un vrai navigateur en est capable. Cette page pose les
 deux mêmes questions, et reste ouvrable à la main.
 
+**`outils/test-moteurs.js`** éprouve les deux interprètes écrits à la main — `sql-moteur.js` et
+`moteur-cj.js`, 82 Ko à eux deux. Ils n'étaient jusqu'ici exercés qu'à travers les exercices, donc
+seulement sur ce qu'un exercice se trouve utiliser. 121 vérifications fixent désormais leur contrat :
+ce qu'ils calculent juste, et ce qu'ils doivent refuser en le disant clairement. Chaque attente a été
+**mesurée sur le moteur avant d'être écrite** — on épingle ce qu'il fait, on n'invente pas ce qu'il
+devrait faire.
+
 **`outils/verifier-navigateur.js`** l'ouvre à ta place. Tant qu'il fallait y penser, un correcteur
 de mise en page pouvait partir cassé sans que rien ne crie — 13 % des exercices reposaient sur la
 mémoire de quelqu'un. Le pilote lance le Chrome ou l'Edge **déjà installé** sur la machine, en mode
@@ -157,6 +164,8 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
  95 vérifications d'interface     — 0 échec, dont 8 d'accessibilité
+121 vérifications des moteurs     — 0 échec (SQL, C, Java)
+ 10 vérifications au navigateur   — 0 échec (Worker, contraste, focus)
 425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
 ```
 
