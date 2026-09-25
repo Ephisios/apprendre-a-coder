@@ -297,6 +297,35 @@ DEUX PIÈGES RENCONTRÉS, à connaître avant d'ajouter ici :
   fait conclure à tort qu'une vérification ne mord pas.
 
 
+### 4.8 Le câblage
+
+RÉSOLU le 2026-09-25, et c'est un revirement. La section 4.7 affirmait que
+les fonctions de câblage ne méritaient pas de contrôle, faute de pouvoir
+échouer. C'était vrai des assertions envisagées, faux du câblage lui-même.
+
+SON MODE DE PANNE, unique et sournois : un bouton qui appelle une fonction
+qui n'existe plus. Renommer sans toucher au HTML ne casse rien au
+chargement — ça casse au clic, chez l'élève, sans un mot dans la console.
+
+DEUX CONTRÔLES, dans test-interface.js :
+
+1. Recensement. Les 33 fonctions nommées dans un onclick, onchange ou
+   oninput — dans index.html comme dans le HTML fabriqué par app.js —
+   doivent exister sur window. Le contrôle nomme les manquantes. Une
+   garde exige d'en avoir recensé au moins 25 : si la lecture échouait,
+   l'ensemble serait vide et le contrôle passerait sans rien regarder.
+
+2. Traversée des cinq vues, qui épingle deux comportements d'accessibilité
+   que rien ne couvrait : chaque vue s'annonce dans la zone lue par les
+   lecteurs d'écran, et le focus repart du titre de la vue. Sans ce
+   déplacement, la navigation au clavier recommencerait au tout début du
+   document à chaque changement.
+
+SABOTAGE DE CONTRÔLE : renommer une fonction appelée par un bouton, retirer
+le focus et retirer l'annonce fait tomber 11 vérifications, et le
+recensement nomme le coupable.
+
+
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
 ### 5.1 Relancer le verifier (source de vérité)

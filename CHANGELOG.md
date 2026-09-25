@@ -6,6 +6,39 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.4.4 — 2026-09-25
+
+**Rien ne change pour l'élève** — 24 vérifications de plus, sur le câblage. Et un revirement de ma
+part, qui vaut d'être écrit.
+
+### Ce que j'avais tort d'écarter
+
+La version précédente affirmait que les fonctions de câblage — celles qui ne font qu'en appeler
+d'autres — ne méritaient pas de contrôle, faute de pouvoir échouer. C'était vrai des assertions que
+j'avais en tête, et faux du câblage lui-même. Il a un mode de panne, précis et sournois : **un bouton
+qui appelle une fonction qui n'existe plus**. Renommer sans toucher au HTML ne casse rien au
+chargement — ça casse au clic, chez l'élève, sans un mot dans la console.
+
+### Ajouté
+
+- **Un recensement des gestionnaires.** Les 33 fonctions nommées dans un `onclick`, `onchange` ou
+  `oninput` — dans `index.html` comme dans le HTML fabriqué par `app.js` — doivent toutes exister.
+  Le contrôle nomme celles qui manquent.
+
+- **La traversée des cinq vues**, qui épingle au passage deux comportements d'accessibilité que rien
+  ne couvrait. Chaque vue **s'annonce** dans la zone que lisent les lecteurs d'écran, et le focus
+  **repart du titre de la vue** — sans quoi la navigation au clavier recommencerait au tout début du
+  document à chaque changement, et il faudrait retraverser le menu entier pour atteindre le contenu.
+
+### Ce que les sabotages ont donné
+
+Renommer une seule fonction appelée par un bouton, retirer le déplacement du focus et retirer
+l'annonce : **11 vérifications tombent**, et le recensement nomme le coupable. C'est la section la
+plus dense du harnais en rapport entre lignes écrites et pannes couvertes — l'inverse de ce que
+j'avais prédit.
+
+---
+
 ## 3.4.3 — 2026-09-25
 
 **Rien ne change pour l'élève** — 32 vérifications de plus, sur ce qu'il lit et sur ce que

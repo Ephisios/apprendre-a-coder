@@ -118,7 +118,17 @@ sources.push(`
     changerOngletBac: (n) => changerOngletBac(n),
     basculerPleinEcran: () => basculerPleinEcran(),
     majZoneMemo: () => majZoneMemo(),
-    poserMemo: (onglet, recherche) => { ongletMemo = onglet; rechercheMemo = recherche; }
+    poserMemo: (onglet, recherche) => { ongletMemo = onglet; rechercheMemo = recherche; },
+
+    // Le câblage : les points d'entrée de la navigation.
+    allerAccueil: () => allerAccueil(),
+    allerBac: () => allerBac(),
+    allerMemos: () => allerMemos(),
+    allerRevision: () => allerRevision(),
+    allerLecon: (id) => allerLecon(id),
+    allerLeconExo: (id, i) => allerLeconExo(id, i),
+    fermerMenus: () => fermerMenus(),
+    fermerNavMobile: () => fermerNavMobile()
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -919,6 +929,98 @@ verifie('encyclopédie — et on peut effacer sa recherche',
 const lancerJS = (code) => new Promise((resolve) => pont.executerJS(code, resolve));
 
 (async () => {
+
+  /* ======================================================================
+     Le câblage
+     ======================================================================
+     Il reste dans app.js des fonctions qui ne font qu'en appeler d'autres.
+     Les éprouver une à une donnerait des assertions incapables d'échouer.
+     Mais le câblage a un vrai mode de panne, et un seul : un bouton qui
+     appelle une fonction qui n'existe plus. Renommer sans mettre à jour le
+     HTML ne casse rien au chargement — ça casse au clic, chez l'élève, et
+     en silence.
+
+     On recense donc tous les gestionnaires écrits en attribut, et on vérifie
+     qu'ils désignent quelque chose. Puis on traverse les cinq vues, pour
+     s'assurer que chacune mène quelque part ET l'annonce : poserVue pose le
+     titre, écrit dans la zone d'annonce que lisent les lecteurs d'écran, et
+     déplace le focus sur le titre de la vue — sans quoi la navigation au
+     clavier repart du tout début du document à chaque fois. */
+
+  console.log('\n=== Le câblage : les boutons appellent-ils quelque chose ? ===\n');
+
+  const sourceApp = fs.readFileSync(path.join(RACINE, 'app.js'), 'utf8');
+  const gestionnaires = new Set();
+  for (const texte of [html, sourceApp]) {
+    for (const attribut of ['onclick', 'onchange', 'oninput']) {
+      for (const m of texte.matchAll(new RegExp(attribut + '="([a-zA-Z_][A-Za-z0-9_]*)', 'g'))) {
+        gestionnaires.add(m[1]);
+      }
+    }
+  }
+
+  /* Si la lecture échouait, l'ensemble serait vide et le contrôle suivant
+     passerait triomphalement sans rien avoir regardé. On exige donc d'en
+     avoir trouvé un nombre plausible. */
+  verifie('câblage — le recensement a bien trouvé des gestionnaires', gestionnaires.size >= 25, true);
+
+  const introuvables = [...gestionnaires].filter((n) => typeof win[n] !== 'function');
+  if (introuvables.length) console.log('         introuvables : ' + introuvables.join(', '));
+  verifie('câblage — les ' + gestionnaires.size + ' fonctions appelées par un bouton existent toutes',
+          introuvables.length, 0);
+
+  console.log('\n=== Chaque vue mène-t-elle quelque part, et le dit-elle ? ===\n');
+
+  const attendreAnnonce = () => new Promise((r) => setTimeout(r, 120));
+  const annonce = () => {
+    const z = win.document.getElementById('annonce-vue');
+    return z ? z.textContent.trim() : '';
+  };
+
+  const VUES = [
+    ['accueil', () => pont.allerAccueil()],
+    ['bac à sable', () => pont.allerBac()],
+    ['encyclopédie', () => pont.allerMemos()],
+    ['révision', () => pont.allerRevision()],
+    ['leçon', () => pont.allerLecon(pont.modules()[0].lecons[0].id)]
+  ];
+
+  for (const [nom, aller] of VUES) {
+    poserScene();
+    win.document.title = '(rien)';
+    let plante = null;
+    try { aller(); } catch (e) { plante = e.message; }
+    verifie('vue « ' + nom + " » — on y va sans casse", plante, null);
+    if (plante) continue;
+
+    verifie('vue « ' + nom + ' » — le titre de la page change',
+            win.document.title !== '(rien)' && win.document.title.length > 3, true);
+
+    await attendreAnnonce();
+    verifie('vue « ' + nom + " » — et elle s'annonce aux lecteurs d'écran", annonce().length > 0, true);
+
+    /* Sans ce déplacement, la navigation au clavier repartirait du tout
+       début du document à chaque changement de vue — on retraverserait le
+       menu entier avant d'atteindre le contenu. */
+    const h1 = win.document.querySelector('#contenu h1');
+    verifie('vue « ' + nom + ' » — le focus part du titre, pas du haut du document',
+            !!h1 && win.document.activeElement === h1, true);
+  }
+
+  // allerLeconExo passe par un setTimeout : on lui laisse son tour de boucle.
+  poserScene();
+  const lecTest = pont.modules()[0].lecons.find((l) => pont.exercicesDe(l).length > 0) || pont.modules()[0].lecons[0];
+  pont.allerLeconExo(lecTest.id, 0);
+  await attendreAnnonce();
+  verifie('câblage — allerLeconExo mène bien à la leçon visée',
+          win.document.title.indexOf(lecTest.titre) !== -1, true);
+
+  poserScene();
+  win.document.body.classList.add('nav-ouverte', 'menu-ouvert');
+  pont.fermerNavMobile();
+  verifie('câblage — fermer le menu mobile le referme vraiment',
+          win.document.body.classList.contains('nav-ouverte'), false);
+
   console.log('\n=== Le repli « sans Worker » rend-il la même chose ? ===\n');
 
   verifie('repli — c\'est bien lui qui s\'exécute ici', typeof win.Worker, 'undefined');
