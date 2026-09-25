@@ -58,7 +58,7 @@
   /* Craie plutôt que blanc pur : moins de fatigue sur un fond presque noir. */
   --encre: #e9e4d8;
   --encre-2: #c9c3b5;
-  --encre-3: #8f897c;       /* 5,3:1 sur le graphite */
+  --encre-3: #9d978a;       /* 6,4:1 sur le graphite, 5,2:1 sur --surface-2 */
 
   --trait: #262a2e;
   --trait-net: #3a3f44;
@@ -87,6 +87,10 @@
 
   --mesure-prose: 580px;
   --focus-code: var(--accent);
+  --part-teinte: 70%;
+  /* Fond d'un extrait de code dans un encart, un verdict, un QCM : opaque.
+     Un gris translucide se lisait bien, mais se mesurait comme un gris plein. */
+  --fond-code-texte: #33373c;
 
   --ombre-1: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 14px -3px rgba(0, 0, 0, .5);
   --ombre-carte: 0 1px 2px rgba(0, 0, 0, .45), 0 10px 24px -8px rgba(0, 0, 0, .6);
@@ -135,6 +139,8 @@
 
   --mesure-prose: 580px;
   --focus-code: #f2a93b;
+  --part-teinte: 40%;
+  --fond-code-texte: #e4dfd3;
 
   --ombre-1: 0 1px 2px rgba(29, 27, 22, .05), 0 3px 10px -3px rgba(29, 27, 22, .08);
   --ombre-carte: 0 1px 2px rgba(29, 27, 22, .06), 0 8px 20px -8px rgba(29, 27, 22, .14);
@@ -364,7 +370,8 @@ body {
   height: 26px;
   flex: none;
   border-radius: var(--r1);
-  background: color-mix(in srgb, var(--teinte) 10%, transparent);
+  /* Fond opaque : un fond translucide se mesure mal, et se lit mal sur la barre. */
+  background: color-mix(in srgb, var(--teinte) 10%, var(--barre));
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teinte) 34%, transparent);
 }
 /* Le numéro du module (00 à 11) remplace l'émoji, qui changeait de dessin
@@ -374,7 +381,9 @@ body {
   font-size: 11.5px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, var(--teinte, var(--accent)) 70%, var(--encre));
+  /* La part de teinte dépend du thème : les teintes sont claires, pensées pour
+     le noir ; sur le papier du thème clair, il faut les tirer vers l'encre. */
+  color: color-mix(in srgb, var(--teinte, var(--accent)) var(--part-teinte), var(--encre));
 }
 .etape-puce, .revision-puce { font-size: 13.5px; }
 .module-nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -911,7 +920,7 @@ h1.titre-lecon {
 .contenu-lecon .trace td:first-child { font-family: var(--f-code); white-space: nowrap; }
 
 .astuce strong, .attention strong, .info strong { color: inherit; }
-.astuce code, .attention code, .info code { background: rgba(128, 128, 128, .16); color: inherit; }
+.astuce code, .attention code, .info code { background: var(--fond-code-texte); color: inherit; }
 
 /* =========================================================================
    Exercices
@@ -992,7 +1001,7 @@ h1.titre-lecon {
   box-shadow: inset 0 0 0 1px var(--accent);
 }
 .qcm-choix input { margin-top: 4px; accent-color: var(--accent); flex: none; }
-.qcm-choix code { background: rgba(128, 128, 128, .16); color: inherit; }
+.qcm-choix code { background: var(--fond-code-texte); color: inherit; }
 
 /* ---------- Éditeur de code ---------- */
 .editeur-cadre {
@@ -1235,7 +1244,7 @@ h1.titre-lecon {
   font-size: 12px;
   color: var(--vert);
 }
-.recu-acquis code { background: rgba(128, 128, 128, .16); color: var(--accent-fonce); }
+.recu-acquis code { background: var(--fond-code-texte); color: var(--accent-fonce); }
 
 .recu-module {
   margin: 0 0 18px;
@@ -1380,7 +1389,7 @@ h1.titre-lecon {
   color: color-mix(in srgb, var(--rouge) 70%, var(--encre));
 }
 .feedback strong { color: inherit; }
-.feedback code { background: rgba(128, 128, 128, .18); color: inherit; }
+.feedback code { background: var(--fond-code-texte); color: inherit; }
 
 /* La relance : ce que l'app ajoute au 2e essai et au-delà, et pas au 1er.
    Détachée du verdict par un filet, pour qu'on voie que c'est autre chose. */
@@ -1433,7 +1442,7 @@ h1.titre-lecon {
 .indice-bloc:empty { margin: 0; padding: 0; border-width: 0; background: none; }
 .indice-bloc.visible { animation: verdict-entre 300ms var(--sortie); }
 .indice-bloc strong { color: inherit; }
-.indice-bloc code { background: rgba(128, 128, 128, .18); color: inherit; }
+.indice-bloc code { background: var(--fond-code-texte); color: inherit; }
 
 /* Sauvegarder / restaurer : discret sous la barre de progression, mais
    toujours visible. C'est la seule porte de sortie si le navigateur vide
@@ -1814,7 +1823,7 @@ h1.titre-lecon {
 .sql-erreur code {
   font-family: var(--f-code);
   font-size: .85em;
-  background: rgba(128, 128, 128, .18);
+  background: var(--fond-code-texte);
   padding: .12em .4em;
   border-radius: 5px;
 }
