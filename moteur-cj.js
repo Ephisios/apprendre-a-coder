@@ -1190,6 +1190,20 @@
 
   /* ------------------------- Point d'entrée ------------------------- */
   function executerCJ(langage, source) {
+    /* La machine est déclarée HORS du try, et c'est tout l'enjeu : quand le
+       programme trébuche en cours de route — division par zéro, case hors du
+       tableau, boucle sans fin — ce qu'il a déjà AFFICHÉ doit rester à
+       l'écran. C'est souvent la seule chose qui dise à l'élève jusqu'où il
+       était allé. Tant qu'elle vivait dans le try, le catch ne pouvait pas
+       l'atteindre et renvoyait « logs: [] » en dur : le message d'erreur
+       arrivait seul, sans rien avant lui. */
+    let machine = null;
+    const dejaAffiche = () => {
+      if (!machine || !machine.sortie) return [];
+      const l = machine.sortie.split('\n');
+      if (l.length && l[l.length - 1] === '') l.pop();
+      return l;
+    };
     try {
       const jetons = decouper(String(source));
       const an = new Analyseur(jetons, langage);
@@ -1217,19 +1231,17 @@
           : 'je ne trouve pas la fonction <code>main</code>. Un programme C commence par :<br><code>int main() { ... return 0; }</code>');
       }
 
-      const machine = new Machine(prog, langage);
+      machine = new Machine(prog, langage);
       for (const g of prog.globales) machine.executer(g, porteeMain);
       const p = new Portee(porteeMain);
       if (mainF.params && mainF.params.length) p.declarer(mainF.params[0].nom, { t: 'tableau', elem: 'String', v: [] });
       machine.executer(mainF.corps, p);
 
-      let lignes = machine.sortie.split('\n');
-      if (lignes.length && lignes[lignes.length - 1] === '') lignes.pop();
-      return { logs: lignes, erreur: null };
+      return { logs: dejaAffiche(), erreur: null };
 
     } catch (e) {
-      if (e && e.cj) return { logs: [], erreur: e.message + (e.ligne ? ' (ligne ' + e.ligne + ')' : '') };
-      return { logs: [], erreur: 'ton programme n\'a pas pu être exécuté (' + (e && e.message ? e.message : e) + ').' };
+      if (e && e.cj) return { logs: dejaAffiche(), erreur: e.message + (e.ligne ? ' (ligne ' + e.ligne + ')' : '') };
+      return { logs: dejaAffiche(), erreur: 'ton programme n\'a pas pu être exécuté (' + (e && e.message ? e.message : e) + ').' };
     }
   }
 

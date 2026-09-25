@@ -1678,6 +1678,18 @@ h1.titre-lecon {
 }
 
 .etape-module {
+  /* C'est un <button>, pour qu'on puisse l'atteindre au clavier. Il faut donc
+     lui retirer tout ce que le navigateur met d'office sur un bouton — sans
+     quoi la carte hériterait d'une bordure, d'une police et d'un centrage. */
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+
   position: relative;
   display: grid;
   grid-template-columns: 44px 1fr auto;
@@ -1853,7 +1865,8 @@ body.plein-ecran #sidebar { display: none; }
   min-width: 0;
 }
 .atelier-puce { font-size: 17px; }
-.atelier-titre b {
+.atelier-titre h1 {
+  margin: 0;
   font-family: var(--f-interface);
   font-size: 19px;
   font-weight: 700;
@@ -2382,6 +2395,7 @@ mark {
   .logo-icone { width: 32px; height: 32px; }
   .logo-titre { font-size: 15px; }
   .logo-sous { display: none; }
+
   .logo { flex: none; }
   .repere-module.actif { display: flex; }
 
@@ -2446,4 +2460,21 @@ mark {
     transition-duration: .001ms !important;
   }
   .confetti-zone { display: none; }
+}
+
+/* ---------- Téléphone : sous 560 px ----------
+   Le plus petit palier du fichier était 980 px. En dessous, le bandeau
+   craquait en silence : la rangée du logo partage sa ligne avec les cinq
+   outils, et tombait à 131 px pour un contenu de 323. Le logo gardant
+   « flex: none », il débordait SOUS les boutons — on lisait « Apprendr ».
+
+   Deux fausses pistes, gardées ici parce qu elles se retentent facilement :
+   le laisser rétrécir l écrase à 28 px et fait disparaître le titre, le
+   bouton Sommaire ne cédant pas ; et donner « flex-basis: 100% » aux OUTILS
+   vide la rangée du logo, dont le « flex: 1 » vaut « flex-basis: 0% ».
+
+   La rangée du logo prend donc la ligne entière, et les outils passent en
+   dessous. Logo et Sommaire tiennent alors largement : 323 px sur 375. */
+@media (max-width: 560px) {
+  .logo-rangee { flex: 1 0 100%; }
 }

@@ -584,7 +584,13 @@ function rendreAccueil() {
     const fini = faites === m.lecons.length;
     const enCours = !fini && idModuleEnCours && idModuleEnCours.id === m.id;
     const etat = fini ? 'Terminé' : (enCours ? 'En cours' : (c.faits > 0 ? 'Commencé' : 'À venir'));
-    html += '<div class="etape-module' + (fini ? ' finie' : '') + (enCours ? ' encours' : '') + '"' +
+    // Un vrai <button>, pas une <div> : une div ne se reçoit pas au clavier,
+    // et aucune classe CSS n'y change rien. C'est exactement ce que la leçon
+    // html-22 reproche à l'élève ; on n'allait pas le faire en page d'accueil.
+    // aria-label plutôt que le texte entier : « Bienvenue — En cours, 0 sur
+    // 3 leçons » vaut mieux que l'énumération de toute la carte.
+    html += '<button type="button" class="etape-module' + (fini ? ' finie' : '') + (enCours ? ' encours' : '') + '"' +
+      ' aria-label="' + echapperAttr(m.titre + ' — ' + etat + ', ' + faites + ' sur ' + m.lecons.length + ' leçons') + '"' +
       ' style="--teinte:' + m.teinte + '" onclick="allerLecon(\'' + m.lecons[0].id + '\')">' +
       '<div class="etape-puce">' + m.icone + '</div>' +
       '<div class="etape-corps">' +
@@ -595,7 +601,7 @@ function rendreAccueil() {
       '<span class="chiffres">' + faites + '/' + m.lecons.length + ' leçons · ' + c.total + ' exercices</span>' +
       '</div></div>' +
       '<div class="etape-etat">' + etat + '</div>' +
-      '</div>';
+      '</button>';
   }
   html += '</div>';
 
@@ -1184,12 +1190,52 @@ function executerJS(code, rappel) {
       '};';
     worker = new Worker(URL.createObjectURL(new Blob([source], { type: 'application/javascript' })));
   } catch (e) {
-    // Repli si les Workers sont indisponibles : exécution directe
+    /* Repli quand les Workers sont indisponibles : exécution directe.
+
+       Il doit rendre EXACTEMENT le même { logs, erreur } que le Worker, sinon
+       deux élèves voient deux résultats pour le même code. Les minuteurs sont
+       donc suivis ici aussi : sans cela, la leçon jsav-18 (setTimeout,
+       setInterval) n'afficherait rien et son correcteur refuserait une
+       réponse juste.
+
+       On les passe en paramètres plutôt que de toucher aux globales : le code
+       de l'élève les voit, le reste de l'application garde les siennes.
+
+       CE QUE LE REPLI NE SAIT PAS FAIRE : arrêter une boucle infinie. Le
+       Worker se fait terminate() au bout de 3 s ; ici tout se passe sur le
+       fil principal, où rien ne peut interrompre du code synchrone. Une
+       boucle sans fin fige l'onglet, et le message « ton code tourne sans
+       s'arrêter » n'apparaîtra jamais. C'est le prix du repli — et la raison
+       pour laquelle il reste un repli. */
     const logs = [];
     const fauxConsole = { log: (...a) => logs.push(a.map(v => typeof v === 'object' && v !== null ? JSON.stringify(v) : String(v)).join(' ')) };
+    let attente = 0;
+    const programmes = [];
+    const monTimeout = (f, d) => {
+      d = Number(d) || 0;
+      if (d > attente) attente = d;
+      const id = setTimeout(f, d); programmes.push(['t', id]); return id;
+    };
+    const monInterval = (f, d) => {
+      d = Number(d) || 0;
+      const total = Math.min(d * 6, 1200);
+      if (total > attente) attente = total;
+      const id = setInterval(f, d); programmes.push(['i', id]); return id;
+    };
     let erreur = null;
-    try { new Function('console', code)(fauxConsole); } catch (err) { erreur = err.message; }
-    return rappel({ logs, erreur });
+    try {
+      new Function('console', 'setTimeout', 'setInterval', code)(fauxConsole, monTimeout, monInterval);
+    } catch (err) { erreur = err.message; }
+    const terminer = () => {
+      // Le Worker se fait terminate() : ses minuteurs meurent avec lui. Ici
+      // il faut les éteindre à la main, sans quoi un setInterval de l'élève
+      // continuerait de tourner longtemps après l'affichage du résultat.
+      for (const [genre, id] of programmes) (genre === 't' ? clearTimeout : clearInterval)(id);
+      rappel({ logs, erreur });
+    };
+    if (attente > 0) setTimeout(terminer, Math.min(attente + 100, 1600));
+    else terminer();
+    return;
   }
   const minuteur = setTimeout(() => {
     worker.terminate();
@@ -2117,11 +2163,36 @@ function pageComplete(p, avecPont) {
     'var vrai=console.log;console.log=function(){envoyer("log",joindre(arguments));vrai.apply(console,arguments);};\n' +
     'var vraiErr=console.error;console.error=function(){envoyer("err",joindre(arguments));vraiErr.apply(console,arguments);};\n' +
     'window.onerror=function(m,s,l){var n=l-DECALAGE;envoyer("err",m+(n>0?" (ligne "+n+" de ton JavaScript)":""));return false;};\n' +
+    // Le localStorage de l'origine opaque : lecture immédiate depuis la copie
+    // posée ici, écriture renvoyée au parent qui la conserve. Le « < » est
+    // échappé parce qu'une valeur contenant </script> refermerait la balise.
+    'var __D=' + JSON.stringify(stockageBac()).replace(/</g, '\\u003c') + ';\n' +
+    'function __persister(){try{parent.postMessage({__bac:1,genre:"stockage",d:__D},"*");}catch(e){}}\n' +
+    'function __magasin(d,dur){var m={getItem:function(k){k=String(k);' +
+    'return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null;},' +
+    'setItem:function(k,v){d[String(k)]=String(v);if(dur)__persister();},' +
+    'removeItem:function(k){delete d[String(k)];if(dur)__persister();},' +
+    'clear:function(){for(var k in d)delete d[k];if(dur)__persister();},' +
+    'key:function(i){var c=Object.keys(d);return c[i]===undefined?null:c[i];}};' +
+    'Object.defineProperty(m,"length",{get:function(){return Object.keys(d).length;}});return m;}\n' +
+    'try{Object.defineProperty(window,"localStorage",{value:__magasin(__D,true),writable:true,configurable:true});}catch(e){}\n' +
+    'try{Object.defineProperty(window,"sessionStorage",{value:__magasin({},false),writable:true,configurable:true});}catch(e){}\n' +
     '})();<\/script>';
 
   const prefixe = tete + pont + CALQUE_REPERAGE + '<script>\n';
   const decalage = prefixe.split('\n').length - 1;   // lignes avant la 1re ligne de JS
   return prefixe.replace('__DECALAGE__', decalage) + p.js + '\n<\/script>\n</body>\n</html>';
+}
+
+// Le stockage du bac à sable, tenu par le parent pour le compte de l'aperçu.
+// Une origine opaque n'a pas de localStorage : y toucher lève une
+// SecurityError. Or le cours l'enseigne (jsav-6, proj-4) et le bac est
+// justement où l'on vient l'essayer. On en tient donc un, à part, sous sa
+// propre clé — jamais mêlé à la progression, qui est ce qu'on protège.
+const CLE_STOCK_BAC = 'aac-bac-stockage';
+
+function stockageBac() {
+  try { return JSON.parse(localStorage.getItem(CLE_STOCK_BAC)) || {}; } catch (e) { return {}; }
 }
 
 // Un seul écouteur global pour tous les messages venant de l'aperçu
@@ -2133,6 +2204,11 @@ function installerPont() {
     if (!e.data || !e.data.__bac) return;
     // La souris se promène dans l'aperçu : on éclaire la ligne correspondante.
     if (e.data.genre === 'survol') { viserLigneCode(e.data.ligne); return; }
+    // L'aperçu a écrit dans son localStorage de remplacement : on garde.
+    if (e.data.genre === 'stockage') {
+      try { localStorage.setItem(CLE_STOCK_BAC, JSON.stringify(e.data.d || {})); } catch (x) {}
+      return;
+    }
     const zone = document.getElementById('console-bac');
     if (!zone) return;
     if (zone.querySelector('.vide')) zone.innerHTML = '';
@@ -2163,7 +2239,9 @@ function rendreBac() {
   // ---- Bandeau : le projet ouvert et ce qu'on peut en faire
   let html = '<div class="atelier-tete">' +
     '<div class="atelier-titre"><span class="atelier-puce">🧪</span>' +
-    '<b>Ton atelier</b><em>écris ce que tu veux : rien n\'est corrigé, rien n\'est noté</em></div>' +
+    // Un <h1> et non un <b> : c'est le titre de la vue, et un lecteur d'écran
+    // navigue par titres. Le bac était la seule vue à n'en avoir aucun.
+    '<h1>Ton atelier</h1><em>écris ce que tu veux : rien n\'est corrigé, rien n\'est noté</em></div>' +
     '<div class="atelier-projet">' +
     '<label class="bac-etiquette" for="bac-projet">Projet</label>' +
     '<select id="bac-projet" class="bac-select" onchange="changerProjet(this.value)">';
@@ -2232,7 +2310,17 @@ function rendreBac() {
       '<div class="etiquette-zone etiquette-barre">Aperçu' +
       '<button class="lien-discret" id="btn-apercu" onclick="ouvrirApercuOnglet()" title="Voir ta page en grand">⤢ Ouvrir dans un onglet</button>' +
       '</div>' +
-      '<iframe id="apercu-bac" class="apercu apercu-plein" title="Aperçu de ta page"></iframe></div>' +
+      // sandbox SANS allow-same-origin : l'aperçu tombe dans une origine
+      // opaque, d'où il ne peut plus lire parent.document ni surtout
+      // parent.localStorage — c'est-à-dire toute la progression et tous les
+      // projets. Le bac est l'endroit où l'on colle du code trouvé ailleurs ;
+      // c'était la seule porte ouverte dessus. Le pont ne souffre pas : il
+      // passe par postMessage, qui traverse les origines.
+      //   allow-popups  — le cours enseigne target="_blank" (7 fois)
+      //   allow-forms   — et les formulaires
+      //   allow-modals  — pour qu'un alert() d'essai ne soit pas avalé
+      '<iframe id="apercu-bac" class="apercu apercu-plein" title="Aperçu de ta page"' +
+      ' sandbox="allow-scripts allow-popups allow-forms allow-modals"></iframe></div>' +
       '<div class="sortie-bloc sortie-console">' +
       '<div class="etiquette-zone">Console</div>' +
       '<div id="console-bac" class="console-sortie console-plein"><span class="vide">Les console.log de ton JavaScript s\'afficheront ici.</span></div></div>';

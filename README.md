@@ -96,6 +96,11 @@ Et un **repérage code ↔ page** : survole une ligne de HTML, l'élément qu'el
 l'aperçu. Survole une règle CSS, et ce sont *tous* les éléments qu'elle touche qui s'entourent, avec
 leur compte (`<li> × 3`). C'est le meilleur moyen de comprendre ce que fait un sélecteur.
 
+L'aperçu est **isolé** : il tourne dans une origine à part, d'où il ne peut atteindre ni la page de
+l'application, ni ta progression. Un bac à sable est fait pour qu'on y colle du code trouvé ailleurs
+— il ne fallait pas que ce code puisse effacer six mois de travail. Ton propre `localStorage` y
+fonctionne quand même, dans un coin qui n'appartient qu'à lui.
+
 ### Une page pour revenir en arrière
 
 Réussir un exercice ne veut pas dire l'avoir compris pour toujours — surtout celui qu'on a arraché en
@@ -126,10 +131,21 @@ que de le noyer dans un compte.
 apparaît après combien d'échecs, ce que l'éditeur souligne ou tait dans chacun des sept langages, et
 ce que la recherche retrouve.
 
+Il juge aussi si **le logiciel s'applique ce qu'il enseigne** : le `alt`, le `label` lié à son champ,
+et le vrai bouton plutôt que la `div` cliquable. Il ne s'y tenait pas — les douze cartes de la page
+d'accueil étaient des `<div onclick>`, inatteignables au clavier.
+
 **`outils/verifier-navigateur.html`** couvre les 63 correcteurs que Node laisse de côté : ceux qui
 *mesurent* la page — une largeur, une position, une couleur calculée, une media query. Ni Node ni
 jsdom ne savent faire de mise en page ; seul un vrai navigateur en est capable. Cette page pose les
 deux mêmes questions, et reste ouvrable à la main.
+
+**`outils/test-moteurs.js`** éprouve les deux interprètes écrits à la main — `sql-moteur.js` et
+`moteur-cj.js`, 82 Ko à eux deux. Ils n'étaient jusqu'ici exercés qu'à travers les exercices, donc
+seulement sur ce qu'un exercice se trouve utiliser. 121 vérifications fixent désormais leur contrat :
+ce qu'ils calculent juste, et ce qu'ils doivent refuser en le disant clairement. Chaque attente a été
+**mesurée sur le moteur avant d'être écrite** — on épingle ce qu'il fait, on n'invente pas ce qu'il
+devrait faire.
 
 **`outils/verifier-navigateur.js`** l'ouvre à ta place. Tant qu'il fallait y penser, un correcteur
 de mise en page pouvait partir cassé sans que rien ne crie — 13 % des exercices reposaient sur la
@@ -147,7 +163,9 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 362 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
 358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
- 77 vérifications d'interface     — 0 échec
+192 vérifications d'interface     — 0 échec (aide, éditeur, projets, a11y, affichage, câblage)
+147 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
+ 10 vérifications au navigateur   — 0 échec (Worker, contraste, focus)
 425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
 ```
 
