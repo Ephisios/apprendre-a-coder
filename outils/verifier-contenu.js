@@ -115,7 +115,32 @@ const ctx = creerContexte();
 /* ---- 2. Ce qu'on va accumuler au fil du contrôle ----------------------- */
 const pb = [];    // problèmes certains : un invariant est violé
 const notes = []; // points à regarder à la main, sans certitude
-const stats = { lecons: 0, memos: 0, qcm: 0, exos: 0, types: {} };
+const stats = { lecons: 0, memos: 0, qcm: 0, exos: 0, types: {}, gabarit: [] };
+
+/* Le gabarit de leçon (outils/gabarit-lecon.md). Une leçon y ENTRE en posant
+   son bloc « À retenir » ; dès lors elle doit en avoir toutes les parties. Les
+   leçons écrites avant le gabarit ne sont pas des erreurs : elles sont
+   seulement comptées, pour qu'on voie la conversion avancer. */
+const GABARIT_MOTS_MIN = 350;
+function motsDeCours(html) {
+  return String(html).replace(/<pre[\s\S]*?<\/pre>/g, ' ').replace(/<details[\s\S]*?<\/details>/g, ' ')
+    .replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/g, ' ').split(/\s+/).filter(Boolean).length;
+}
+function controlerGabarit(lecon, ou) {
+  const c = String(lecon.contenu || '');
+  if (!/class="a-retenir"/.test(c)) return;
+  stats.gabarit.push(lecon.id);
+  const manque = [];
+  if (!/<h2>Pourquoi ça existe<\/h2>/.test(c)) manque.push('« Pourquoi ça existe »');
+  if (!/<h2>Les pièges<\/h2>/.test(c)) manque.push('« Les pièges »');
+  if (!/class="memo-table trace"/.test(c)) manque.push('une trace pas à pas (table.trace)');
+  const retenir = (c.match(/<div class="a-retenir">([\s\S]*?)<\/div>/) || [])[1] || '';
+  const points = (retenir.match(/<li>/g) || []).length;
+  if (points < 2 || points > 4) manque.push('un « À retenir » de 2 à 4 points (il en a ' + points + ')');
+  const mots = motsDeCours(c);
+  if (mots < GABARIT_MOTS_MIN) manque.push(GABARIT_MOTS_MIN + ' mots de cours au moins (il en a ' + mots + ')');
+  if (manque.length) pb.push(ou + ' : leçon au gabarit, mais il lui manque ' + manque.join(', '));
+}
 const idsVus = new Map();
 
 /* ---- 3. Inventaire : qui définit quoi ---------------------------------- */
@@ -262,6 +287,7 @@ for (const item of lecons) {
   if (!lecon.id) pb.push(fichier + ' : leçon sans id (« ' + tronque(lecon.titre) + ' »)');
   if (!lecon.titre) pb.push(ou + ' : leçon sans titre');
   if (!lecon.contenu) pb.push(ou + ' : leçon sans contenu');
+  else controlerGabarit(lecon, ou);
   if (lecon.id) {
     if (idsVus.has(lecon.id)) pb.push(ou + ' : id en DOUBLE avec ' + idsVus.get(lecon.id));
     else idsVus.set(lecon.id, ou);
@@ -865,6 +891,8 @@ controler().then(() => {
   console.log('=== Contenu ===');
   console.log(stats.lecons + ' leçons, ' + stats.memos + ' mémos, ' + stats.exos + ' exercices (dont ' + stats.qcm + ' QCM)');
   console.log('types : ' + Object.keys(stats.types).sort().map(k => k + '=' + stats.types[k]).join('  '));
+  console.log('gabarit de leçon : ' + stats.gabarit.length + ' / ' + stats.lecons + ' leçons' +
+    (stats.gabarit.length ? ' (' + stats.gabarit.join(', ') + ')' : ''));
   console.log('');
 
   console.log('=== Non-régression : la solution officielle passe-t-elle son correcteur ? ===');

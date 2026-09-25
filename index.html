@@ -11,8 +11,10 @@
     (function () {
       var choix = null;
       try { choix = localStorage.getItem('aac-theme'); } catch (e) {}
+      // Sans choix enregistré, on suit le système ; s'il ne dit rien, on
+      // ouvre dans le noir, le thème de référence.
       if (!choix) {
-        choix = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'sombre' : 'clair';
+        choix = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'clair' : 'sombre';
       }
       document.documentElement.setAttribute('data-theme', choix);
     })();
@@ -26,7 +28,7 @@
     <div class="logo-rangee">
       <button type="button" class="logo" onclick="allerAccueil()"
               aria-label="Apprendre à coder — revenir à l'accueil">
-        <span class="logo-icone" aria-hidden="true">&lt;/&gt;</span>
+        <span class="logo-icone" aria-hidden="true">&gt;_</span>
         <span class="logo-texte">
           <span class="logo-titre">Apprendre à coder</span>
           <span class="logo-sous">de A à Z, sans internet</span>

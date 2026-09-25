@@ -526,7 +526,12 @@ print(total)   # 54</pre>
   id: 'py-7',
   titre: 'Les fonctions : def',
   contenu: `
-<p>Les fonctions Python font exactement le même travail qu'en JavaScript : emballer du code réutilisable. Seul le costume change :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Imagine un programme qui calcule un prix avec la TVA à cinq endroits différents. Le jour où le taux change, il faut retrouver et corriger les cinq ; en oublier un, c'est un bug que personne ne verra avant qu'un client paie le mauvais prix. Une <strong>fonction</strong> règle ça : on donne un nom à un morceau de code, on l'écrit <em>une</em> fois, et on l'appelle autant de fois qu'on veut. Le jour où il faut changer quelque chose, on le change à un seul endroit.</p>
+<p>Tu t'en sers déjà sans le savoir : <code>print</code>, <code>len</code>, <code>input</code> sont des fonctions que quelqu'un a écrites pour toi. Ici, tu écris les tiennes.</p>
+
+<h2>def : définir une fonction</h2>
+<p>Les fonctions Python font le même travail qu'en JavaScript ; seul le costume change :</p>
 <pre class="bloc-code"># JavaScript
 function bonjour(prenom) {
   console.log("Bonjour " + prenom);
@@ -538,7 +543,13 @@ def bonjour(prenom):
 
 bonjour("Nadia")   # l'appel est identique
 bonjour("Karim")</pre>
-<p><code>def</code> (pour « define »), le nom, les paramètres entre parenthèses, le <code>:</code> — et le corps indenté, évidemment.</p>
+<ul>
+<li><code>def</code> (pour <em>define</em>, « définir ») annonce une fonction ;</li>
+<li><code>bonjour</code> est son nom ;</li>
+<li><code>prenom</code>, entre parenthèses, est son <strong>paramètre</strong> : une variable qui recevra une valeur à chaque appel ;</li>
+<li>les deux-points <code>:</code> ouvrent le corps, et tout le corps est <strong>indenté</strong>. C'est l'indentation, et elle seule, qui dit où la fonction s'arrête.</li>
+</ul>
+<p>Écrire la fonction ne l'exécute pas : c'est une recette rangée dans un tiroir. Elle ne tourne que quand on l'<strong>appelle</strong>, avec des parenthèses : <code>bonjour("Nadia")</code>. La valeur passée à l'appel, <code>"Nadia"</code>, s'appelle un <strong>argument</strong>.</p>
 
 <h2>return : la fonction qui répond</h2>
 <pre class="bloc-code">def aire_rectangle(largeur, hauteur):
@@ -547,9 +558,49 @@ bonjour("Karim")</pre>
 surface = aire_rectangle(4, 5)
 print(surface)              # 20
 print(aire_rectangle(3, 3)) # 9 — utilisable directement dans un print</pre>
-<p>Même distinction cruciale qu'en JavaScript : <code>print</code> <em>montre</em> une valeur à l'écran, <code>return</code> la <em>renvoie</em> au programme pour qu'il puisse s'en servir (la ranger dans une variable, la réutiliser dans un calcul…).</p>
+<p>La distinction la plus importante de la leçon : <code>print</code> <em>montre</em> une valeur à l'écran, pour l'humain qui regarde. <code>return</code> la <em>renvoie</em> au programme, qui peut la ranger dans une variable, la réutiliser dans un calcul, la passer à une autre fonction. Une fonction qui calcule quelque chose devrait presque toujours faire <code>return</code>, et laisser à l'appelant le choix de l'afficher.</p>
 
-<div class="astuce"><div>Les noms de fonctions Python s'écrivent en <code>minuscules_avec_tirets_bas</code> : <code>aire_rectangle</code>, <code>calculer_age</code>. C'est la convention officielle du langage (elle a même un nom : PEP 8).</div></div>
+<h2>Pas à pas</h2>
+<p>Que se passe-t-il pendant <code>surface = aire_rectangle(4, 5)</code> ?</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>appel</td><td>Python saute dans la fonction : <code>largeur</code> reçoit <code>4</code>, <code>hauteur</code> reçoit <code>5</code>, dans l'ordre des parenthèses.</td></tr>
+<tr><td>calcul</td><td><code>largeur * hauteur</code> donne <code>20</code>.</td></tr>
+<tr><td>return</td><td>La fonction s'arrête et renvoie <code>20</code> : l'appel <code>aire_rectangle(4, 5)</code> « vaut » 20.</td></tr>
+<tr><td>retour</td><td>Python revient à la ligne de l'appel et range 20 dans <code>surface</code>. <code>largeur</code> et <code>hauteur</code> n'existent plus : elles ne vivaient que pendant l'appel.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier le return.</strong> C'est le plus sournois, parce que rien ne plante :</p>
+<pre class="bloc-code">def aire(largeur, hauteur):
+    print(largeur * hauteur)    # montre 20… mais ne renvoie rien
+
+resultat = aire(4, 5)
+print(resultat)                 # None</pre>
+<p><code>None</code>, c'est la façon dont Python dit « rien ». Si tu vois un <code>None</code> inattendu, regarde d'abord s'il ne manque pas un <code>return</code>.</p>
+<p><strong>Appeler avant de définir.</strong> Python lit le fichier de haut en bas. Si l'appel <code>bonjour("Nadia")</code> est écrit au-dessus du <code>def</code>, la fonction n'existe pas encore, et l'éditeur te le dira : « le nom « bonjour » est inconnu ». Les <code>def</code> se placent en haut, les appels en dessous.</p>
+<p><strong>Oublier les parenthèses.</strong> <code>bonjour</code> tout seul, sans parenthèses, ne provoque aucune erreur… et n'affiche rien : on a <em>nommé</em> la fonction sans l'<em>appeler</em>. Les parenthèses, c'est le bouton « lancer ».</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un vrai programme Python, c'est surtout des fonctions courtes, chacune avec un nom qui dit ce qu'elle fait : <code>calculer_total</code>, <code>envoyer_email</code>, <code>lire_fichier</code>. Et une bibliothèque Python, comme celles qui servent à analyser des données ou à faire de l'intelligence artificielle, n'est rien d'autre qu'une grande collection de fonctions écrites par d'autres, que tu appelles avec leur nom et tes arguments.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>def nom(parametres):</code> puis un corps indenté. Écrire une fonction ne l'exécute pas ; il faut l'appeler, avec des parenthèses.</li>
+<li><code>return</code> renvoie une valeur au programme ; <code>print</code> ne fait que la montrer. Sans <code>return</code>, la fonction renvoie <code>None</code>.</li>
+<li>On définit d'abord, on appelle ensuite.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : return arrête tout</summary>
+<p>Dès qu'un <code>return</code> est exécuté, la fonction s'arrête, même s'il reste des lignes en dessous. On s'en sert pour sortir tôt :</p>
+<pre class="bloc-code">def diviser(a, b):
+    if b == 0:
+        return "division impossible"
+    return a / b</pre>
+<p>Si <code>b</code> vaut 0, la deuxième ligne n'est jamais atteinte. C'est souvent plus lisible qu'un <code>else</code>. Et les noms de fonctions Python s'écrivent en <code>minuscules_avec_tirets_bas</code> : c'est la convention officielle du langage, décrite dans un texte appelé PEP 8.</p>
+</details>
 `,
   exercices: [
     {

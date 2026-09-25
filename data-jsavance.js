@@ -83,19 +83,177 @@ console.log(invites.join(" et "));      // "Léa et Tom et Nina" — coller en u
 },
 
 {
+  id: 'jsav-fleches',
+  titre: 'Les fonctions fléchées : une fonction en une ligne',
+  contenu: `
+<h2>Pourquoi ça existe</h2>
+<p>En JavaScript, on passe sans arrêt une fonction à une autre fonction : à <code>sort</code> pour dire comment trier, à <code>setTimeout</code> pour dire quoi faire plus tard, à un bouton pour dire quoi faire au clic. Tu l'as d'ailleurs déjà fait sans qu'on s'y arrête, avec <code>(a, b) =&gt; a - b</code> dans le module précédent.</p>
+<p>Ces fonctions-là sont minuscules et ne servent qu'une fois. Les écrire avec <code>function</code>, des accolades et un <code>return</code>, c'est trois lignes de cérémonie pour une ligne de calcul : l'essentiel se noie. La <strong>fonction fléchée</strong> est une écriture courte de la même chose. Elle ne fait rien de plus, elle prend juste moins de place.</p>
+
+<h2>De la fonction classique à la flèche</h2>
+<p>Voici quatre versions de la <em>même</em> fonction. Chaque étape retire quelque chose d'inutile (dans un vrai programme, on n'en garderait qu'une) :</p>
+<pre class="bloc-code">// 1. La fonction classique
+function doubler(n) {
+  return n * 2;
+}
+
+// 2. Rangée dans une constante
+const doubler = function (n) {
+  return n * 2;
+};
+
+// 3. La flèche remplace le mot « function »
+const doubler = (n) => {
+  return n * 2;
+};
+
+// 4. Une seule instruction : accolades et return disparaissent
+const doubler = (n) => n * 2;</pre>
+<p>La dernière ligne se lit : « <code>doubler</code>, c'est ce qui, à partir de <code>n</code>, donne <code>n * 2</code> ». À gauche de la flèche, ce qui entre ; à droite, ce qui sort.</p>
+
+<h2>Les formes que tu croiseras</h2>
+<pre class="bloc-code">// Aucun paramètre : des parenthèses vides
+const direBonjour = () => console.log("Bonjour");
+
+// Un paramètre, puis deux
+const carre = (n) => n * n;
+const additionner = (a, b) => a + b;
+
+// Plusieurs lignes : accolades, et return redevient obligatoire
+const moyenne = (a, b) => {
+  const somme = a + b;
+  return somme / 2;
+};</pre>
+<p>Avec un seul paramètre, les parenthèses sont facultatives : <code>n =&gt; n * n</code> marche aussi. On les garde ici, pour que la forme soit toujours la même.</p>
+
+<h2>Pas à pas</h2>
+<p>Que se passe-t-il exactement avec ces deux lignes ?</p>
+<pre class="bloc-code">const prixTTC = (prix) => prix * 1.2;
+console.log(prixTTC(50));</pre>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>ligne 1</td><td>JavaScript range la fonction dans <code>prixTTC</code>. Rien n'est calculé : on a seulement décrit la recette.</td></tr>
+<tr><td>prixTTC(50)</td><td>La fonction est appelée : <code>prix</code> reçoit la valeur <code>50</code>.</td></tr>
+<tr><td>prix * 1.2</td><td>Le calcul donne <code>60</code>.</td></tr>
+<tr><td>retour</td><td>Pas d'accolades, donc le résultat est renvoyé tout seul : <code>prixTTC(50)</code> vaut <code>60</code>, et <code>console.log</code> l'affiche.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Des accolades, mais pas de return.</strong> C'est l'erreur numéro un. Dès qu'il y a des accolades, le retour automatique disparaît :</p>
+<pre class="bloc-code">const tripler = (n) => { n * 3 };
+console.log(tripler(4));   // undefined — le calcul est fait, puis jeté</pre>
+<p>Deux corrections possibles : enlever les accolades (<code>(n) =&gt; n * 3</code>), ou écrire le <code>return</code> (<code>(n) =&gt; { return n * 3; }</code>).</p>
+<p><strong>Renvoyer un objet.</strong> Les accolades d'un objet ressemblent à celles d'un bloc, et JavaScript choisit le bloc. Il faut entourer l'objet de parenthèses :</p>
+<pre class="bloc-code">// Pris pour un bloc : renvoie undefined
+const creer = (nom) => { nom: nom };
+
+// Pris pour un objet : renvoie { nom: "Léa" }
+const creer = (nom) => ({ nom: nom });</pre>
+<p><strong>L'appeler trop tôt.</strong> Une fonction écrite avec <code>function</code> peut être appelée avant sa ligne ; une flèche rangée dans un <code>const</code>, non. JavaScript s'arrête avec le message « Cannot access 'doubler' before initialization » : impossible d'utiliser la constante avant sa ligne. Déclare d'abord, appelle ensuite.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ouvre le code de n'importe quel site récent : les flèches sont partout où une fonction ne sert qu'une fois.</p>
+<pre class="bloc-code">// Au clic sur un bouton
+bouton.addEventListener("click", () => afficherMenu());
+
+// Dans 3 secondes
+setTimeout(() => console.log("Temps écoulé"), 3000);
+
+// Pour trier des nombres
+prix.sort((a, b) => a - b);</pre>
+<p>Et surtout, dans la leçon suivante : <code>forEach</code>, <code>map</code> et <code>filter</code>, qui reçoivent chacune une petite flèche.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>(paramètres) =&gt; résultat</code> : une fonction, écrite court.</li>
+<li>Une seule expression après la flèche : le <code>return</code> est automatique. Des accolades : il faut l'écrire.</li>
+<li>On s'en sert surtout là où une fonction ne sert qu'une fois : tri, clic, minuterie, <code>map</code> et <code>filter</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : flèche et function, pas tout à fait jumelles</summary>
+<p>Une différence n'apparaîtra qu'avec les objets et les classes : le mot <code>this</code>. Une fonction classique a son propre <code>this</code> (« l'objet sur lequel on m'a appelée »), une flèche n'en a pas : elle reprend celui de l'endroit où elle est écrite. C'est pour cela qu'on écrit en général les méthodes d'une classe sans flèche, et les petites fonctions passées en argument avec. Tu croiseras <code>this</code> dans la leçon sur les classes.</p>
+</details>
+`,
+  exercices: [
+    {
+      type: 'js',
+      consigne: 'Réécris la fonction <code>carre</code> en fonction fléchée, sur une seule ligne et sans le mot <code>function</code>, rangée dans une constante <code>carre</code>. Puis affiche <code>carre(7)</code>.',
+      codeDepart: 'function carre(n) {\n  return n * n;\n}\n\nconsole.log(carre(7));\n',
+      indices: [
+        "Le calcul ne change pas : seule l’écriture raccourcit. Ce qui entre à gauche de la flèche, ce qui sort à droite.",
+        "La fonction se range dans une constante : <code>const carre = …</code>. Une seule instruction, donc ni accolades ni <code>return</code>.",
+        "<code>const carre = (n) =&gt; n * n;</code> puis <code>console.log(carre(7));</code>"
+      ],
+      solution: 'const carre = (n) => n * n;\n\nconsole.log(carre(7));',
+      verifier: function (ctx) {
+        if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
+        if (/\bfunction\b/.test(ctx.code)) return { ok: false, message: 'Le mot <code>function</code> est encore là : la flèche <code>=&gt;</code> doit le remplacer.' };
+        if (!/=>/.test(ctx.code)) return { ok: false, message: 'Il manque la flèche : <code>const carre = (n) =&gt; n * n;</code>' };
+        if (!ctx.logs.includes('49')) return { ok: false, message: 'La fonction est écrite, mais <code>carre(7)</code> doit afficher 49. As-tu gardé le <code>console.log</code> ?' };
+        return { ok: true, message: 'Même fonction, trois lignes de moins. C\'est exactement ce que fait une flèche : rien de plus, en plus court.' };
+      }
+    },
+    {
+      type: 'js',
+      consigne: '<strong>Entraînement :</strong> écris une fonction fléchée <code>prixTTC</code> qui reçoit un prix hors taxes et renvoie ce prix multiplié par <code>1.2</code>. Affiche ensuite <code>prixTTC(50)</code> (attendu : 60) puis <code>prixTTC(15)</code> (attendu : 18).',
+      codeDepart: '// Ta fonction fléchée ici\n\n',
+      indices: [
+        "Une entrée (le prix hors taxes), une sortie (le prix TTC) : c’est une fonction d’une seule ligne.",
+        "À gauche de la flèche, le paramètre entre parenthèses ; à droite, le calcul. Sans accolades, le résultat est renvoyé tout seul.",
+        "<code>const prixTTC = (prix) =&gt; prix * 1.2;</code> puis deux <code>console.log</code>."
+      ],
+      solution: 'const prixTTC = (prix) => prix * 1.2;\n\nconsole.log(prixTTC(50));\nconsole.log(prixTTC(15));',
+      verifier: function (ctx) {
+        if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
+        if (!/prixTTC\s*=\s*\(?\s*\w*\s*\)?\s*=>/.test(ctx.code)) return { ok: false, message: 'Écris <code>prixTTC</code> comme une fonction fléchée : <code>const prixTTC = (prix) =&gt; …</code>' };
+        if (ctx.logs.includes('undefined')) return { ok: false, message: 'Un <code>undefined</code> s\'affiche : si ta flèche a des accolades, il lui faut un <code>return</code>. Sinon, enlève les accolades.' };
+        if (!ctx.logs.includes('60')) return { ok: false, message: '<code>prixTTC(50)</code> doit afficher 60. Vérifie le calcul : <code>prix * 1.2</code>.' };
+        if (!ctx.logs.includes('18')) return { ok: false, message: '60, c\'est bon ! Affiche aussi <code>prixTTC(15)</code>, qui doit donner 18.' };
+        return { ok: true, message: 'Une ligne, une fonction réutilisable : change le taux à un seul endroit, et tous les prix suivent.' };
+      }
+    },
+    {
+      type: 'js',
+      consigne: '<strong>Chasse au bug :</strong> ce programme devrait afficher 12, mais il affiche <code>undefined</code>. Trouve pourquoi et corrige-le, en gardant une fonction fléchée.',
+      codeDepart: 'const tripler = (n) => { n * 3 };\n\nconsole.log(tripler(4));\n',
+      indices: [
+        "Le calcul est juste. Le problème est ailleurs : la fonction fait bien <code>4 * 3</code>… mais qu’en fait-elle ensuite ?",
+        "Le retour automatique n’existe que <strong>sans</strong> accolades. Avec des accolades, il faut dire explicitement ce qu’on renvoie.",
+        "Soit <code>(n) =&gt; n * 3</code> (sans accolades), soit <code>(n) =&gt; { return n * 3; }</code>."
+      ],
+      solution: 'const tripler = (n) => n * 3;\n\nconsole.log(tripler(4));',
+      verifier: function (ctx) {
+        if (ctx.erreur) return { ok: false, message: 'Ton code a une erreur : <code>' + ctx.erreur.replace(/</g, '&lt;') + '</code>' };
+        if (!/=>/.test(ctx.code)) return { ok: false, message: 'Garde une fonction fléchée : le but est de réparer la flèche, pas de revenir à <code>function</code>.' };
+        if (ctx.logs.includes('undefined')) return { ok: false, message: 'Toujours <code>undefined</code> : le calcul se fait, mais rien n\'est renvoyé. Enlève les accolades, ou ajoute un <code>return</code>.' };
+        if (!ctx.logs.includes('12')) return { ok: false, message: '<code>tripler(4)</code> doit afficher 12.' };
+        return { ok: true, message: 'Le piège numéro un des flèches, désamorcé : des accolades, et le return redevient ton travail.' };
+      }
+    }
+  ]
+},
+
+{
   id: 'jsav-2',
   titre: 'forEach, map, filter : la boîte à outils des pros',
   contenu: `
-<p>Voici les trois méthodes que tu verras dans TOUT code JavaScript moderne. Elles prennent une fonction en argument — d'abord, un raccourci d'écriture indispensable :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Presque tout ce qu'on fait avec un tableau tient en trois gestes : <strong>agir</strong> sur chaque élément (l'afficher, l'envoyer), <strong>transformer</strong> chaque élément (un prix en prix soldé), <strong>garder</strong> certains éléments (les produits en stock). Avec une boucle <code>for</code>, chacun de ces gestes demande un compteur, un tableau vide, un <code>push</code>… et l'intention se perd dans la mécanique :</p>
+<pre class="bloc-code">// Garder les notes d'au moins 10, avec une boucle
+let admis = [];
+for (let i = 0; i &lt; notes.length; i++) {
+  if (notes[i] >= 10) {
+    admis.push(notes[i]);
+  }
+}
 
-<h2>Les fonctions fléchées</h2>
-<pre class="bloc-code">// Fonction classique          // Fonction fléchée (identique !)
-function doubler(n) {          const doubler = (n) => n * 2;
-  return n * 2;
-}</pre>
-<p>La flèche <code>=&gt;</code> remplace <code>function</code> et, sur une seule ligne, le <code>return</code> est automatique. Compact, très utilisé.</p>
+// La même chose, avec filter
+let admis = notes.filter((n) => n >= 10);</pre>
+<p>Les deux font exactement pareil. Mais la seconde se lit comme une phrase : « les notes, filtrées, pour garder celles d'au moins 10 ». Chacune de ces méthodes <strong>nomme un geste</strong>, et reçoit une petite fonction fléchée qui dit quoi faire de chaque élément.</p>
 
-<h2>Les trois mousquetaires</h2>
+<h2>Les trois gestes</h2>
 <pre class="bloc-code">let nombres = [1, 2, 3, 4, 5, 6];
 
 // forEach : FAIRE quelque chose pour chaque élément
@@ -108,8 +266,55 @@ console.log(doubles);    // [2,4,6,8,10,12]
 // filter : GARDER certains éléments → nouveau tableau
 let pairs = nombres.filter((n) => n % 2 === 0);
 console.log(pairs);      // [2,4,6]</pre>
+<table class="memo-table">
+<tr><th>Méthode</th><th>Question</th><th>Renvoie</th></tr>
+<tr><td>forEach</td><td>Que faire de chacun ?</td><td>rien (<code>undefined</code>)</td></tr>
+<tr><td>map</td><td>Que devient chacun ?</td><td>un nouveau tableau, de même longueur</td></tr>
+<tr><td>filter</td><td>Lesquels garder ?</td><td>un nouveau tableau, plus court ou égal</td></tr>
+</table>
+<p>Pour <code>filter</code>, la fonction doit répondre par vrai ou faux : c'est une <em>condition</em>. Ce qui répond vrai reste, le reste disparaît.</p>
 
-<div class="astuce">✅ Comment choisir ? <strong>forEach</strong> = « fais ça pour chacun » (affichage...). <strong>map</strong> = « transforme chacun » (même nombre d'éléments, valeurs modifiées). <strong>filter</strong> = « garde ceux qui... » (moins d'éléments, valeurs intactes).</div>
+<h2>Pas à pas</h2>
+<p>Que fait réellement <code>map</code> ici ?</p>
+<pre class="bloc-code">let prix = [3, 8, 5];
+let doubles = prix.map((p) => p * 2);</pre>
+<table class="memo-table trace">
+<tr><th>Tour</th><th>Ce qui se passe</th></tr>
+<tr><td>1</td><td><code>p</code> reçoit <code>3</code>, la flèche renvoie <code>6</code>, rangé dans le nouveau tableau.</td></tr>
+<tr><td>2</td><td><code>p</code> reçoit <code>8</code>, la flèche renvoie <code>16</code>.</td></tr>
+<tr><td>3</td><td><code>p</code> reçoit <code>5</code>, la flèche renvoie <code>10</code>.</td></tr>
+<tr><td>fin</td><td><code>doubles</code> vaut <code>[6, 16, 10]</code>. Et <code>prix</code> vaut toujours <code>[3, 8, 5]</code> : l'original n'est jamais touché.</td></tr>
+</table>
+<p>C'est <code>map</code> qui fait la boucle et qui appelle ta fonction une fois par élément. Toi, tu n'écris que ce qui arrive à <em>un</em> élément.</p>
+
+<h2>Enchaîner</h2>
+<p>Comme <code>map</code> et <code>filter</code> renvoient un tableau, on peut appeler la méthode suivante directement dessus :</p>
+<pre class="bloc-code">let temperatures = [20, -5, 25, -12];
+let positivesEnFahrenheit = temperatures
+  .filter((c) => c > 0)           // [20, 25]
+  .map((c) => c * 1.8 + 32);      // [68, 77]</pre>
+<p>L'ordre compte : on filtre d'abord, pour ne pas transformer des valeurs qu'on va jeter.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Attendre un résultat de forEach.</strong> <code>forEach</code> agit, il ne fabrique rien : <code>let r = nombres.forEach(…)</code> donne <code>undefined</code>. Pour obtenir un nouveau tableau, c'est <code>map</code> ou <code>filter</code>.</p>
+<p><strong>Des accolades sans return dans map.</strong> Le piège de la leçon précédente revient ici en force : <code>nombres.map((n) =&gt; { n * 2 })</code> donne un tableau rempli de <code>undefined</code>, un par élément. (La console de ce logiciel les affiche sous la forme <code>[null,null,…]</code> : même signe, même cause.)</p>
+<p><strong>Croire que l'original change.</strong> <code>prix.map(…)</code> seul, sans ranger le résultat, ne sert à rien : <code>prix</code> reste identique. Il faut écrire <code>let soldes = prix.map(…)</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La page d'une boutique en ligne, c'est souvent exactement ça : la liste des produits reçue du serveur, <code>filter</code> pour ne garder que ceux en stock ou dans la bonne catégorie, <code>map</code> pour transformer chacun en carte à afficher. Un tableau de bord fait pareil avec des ventes, une appli météo avec des relevés. Ces trois méthodes sont parmi les lignes de JavaScript les plus écrites au monde.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>forEach</code> agit sur chacun, <code>map</code> transforme chacun, <code>filter</code> garde certains.</li>
+<li><code>map</code> et <code>filter</code> renvoient un <strong>nouveau</strong> tableau : il faut le ranger. L'original ne change pas.</li>
+<li>On peut les enchaîner : <code>tableau.filter(…).map(…)</code>, en filtrant d'abord.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la position, et reduce</summary>
+<p>La petite fonction reçoit aussi la position de l'élément, en second paramètre : <code>noms.map((nom, i) =&gt; (i + 1) + ". " + nom)</code> numérote une liste. Et un quatrième geste existe, pour <em>résumer</em> tout un tableau en une seule valeur (une somme, un maximum) : <code>reduce</code>, que tu as croisé avec le tri. Il est plus difficile à lire ; on ne le sort que quand les trois autres ne suffisent pas.</p>
+</details>
 `,
   exercices: [
     {
