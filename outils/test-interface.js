@@ -80,7 +80,26 @@ sources.push(`
     rendreLecon: id => rendreLecon(id),
     rendreBac: () => rendreBac(),
     rendreMemos: o => rendreMemos(o),
-    executerJS: (code, rappel) => executerJS(code, rappel)
+    executerJS: (code, rappel) => executerJS(code, rappel),
+
+    // Le bac à sable : « bac » est déclaré en let, donc inatteignable de
+    // l'extérieur sans passerelle (voir la note de montage en tête de fichier).
+    bacEtat: () => bac,
+    poserBac: (v) => { bac = v; },
+    cleBac: () => CLE_BAC,
+    modeles: () => MODELES,
+    nomLibre: (n) => nomLibre(n),
+    creerProjet: (n, m) => creerProjet(n, m),
+    projetCourant: () => projetCourant(),
+    changerProjet: (n) => changerProjet(n),
+    supprimerProjet: () => supprimerProjet(),
+    exporterProjet: () => exporterProjet(),
+
+    // Les gestes du clavier dans l'éditeur.
+    indenter: (z, p) => indenterEditeur(z, p),
+    desindenter: (z, p) => desindenterEditeur(z, p),
+    brancherClavier: (z, p, id, r, v) => brancherClavierEditeur(z, p, id, r, v),
+    majLignes: (i) => majLignes(i)
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -474,6 +493,219 @@ for (const [titre, rendre] of VUES) {
   const h1 = contenu.querySelectorAll('h1').length;
   verifie('a11y — « ' + titre + ' » a un titre de niveau 1 et un seul', h1, 1);
 }
+
+/* ========================================================================
+   Les projets du bac à sable
+   ========================================================================
+   Le bac garde les projets de l'élève dans le localStorage, et rien ne les
+   vérifiait. La sauvegarde de la PROGRESSION est testée depuis longtemps ;
+   celle de son TRAVAIL, non. Un défaut ici ne se rattrape pas : il n'y a pas
+   de deuxième copie.
+
+   Deux points comptent plus que les autres. Le garde-fou qui empêche de
+   supprimer son dernier projet — sans lui, un clic laisse l'atelier vide.
+   Et la reprise en douceur d'un projet enregistré AVANT l'ajout des onglets
+   SQL, C et Java : projetCourant le complète à la volée, faute de quoi un
+   ancien projet ferait planter l'éditeur. */
+
+console.log('\n=== Le bac à sable garde-t-il le travail de l\'élève ? ===\n');
+
+function bacNeuf(projets, courant, onglet) {
+  pont.poserBac({ projets: projets, courant: courant, onglet: onglet || 'web', fichier: 'html' });
+}
+
+// --- nomLibre : deux projets ne peuvent pas porter le même nom ---
+bacNeuf({}, null);
+verifie('bac — un nom libre est rendu tel quel', pont.nomLibre('Essai'), 'Essai');
+bacNeuf({ 'Essai': {} }, 'Essai');
+verifie('bac — un nom déjà pris devient « Essai 2 »', pont.nomLibre('Essai'), 'Essai 2');
+bacNeuf({ 'Essai': {}, 'Essai 2': {} }, 'Essai');
+verifie('bac — puis « Essai 3 »', pont.nomLibre('Essai'), 'Essai 3');
+
+// --- créer ---
+LS.clear();
+bacNeuf({}, null);
+const cree = pont.creerProjet('Mon essai', 'vide');
+verifie('bac — créer rend le nom retenu', cree, 'Mon essai');
+verifie('bac — le projet existe', !!pont.bacEtat().projets['Mon essai'], true);
+verifie('bac — il devient le projet courant', pont.bacEtat().courant, 'Mon essai');
+verifie('bac — et il est écrit dans le localStorage', !!LS.getItem(pont.cleBac()), true);
+verifie('bac — un projet neuf a ses sept fichiers',
+        Object.keys(pont.bacEtat().projets['Mon essai']).sort().join(','), 'c,css,html,java,js,py,sql');
+
+// Choisir un modèle Python en étant côté web afficherait sinon un éditeur
+// HTML qui n'a rien à voir avec ce qu'on vient de demander.
+const modelePython = Object.keys(pont.modeles()).find((k) => pont.modeles()[k].python);
+if (modelePython) {
+  bacNeuf({}, null, 'web');
+  pont.creerProjet('Essai python', modelePython);
+  verifie('bac — un modèle Python ouvre l\'onglet Python', pont.bacEtat().onglet, 'python');
+}
+
+// --- projetCourant : il répare ce qui manque ---
+bacNeuf({ 'Ancien': { html: '<p>x</p>', css: '', js: '' } }, 'Ancien');
+const repare = pont.projetCourant();
+verifie('bac — un projet d\'avant les onglets SQL/C/Java est complété',
+        [typeof repare.sql, typeof repare.c, typeof repare.java].join(','), 'string,string,string');
+verifie('bac — et son HTML n\'a pas été touché', repare.html, '<p>x</p>');
+
+bacNeuf({ 'A': { html: 'a' }, 'B': { html: 'b' } }, 'Disparu');
+pont.projetCourant();
+verifie('bac — un projet courant disparu retombe sur un autre', pont.bacEtat().courant, 'A');
+
+bacNeuf({}, null);
+pont.projetCourant();
+verifie('bac — sans aucun projet, il en crée un', Object.keys(pont.bacEtat().projets).length, 1);
+
+// --- changer ---
+poserScene();
+bacNeuf({ 'A': { html: 'a' }, 'B': { html: 'b' } }, 'A');
+pont.changerProjet('B');
+verifie('bac — changer de projet suit', pont.bacEtat().courant, 'B');
+pont.changerProjet('Inconnu');
+verifie('bac — un nom inconnu ne change rien', pont.bacEtat().courant, 'B');
+
+// --- supprimer : c'est là qu'on perd du travail ---
+let demandes = [];
+win.alert = (q) => { demandes.push('ALERTE:' + String(q)); };
+
+/* Le confirm dit OUI ici, et c'est tout l'intérêt : si le garde-fou saute,
+   le dernier projet DISPARAÎT pour de bon. L'éprouver avec un confirm qui
+   refuse ne prouverait rien — le projet survivrait de toute façon, et le
+   contrôle resterait vert sans rien garantir. */
+win.confirm = (q) => { demandes.push('CONFIRME:' + String(q)); return true; };
+poserScene();
+bacNeuf({ 'Seul': { html: 'a' } }, 'Seul');
+demandes = [];
+pont.supprimerProjet();
+/* Compter les projets ne suffirait pas, et c'est un piège à connaître :
+   si le garde-fou saute, le projet EST supprimé, puis rendreBac appelle
+   projetCourant, qui en recrée aussitôt un vide. Le compte revient à 1 et
+   tout a l'air normal — alors que le travail de l'élève a disparu. Seul le
+   NOM le dit. */
+verifie('bac — le dernier projet survit, sous son nom',
+        Object.keys(pont.bacEtat().projets).join(','), 'Seul');
+verifie('bac — on le dit, au lieu de ne rien faire',
+        demandes.length === 1 && demandes[0].indexOf('ALERTE:') === 0, true);
+verifie("bac — et la confirmation n'est même pas posée",
+        demandes.some((d) => d.indexOf('CONFIRME:') === 0), false);
+
+win.confirm = (q) => { demandes.push(String(q)); return false; };
+poserScene();
+bacNeuf({ 'A': { html: 'a' }, 'B': { html: 'b' } }, 'A');
+demandes = [];
+pont.supprimerProjet();
+verifie('bac — supprimer demande confirmation', demandes.length, 1);
+verifie('bac — refuser ne supprime rien', Object.keys(pont.bacEtat().projets).length, 2);
+
+win.confirm = () => true;
+poserScene();
+bacNeuf({ 'A': { html: 'a' }, 'B': { html: 'b' } }, 'A');
+pont.supprimerProjet();
+verifie('bac — accepter supprime le bon projet',
+        Object.keys(pont.bacEtat().projets).join(','), 'B');
+verifie('bac — et le courant retombe sur celui qui reste', pont.bacEtat().courant, 'B');
+
+// --- exporter : le nom du fichier et son extension ---
+// jsdom n'a pas createObjectURL : on le pose, et on retient le lien fabriqué.
+let telecharge = null;
+win.URL.createObjectURL = () => 'blob:essai';
+win.URL.revokeObjectURL = () => {};
+const vraiClic = win.HTMLAnchorElement.prototype.click;
+win.HTMLAnchorElement.prototype.click = function () { telecharge = this.download; };
+
+for (const [onglet, extension] of [['web', '.html'], ['python', '.py'], ['sql', '.sql'], ['c', '.c'], ['java', '.java']]) {
+  poserScene();
+  bacNeuf({ 'Mon projet': { html: 'h', css: '', js: '', py: 'p', sql: 's', c: 'c', java: 'j' } }, 'Mon projet', onglet);
+  telecharge = null;
+  pont.exporterProjet();
+  verifie('bac — export depuis l\'onglet « ' + onglet + ' »', telecharge, 'Mon-projet' + extension);
+}
+
+poserScene();
+bacNeuf({ 'Café: / brûlé*?' : { html: 'h', css: '', js: '', py: '', sql: '', c: '', java: '' } }, 'Café: / brûlé*?', 'web');
+telecharge = null;
+pont.exporterProjet();
+verifie('bac — un nom à caractères interdits devient un nom de fichier sûr',
+        /^[a-zA-Z0-9à-ÿ_-]+\.html$/.test(String(telecharge)), true);
+win.HTMLAnchorElement.prototype.click = vraiClic;
+
+/* ========================================================================
+   Les gestes du clavier dans l'éditeur
+   ========================================================================
+   Une zoneClavier de texte qui avale la touche Tab est un piège au clavier : on y
+   entre, on n'en sort plus. C'est un manquement d'accessibilité caractérisé,
+   et le cours l'enseigne lui-même. L'éditeur capture bien Tab — il faut
+   pouvoir indenter — mais Échap relâche la capture, et l'astuce affichée
+   change pour le dire. Rien ne vérifiait cette porte de sortie.
+
+   jsdom ne fournit pas document.execCommand : les deux fonctions prennent
+   donc leur chemin manuel, celui qui manipule la valeur à la main. C'est
+   celui qu'on veut éprouver, puisque c'est le seul qui soit à nous. */
+
+console.log('\n=== L\'éditeur laisse-t-il sortir au clavier ? ===\n');
+
+function zoneClavierAvec(texte, curseur) {
+  poserScene();
+  const z = win.document.createElement('textarea');
+  z.value = texte;
+  z.selectionStart = z.selectionEnd = curseur === undefined ? texte.length : curseur;
+  win.document.body.appendChild(z);
+  return z;
+}
+
+let z = zoneClavierAvec('abc', 3);
+pont.indenter(z, '    ');
+verifie('éditeur — Tab insère l\'indentation au curseur', z.value, 'abc    ');
+
+z = zoneClavierAvec('ab', 1);
+pont.indenter(z, '    ');
+verifie('éditeur — et au milieu aussi', z.value, 'a    b');
+verifie('éditeur — le curseur suit l\'insertion', z.selectionStart, 5);
+
+z = zoneClavierAvec('x\n        y', 11);
+pont.desindenter(z, '    ');
+verifie('éditeur — Maj+Tab retire quatre espaces', z.value, 'x\n    y');
+
+z = zoneClavierAvec('x\n  y', 5);
+pont.desindenter(z, '    ');
+verifie('éditeur — il ne retire que ce qui est là', z.value, 'x\ny');
+
+z = zoneClavierAvec('x\ny', 3);
+pont.desindenter(z, '    ');
+verifie('éditeur — et rien du tout s\'il n\'y a pas d\'espaces', z.value, 'x\ny');
+
+// --- la porte de sortie ---
+const scene = poserScene();
+const astuce = win.document.createElement('p');
+astuce.id = 'astuce-test';
+win.document.body.appendChild(astuce);
+const zoneClavier = win.document.createElement('textarea');
+zoneClavier.value = 'du code';
+zoneClavier.selectionStart = zoneClavier.selectionEnd = 7;
+win.document.body.appendChild(zoneClavier);
+
+let valide = 0;
+pont.brancherClavier(zoneClavier, '    ', 'astuce-test', () => {}, () => { valide++; });
+
+const touche = (cle, options) => {
+  const e = new win.KeyboardEvent('keydown', Object.assign({ key: cle, bubbles: true, cancelable: true }, options || {}));
+  zoneClavier.dispatchEvent(e);
+  return e;
+};
+
+verifie('éditeur — Tab est d\'abord capturé, pour indenter', touche('Tab').defaultPrevented, true);
+verifie('éditeur — et le code a bien été indenté', zoneClavier.value, 'du code    ');
+
+const echap = touche('Escape');
+verifie('éditeur — Échap est pris en compte', echap.defaultPrevented, true);
+verifie('éditeur — l\'astuce annonce la sortie', /Tab quitte/.test(astuce.textContent), true);
+verifie('éditeur — Tab n\'est PLUS capturé : on peut sortir au clavier',
+        touche('Tab').defaultPrevented, false);
+const avant = zoneClavier.value;
+verifie('éditeur — et Tab n\'indente plus', zoneClavier.value, avant);
+
+verifie('éditeur — Ctrl+Entrée lance la vérification', (touche('Enter', { ctrlKey: true }), valide), 1);
 
 /* ========================================================================
    Le moteur JavaScript quand les Workers manquent

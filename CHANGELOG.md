@@ -6,6 +6,39 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.4.2 — 2026-09-25
+
+**Rien ne change pour l'élève** — 41 vérifications de plus, sur deux endroits que personne ne
+regardait : ses projets, et sa capacité à sortir de l'éditeur au clavier.
+
+### Ajouté
+
+- **Les projets du bac à sable.** La sauvegarde de la *progression* était testée depuis longtemps ;
+  celle du *travail* de l'élève, jamais — alors qu'il n'y a pas de deuxième copie. On vérifie
+  maintenant qu'on ne peut pas supprimer son dernier projet, qu'un refus de confirmation ne touche à
+  rien, qu'un projet enregistré avant l'ajout des onglets SQL, C et Java est complété à la volée au
+  lieu de casser l'éditeur, et que l'export nomme son fichier correctement dans les cinq onglets.
+
+- **La porte de sortie de l'éditeur.** Une zone de texte qui avale la touche Tab est un piège au
+  clavier : on y entre, on n'en sort plus. L'éditeur capture bien Tab — il faut pouvoir indenter —
+  mais **Échap relâche la capture**, et l'astuce affichée change pour le dire. Cette porte de sortie
+  n'était vérifiée par personne, dans un logiciel qui enseigne l'accessibilité.
+
+### Ce que les sabotages ont appris
+
+Aucun défaut dans le produit. Mais deux contrôles étaient verts **sans rien garantir**, et il a fallu
+les casser exprès pour s'en apercevoir.
+
+Compter les projets après une suppression ne prouve rien : si le garde-fou saute, le projet *est*
+supprimé, puis `rendreBac` appelle `projetCourant`, qui en recrée aussitôt un vide. Le compte revient
+à 1, tout a l'air normal — et le travail de l'élève a disparu. Seul le **nom** le dit.
+
+Et `verifie` compare par égalité stricte : deux tableaux ne sont jamais égaux, donc la première
+version du contrôle échouait même sur du code sain. Un contrôle qu'on n'a pas vu passer *et* échouer
+n'est pas un contrôle.
+
+---
+
 ## 3.4.1 — 2026-09-25
 
 **Rien ne change pour l'élève.** Cette version n'ajoute que des vérifications — mais sur le dernier

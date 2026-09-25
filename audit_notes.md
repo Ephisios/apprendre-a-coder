@@ -244,6 +244,31 @@ toutes les fautes de structure. La branche est inoffensive et défensive,
 mais elle ne s'exécute pas ici.
 
 
+### 4.6 Les projets du bac, et la sortie clavier de l'éditeur
+
+RÉSOLU le 2026-09-25. 41 vérifications ajoutées à test-interface.js.
+
+LES PROJETS. Le bac garde le travail de l'élève dans le localStorage, et
+rien ne le vérifiait — la progression l'était, pas le travail. On contrôle
+le garde-fou du dernier projet, le refus de confirmation, la reprise d'un
+projet enregistré avant l'ajout des onglets SQL/C/Java (projetCourant le
+complète à la volée), et le nom de fichier à l'export dans les cinq onglets.
+
+LA SORTIE CLAVIER. Une zone de texte qui avale Tab est un piège au clavier.
+L'éditeur capture Tab pour indenter, mais Échap relâche la capture et
+l'astuce affichée l'annonce. Personne ne le vérifiait.
+
+UN PIÈGE DE TEST, à connaître avant d'écrire ici. Compter les projets après
+une suppression ne prouve RIEN : sans le garde-fou, le projet est supprimé,
+puis rendreBac appelle projetCourant qui en recrée un vide. Le compte
+revient à 1 et le contrôle reste vert — alors que le travail a disparu. Le
+contrôle porte donc sur le NOM du projet survivant.
+
+UN SECOND PIÈGE : la fonction verifie() de ce fichier compare par égalité
+STRICTE, pas par JSON. Comparer deux tableaux échoue toujours. On compare
+des chaînes.
+
+
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
 ### 5.1 Relancer le verifier (source de vérité)
