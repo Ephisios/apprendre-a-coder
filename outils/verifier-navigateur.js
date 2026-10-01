@@ -254,6 +254,47 @@ const SONDE_APPARENCE = `(() => {
   return { faibles, examines, contourFocus, vue: document.title };
 })()`;
 
+/* Quelle ligne de code la souris survole-t-elle ? C'est la seule pièce du
+   repérage que jsdom ne peut pas juger : elle additionne les hauteurs réelles
+   des numéros de ligne pour trouver celle qui tombe sous le curseur. Tout le
+   reste du repérage est éprouvé dans test-interface.js.
+
+   On ne simule pas un déplacement de souris — ligneSousLaSouris ne lit que
+   le clientY de l'événement. On lui présente donc, pour chaque numéro
+   affiché, le centre vertical de ce numéro, et on attend la ligne
+   correspondante. Si les deux colonnes se désalignaient d'un pixel, le
+   survol désignerait la mauvaise ligne et personne ne le verrait. */
+const SONDE_SOURIS = `(async () => {
+  const bouton = [...document.querySelectorAll('button, a')].find((b) => /Bac à sable/i.test(b.textContent));
+  if (!bouton) return { erreur: 'pas de bouton vers le bac à sable' };
+  bouton.click();
+  await new Promise((r) => setTimeout(r, 600));
+
+  const editeur = document.getElementById('editeur-bs-html');
+  const gouttiere = document.getElementById('lignes-bs-html');
+  if (!editeur || !gouttiere) return { erreur: "l'éditeur HTML du bac est introuvable" };
+
+  editeur.value = ['<h1>un</h1>', '<p>deux</p>', '<p>trois</p>', '<p>quatre</p>', '<p>cinq</p>'].join('\\n');
+  editeur.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 400));
+
+  const numeros = gouttiere.children.length;
+  const resultats = [];
+  for (let k = 0; k < numeros; k++) {
+    const r = gouttiere.children[k].getBoundingClientRect();
+    resultats.push(window.ligneSousLaSouris(editeur, gouttiere, { clientY: r.top + r.height / 2 }));
+  }
+
+  const hautDeTout = editeur.getBoundingClientRect().top - 50;
+  return {
+    numeros,
+    resultats,
+    attendu: resultats.map((_, k) => k + 1),
+    auDessus: window.ligneSousLaSouris(editeur, gouttiere, { clientY: hautDeTout }),
+    bienEnDessous: window.ligneSousLaSouris(editeur, gouttiere, { clientY: editeur.getBoundingClientRect().bottom + 500 })
+  };
+})()`;
+
 /* ---- 5. Le déroulé ------------------------------------------------------ */
 
 async function ongletPour(port, motif) {
@@ -340,6 +381,20 @@ async function suiteApplication(co) {
   console.log('  règle :focus-visible globale : ' + (a.contourFocus || 'AUCUNE'));
   verifie('apparence — le focus clavier laisse une marque visible',
           !!a.contourFocus && !/^(none|0px|0)$/.test(a.contourFocus.trim()), true);
+
+  /* --- quelle ligne la souris survole-t-elle ? --- */
+  console.log('\n=== Le repérage : la ligne sous la souris ===\n');
+  const souris = await evaluer(co, SONDE_SOURIS);
+  if (souris.erreur) {
+    verifie('souris — le bac à sable s\'ouvre et montre son éditeur', souris.erreur, null);
+  } else {
+    console.log('  ' + souris.numeros + ' lignes affichées, lues sous la souris : [' + souris.resultats.join(', ') + ']');
+    verifie('souris — les cinq lignes du code sont numérotées', souris.numeros, 5);
+    verifie('souris — chaque numéro survolé désigne sa propre ligne',
+            souris.resultats, souris.attendu);
+    verifie('souris — au-dessus du code, aucune ligne', souris.auDessus, 0);
+    verifie('souris — loin en dessous non plus', souris.bienEnDessous, 0);
+  }
 
   co.fermer();
 }

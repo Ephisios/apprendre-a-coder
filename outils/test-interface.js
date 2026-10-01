@@ -137,7 +137,16 @@ sources.push(`
     oublierExo: (id, i) => oublierExo(id, i),
     exporterProgression: () => exporterProgression(),
     progressionEtat: () => progression,
-    indicesEtat: () => indicesOuverts
+    indicesEtat: () => indicesOuverts,
+
+    // Le repérage code <-> page.
+    selecteurDeLigne: (css, l) => selecteurDeLigne(css, l),
+    eclairerGouttiere: (l) => eclairerGouttiere(l),
+    viserLigneCode: (l) => viserLigneCode(l),
+    viserDepuisCode: (cle, l) => viserDepuisCode(cle, l),
+    parlerAApercu: (m) => parlerAApercu(m),
+    grandApercu: (a) => grandApercu(a),
+    poserLigneVisee: (l) => { ligneVisee = l; }
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -1239,6 +1248,158 @@ const lancerJS = (code) => new Promise((resolve) => pont.executerJS(code, resolv
   }
   win.HTMLAnchorElement.prototype.click = clicOriginal;
   LS.clear();
+
+  /* ======================================================================
+     Le repérage code <-> page
+     ======================================================================
+     C'est ce que le bac à sable a de plus distinctif : survoler une ligne de
+     HTML entoure l'élément qu'elle fabrique, survoler une règle CSS entoure
+     TOUS les éléments qu'elle touche. Rien ne le vérifiait.
+
+     L'essentiel se joue côté parent, et c'est ce qui rend la chose testable
+     ici : seul le dessin du cadre vit dans l'aperçu. Ce qui reste hors de
+     portée de jsdom — savoir quelle ligne se trouve sous la souris, qui
+     demande de vraies hauteurs — est éprouvé par le pilote navigateur.
+
+     La pièce maîtresse est selecteurDeLigne : à partir du texte du CSS et
+     d'un numéro de ligne, elle retrouve la règle à laquelle cette ligne
+     appartient. Pile d'accolades, regard en avant quand la ligne OUVRE la
+     règle, et refus des @media, qui ne désignent aucun élément de la page.
+     Chaque attente ci-dessous a été mesurée sur la fonction avant d'être
+     écrite. */
+
+  console.log('\n=== Le repérage : de quelle règle cette ligne parle-t-elle ? ===\n');
+
+  const CSS = [
+    '/* une feuille ordinaire */',        // 1
+    'h1 {',                               // 2
+    '  color: red;',                      // 3
+    '}',                                  // 4
+    '',                                   // 5
+    'ul li a { text-decoration: none; }', // 6
+    '',                                   // 7
+    '@media (max-width: 600px) {',        // 8
+    '  .carte {',                         // 9
+    '    display: block;',                // 10
+    '  }',                                // 11
+    '}',                                  // 12
+    '',                                   // 13
+    '.grille,',                           // 14
+    '.liste {',                           // 15
+    '  gap: 8px;',                        // 16
+    '}'                                   // 17
+  ].join('\n');
+  const sel = (n) => pont.selecteurDeLigne(CSS, n);
+
+  verifie('repérage — une ligne dans le corps de la règle donne son sélecteur', sel(3), 'h1');
+  verifie('repérage — la ligne qui OUVRE la règle aussi', sel(2), 'h1');
+  verifie('repérage — et son accolade fermante', sel(4), 'h1');
+  verifie('repérage — un sélecteur composé est rendu entier', sel(6), 'ul li a');
+
+  /* Un @media ne désigne aucun élément : l'entourer n'aurait pas de sens.
+     Mais la règle qu'il CONTIENT, si — c'est la pile d'accolades qui le
+     permet, et c'est le cas le plus facile à casser. */
+  verifie('repérage — un @media ne désigne rien', sel(8), null);
+  verifie("repérage — mais la règle qu'il contient, si", sel(10), '.carte');
+  verifie('repérage — et son accolade fermante aussi', sel(11), '.carte');
+  verifie('repérage — la fin du @media ne désigne plus rien', sel(12), null);
+
+  verifie('repérage — une liste de sélecteurs sur deux lignes reste entière',
+          sel(16), '.grille,\n.liste');
+  verifie('repérage — un commentaire désigne la règle qu\'il annonce', sel(1), 'h1');
+  verifie('repérage — une ligne vide avant un @media ne désigne rien', sel(7), null);
+  verifie('repérage — hors du fichier, rien', sel(0), null);
+  verifie('repérage — au-delà de la fin non plus', sel(99), null);
+
+  console.log('\n=== Le repérage : la gouttière et l\'aperçu ===\n');
+
+  /* parlerAApercu ne demande au cadre que son contentWindow. On pose donc un
+     faux cadre qui retient ce qu'on lui envoie : jsdom ne fait pas tourner
+     d'iframe, et ce n'est pas elle qu'on juge ici. */
+  function sceneReperage(lignesHtml) {
+    poserScene();
+    const d = win.document.getElementById('contenu');
+    let gouttiere = '';
+    for (let k = 1; k <= lignesHtml; k++) gouttiere += '<span>' + k + '</span>';
+    d.innerHTML = '<div class="atelier-plan"><div id="lignes-bs-html">' + gouttiere + '</div>' +
+                  '<button id="btn-apercu"></button></div>';
+    const faux = win.document.createElement('div');
+    faux.id = 'apercu-bac';
+    const recus = [];
+    faux.contentWindow = { postMessage: (m) => recus.push(m) };
+    d.appendChild(faux);
+    pont.poserLigneVisee(-1);   // -1 : aucune ligne réelle, donc rien n'est filtré
+    return recus;
+  }
+  const gouttiere = () => win.document.getElementById('lignes-bs-html');
+  const allumee = () => {
+    const el = gouttiere().querySelector('.ligne-visee');
+    return el ? el.textContent : null;
+  };
+
+  sceneReperage(4);
+  pont.eclairerGouttiere(3);
+  verifie('gouttière — la bonne ligne s\'allume', allumee(), '3');
+  pont.eclairerGouttiere(1);
+  verifie('gouttière — et une seule à la fois', allumee(), '1');
+  verifie('gouttière — l\'ancienne s\'est éteinte', gouttiere().querySelectorAll('.ligne-visee').length, 1);
+  pont.eclairerGouttiere(0);
+  verifie('gouttière — sortir du code éteint tout', allumee(), null);
+  pont.eclairerGouttiere(99);
+  verifie('gouttière — une ligne qui n\'existe pas n\'allume rien', allumee(), null);
+
+  // Le repère ne suit que le fichier HTML : une ligne de CSS ne correspond
+  // à aucune ligne de la gouttière affichée.
+  let recus = sceneReperage(4);
+  bacNeuf({ 'A': { html: 'x', css: 'h1 { color: red; }', js: '', py: '', sql: '', c: '', java: '' } }, 'A', 'web');
+  pont.bacEtat().fichier = 'html';
+  pont.viserLigneCode(2);
+  verifie('gouttière — côté HTML, la ligne survolée s\'allume', allumee(), '2');
+  pont.bacEtat().fichier = 'css';
+  pont.viserLigneCode(2);
+  verifie('gouttière — côté CSS, la gouttière HTML reste éteinte', allumee(), null);
+
+  // --- ce qui part vers l'aperçu ---
+  recus = sceneReperage(4);
+  bacNeuf({ 'A': { html: '<h1>x</h1>', css: CSS, js: '', py: '', sql: '', c: '', java: '' } }, 'A', 'web');
+  pont.bacEtat().fichier = 'html';
+  pont.poserLigneVisee(-1);
+  pont.viserDepuisCode('html', 2);
+  verifie('aperçu — survoler du HTML envoie le numéro de ligne',
+          JSON.stringify(recus[recus.length - 1]), JSON.stringify({ __aac: 'ligne', ligne: 2 }));
+
+  pont.viserDepuisCode('css', 10);
+  verifie('aperçu — survoler du CSS envoie le sélecteur, pas la ligne',
+          JSON.stringify(recus[recus.length - 1]), JSON.stringify({ __aac: 'selecteur', sel: '.carte' }));
+
+  pont.viserDepuisCode('css', 8);
+  verifie('aperçu — une ligne qui ne désigne rien efface le repère',
+          JSON.stringify(recus[recus.length - 1]), JSON.stringify({ __aac: 'effacer' }));
+
+  pont.viserDepuisCode('html', 0);
+  verifie('aperçu — sortir de l\'éditeur efface aussi',
+          JSON.stringify(recus[recus.length - 1]), JSON.stringify({ __aac: 'effacer' }));
+
+  /* Sans ce garde, bouger la souris dans une même ligne enverrait un message
+     à chaque pixel parcouru — et l'aperçu redessinerait son cadre autant de
+     fois pour rien. */
+  pont.poserLigneVisee(-1);
+  recus.length = 0;
+  pont.viserDepuisCode('html', 3);
+  pont.viserDepuisCode('html', 3);
+  pont.viserDepuisCode('html', 3);
+  verifie('aperçu — rester sur la même ligne n\'envoie qu\'un seul message', recus.length, 1);
+
+  // --- le grand aperçu ---
+  sceneReperage(2);
+  pont.grandApercu(true);
+  verifie('aperçu — l\'agrandir marque le plan',
+          win.document.querySelector('.atelier-plan').classList.contains('plan-apercu'), true);
+  verifie('aperçu — et le bouton propose de revenir au code',
+          /Revenir au code/.test(win.document.getElementById('btn-apercu').textContent), true);
+  pont.grandApercu(false);
+  verifie('aperçu — le réduire remet le plan en place',
+          win.document.querySelector('.atelier-plan').classList.contains('plan-apercu'), false);
 
   console.log('\n=== Le repli « sans Worker » rend-il la même chose ? ===\n');
 

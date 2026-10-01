@@ -361,6 +361,35 @@ remplacer intercepte AUSSI les appels internes. C'est ce qui rend
 l'instrumentation possible sans toucher au code du projet.
 
 
+### 4.10 Le repérage code <-> page
+
+RÉSOLU le 2026-10-01. C'est ce que le bac à sable a de plus distinctif, et
+cela ne reposait que sur une mesure faite à la main pendant le durcissement
+du sandbox (section 4.3).
+
+LA RÉPARTITION, qui est la bonne surprise : six des sept fonctions vivent
+CÔTÉ PARENT — seul le dessin du cadre a lieu dans l'aperçu. L'essentiel est
+donc testable sous jsdom, alors que la fonctionnalité semblait réservée à un
+vrai navigateur. 28 vérifications dans test-interface.js.
+
+LA PIÈCE MAÎTRESSE : selecteurDeLigne, qui retrouve la règle à laquelle une
+ligne de CSS appartient. Pile d'accolades, regard en avant quand la ligne
+OUVRE la règle, refus des @media — tout en acceptant la règle qu'un @media
+CONTIENT. C'est ce dernier point qui casse en premier si l'on touche à la
+pile, et c'est pour cela qu'il a trois contrôles à lui seul.
+
+Comportement mesuré avant d'être épinglé, et qui surprend au premier regard :
+un commentaire ou une ligne vide AVANT une règle désigne cette règle, par le
+regard en avant. C'est voulu — survoler le commentaire qui annonce une règle
+entoure bien ce qu'elle touche.
+
+LA SEULE PIÈCE HORS DE PORTÉE DE JSDOM : ligneSousLaSouris, qui additionne
+les hauteurs réelles des numéros de ligne. Elle est éprouvée par le pilote
+navigateur : on lui présente le centre vertical de chaque numéro affiché, et
+on attend la ligne correspondante. Un décalage d'un cran se lit alors dans
+la sortie — [2,3,4,5,6] au lieu de [1,2,3,4,5].
+
+
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
 ### 5.1 Relancer le verifier (source de vérité)

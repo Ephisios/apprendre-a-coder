@@ -6,6 +6,45 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.4.6 — 2026-10-01
+
+**Rien ne change pour l'élève** — 32 vérifications sur ce que le bac à sable a de plus distinctif,
+et qui ne reposait jusqu'ici que sur une mesure faite à la main.
+
+### Ajouté
+
+- **Le repérage code ↔ page.** Survoler une ligne de HTML entoure l'élément qu'elle fabrique ;
+  survoler une règle CSS entoure *tous* les éléments qu'elle touche, avec leur compte. C'est le
+  meilleur moyen de comprendre ce que fait un sélecteur, et rien ne le vérifiait.
+
+  La pièce maîtresse est `selecteurDeLigne` : à partir du texte du CSS et d'un numéro de ligne, elle
+  retrouve la règle à laquelle cette ligne appartient. Pile d'accolades, regard en avant quand la
+  ligne *ouvre* la règle, et refus des `@media`, qui ne désignent aucun élément de la page — tout en
+  acceptant la règle qu'un `@media` **contient**. C'est ce dernier point qui casse en premier quand
+  on touche à la pile.
+
+- **La ligne sous la souris**, dans le pilote navigateur. C'est la seule pièce du repérage que jsdom
+  ne peut pas juger : elle additionne les hauteurs réelles des numéros de ligne. On présente au
+  calcul le centre vertical de chaque numéro affiché, et on attend la ligne correspondante. Si les
+  deux colonnes se désalignaient, le survol désignerait la mauvaise ligne sans que rien ne crie.
+
+### Ce que la répartition apprend
+
+Six des sept fonctions du repérage vivent **côté parent** : seul le dessin du cadre a lieu dans
+l'aperçu. C'est ce qui rend l'essentiel testable sous jsdom, alors que la fonctionnalité semblait
+réservée à un vrai navigateur. Le travail fait à la main pendant le durcissement du bac — sondes
+temporaires, survol déclenché depuis l'intérieur de l'iframe — est désormais permanent, et sans
+sonde.
+
+### Ce que les sabotages ont donné
+
+Laisser passer les `@media`, décaler la gouttière d'un cran, retirer le garde qui évite de renvoyer
+le même message à chaque pixel, décaler le calcul de la ligne sous la souris : **neuf vérifications
+tombent**, réparties sur les deux harnais. Le décalage de la souris se lit directement dans la
+sortie — `[2, 3, 4, 5, 6]` au lieu de `[1, 2, 3, 4, 5]`.
+
+---
+
 ## 3.4.5 — 2026-10-01
 
 **Rien ne change pour l'élève** — 27 vérifications de plus, sur le chemin le plus parcouru du
