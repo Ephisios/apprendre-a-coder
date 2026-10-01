@@ -5,37 +5,68 @@ window.DATA_JS2 = [
   id: 'js-7',
   titre: 'Les boucles : répéter sans se fatiguer',
   contenu: `
-<p>Afficher les nombres de 1 à 1000 ? Hors de question d'écrire 1000 lignes. Les <strong>boucles</strong> font répéter du code autant de fois que nécessaire — c'est là que l'ordinateur devient vraiment plus fort que nous.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Afficher les nombres de 1 à 1000 ? Hors de question d'écrire 1000 lignes. Envoyer un message à chaque membre d'un groupe, vérifier chaque case d'une grille, additionner chaque article d'un panier : dès qu'il faut <strong>répéter</strong>, on écrit une <strong>boucle</strong>. C'est là que l'ordinateur devient vraiment plus fort que nous : il répète un million de fois sans se lasser ni se tromper.</p>
 
 <h2>La boucle for</h2>
-<pre class="bloc-code">for (let i = 1; i <= 5; i++) {
+<pre class="bloc-code">for (let i = 1; i &lt;= 5; i++) {
   console.log("Tour numéro " + i);
 }</pre>
-<p>Résultat : « Tour numéro 1 », « Tour numéro 2 »... jusqu'à 5. La parenthèse contient trois parties, séparées par des points-virgules :</p>
+<p>Résultat : « Tour numéro 1 », « Tour numéro 2 »… jusqu'à 5. La parenthèse contient trois parties, séparées par des points-virgules :</p>
 <ol>
-<li><code>let i = 1</code> — le <strong>départ</strong> : on crée un compteur <code>i</code> qui commence à 1 ;</li>
-<li><code>i &lt;= 5</code> — la <strong>condition pour continuer</strong> : tant que <code>i</code> ne dépasse pas 5, on refait un tour ;</li>
-<li><code>i++</code> — <strong>après chaque tour</strong> : augmente <code>i</code> de 1 (<code>i++</code> est le raccourci de <code>i = i + 1</code>).</li>
+<li><code>let i = 1</code> : le <strong>départ</strong>. On crée un compteur <code>i</code> qui commence à 1 ;</li>
+<li><code>i &lt;= 5</code> : la <strong>condition pour continuer</strong>. Tant qu'elle est vraie, on refait un tour ;</li>
+<li><code>i++</code> : ce qui se passe <strong>après chaque tour</strong>. <code>i++</code> est le raccourci de <code>i = i + 1</code>.</li>
 </ol>
-<p>Le compteur s'appelle traditionnellement <code>i</code>, et il est utilisable dans la boucle — c'est ce qui rend chaque tour différent.</p>
+<p>Le compteur s'appelle traditionnellement <code>i</code>, et il est utilisable dans la boucle : c'est ce qui rend chaque tour différent. Il peut aussi descendre : <code>for (let i = 10; i >= 1; i--)</code> compte à rebours, avec <code>i--</code> qui retire 1.</p>
 
 <h2>La boucle while</h2>
-<p>Quand on ne sait pas d'avance combien de tours il faudra : <code>while</code> (« tant que ») répète tant que sa condition est vraie.</p>
+<p>Quand on ne sait pas d'avance combien de tours il faudra, <code>while</code> (« tant que ») répète tant que sa condition est vraie :</p>
 <pre class="bloc-code">let energie = 10;
 while (energie > 0) {
   console.log("Je cours ! Énergie : " + energie);
-  energie = energie - 2;
+  energie = energie - 3;
 }</pre>
+<p>Ici : 10, 7, 4, 1, puis <code>energie</code> passe à -2 et la boucle s'arrête. Combien de tours ? On ne l'a écrit nulle part : c'est la condition qui décide.</p>
 
 <h2>Le motif « accumulateur »</h2>
-<p>Très souvent, on utilise une boucle pour <strong>accumuler</strong> un résultat dans une variable créée avant la boucle :</p>
+<p>Très souvent, une boucle sert à <strong>accumuler</strong> un résultat dans une variable créée <em>avant</em> la boucle :</p>
 <pre class="bloc-code">let total = 0;
-for (let i = 1; i <= 5; i++) {
+for (let i = 1; i &lt;= 4; i++) {
   total = total + i;      // ou : total += i;
 }
-console.log(total);       // 1+2+3+4+5 = 15</pre>
+console.log(total);       // 10</pre>
 
-<div class="attention">⚠️ Avec <code>while</code>, si la condition ne devient jamais fausse (par exemple si on oublie de diminuer <code>energie</code>), la boucle tourne pour toujours : c'est la fameuse <strong>boucle infinie</strong>. Ici, pas de panique : l'éditeur la détecte et arrête ton code au bout de 3 secondes.</div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>i</th><th>i &lt;= 4 ?</th><th>total avant</th><th>total après</th></tr>
+<tr><td>1</td><td>oui</td><td>0</td><td>0 + 1 = 1</td></tr>
+<tr><td>2</td><td>oui</td><td>1</td><td>1 + 2 = 3</td></tr>
+<tr><td>3</td><td>oui</td><td>3</td><td>3 + 3 = 6</td></tr>
+<tr><td>4</td><td>oui</td><td>6</td><td>6 + 4 = 10</td></tr>
+<tr><td>5</td><td>non</td><td colspan="2">la boucle s'arrête ; la ligne suivante affiche 10</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>La boucle infinie.</strong> Si la condition d'un <code>while</code> ne devient jamais fausse (par exemple si on oublie de diminuer <code>energie</code>), la boucle tourne pour toujours. Pas de panique : l'éditeur l'arrête et affiche « ton code tourne sans s'arrêter (boucle infinie ?). Vérifie la condition de ta boucle. » Vérifie que quelque chose, dans la boucle, rapproche la condition de <code>false</code>.</p>
+<p><strong>Un tour de trop, ou de moins.</strong> <code>i &lt; 5</code> en partant de 1 fait 4 tours (1, 2, 3, 4) ; <code>i &lt;= 5</code> en fait 5. Quand un résultat est décalé de un, c'est presque toujours cette comparaison : déroule le premier et le dernier tour à la main.</p>
+<p><strong>L'accumulateur au mauvais endroit.</strong> Si <code>let total = 0</code> est écrit <em>dans</em> la boucle, il est remis à zéro à chaque tour, et le total final ne vaut que le dernier ajout. De même, un <code>console.log(total)</code> placé dans la boucle affiche tous les totaux intermédiaires : pour le résultat final seul, il va <em>après</em> l'accolade fermante.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Afficher la liste de tes messages, c'est une boucle sur les messages. Une animation, c'est une boucle qui redessine l'image soixante fois par seconde. Une application qui perd le réseau réessaie de se connecter <em>tant que</em> la connexion échoue : c'est un <code>while</code>.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>for (départ; condition; pas)</code> quand on connaît le nombre de tours ; <code>while (condition)</code> sinon.</li>
+<li>Toute boucle doit faire évoluer ce que teste sa condition, sinon elle ne s'arrête jamais.</li>
+<li>Accumulateur : la variable se crée avant la boucle, grandit dedans, s'affiche après.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le compteur n'existe que dans la boucle</summary>
+<p>Le <code>i</code> déclaré dans la parenthèse du <code>for</code> n'existe que pendant la boucle. Écrire <code>console.log(i)</code> après l'accolade fermante donne « i is not defined ». C'est voulu : chaque boucle a son propre compteur, et deux boucles à la suite peuvent toutes les deux utiliser <code>i</code> sans se gêner. Si tu as besoin de la valeur après la boucle, crée la variable avant.</p>
+</details>
 `,
   exercices: [
     {
@@ -109,7 +140,8 @@ console.log(total);       // 1+2+3+4+5 = 15</pre>
   id: 'js-8',
   titre: 'Les tableaux : des listes de valeurs',
   contenu: `
-<p>Une variable stocke UNE valeur. Pour une liste de courses, une liste de scores, une liste de contacts... il nous faut un <strong>tableau</strong> (<em>array</em>).</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une variable stocke UNE valeur. Mais une liste de courses, les scores d'une partie, les contacts d'un téléphone ? Créer <code>contact1</code>, <code>contact2</code>… <code>contact500</code> serait absurde, et impossible à parcourir. Il nous faut une seule variable qui contient toute une liste, dans l'ordre : un <strong>tableau</strong> (<em>array</em>).</p>
 
 <h2>Créer et lire un tableau</h2>
 <pre class="bloc-code">let fruits = ["pomme", "banane", "cerise"];
@@ -118,12 +150,11 @@ console.log(fruits[0]);      // pomme
 console.log(fruits[1]);      // banane
 console.log(fruits.length);  // 3</pre>
 <ul>
-<li>les crochets <code>[ ]</code> créent le tableau, les valeurs sont séparées par des virgules ;</li>
-<li>chaque valeur a une position, appelée <strong>index</strong>... et attention : <strong>on compte à partir de 0</strong> ! <code>fruits[0]</code> est le premier élément ;</li>
+<li>les crochets <code>[ ]</code> créent le tableau ; les valeurs sont séparées par des virgules ;</li>
+<li>chaque valeur a une position, appelée <strong>index</strong>. Et attention : <strong>on compte à partir de 0</strong>. <code>fruits[0]</code> est le premier élément ;</li>
 <li><code>.length</code> donne le nombre d'éléments.</li>
 </ul>
-
-<div class="info">💬 Pourquoi compter depuis 0 ? Héritage historique de la façon dont la mémoire fonctionne. Tous les langages majeurs font pareil — au début on se trompe tous, puis ça devient une seconde nature. Conséquence utile : le DERNIER élément est à l'index <code>length - 1</code>, donc <code>fruits[fruits.length - 1]</code>.</div>
+<p>Conséquence : le DERNIER élément est à l'index <code>length - 1</code>. Pour un tableau de 3 éléments, les index vont de 0 à 2. On l'écrit <code>fruits[fruits.length - 1]</code>, ce qui reste juste même si le tableau grandit.</p>
 
 <h2>Modifier un tableau</h2>
 <pre class="bloc-code">let fruits = ["pomme", "banane"];
@@ -131,15 +162,45 @@ fruits.push("cerise");        // ajoute à la fin
 console.log(fruits);          // ["pomme","banane","cerise"]
 fruits[0] = "poire";          // remplace le premier
 console.log(fruits.length);   // 3</pre>
+<p>Un tableau entier s'affiche entre crochets, ses textes entre guillemets : c'est ainsi que la console le montre.</p>
 
 <h2>Le duo magique : tableau + boucle</h2>
-<p>Les tableaux et les boucles sont faits l'un pour l'autre :</p>
 <pre class="bloc-code">let invites = ["Léa", "Tom", "Nina"];
 
-for (let i = 0; i < invites.length; i++) {
+for (let i = 0; i &lt; invites.length; i++) {
   console.log("Bienvenue " + invites[i] + " !");
 }</pre>
-<p>Remarque la condition <code>i &lt; invites.length</code> : comme on compte de 0, le dernier index est <code>length - 1</code>. Ce motif exact, tu l'écriras des centaines de fois dans ta vie de codeur.</p>
+<p>Le compteur <code>i</code> sert d'index : il part de 0 et s'arrête juste avant <code>length</code>. Ce motif exact, tu l'écriras des centaines de fois.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>i</th><th>i &lt; 3 ?</th><th>invites[i]</th><th>Affichage</th></tr>
+<tr><td>0</td><td>oui</td><td>"Léa"</td><td>Bienvenue Léa !</td></tr>
+<tr><td>1</td><td>oui</td><td>"Tom"</td><td>Bienvenue Tom !</td></tr>
+<tr><td>2</td><td>oui</td><td>"Nina"</td><td>Bienvenue Nina !</td></tr>
+<tr><td>3</td><td>non</td><td>—</td><td>la boucle s'arrête</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Commencer à 1.</strong> <code>fruits[1]</code> est le <em>deuxième</em> fruit. Tout le monde s'y trompe au début ; ça devient vite une seconde nature.</p>
+<p><strong>Lire après la fin.</strong> <code>fruits[fruits.length]</code> n'est pas le dernier élément : c'est une case qui n'existe pas, et JavaScript renvoie <code>undefined</code> (« non défini ») sans afficher d'erreur. De même, une boucle écrite avec <code>i &lt;= invites.length</code> fait un tour de trop et affiche « Bienvenue undefined ! ». Si tu vois <code>undefined</code>, cherche un index trop grand.</p>
+<p><strong>Oublier que le tableau peut changer.</strong> Écrire <code>fruits[2]</code> pour « le dernier » marche… jusqu'au jour où on ajoute un fruit. <code>fruits[fruits.length - 1]</code> reste toujours juste. Même idée pour une moyenne : on divise par <code>length</code>, pas par un nombre écrit à la main.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ta boîte de réception est un tableau de messages, un panier un tableau d'articles, un classement un tableau de scores. Chaque fois qu'une application affiche une liste, il y a derrière un tableau et une boucle qui le parcourt.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>let t = [a, b, c];</code> ; le premier est <code>t[0]</code>, le dernier <code>t[t.length - 1]</code>.</li>
+<li><code>t.push(x)</code> ajoute à la fin ; <code>t[i] = x</code> remplace.</li>
+<li>Pour parcourir : <code>for (let i = 0; i &lt; t.length; i++)</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi compter depuis 0 ?</summary>
+<p>L'index n'est pas un numéro d'ordre, c'est un <em>décalage</em> depuis le début du tableau en mémoire : le premier élément est à 0 case du début, le deuxième à 1 case. Presque tous les langages ont gardé cette convention, héritée du langage C (que tu croiseras plus loin dans ce cours). Et un tableau peut contenir n'importe quoi, y compris d'autres tableaux : une grille de morpion est un tableau de trois lignes, chacune un tableau de trois cases.</p>
+</details>
 `,
   exercices: [
     {
@@ -207,7 +268,9 @@ for (let i = 0; i < invites.length; i++) {
   id: 'js-9',
   titre: 'Les fonctions : tes propres instructions',
   contenu: `
-<p>Tu utilises <code>console.log(...)</code> depuis le début : quelqu'un a écrit cette fonctionnalité une fois, et tout le monde la réutilise. Une <strong>fonction</strong>, c'est exactement ça : un bloc de code réutilisable, avec un nom.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu utilises <code>console.log(...)</code> depuis le début : quelqu'un a écrit cette fonctionnalité une fois, et tout le monde la réutilise sans savoir comment elle marche à l'intérieur. Une <strong>fonction</strong>, c'est exactement ça : un bloc de code avec un nom, écrit une fois et appelé autant de fois qu'on veut.</p>
+<p>Imagine un calcul de prix copié à cinq endroits d'un programme. Le jour où il faut le corriger, il faut retrouver les cinq copies, et en oublier une, c'est un bug. Rangé dans une fonction, il n'existe qu'à un seul endroit : on le corrige une fois, et tous les appels en profitent.</p>
 
 <h2>Créer et appeler une fonction</h2>
 <pre class="bloc-code">function direBonjour() {
@@ -217,7 +280,7 @@ for (let i = 0; i < invites.length; i++) {
 
 direBonjour();   // exécute le bloc
 direBonjour();   // et encore une fois</pre>
-<p>Deux temps : on <strong>définit</strong> la fonction (le code ne s'exécute pas encore !), puis on l'<strong>appelle</strong> par son nom suivi de parenthèses, autant de fois qu'on veut.</p>
+<p>Deux temps : on <strong>définit</strong> la fonction (le code ne s'exécute pas encore, il est rangé), puis on l'<strong>appelle</strong> par son nom suivi de parenthèses.</p>
 
 <h2>Les paramètres : rendre la fonction flexible</h2>
 <pre class="bloc-code">function saluer(prenom) {
@@ -226,7 +289,7 @@ direBonjour();   // et encore une fois</pre>
 
 saluer("Léa");    // Bonjour Léa !
 saluer("Tom");    // Bonjour Tom !</pre>
-<p><code>prenom</code> est un <strong>paramètre</strong> : une variable qui reçoit la valeur passée entre les parenthèses à l'appel. Même code, résultats différents.</p>
+<p><code>prenom</code> est un <strong>paramètre</strong> : une variable qui reçoit, à chaque appel, la valeur écrite entre les parenthèses. Plusieurs paramètres se séparent par des virgules : <code>function aire(largeur, hauteur)</code>, et les valeurs sont données dans le même ordre à l'appel.</p>
 
 <h2>return : la fonction qui répond</h2>
 <pre class="bloc-code">function doubler(nombre) {
@@ -236,9 +299,40 @@ saluer("Tom");    // Bonjour Tom !</pre>
 let resultat = doubler(21);
 console.log(resultat);        // 42
 console.log(doubler(5) + 1);  // 11</pre>
-<p><code>return</code> <strong>renvoie</strong> une valeur à celui qui a appelé la fonction — on peut la ranger dans une variable ou l'utiliser dans un calcul. C'est la différence clé : <code>console.log</code> <em>affiche</em> (pour tes yeux), <code>return</code> <em>renvoie</em> (pour le programme).</p>
+<p><code>return</code> <strong>renvoie</strong> une valeur à celui qui a appelé la fonction : on peut la ranger dans une variable, l'utiliser dans un calcul, ou la passer à une autre fonction. C'est la différence clé : <code>console.log</code> <em>affiche</em>, pour tes yeux ; <code>return</code> <em>renvoie</em>, pour le programme.</p>
+<p>Une fonction peut en appeler une autre : <code>function quadrupler(n) { return doubler(doubler(n)); }</code>. C'est ainsi qu'on construit de gros programmes à partir de petites pièces.</p>
 
-<div class="astuce">✅ Pourquoi c'est si important ? Un programme bien écrit est un assemblage de petites fonctions qui font chacune UNE chose. C'est ce qui permet de construire des logiciels géants sans s'y perdre.</div>
+<h2>Pas à pas</h2>
+<p>Que se passe-t-il pendant <code>let resultat = doubler(21);</code> ?</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>appel</td><td>JavaScript saute dans la fonction : <code>nombre</code> reçoit 21.</td></tr>
+<tr><td>calcul</td><td><code>nombre * 2</code> donne 42.</td></tr>
+<tr><td>return</td><td>La fonction s'arrête et renvoie 42 : l'appel <code>doubler(21)</code> « vaut » 42.</td></tr>
+<tr><td>retour</td><td>JavaScript revient à la ligne de l'appel et range 42 dans <code>resultat</code>.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier le return.</strong> Une fonction qui calcule sans renvoyer ne donne rien : <code>function doubler(n) { n * 2; }</code> puis <code>console.log(doubler(4))</code> affiche <code>undefined</code>. Le calcul est fait, puis jeté. Aucune erreur ne s'affiche : c'est à toi de repérer ce <code>undefined</code>.</p>
+<p><strong>Afficher au lieu de renvoyer.</strong> Un <code>console.log</code> dans la fonction montre bien la bonne valeur à l'écran… mais l'appel, lui, vaut toujours <code>undefined</code>, et on ne peut rien en faire. Une fonction qui calcule doit <code>return</code> ; c'est l'appelant qui décide d'afficher.</p>
+<p><strong>Oublier les parenthèses à l'appel.</strong> <code>console.log(doubler)</code> n'appelle pas la fonction : il affiche son code, « function doubler(nombre) { … } ». Les parenthèses, c'est le bouton « lancer ».</p>
+<p><strong>Du code après le return.</strong> Tout ce qui suit un <code>return</code> exécuté ne tourne jamais : la fonction s'est déjà arrêtée.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un site de commerce a une fonction pour calculer un total, une autre pour formater un prix en « 12,50 € », une autre pour vérifier une adresse e-mail. Un programme bien écrit est un assemblage de petites fonctions qui font chacune UNE chose, avec un nom qui dit laquelle. C'est ce qui permet de construire des logiciels géants sans s'y perdre.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>function nom(parametres) { ... }</code> définit ; <code>nom(valeurs)</code> appelle.</li>
+<li><code>return</code> renvoie une valeur et arrête la fonction ; sans lui, l'appel vaut <code>undefined</code>.</li>
+<li><code>console.log</code> montre, <code>return</code> transmet : une fonction qui calcule renvoie.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les variables d'une fonction lui appartiennent</summary>
+<p>Un paramètre, ou une variable créée avec <code>let</code> dans une fonction, n'existe que pendant l'appel : de l'extérieur, <code>nombre</code> est inconnu. Deux fonctions peuvent donc avoir chacune leur variable <code>total</code> sans se marcher dessus. On appelle ça la <em>portée</em> des variables ; le module « JavaScript, la suite » y consacre une leçon, et le module avancé montre une écriture plus courte des fonctions, avec une flèche.</p>
+</details>
 `,
   exercices: [
     {
@@ -306,7 +400,8 @@ console.log(doubler(5) + 1);  // 11</pre>
   id: 'js-10',
   titre: 'Les objets : regrouper des informations',
   contenu: `
-<p>Décrire une personne avec des variables séparées (<code>prenom</code>, <code>age</code>, <code>ville</code>...), ça devient vite le chaos. Un <strong>objet</strong> regroupe des informations liées dans une seule structure.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Décrire un chat avec des variables séparées (<code>nomChat</code>, <code>ageChat</code>, <code>couleurChat</code>) marche pour un chat. Pour cent chats, ou pour un contact avec nom, téléphone, adresse et anniversaire, ça devient vite le chaos : rien ne dit quelles variables vont ensemble. Un <strong>objet</strong> regroupe des informations liées dans une seule structure, où chaque information porte un nom.</p>
 
 <h2>Créer et lire un objet</h2>
 <pre class="bloc-code">let chat = {
@@ -320,26 +415,58 @@ console.log(chat.age);     // 3</pre>
 <ul>
 <li>les accolades <code>{ }</code> créent l'objet ;</li>
 <li>chaque information est une paire <strong>clé: valeur</strong>, séparée des autres par une virgule ;</li>
-<li>on accède à une valeur avec le <strong>point</strong> : <code>objet.cle</code>.</li>
+<li>on lit une valeur avec le <strong>point</strong> : <code>objet.cle</code>.</li>
 </ul>
+<p>La différence avec un tableau : un tableau range des valeurs <em>par position</em> (la première, la deuxième…), un objet les range <em>par nom</em>.</p>
 
 <h2>Modifier un objet</h2>
 <pre class="bloc-code">chat.age = 4;              // anniversaire !
 chat.jouet = "souris";     // nouvelle clé, créée à la volée
-console.log(chat.age);     // 4</pre>
+console.log(chat);
+// {"nom":"Félix","age":4,"couleur":"roux","jouet":"souris"}</pre>
+<p>Affiché en entier, un objet apparaît entre accolades, avec ses clés entre guillemets : c'est ainsi que la console de ce logiciel le montre.</p>
 
 <h2>Des objets dans des tableaux</h2>
-<p>Le combo qui fait tourner le monde : un tableau d'objets. C'est exactement la forme des données de toutes les applications (une liste de contacts, de produits, de films...).</p>
+<p>Le combo qui fait tourner le monde : un tableau d'objets. C'est exactement la forme des données de toutes les applications, qu'il s'agisse de contacts, de produits ou de films.</p>
 <pre class="bloc-code">let films = [
   { titre: "Alien", annee: 1979 },
   { titre: "Titanic", annee: 1997 }
 ];
 
-for (let i = 0; i < films.length; i++) {
+for (let i = 0; i &lt; films.length; i++) {
   console.log(films[i].titre + " (" + films[i].annee + ")");
 }</pre>
 
-<div class="info">💬 Ce format te dit quelque chose ? Les données échangées sur internet (le « JSON ») s'écrivent quasiment pareil. En apprenant les objets JavaScript, tu apprends la langue des données du web.</div>
+<h2>Pas à pas</h2>
+<p>Comment se lit <code>films[i].titre</code> ? De gauche à droite, un morceau à la fois :</p>
+<table class="memo-table trace">
+<tr><th>i</th><th>films[i]</th><th>.titre</th><th>.annee</th></tr>
+<tr><td>0</td><td>le premier objet</td><td>"Alien"</td><td>1979</td></tr>
+<tr><td>1</td><td>le deuxième objet</td><td>"Titanic"</td><td>1997</td></tr>
+<tr><td>2</td><td colspan="3">2 n'est pas &lt; 2 : la boucle s'arrête</td></tr>
+</table>
+<p><code>films[i]</code> donne un objet ; le <code>.titre</code> qui suit s'applique à cet objet. On peut enchaîner ainsi aussi loin que la structure le permet.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Une clé mal orthographiée.</strong> <code>chat.Nom</code> ou <code>chat.nome</code> ne provoquent aucune erreur : JavaScript renvoie <code>undefined</code>, comme pour une clé qui n'existe pas. Si un <code>undefined</code> s'affiche, compare lettre à lettre le nom de la clé.</p>
+<p><strong>Lire une clé sur quelque chose qui n'existe pas.</strong> <code>films[2].titre</code>, alors qu'il n'y a que deux films : <code>films[2]</code> vaut <code>undefined</code>, et lui demander un titre donne « Cannot read properties of undefined (reading 'titre') », « impossible de lire les propriétés de undefined ». Le message nomme la clé demandée ; le coupable est ce qu'il y a <em>avant</em> le point.</p>
+<p><strong>La virgule oubliée.</strong> Entre deux paires, la virgule est obligatoire. <code>{ nom: "Félix" age: 3 }</code> donne « Unexpected identifier 'age' » : JavaScript ne s'attendait pas à trouver <code>age</code> juste là.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Quand une application météo reçoit les prévisions, ou quand un site reçoit la liste des produits, les données arrivent dans un format appelé JSON, qui s'écrit presque exactement comme ces objets et tableaux. En apprenant les objets JavaScript, tu apprends la langue dans laquelle les données circulent sur le web.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>{ cle: valeur, cle2: valeur2 }</code> regroupe des informations par nom ; on lit avec <code>objet.cle</code>.</li>
+<li>Une clé absente ou mal écrite donne <code>undefined</code>, sans erreur.</li>
+<li>Un tableau d'objets se parcourt avec une boucle : <code>liste[i].cle</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les crochets</summary>
+<p>Il existe une seconde façon de lire une clé : <code>chat["nom"]</code>, avec le nom entre guillemets et entre crochets. Elle devient indispensable quand le nom de la clé est dans une variable : <code>let cle = "age"; console.log(chat[cle]);</code> affiche 3. Le point, lui, prend le mot tel quel : <code>chat.cle</code> chercherait une clé qui s'appelle littéralement « cle ».</p>
+</details>
 `,
   exercices: [
     {
@@ -408,7 +535,8 @@ for (let i = 0; i < films.length; i++) {
   id: 'js-11',
   titre: 'JavaScript dans la page : le DOM',
   contenu: `
-<p>Moment charnière : on va réunir tes trois compétences. Le JavaScript peut <strong>lire et modifier la page HTML</strong> en direct — c'est comme ça que les sites deviennent interactifs.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une page HTML seule est figée : ce qui est écrit dans le fichier s'affiche, un point c'est tout. Un menu qui s'ouvre, un bouton « J'aime » dont le compteur monte, un message « Mot de passe trop court » qui apparaît pendant la saisie : tout ça, c'est du JavaScript qui <strong>lit et modifie la page</strong> pendant qu'on la regarde. La page vue par JavaScript s'appelle le <strong>DOM</strong> (<em>Document Object Model</em>) : chaque balise y devient un objet qu'on peut attraper et transformer. C'est le moment où tes trois compétences (HTML, CSS, JavaScript) se rejoignent.</p>
 
 <h2>Attraper un élément</h2>
 <pre class="bloc-code">&lt;p id="message"&gt;Texte de départ&lt;/p&gt;
@@ -419,9 +547,9 @@ for (let i = 0; i < films.length; i++) {
 &lt;/script&gt;</pre>
 <ul>
 <li>le JavaScript s'écrit dans une balise <code>&lt;script&gt;</code>, placée <strong>après</strong> le HTML qu'il manipule ;</li>
-<li><code>document</code> — l'objet qui représente toute la page ;</li>
-<li><code>querySelector("...")</code> — trouve le premier élément correspondant au sélecteur, <strong>exactement comme en CSS</strong> : <code>"#message"</code> pour un id, <code>".classe"</code> pour une classe, <code>"p"</code> pour une balise. Ton CSS resservait déjà !</li>
-<li><code>.textContent</code> — le texte de l'élément, qu'on peut lire ou remplacer.</li>
+<li><code>document</code> est l'objet qui représente toute la page ;</li>
+<li><code>querySelector("...")</code> trouve le premier élément qui correspond au sélecteur, <strong>exactement comme en CSS</strong> : <code>"#message"</code> pour un id, <code>".classe"</code> pour une classe, <code>"p"</code> pour une balise. Ton CSS resservait déjà ;</li>
+<li><code>.textContent</code> est le texte de l'élément, qu'on peut lire ou remplacer.</li>
 </ul>
 
 <h2>Réagir à un clic</h2>
@@ -432,12 +560,42 @@ for (let i = 0; i < films.length; i++) {
   let btn = document.querySelector("#btn");
 
   btn.addEventListener("click", function () {
-    document.querySelector("#message").textContent = "Tu as cliqué !";
+    let msg = document.querySelector("#message");
+    msg.textContent = "Tu as cliqué !";
   });
 &lt;/script&gt;</pre>
-<p><code>addEventListener("click", ...)</code> se lit : « écoute les clics sur cet élément, et à chaque clic, exécute cette fonction ». La fonction sans nom (<em>fonction anonyme</em>) est simplement du code mis en attente jusqu'au clic.</p>
+<p><code>addEventListener("click", ...)</code> se lit : « écoute les clics sur cet élément, et à chaque clic, exécute cette fonction ». La fonction n'a pas de nom (on dit <em>fonction anonyme</em>) : c'est simplement du code mis en attente jusqu'au clic.</p>
 
-<div class="astuce">✅ C'est LE mécanisme de toute interface : <strong>un événement se produit (clic, saisie, survol...) → une fonction s'exécute → la page change</strong>. Tout le reste n'est que variation.</div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>Ce qui se passe</th></tr>
+<tr><td>chargement</td><td>Le navigateur affiche le bouton et le paragraphe, puis lit le script : il trouve le bouton et y attache l'écouteur. Rien ne change à l'écran.</td></tr>
+<tr><td>1er clic</td><td>La fonction s'exécute : elle trouve le paragraphe et remplace son texte par « Tu as cliqué ! ».</td></tr>
+<tr><td>2e clic</td><td>La fonction s'exécute à nouveau et remet le même texte : l'écouteur reste actif tant que la page est ouverte.</td></tr>
+</table>
+<p>C'est LE mécanisme de toute interface : <strong>un événement se produit → une fonction s'exécute → la page change</strong>. Tout le reste n'est que variation.</p>
+
+<h2>Les pièges</h2>
+<p>Ici, une erreur de script ne s'affiche pas : il ne se passe simplement rien. Un vrai navigateur, lui, l'écrit dans sa console (touche <kbd>F12</kbd>), en général sous la forme « Cannot read properties of null ». Le <code>null</code> veut dire : <code>querySelector</code> n'a rien trouvé.</p>
+<p><strong>Le sélecteur sans son symbole.</strong> <code>querySelector("message")</code> cherche une balise <code>&lt;message&gt;</code>, qui n'existe pas. Pour un id, il faut le <code>#</code> ; pour une classe, le point.</p>
+<p><strong>Le script avant le HTML.</strong> Le navigateur lit la page de haut en bas. Un script placé avant le bouton cherche un bouton qui n'existe pas encore, et reçoit <code>null</code>. D'où la règle : le <code>&lt;script&gt;</code> en dernier.</p>
+<p><strong>Des parenthèses de trop.</strong> <code>btn.addEventListener("click", changer())</code> <em>appelle</em> <code>changer</code> tout de suite, une seule fois, au chargement, au lieu de la confier à l'écouteur. On donne la fonction elle-même, sans parenthèses : <code>addEventListener("click", changer)</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le bouton qui ouvre le menu sur téléphone, le cœur qui se remplit quand tu aimes une photo, le compteur « 280 caractères restants » sous un champ de texte : chacun est un écouteur d'événement qui modifie un morceau de la page. Des outils comme React ou Vue, utilisés par les grands sites, automatisent ce mécanisme, mais ne le remplacent pas.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>document.querySelector("#id")</code> attrape un élément, avec les sélecteurs du CSS.</li>
+<li><code>.textContent</code> lit ou remplace son texte.</li>
+<li><code>element.addEventListener("click", function () { ... })</code> : un clic, une fonction, une page qui change.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les autres événements</summary>
+<p>Le clic n'est qu'un événement parmi d'autres : <code>"input"</code> se déclenche à chaque caractère tapé dans un champ, <code>"mouseover"</code> au survol de la souris, <code>"keydown"</code> à l'appui d'une touche du clavier. Tous s'écoutent de la même façon, avec <code>addEventListener</code>. Le module « JavaScript, la suite » consacre une leçon au clavier et aux autres événements.</p>
+</details>
 `,
   exercices: [
     {
@@ -509,7 +667,8 @@ for (let i = 0; i < films.length; i++) {
   id: 'js-12',
   titre: 'Projet final : le compteur',
   contenu: `
-<p>Dernière leçon du module — et cette fois, c'est TOI qui construis. Un compteur interactif : deux boutons, un nombre qui monte et descend. C'est petit, mais ça contient tout : variables, fonctions, événements, DOM.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Dernière leçon du module, et cette fois, c'est toi qui construis : un compteur interactif, avec deux boutons et un nombre qui monte et descend. C'est petit, mais c'est le squelette de beaucoup d'interfaces : la quantité d'un article dans un panier, le nombre de « J'aime », la page 3 sur 12 d'une galerie. Et ça mobilise tout le module : variables, fonctions, événements, DOM.</p>
 
 <h2>Le plan de bataille</h2>
 <p>Tout projet, même géant, se découpe en petites étapes. Voici les tiennes :</p>
@@ -519,11 +678,42 @@ for (let i = 0; i < films.length; i++) {
 <li>au clic sur <code>#plus</code> : augmente la variable de 1, puis mets à jour l'affichage ;</li>
 <li>au clic sur <code>#moins</code> : pareil, en enlevant 1.</li>
 </ol>
+<p>Avance étape par étape, et relance <strong>Vérifier ma réponse</strong> après chacune : un programme se construit par petits morceaux qui marchent, pas d'un seul bloc.</p>
 
-<h2>Le morceau nouveau (et le seul !)</h2>
-<p>Pour afficher un nombre dans un élément, on le range dans <code>textContent</code> :</p>
+<h2>L'idée clé : la variable d'abord, l'affichage ensuite</h2>
+<p>Le nombre existe à deux endroits : dans ta variable <code>compteur</code> (ce que le programme <em>sait</em>) et dans le texte de <code>#affichage</code> (ce que l'utilisateur <em>voit</em>). La variable est la référence ; l'affichage n'en est qu'une copie. À chaque clic, on modifie d'abord la variable, puis on recopie sa valeur dans la page :</p>
 <pre class="bloc-code">document.querySelector("#affichage").textContent = compteur;</pre>
-<p>Tout le reste, tu le connais déjà. Prends ton temps, relance avec <strong>Vérifier ma réponse</strong> à chaque étape, et souviens-toi : les erreurs sont des indices, pas des échecs.</p>
+<p>C'est le seul morceau nouveau de ce projet. Tout le reste, tu le connais déjà.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Événement</th><th>compteur</th><th>Affichage</th></tr>
+<tr><td>chargement</td><td>0</td><td>0</td></tr>
+<tr><td>clic sur +1</td><td>0 + 1 = 1</td><td>recopié : 1</td></tr>
+<tr><td>clic sur +1</td><td>1 + 1 = 2</td><td>recopié : 2</td></tr>
+<tr><td>clic sur -1</td><td>2 - 1 = 1</td><td>recopié : 1</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier de recopier.</strong> La variable change, mais l'écran reste à 0 : sans la ligne <code>textContent = compteur</code>, rien ne prévient la page. La page ne se met jamais à jour toute seule.</p>
+<p><strong>La variable créée dans l'écouteur.</strong> Si <code>let compteur = 0</code> est écrit <em>à l'intérieur</em> de la fonction du clic, il est recréé à 0 à chaque clic : le compteur affiche 1, et encore 1, et toujours 1. La variable se crée une seule fois, en dehors des écouteurs.</p>
+<p><strong>Calculer à partir du texte affiché.</strong> Lire <code>textContent</code> puis lui ajouter 1 donne « 01 », puis « 011 » : le texte de la page est du texte, et <code>"1" + 1</code> colle au lieu d'additionner. C'est pour ça qu'on calcule sur la variable, jamais sur l'affichage.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ce découpage (une variable qui fait foi, un affichage qu'on recopie depuis elle) porte un nom chez les développeurs : l'<em>état</em> et la <em>vue</em>. Les grandes applications gèrent des milliers de variables d'état et des centaines de morceaux de vue, mais le principe est exactement celui de ton compteur.</p>
+
+<div class="a-retenir">
+<ul>
+<li>La variable est la référence, l'affichage en est la copie.</li>
+<li>À chaque événement : modifier la variable, puis recopier dans la page avec <code>textContent</code>.</li>
+<li>La variable se crée une seule fois, en dehors des écouteurs.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : une seule fonction pour afficher</summary>
+<p>Les deux écouteurs finissent par la même ligne de mise à jour. Quand du code se répète, on le range dans une fonction : <code>function afficher() { document.querySelector("#affichage").textContent = compteur; }</code>, que chaque écouteur appelle. Le jour où l'affichage change (« 3 articles » au lieu de « 3 »), il n'y a plus qu'un endroit à modifier. C'est le réflexe de la leçon sur les fonctions, appliqué à un vrai projet.</p>
+</details>
 `,
   exercices: [
     {
