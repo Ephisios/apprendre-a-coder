@@ -6,6 +6,51 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.5.0 — 2026-10-01
+
+Une leçon de plus, et elle vient d'une mesure plutôt que d'une envie.
+
+### Ce que le relevé du contenu a montré
+
+Deux choses sont exemplaires et n'ont demandé aucun travail : les **59 QCM ont tous une aide pour
+chaque mauvaise réponse** et une explication sur la bonne ; et l'équilibre des leçons est
+remarquablement régulier — 3 exercices par leçon presque partout, 1000 à 1400 signes de cours,
+aucune leçon sans exercice.
+
+Un trou, en revanche : **aucune chasse au bug en SQL**, 0 sur 48 exercices, là où C en a 2 et Java 3.
+Or c'est le langage où déboguer s'apprend le plus mal seul : un `WHERE` mis à la place d'un
+`HAVING`, un `COUNT(*)` après un `LEFT JOIN` — ces fautes ne produisent **aucun message d'erreur**,
+juste un résultat faux et plausible.
+
+### Ajouté
+
+- **`sql-17` — « Déboguer une requête »**, en fin de module. Trois chasses au bug, une par famille
+  d'erreur silencieuse, et une méthode : retirer les clauses une par une en partant de la fin, et
+  regarder le nombre de lignes à chaque étape.
+
+  La troisième est la plus parlante : `ORDER BY titre LIMIT 3` présente comme « meilleur film » un
+  titre qui n'a même pas de note. Absurde à l'œil, produit sans la moindre erreur.
+
+- **Un invariant qui définit le genre** : *le code de départ d'une chasse au bug doit être refusé par
+  son propre correcteur*. S'il passait, l'élève cliquerait « Vérifier » et lirait « Bravo » sans
+  avoir rien cherché. Rien ne le vérifiait. Les **18** chasses du cours s'y conforment — 15 sous
+  Node, et les 3 dont le correcteur mesure la page, dans le navigateur.
+
+  > Le harnais Node écartait silencieusement ces trois-là. Il les **nomme** désormais, et le pilote
+  > navigateur exige d'en éprouver exactement trois : un total qui ne tombe pas juste est la
+  > meilleure façon de croire une famille couverte alors qu'elle ne l'est pas.
+
+### Ce qui n'a pas été fait, et pourquoi
+
+Le premier plan était de convertir trois défis SQL existants en chasses au bug, pour respecter le
+rythme de trois exercices par leçon. En les lisant, deux d'entre eux se sont révélés être **les
+formes correctes des bugs que je voulais faire chercher** — `sql-11 [1]` est le `HAVING AVG` juste,
+`sql-13 [2]` le `COUNT(colonne)` juste. Les remplacer aurait supprimé la bonne réponse pour y mettre
+l'erreur. Une leçon neuve ne supprime rien et traite la cause plutôt que le symptôme : le manque
+n'était pas « trois exercices », c'était que le débogage n'existait pas comme sujet.
+
+---
+
 ## 3.4.6 — 2026-10-01
 
 **Rien ne change pour l'élève** — 32 vérifications sur ce que le bac à sable a de plus distinctif,

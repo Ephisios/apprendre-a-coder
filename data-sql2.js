@@ -569,7 +569,125 @@ FROM films;</pre>
         if (ctx.lignes.length !== 1) return { ok: false, message: 'Une seule ville dépasse 2 séances : Lyon, avec 4. Ta requête renvoie ' + ctx.lignes.length + ' ligne(s) — vérifie le <code>HAVING COUNT(*) > 2</code>.' };
         if (Number(sqlValeurs(ctx, 'nb')[0]) !== 4) return { ok: false, message: 'Lyon a accueilli 4 séances (deux salles). Tu affiches ' + sqlValeurs(ctx, 'nb')[0] + '.' };
         if (Number(sqlValeurs(ctx, 'total')[0]) !== 595) return { ok: false, message: 'Le total lyonnais est 595 spectateurs (210 + 45 + 260 + 80). Tu affiches ' + sqlValeurs(ctx, 'total')[0] + ' — utilise <code>SUM</code>, pas <code>COUNT</code>.' };
-        return { ok: true, message: 'Module SQL complet ! 🗄 Jointures, agrégats, groupes, filtres de groupes, sous-requêtes, LEFT JOIN, UNION, CASE — tu disposes maintenant de tout l\'outillage d\'un analyste de données.' };
+        return { ok: true, message: 'Jointures, agrégats, groupes, filtres de groupes, sous-requêtes, LEFT JOIN, UNION, CASE, et maintenant la conception : tu disposes de tout l\'outillage d\'un analyste de données. Reste une dernière leçon, sur les requêtes qui ne se plaignent pas.' };
+      }
+    }
+  ]
+}
+,
+/* ---------- sql-17 ---------- */
+{
+  id: 'sql-17',
+  titre: 'Déboguer une requête',
+  contenu: `
+<p>Jusqu'ici, quand une requête était fausse, le moteur te le disait. Cette leçon parle du cas inverse, et c'est le plus dangereux : <strong>une requête fausse ne se plaint pas, elle répond</strong>. Elle rend un tableau propre, plausible, et faux.</p>
+
+<h2>Le filtre posé au mauvais moment</h2>
+<p><code>WHERE</code> filtre les <strong>lignes</strong>, avant tout regroupement. <code>HAVING</code> filtre les <strong>groupes</strong>, après. Écrire l'un pour l'autre ne provoque aucune erreur — seulement un autre résultat.</p>
+<pre class="bloc-code">WHERE note > 8         → on jette des films, PUIS on calcule la moyenne
+HAVING AVG(note) > 8   → on calcule la moyenne, PUIS on juge le genre</pre>
+<p>Avec le <code>WHERE</code>, tout genre qui garde ne serait-ce qu'un film passe le filtre : la moyenne d'un seul film noté au-dessus de 8 est forcément au-dessus de 8.</p>
+
+<h2>Le comptage qui compte autre chose</h2>
+<p><code>COUNT(*)</code> compte les <strong>lignes</strong>. <code>COUNT(colonne)</code> compte les valeurs <strong>présentes</strong> dans cette colonne. Après un <code>LEFT JOIN</code>, un film sans séance produit quand même une ligne — avec des cases vides. <code>COUNT(*)</code> y voit 1, <code>COUNT(seances.id)</code> y voit 0.</p>
+
+<h2>L'ordre qu'on n'a pas demandé</h2>
+<p><code>LIMIT 3</code> ne garde pas « les trois meilleurs » : il garde les trois premiers <strong>de l'ordre en vigueur</strong>. Avec le mauvais <code>ORDER BY</code>, on obtient trois lignes quelconques présentées comme un palmarès.</p>
+
+<h2>La méthode</h2>
+<p>Devant un résultat suspect, retire les clauses une par une en partant de la fin, et regarde le <strong>nombre de lignes</strong> à chaque étape. Celle qui fait bouger ce nombre de façon inattendue est la coupable.</p>
+
+<div class="attention"><div>Compte toujours. Huit lignes là où tu en attendais cinq, c'est un signal. Un résultat « qui a l'air bien » n'en est pas un.</div></div>
+`,
+  exercices: [
+    {
+      type: 'sql',
+      genre: 'bug',
+      tables: ['films'],
+      consigne: "<strong>Chasse au bug :</strong> cette requête doit afficher les genres dont la <strong>note moyenne</strong> dépasse 8, avec la moyenne nommée <code>moyenne</code>. Elle en rend trois. Un seul des deux attendus manque à l'appel, et un intrus s'est invité.",
+      codeDepart: "SELECT genre, AVG(note) AS moyenne\nFROM films\nWHERE note > 8\nGROUP BY genre;\n",
+      indices: [
+        "Rien ne plante, et pourtant le Thriller est là. Sa vraie moyenne est 8.0 — calcule-la à la main sur les deux films du genre pour voir ce que la requête a compté.",
+        "Le <code>WHERE</code> s'applique AVANT le regroupement : il jette « Nuit Polaire » (7.8), et il ne reste plus qu'un film pour faire la moyenne du Thriller. Le filtre doit porter sur le groupe, pas sur la ligne.",
+        "Retire la ligne <code>WHERE</code>, et pose <code>HAVING AVG(note) > 8</code> après le <code>GROUP BY</code>."
+      ],
+      solution: "SELECT genre, AVG(note) AS moyenne\nFROM films\nGROUP BY genre\nHAVING AVG(note) > 8;",
+      verifier: function (ctx) {
+        const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
+        if (/\bwhere\b/i.test(ctx.code)) {
+          return { ok: false, message: 'Il reste un <code>WHERE</code>. C\'est lui le bug : il jette des films avant que la moyenne ne soit calculée.' };
+        }
+        if (ctx.lignes.length === 4) return { ok: false, message: 'Les 4 genres sont là : plus aucun filtre ne s\'applique. Il en faut un, mais sur les groupes.' };
+        if (ctx.lignes.length !== 2) {
+          return { ok: false, message: 'J\'attends 2 genres — Drame (8.15) et Aventure (8.7). Ta requête en rend ' + ctx.lignes.length + '.' };
+        }
+        if (!sqlMemeEnsemble(sqlValeurs(ctx, 'genre'), ['Drame', 'Aventure'])) {
+          return { ok: false, message: 'Les deux genres attendus sont Drame et Aventure. Le Thriller ne doit plus y être : sa vraie moyenne est 8.0.' };
+        }
+        if (!sqlColonnes(ctx).includes('moyenne')) return { ok: false, message: 'Garde le nom <code>moyenne</code> pour la colonne de moyenne.' };
+        return { ok: true, message: 'WHERE jette des lignes, HAVING juge des groupes. Le résultat faux était propre et plausible — c\'est exactement ce qui rend cette faute difficile à voir.' };
+      }
+    },
+    {
+      type: 'sql',
+      genre: 'bug',
+      tables: ['films', 'seances'],
+      consigne: "<strong>Chasse au bug :</strong> cette requête doit afficher chaque film avec son nombre de séances nommé <code>nb</code>, y compris les films jamais programmés. Elle prétend que « Petit Déjeuner » a une séance. Il n'en a aucune.",
+      codeDepart: "SELECT films.titre, COUNT(*) AS nb\nFROM films\nLEFT JOIN seances ON films.id = seances.film_id\nGROUP BY films.titre;\n",
+      indices: [
+        "Le <code>LEFT JOIN</code> fait bien son travail : les films sans séance sont là. C'est le comptage qui se trompe de chose à compter.",
+        "Un film sans séance produit quand même une ligne, avec les colonnes de <code>seances</code> vides. <code>COUNT(*)</code> compte cette ligne ; il faut compter autre chose.",
+        "<code>COUNT(seances.id)</code> ne compte que les valeurs présentes — donc 0 pour un film jamais programmé."
+      ],
+      solution: "SELECT films.titre, COUNT(seances.id) AS nb\nFROM films\nLEFT JOIN seances ON films.id = seances.film_id\nGROUP BY films.titre;",
+      verifier: function (ctx) {
+        const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
+        const cols = sqlColonnes(ctx);
+        const iNb = cols.indexOf('nb');
+        if (iNb === -1) return { ok: false, message: 'Garde le nom <code>nb</code> pour la colonne de comptage.' };
+        if (ctx.lignes.length !== 8) {
+          return { ok: false, message: 'J\'attends les 8 films, même ceux sans séance. Ta requête en rend ' + ctx.lignes.length + ' — le <code>LEFT JOIN</code> est-il toujours là ?' };
+        }
+        const iTitre = iNb === 0 ? 1 : 0;
+        const compte = {};
+        for (const l of ctx.lignes) compte[String(l[iTitre])] = l[iNb];
+        const jamais = ['Petit Déjeuner', 'Echo', 'Le Phare'];
+        const faux = jamais.filter(function (t) { return Number(compte[t]) !== 0; });
+        if (faux.length) {
+          return { ok: false, message: '« ' + faux[0] + ' » n\'a aucune séance, et ta requête lui en compte ' + compte[faux[0]] + '. <code>COUNT(*)</code> compte la ligne, pas la séance.' };
+        }
+        if (Number(compte['Sable et Cendres']) !== 3) {
+          return { ok: false, message: 'Les zéros sont bons, mais « Sable et Cendres » doit garder ses 3 séances.' };
+        }
+        return { ok: true, message: 'COUNT(*) compte des lignes, COUNT(colonne) compte des valeurs présentes. Après un LEFT JOIN, toute la différence est là.' };
+      }
+    },
+    {
+      type: 'sql',
+      genre: 'bug',
+      tables: ['films'],
+      consigne: "<strong>Chasse au bug :</strong> cette requête doit afficher les <strong>trois films les mieux notés</strong> avec leur note. Elle place « Echo » en tête — un film qui n'a même pas de note.",
+      codeDepart: "SELECT titre, note\nFROM films\nORDER BY titre\nLIMIT 3;\n",
+      indices: [
+        "Il y a bien un <code>ORDER BY</code> et un <code>LIMIT 3</code>. Regarde sur QUOI porte le tri, puis relis la consigne.",
+        "<code>LIMIT</code> coupe après le tri : il garde les trois premiers de l'ordre en vigueur. Ici l'ordre est alphabétique, donc les trois premiers sont ceux dont le titre commence le plus tôt dans l'alphabet.",
+        "Trie sur la note, et du plus grand au plus petit : <code>ORDER BY note DESC</code>."
+      ],
+      solution: "SELECT titre, note\nFROM films\nORDER BY note DESC\nLIMIT 3;",
+      verifier: function (ctx) {
+        const pb = sqlErreurOuVide(ctx, true); if (pb) return pb;
+        if (ctx.lignes.length !== 3) {
+          return { ok: false, message: 'J\'attends exactement 3 films. Ta requête en rend ' + ctx.lignes.length + ' — garde le <code>LIMIT 3</code>.' };
+        }
+        const titres = sqlValeurs(ctx, 'titre').map(String);
+        const attendus = ['Sable et Cendres', 'La Grande Traversée', 'Le Dernier Train'];
+        if (titres.join('|') === 'Echo|La Grande Traversée|Le Dernier Train') {
+          return { ok: false, message: 'Toujours l\'ordre alphabétique : « Echo » passe devant parce que son titre commence par un E, pas parce qu\'il est bien noté. Il n\'a même pas de note.' };
+        }
+        if (titres.join('|') !== attendus.join('|')) {
+          return { ok: false, message: 'J\'attends, dans cet ordre : ' + attendus.join(', ') + '. Tu rends : ' + titres.join(', ') + '.' };
+        }
+        return { ok: true, message: 'LIMIT coupe après le tri : sans le bon ORDER BY, il ne garde pas les meilleurs, il garde les premiers venus.' };
       }
     }
   ]

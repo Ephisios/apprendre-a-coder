@@ -806,12 +806,29 @@ const moteurs = { js: { juges: 0, ko: [] }, py: { juges: 0, ko: [] }, cj: { juge
 const nonJuges = { miseEnPage: 0, qcm: stats.qcm, domSansJsdom: 0, pasDeMoteur: 0 };
 const sabo = { testes: 0, refuses: 0, complaisants: [], nonEprouves: 0, sansCopie: [], equivalentes: 0 };
 
+/* Une chasse au bug a une propriété qui la définit : son code de départ est
+   FAUX. S'il passait son propre correcteur, l'élève cliquerait « Vérifier »
+   et lirait « Bravo » sans avoir rien cherché. Rien ne le vérifiait. */
+const chasses = { eprouvees: 0, complaisantes: [], horsPortee: [] };
+function estChasseAuBug(ex) {
+  if (ex.genre) return ex.genre === 'bug';
+  return /^\s*Chasse au bug/i.test(String(ex.consigne || '').replace(/<[^>]*>/g, ''));
+}
+
 async function controler() {
   for (const t of travail) {
     const ex = t.ex;
     const famille = familleDe(ex);
 
-    if (famille === 'mise en page') { nonJuges.miseEnPage++; continue; }
+    if (famille === 'mise en page') {
+      nonJuges.miseEnPage++;
+      // Une chasse au bug dont le correcteur MESURE la page ne peut pas être
+      // éprouvée ici. On la nomme, plutôt que de la laisser disparaître du
+      // compte : un total qui ne tombe pas juste est la meilleure façon de
+      // croire une famille couverte alors qu'elle ne l'est pas.
+      if (estChasseAuBug(ex)) chasses.horsPortee.push(t.ou);
+      continue;
+    }
     if (famille === 'dom' && !chargerJsdom()) { nonJuges.domSansJsdom++; continue; }
     if (!moteurs[famille]) { nonJuges.pasDeMoteur++; continue; }
 
@@ -823,6 +840,20 @@ async function controler() {
     if (ct.impossible) { nonJuges.pasDeMoteur++; continue; }
     let verdict = juger(ex, ct);
     moteurs[famille].juges++;
+
+    // 1 bis. Le code de départ d'une chasse au bug doit être REFUSÉ.
+    if (estChasseAuBug(ex) && typeof ex.codeDepart === 'string') {
+      let depart = null;
+      try { depart = await rejouer(ex.codeDepart, ex, famille); } catch (e) { depart = null; }
+      if (depart && !depart.impossible) {
+        const vd = juger(ex, depart);
+        if (vd && vd.ok === true) {
+          chasses.complaisantes.push(t.ou + ' — son code de départ est ACCEPTÉ : il n' + '\'' + 'y a rien à trouver');
+        } else {
+          chasses.eprouvees++;
+        }
+      }
+    }
 
     if (verdict && verdict.ok === true) {
       // 2. une copie sabotée doit être REFUSÉE — mais seulement si cette copie
@@ -895,6 +926,19 @@ controler().then(() => {
     for (const ou of sabo.sansCopie) console.log('        - ' + ou);
   }
   console.log('');
+
+  if (chasses.eprouvees || chasses.complaisantes.length) {
+    console.log('=== Chasses au bug : leur code de départ est-il bien faux ? ===');
+    for (const c of chasses.complaisantes) console.log('  ! ' + c);
+    if (chasses.complaisantes.length) pb.push.apply(pb, chasses.complaisantes);
+    console.log('  ' + chasses.eprouvees + ' chasse(s) dont le départ est bien refusé, '
+      + chasses.complaisantes.length + ' sans rien à chercher');
+    if (chasses.horsPortee.length) {
+      console.log('  ' + chasses.horsPortee.length + ' hors de portée ici — leur correcteur mesure la page :');
+      for (const ou of chasses.horsPortee) console.log('        - ' + ou);
+    }
+    console.log('');
+  }
 
   console.log('=== Ce qui n\'a PAS pu être jugé ici (' + totalNonJuges + ') ===');
   console.log('  ' + String(nonJuges.miseEnPage).padStart(4) + '  correcteurs qui mesurent la page (largeur, position, media queries) — seul le navigateur peut en juger');

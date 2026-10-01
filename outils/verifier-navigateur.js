@@ -327,6 +327,9 @@ async function suiteMesure(port) {
   console.log('  ' + bilan.texte);
   verifie('mise en page — aucune solution officielle refusée', bilan.ko, 0);
   verifie('mise en page — aucun correcteur complaisant', bilan.complaisants, 0);
+  console.log('  ' + bilan.chassesOk + ' chasse(s) au bug éprouvée(s) ici — celles que Node ne peut pas juger');
+  verifie('mise en page — aucune chasse au bug n\'accepte son propre code de départ', bilan.chassesKo, 0);
+  verifie('mise en page — les trois chasses hors de portée de Node sont bien éprouvées ici', bilan.chassesOk, 3);
   return co;   // le même onglet servira pour l'application
 }
 

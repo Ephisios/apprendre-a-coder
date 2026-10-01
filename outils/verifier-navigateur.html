@@ -219,6 +219,11 @@ function sansLaCible(code, src) {
 // en mémoire en plus de les peindre, pour qu'il n'ait pas à gratter le DOM.
 var RETENU = [];
 
+function estChasseAuBug(ex) {
+  if (ex.genre) return ex.genre === 'bug';
+  return /^\s*Chasse au bug/i.test(String(ex.consigne || '').replace(/<[^>]*>/g, ''));
+}
+
 function ligne(classe, ou, texte) {
   RETENU.push({ classe: classe, ou: ou, texte: String(texte).replace(/<[^>]+>/g, '') });
   var d = document.createElement('div');
@@ -245,6 +250,10 @@ async function lancer() {
     'En cours — ' + travail.length + ' exercices à ' + largeur + ' px…';
 
   var ko = 0, complaisants = 0, nonEprouves = 0, juges = 0;
+  // Une chasse au bug a une propriété qui la définit : son code de départ est
+  // FAUX. Les trois qui mesurent la page ne peuvent pas être éprouvées sous
+  // Node — c'est ici, et nulle part ailleurs, qu'on peut le faire.
+  var chassesOk = 0, chassesKo = 0;
 
   for (var n = 0; n < travail.length; n++) {
     var t = travail[n];
@@ -258,6 +267,18 @@ async function lancer() {
       ligne('ko', t.ou, 'la solution officielle est REFUSÉE → ' +
         ((v && v.message) || 'sans message').replace(/<[^>]+>/g, ''));
       continue;
+    }
+
+    // 1 bis. Une chasse au bug doit refuser son propre code de départ.
+    if (estChasseAuBug(t.ex) && typeof t.ex.codeDepart === 'string') {
+      var ctxDepart = await rendre(t.ex.codeDepart, largeur);
+      var vDepart = juger(t.ex, ctxDepart);
+      if (vDepart && vDepart.ok === true) {
+        chassesKo++;
+        ligne('ko', t.ou, 'son code de départ est ACCEPTÉ : il n’y a rien à trouver');
+      } else {
+        chassesOk++;
+      }
     }
 
     // 2. une copie abîmée doit être REFUSÉE
@@ -289,6 +310,7 @@ async function lancer() {
   // Dernier geste : le pilote ne lit que ceci.
   window.__bilan = {
     juges: juges, ko: ko, complaisants: complaisants, nonEprouves: nonEprouves,
+    chassesOk: chassesOk, chassesKo: chassesKo,
     duree: duree, texte: b.textContent,
     ennuis: RETENU.filter(function (l) { return l.classe !== 'ok'; })
   };
