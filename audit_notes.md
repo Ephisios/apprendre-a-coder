@@ -326,6 +326,41 @@ le focus et retirer l'annonce fait tomber 11 vérifications, et le
 recensement nomme le coupable.
 
 
+### 4.9 Le clic « Vérifier », et ce qui efface du travail
+
+RÉSOLU le 2026-10-01. 27 vérifications dans test-interface.js, choisies
+d'après une mesure de COUVERTURE RÉELLE et non de couverture par nom : on
+instrumente les fonctions globales d'app.js, on lance le harnais, on
+regarde lesquelles ne sont jamais appelées. Résultat de départ : 88 des 132
+fonctions s'exécutaient, 44 jamais.
+
+CE QUI EN RESSORTAIT DE PLUS LOURD :
+
+1. verifier(i), le point d'entrée du clic. verifier-contenu.js juge les
+   correcteurs en les appelant LUI-MÊME ; le chemin du clic au verdict
+   n'était parcouru par personne. Les 59 QCM en dépendent entièrement —
+   ils n'ont pas de correcteur à eux. Les deux cas qui portent la
+   pédagogie : une case non cochée est une étape sautée (ni rouge, ni essai
+   compté), et une mauvaise réponse reçoit l'aide propre à CE choix.
+
+2. Les trois fonctions qui détruisent du travail. recommencerLecon promet
+   dans sa confirmation que « le reste de ta progression n'est pas
+   touché » : c'est désormais une vérification.
+
+3. exporterProgression. La restauration était testée, l'écriture non. On
+   fait l'aller-retour : exporter, tout effacer, restaurer, comparer.
+
+UN INVARIANT AJOUTÉ AU VERIFIER : tout exercice non-QCM doit avoir un
+codeDepart de type chaîne. Sans lui, « Recommencer » écrirait le mot
+undefined dans l'éditeur. Mesuré d'abord : 425 exercices à éditeur, aucun
+sans codeDepart.
+
+POUR REFAIRE LA MESURE DE COUVERTURE RÉELLE : les fonctions déclarées au
+premier niveau d'app.js deviennent des propriétés de window, donc les
+remplacer intercepte AUSSI les appels internes. C'est ce qui rend
+l'instrumentation possible sans toucher au code du projet.
+
+
 ## 5. Comment ré-examiner ce travail (pour Claude ou autre)
 
 ### 5.1 Relancer le verifier (source de vérité)

@@ -289,6 +289,12 @@ for (const item of lecons) {
       pb.push(tag + ' : genre inconnu « ' + ex.genre + ' » — attendu ' + GENRES_CONNUS.join(', '));
     }
 
+    // « Recommencer » remet codeDepart dans l'éditeur. S'il manquait, l'élève
+    // y lirait le mot « undefined » à la place de son point de départ.
+    if (t !== 'qcm' && typeof ex.codeDepart !== 'string') {
+      pb.push(tag + " : codeDepart manquant — « Recommencer » écrirait « undefined » dans l'éditeur");
+    }
+
     if (ex.indices !== undefined && !Array.isArray(ex.indices)) {
       pb.push(tag + ' : indices doit etre un tableau de chaines');
     }

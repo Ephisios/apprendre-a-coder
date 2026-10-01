@@ -128,7 +128,16 @@ sources.push(`
     allerLecon: (id) => allerLecon(id),
     allerLeconExo: (id, i) => allerLeconExo(id, i),
     fermerMenus: () => fermerMenus(),
-    fermerNavMobile: () => fermerNavMobile()
+    fermerNavMobile: () => fermerNavMobile(),
+
+    // Le clic « Vérifier », et ce qui efface du travail.
+    verifier: (i) => verifier(i),
+    reinitialiser: (i) => reinitialiser(i),
+    recommencerLecon: () => recommencerLecon(),
+    oublierExo: (id, i) => oublierExo(id, i),
+    exporterProgression: () => exporterProgression(),
+    progressionEtat: () => progression,
+    indicesEtat: () => indicesOuverts
   };
 `);
 win.eval(sources.join('\n;\n'));
@@ -1020,6 +1029,216 @@ const lancerJS = (code) => new Promise((resolve) => pont.executerJS(code, resolv
   pont.fermerNavMobile();
   verifie('câblage — fermer le menu mobile le referme vraiment',
           win.document.body.classList.contains('nav-ouverte'), false);
+
+  /* ======================================================================
+     Le clic sur « Vérifier »
+     ======================================================================
+     C'est le point d'entrée le plus parcouru du logiciel, et aucun harnais
+     ne l'exécutait. verifier-contenu.js juge les CORRECTEURS un par un, mais
+     en les appelant lui-même : le chemin qui va du clic au verdict — lire la
+     case cochée, choisir le bon message, décider si l'essai compte — n'était
+     emprunté par personne.
+
+     Les QCM en dépendent entièrement : ils n'ont pas de fonction verifier()
+     à eux, toute leur mécanique vit ici. Le verifier dit d'ailleurs qu'elle
+     n'est « contrôlée que statiquement ». Elle l'est désormais en marche. */
+
+  console.log('\n=== Le clic sur « Vérifier » ===\n');
+
+  // Un VRAI QCM du cours, avec ses aides par réponse : afficherVerdict passe
+  // par marquerExo, qui ne connaît que les leçons existantes.
+  let qcm = null;
+  for (const mod of pont.modules()) {
+    for (const lec of mod.lecons) {
+      pont.exercicesDe(lec).forEach((ex, i) => {
+        if (!qcm && ex.type === 'qcm' && Array.isArray(ex.aides) && ex.aides.length) qcm = { lec, i, ex };
+      });
+      if (qcm) break;
+    }
+    if (qcm) break;
+  }
+  verifie('vérifier — le cours contient bien un QCM avec des aides par réponse', !!qcm, true);
+
+  if (qcm) {
+    const mauvaise = qcm.ex.choix.findIndex((_, k) => k !== qcm.ex.bonne && qcm.ex.aides[k]);
+
+    function sceneQcm() {
+      poserScene();
+      const d = win.document.getElementById('contenu');
+      let html = '<div id="exercice-' + qcm.i + '" class="exercice"><div class="exercice-entete">Q</div>';
+      qcm.ex.choix.forEach((c, k) => {
+        html += '<input type="radio" name="qcm-' + qcm.i + '" value="' + k + '" id="c' + k + '">';
+      });
+      html += '<div id="feedback-' + qcm.i + '"></div></div>';
+      d.innerHTML = html;
+      pont.poserLecon(qcm.lec);
+      pont.poserProgression({ faits: {}, exos: {}, acquis: {}, effort: {} });
+      pont.viderEssais();
+    }
+    const lu = () => win.document.getElementById('feedback-' + qcm.i);
+
+    // Ne rien avoir coché n'est PAS une faute : c'est une étape sautée.
+    // La confondre avec une erreur ferait monter l'aide pour rien.
+    sceneQcm();
+    pont.verifier(qcm.i);
+    verifie('QCM — ne rien cocher n\'est pas peint comme une faute', lu().className, 'feedback neutre');
+    verifie('QCM — et ne compte pas comme un essai raté', Object.keys(pont.essais()).length, 0);
+
+    sceneQcm();
+    win.document.getElementById('c' + qcm.ex.bonne).checked = true;
+    pont.verifier(qcm.i);
+    verifie('QCM — la bonne réponse est acceptée', lu().className, 'feedback ok');
+    if (qcm.ex.explication) {
+      verifie('QCM — et l\'explication de la leçon est donnée',
+              lu().textContent.indexOf(qcm.ex.explication.replace(/<[^>]+>/g, '').slice(0, 25)) !== -1, true);
+    }
+
+    /* Le cœur de la pédagogie des QCM : chaque mauvaise réponse a SON
+       message, qui dit pourquoi celle-là est fausse. Servir le message
+       générique à tout le monde ferait perdre tout l'intérêt des 59 QCM. */
+    if (mauvaise !== -1) {
+      sceneQcm();
+      win.document.getElementById('c' + mauvaise).checked = true;
+      pont.verifier(qcm.i);
+      verifie('QCM — une mauvaise réponse est refusée', lu().className, 'feedback ko');
+      verifie('QCM — et reçoit l\'aide propre à CE choix-là',
+              lu().textContent.indexOf(qcm.ex.aides[mauvaise].replace(/<[^>]+>/g, '').slice(0, 25)) !== -1, true);
+      verifie('QCM — l\'essai raté est compté, lui', Object.values(pont.essais())[0], 1);
+    }
+  }
+
+  /* ======================================================================
+     Ce qui efface du travail
+     ======================================================================
+     Trois fonctions du logiciel détruisent ce que l'élève a fait. Aucune
+     n'était exercée. recommencerLecon fait en plus une promesse écrite dans
+     sa propre demande de confirmation — « Le reste de ta progression n'est
+     pas touché » — et c'est exactement le genre de phrase qu'on vérifie. */
+
+  console.log('\n=== Ce qui efface du travail ===\n');
+
+  // Une leçon dont le PREMIER exercice a un éditeur : reinitialiser() y
+  // remet le code de départ, ce qui n'a pas de sens sur un QCM.
+  // Un exercice de type html : son aperçu est un simple srcdoc, synchrone.
+  // Un exercice JS ou Python relancerait un Worker ou Skulpt, ce qui n'a rien
+  // à voir avec ce qu'on veut éprouver ici.
+  const aUnEditeur = (l) => { const e = pont.exercicesDe(l)[0]; return e && e.type === 'html' && typeof e.codeDepart === 'string'; };
+  const toutesLecons = pont.modules().flatMap((m) => m.lecons);
+  const lecA = toutesLecons.find(aUnEditeur);
+  const lecB = toutesLecons.find((l) => l.id !== lecA.id && aUnEditeur(l));
+
+  function sceneExos(lecon) {
+    poserScene();
+    const d = win.document.getElementById('contenu');
+    // La scène porte tout ce qu'un exercice peut réclamer en se rafraîchissant :
+    // l'aperçu, la zone d'annonce, la console et le tableau SQL.
+    d.innerHTML = pont.exercicesDe(lecon).map((ex, i) =>
+      '<div id="exercice-' + i + '"><textarea id="editeur-' + i + '"></textarea>' +
+      '<iframe id="apercu-' + i + '"></iframe><p id="apercu-etat-' + i + '"></p>' +
+      '<pre id="console-sortie-' + i + '"></pre><div id="resultat-sql-' + i + '"></div>' +
+      '<div id="feedback-' + i + '"></div><div id="indice-' + i + '"></div>' +
+      '<div id="zone-solution-' + i + '"></div></div>').join('');
+    pont.poserLecon(lecon);
+  }
+
+  // --- reinitialiser : un exercice revient à son point de départ ---
+  sceneExos(lecA);
+  pont.poserProgression({ faits: { [lecA.id]: true }, exos: { [lecA.id]: { 0: 'ok' } }, acquis: {}, effort: {} });
+  LS.setItem('aac-code-' + lecA.id + '-0', 'du code écrit par l\'élève');
+  win.document.getElementById('editeur-0').value = 'du code écrit par l\'élève';
+  pont.viderEssais();
+  pont.ouvrir(lecA.id + '#0', 2);
+  pont.reinitialiser(0);
+  verifie('réinitialiser — le code de départ est rendu',
+          win.document.getElementById('editeur-0').value, pont.exercicesDe(lecA)[0].codeDepart);
+  verifie('réinitialiser — le code gardé est oublié', LS.getItem('aac-code-' + lecA.id + '-0'), null);
+  verifie('réinitialiser — la réussite est effacée', !!pont.progressionEtat().exos[lecA.id][0], false);
+  verifie('réinitialiser — et l\'aide se referme', pont.indicesEtat()[lecA.id + '#0'], undefined);
+
+  // --- recommencerLecon : et la promesse faite dans sa confirmation ---
+  const etatDeux = () => ({
+    faits: { [lecA.id]: true, [lecB.id]: true },
+    exos: { [lecA.id]: { 0: 'ok' }, [lecB.id]: { 0: 'ok' } },
+    acquis: {}, effort: {}
+  });
+
+  sceneExos(lecA);
+  pont.poserProgression(etatDeux());
+  win.confirm = () => false;
+  pont.recommencerLecon();
+  verifie('recommencer — refuser ne touche à rien',
+          !!pont.progressionEtat().exos[lecA.id], true);
+
+  sceneExos(lecA);
+  pont.poserProgression(etatDeux());
+  LS.setItem('aac-code-' + lecA.id + '-0', 'mon code');
+  win.confirm = () => true;
+  pont.recommencerLecon();
+  verifie('recommencer — la leçon visée est remise à zéro',
+          pont.progressionEtat().exos[lecA.id], undefined);
+  verifie('recommencer — et le code gardé avec elle',
+          LS.getItem('aac-code-' + lecA.id + '-0'), null);
+  /* La phrase exacte de la confirmation : « Le reste de ta progression n'est
+     pas touché ». Si elle devenait fausse, l'élève perdrait tout en croyant
+     ne perdre qu'une leçon. */
+  verifie('recommencer — le reste de la progression est intact, comme promis',
+          !!pont.progressionEtat().exos[lecB.id], true);
+  verifie('recommencer — y compris la leçon terminée',
+          pont.progressionEtat().faits[lecB.id], true);
+
+  /* ======================================================================
+     L'export de la progression
+     ======================================================================
+     La RESTAURATION est vérifiée depuis longtemps. L'ÉCRITURE du fichier ne
+     l'était pas — et un export malformé ne se découvre que le jour où l'on
+     en a besoin, c'est-à-dire trop tard. On fait donc l'aller-retour
+     complet : exporter, tout effacer, restaurer, comparer. */
+
+  console.log('\n=== La sauvegarde que l\'élève emporte ===\n');
+
+  let blobExporte = null, nomExporte = null;
+  win.URL.createObjectURL = (b) => { blobExporte = b; return 'blob:export'; };
+  win.URL.revokeObjectURL = () => {};
+  const clicOriginal = win.HTMLAnchorElement.prototype.click;
+  win.HTMLAnchorElement.prototype.click = function () { nomExporte = this.download; };
+
+  poserScene();
+  LS.clear();
+  LS.setItem('aac-progression', '{"faits":{"html-1":true}}');
+  LS.setItem('aac-code-html-1-0', '<h1>mon titre</h1>');
+  LS.setItem('aac-bac', '{"projets":{"essai":{}}}');
+  LS.setItem('autre-appli', 'ne doit pas partir dans la sauvegarde');
+  pont.poserProgression({ faits: { 'html-1': true }, exos: {}, acquis: {}, effort: {} });
+  pont.exporterProgression();
+
+  verifie('export — un fichier est bien proposé au téléchargement', !!blobExporte, true);
+  verifie('export — son nom porte la date du jour',
+          /^apprendre-a-coder-\d{4}-\d{2}-\d{2}\.json$/.test(String(nomExporte)), true);
+
+  const texte = blobExporte ? await blobExporte.text() : '';
+  let sauvegarde = null;
+  try { sauvegarde = JSON.parse(texte); } catch (e) { sauvegarde = null; }
+  verifie('export — le fichier est du JSON lisible', !!sauvegarde, true);
+
+  if (sauvegarde) {
+    verifie('export — il se reconnaît à sa marque', sauvegarde.format, pont.marque());
+    verifie('export — il dit en clair ce qu\'il contient', /exercices réussis sur/.test(String(sauvegarde.resume)), true);
+    verifie('export — le code écrit par l\'élève est dedans',
+            sauvegarde.donnees['aac-code-html-1-0'], '<h1>mon titre</h1>');
+    verifie('export — ses projets aussi', sauvegarde.donnees['aac-bac'], '{"projets":{"essai":{}}}');
+    verifie('export — mais rien qui ne nous appartienne',
+            Object.prototype.hasOwnProperty.call(sauvegarde.donnees, 'autre-appli'), false);
+
+    // L'aller-retour : c'est lui qui prouve que la sauvegarde sert à quelque chose.
+    LS.clear();
+    win.confirm = () => true;
+    pont.restaurer(texte);
+    verifie('export — après un effacement total, tout revient',
+            LS.getItem('aac-code-html-1-0'), '<h1>mon titre</h1>');
+    verifie('export — la progression aussi', LS.getItem('aac-progression'), '{"faits":{"html-1":true}}');
+  }
+  win.HTMLAnchorElement.prototype.click = clicOriginal;
+  LS.clear();
 
   console.log('\n=== Le repli « sans Worker » rend-il la même chose ? ===\n');
 

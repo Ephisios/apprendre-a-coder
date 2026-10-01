@@ -6,6 +6,46 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.4.5 — 2026-10-01
+
+**Rien ne change pour l'élève** — 27 vérifications de plus, sur le chemin le plus parcouru du
+logiciel et sur les seules fonctions qui détruisent son travail.
+
+### Ajouté
+
+- **Le clic sur « Vérifier ».** Point d'entrée le plus emprunté de l'application, et aucun harnais ne
+  l'exécutait : `verifier-contenu.js` juge les correcteurs un par un, mais en les appelant lui-même.
+  Le chemin qui va du clic au verdict — lire la case cochée, choisir le bon message, décider si
+  l'essai compte — n'était parcouru par personne.
+
+  Les **59 QCM** en dépendent entièrement : ils n'ont pas de correcteur à eux, toute leur mécanique
+  vit là. On vérifie les trois cas, dont les deux qui portent la pédagogie : ne rien avoir coché est
+  une étape sautée, pas une faute — donc ce n'est ni peint en rouge ni compté comme un essai raté ;
+  et une mauvaise réponse reçoit **l'aide propre à ce choix-là**, celle qui dit pourquoi *celle-ci*
+  est fausse, et non un message générique servi à tout le monde.
+
+- **Ce qui efface du travail.** Trois fonctions détruisent ce que l'élève a fait, aucune n'était
+  exercée. `recommencerLecon` fait en plus une promesse écrite dans sa propre demande de
+  confirmation — « Le reste de ta progression n'est pas touché » — et c'est maintenant une
+  vérification. Si elle devenait fausse, l'élève perdrait tout en croyant ne perdre qu'une leçon.
+
+- **L'aller-retour complet de la sauvegarde.** La restauration était vérifiée depuis longtemps,
+  l'écriture du fichier ne l'était pas : un export malformé ne se découvre que le jour où l'on en a
+  besoin. On exporte, on efface tout, on restaure, on compare. Et on s'assure que les clés d'une
+  autre application n'y entrent pas.
+
+- **Un invariant de structure** dans `verifier-contenu.js` : les 425 exercices à éditeur ont tous un
+  `codeDepart`. Sans lui, « Recommencer » écrirait littéralement le mot `undefined` dans l'éditeur.
+  Mesuré avant d'être écrit — aucun ne manque aujourd'hui.
+
+### Ce que les sabotages ont donné
+
+Servir le message générique au lieu de l'aide par réponse, compter une case non cochée comme une
+faute, effacer toute la progression au lieu d'une leçon, vider le fichier de sauvegarde : **8
+vérifications tombent**, chacune nommant sa promesse.
+
+---
+
 ## 3.4.4 — 2026-09-25
 
 **Rien ne change pour l'élève** — 24 vérifications de plus, sur le câblage. Et un revirement de ma
