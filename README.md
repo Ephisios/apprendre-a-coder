@@ -22,8 +22,8 @@ en français, sans jargon.
 
 |  |  |
 |---|---|
-| **166 leçons** | progressives, de « c'est quoi coder ? » aux pointeurs et aux classes |
-| **487 exercices** | tous corrigés automatiquement, avec un message d'erreur écrit à la main |
+| **167 leçons** | progressives, de « c'est quoi coder ? » aux pointeurs et aux classes |
+| **490 exercices** | tous corrigés automatiquement, avec un message d'erreur écrit à la main |
 | **12 modules** | le parcours se suit dans l'ordre, ou se pioche |
 | **7 langages** | HTML, CSS, JavaScript, Python, SQL, C, Java |
 | **13 mémos** | une encyclopédie consultable à tout moment, avec recherche |
@@ -109,7 +109,7 @@ Les refaire ne touche à rien.
 
 ## Comment le contenu est vérifié
 
-487 exercices corrigés automatiquement, c'est 428 correcteurs écrits à la main. Un correcteur trop
+490 exercices corrigés automatiquement, c'est 431 correcteurs écrits à la main. Un correcteur trop
 permissif est pire qu'absent : il félicite pour une réponse fausse. Deux harnais veillent.
 
 ```bash
@@ -160,17 +160,18 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 État actuel :
 
 ```
-365 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
- 18 chasses au bug            — 0 dont le code de départ serait accepté
-358 copies sabotées présentées    — 358 refusées, 0 non éprouvé
+368 exercices rejoués sous Node   — 0 échec, 0 correcteur complaisant
+ 19 chasses au bug                — 0 dont le code de départ serait accepté
+364 copies sabotées présentées    — 364 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
 247 vérifications d'interface     — 0 échec (aide, éditeur, projets, a11y, câblage, repérage)
 147 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
- 14 vérifications au navigateur   — 0 échec (Worker, contraste, focus, souris)
-425 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
+ 16 vérifications au navigateur   — 0 échec (Worker, contraste, focus, souris)
+431 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
+ 16 leçons au gabarit             — 0 à qui il manque une partie
 ```
 
-Soit **425 correcteurs sur 425** mis à l'épreuve, et pas seulement exécutés — le tout en une seule
+Soit **431 correcteurs sur 431** mis à l'épreuve, et pas seulement exécutés — le tout en une seule
 commande, sans que personne ait à ouvrir quoi que ce soit.
 
 ## Pourquoi hors ligne
@@ -192,7 +193,7 @@ sql-moteur.js       le moteur SQL et sa base de cinéma
 moteur-cj.js        l'interpréteur C et Java
 skulpt*.js          l'interpréteur Python, chargé au premier code Python
                     seulement (tiers — voir NOTICE.md)
-data-*.js           les 166 leçons et 487 exercices
+data-*.js           les 167 leçons et 490 exercices
 outils/             les harnais de vérification (développement)
   verifier-contenu.js       rejoue les exercices et sabote les copies (Node)
   test-interface.js         l'aide, les genres, la recherche, la sauvegarde (jsdom)

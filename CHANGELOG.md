@@ -6,6 +6,49 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.6.0 — 2026-10-02
+
+Une leçon n'est pas qu'un texte suivi d'exercices : c'est une forme. Jusqu'ici cette forme vivait
+dans l'habitude de qui écrivait, et se perdait d'une leçon à l'autre. Elle est maintenant écrite.
+
+### Ajouté
+
+- **`outils/gabarit-lecon.md`** — les sept parties d'une leçon, dans l'ordre : *pourquoi ça existe*,
+  la notion, les formes qu'on croisera, un **pas à pas** qui déroule l'exécution ligne par ligne,
+  *les pièges*, *dans la vraie vie*, puis un **« À retenir »** de deux à quatre points. Un repli
+  *« Aller plus loin »* accueille le « sous le capot » sans alourdir la leçon pour autant.
+
+- **`jsav-fleches` — « Les fonctions fléchées »**, détachée de `jsav-2` qui en portait trop.
+
+### Changé
+
+- **Les douze leçons du module « JavaScript — La logique » passent au gabarit**, plus `py-7`, `j-5`
+  et `jsav-2`. Seize leçons sur 167 : la conversion se fera au fil de l'eau, et le compteur du
+  harnais dit où elle en est à chaque passage.
+
+### Comment le gabarit se contrôle lui-même
+
+Une leçon **entre** dans le gabarit en posant son bloc « À retenir ». Dès lors le harnais exige tout
+le reste : les deux titres obligatoires, la trace pas à pas, un « À retenir » de 2 à 4 points, et 350
+mots de cours au moins. Les leçons écrites avant ne sont pas en faute — elles sont seulement
+comptées, pour qu'on voie l'avancement plutôt que de le supposer.
+
+> L'inverse aurait été de contrôler les 167 leçons d'un coup : 151 erreurs le premier jour, un
+> harnais qu'on apprend à ignorer, et un gabarit mort-né.
+
+### Ce qui a été écarté
+
+Ces leçons venaient d'une branche qui portait aussi une refonte graphique complète — une direction
+« Veilleuse ». Seuls le gabarit et les leçons ont été repris ; la refonte a été laissée de côté. Le
+seul endroit où les deux se touchaient était la pastille du bloc `.info`, que la refonte remplaçait
+par `// à retenir` : elle garde son 📌, cohérent avec le 💡 de `.astuce` et le ⚠️ de `.attention`.
+
+Les styles des trois blocs du gabarit ont été vérifiés jeton par jeton avant d'être repris : ils
+n'utilisent que des variables qui existaient déjà (`--trait-net`, `--surface`, `--r2`, `--f-code`,
+`--accent-fonce`, `--encre-2`). Aucun n'a eu besoin de la refonte pour s'afficher correctement.
+
+---
+
 ## 3.5.0 — 2026-10-01
 
 Une leçon de plus, et elle vient d'une mesure plutôt que d'une envie.

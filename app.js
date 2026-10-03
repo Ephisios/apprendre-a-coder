@@ -423,7 +423,7 @@ function majRepereModule(idActive) {
 
 /* Changer de vue, c'est changer de page. Sans ces trois gestes, valider
    « leçon suivante » ne produit AUCUN retour : le focus retombe sur <body>,
-   l'onglet garde le même titre pour les 165 leçons, et rien n'est annoncé. */
+   l'onglet garde le même titre pour les 167 leçons, et rien n'est annoncé. */
 const TITRE_APP = 'Apprendre à coder — de A à Z';
 
 function poserVue(titre, annonce) {
