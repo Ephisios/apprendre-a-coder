@@ -6,6 +6,59 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.7.0 — 2026-10-04
+
+Le module où l'on apprend à programmer pour de bon n'avait presque aucune question de contrôle :
+**un QCM pour douze leçons**. C'est pourtant là que vivent les malentendus les plus coûteux du
+cours — ceux qui ne produisent aucune erreur et donnent un résultat faux.
+
+### Ajouté
+
+- **Onze QCM dans « JavaScript — La logique »**, un par leçon qui en manquait. Chacun vise un piège
+  **nommé dans sa propre leçon**, et pas une question de mémoire :
+
+  | | le piège | ce qui trompe |
+  |---|---|---|
+  | `js-3` | `"5" + 3` | donne `"53"`, et `"5" * 3` donne bien 15 |
+  | `js-5` | `if (age = 18)` | le bloc s'exécute **toujours**, et la variable a changé |
+  | `js-6` | `jour === "samedi" \|\| "dimanche"` | vrai un lundi aussi |
+  | `js-8` | `fruits[3]` sur trois fruits | `undefined`, sans la moindre erreur |
+  | `js-9` | une fonction qui affiche au lieu de renvoyer | **deux** lignes : 8, puis `undefined` |
+
+  Aucun de ces cas ne lève d'erreur. C'est précisément ce qu'une question peut attraper et qu'un
+  exercice, dont on finit par copier la solution, laisse passer.
+
+- **Quatre contrôles sur les QCM** dans le harnais de contenu. app.js ne se plaint jamais d'un QCM
+  mal écrit : il **dégrade**. Une bonne réponse sans explication affiche un message vide ; une
+  mauvaise réponse sans aide retombe sur « Ce n'est pas la bonne réponse — relis la leçon et
+  réessaie », qui n'apprend rien. Le harnais refuse désormais les deux, plus deux choix identiques,
+  et une aide posée sur la bonne réponse — presque toujours le signe d'un `bonne` décalé.
+
+  > Les quatre ont été mesurés sur les 70 QCM avant d'être posés : zéro faux positif. Puis chacun a
+  > été éprouvé en cassant exprès ce qu'il garde — quatre sur quatre refusent le défaut.
+
+### Changé
+
+- **Un QCM s'annonce « ❓ Question », plus « 🎯 Défi »**. Le porte-outils nommait les exercices
+  d'après leur **rang** : un QCM placé en troisième position s'annonçait « Défi 3/3 », alors qu'il
+  se répond en vingt secondes. Le libellé suit maintenant le **type**. Les 70 QCM du cours sont
+  concernés, pas seulement les nouveaux.
+
+- Les dix leçons `js-1` à `js-10` passent à **quatre entrées**, une première dans le cours. Le
+  choix s'est fait contre l'autre option : remplacer un exercice existant. Les trois exercices de
+  ces leçons forment une montée — guidé, entraînement, défi — qu'on ne peut pas amputer sans
+  perdre quelque chose ; et c'est le module où l'élève a le plus besoin de **taper du code**.
+  L'application le prévoyait déjà : sa liste de libellés comptait une quatrième entrée inutilisée.
+
+### Un détail qui n'en est pas un
+
+Sur les 59 QCM d'avant, la bonne réponse n'était **jamais** la quatrième : 31 fois la première,
+21 fois la deuxième, 7 fois la troisième, 0 fois la dernière. Un élève attentif peut s'en servir
+sans rien comprendre au sujet. Les onze nouveaux se répartissent 3 / 3 / 3 / 2 — la dernière place
+comprise.
+
+---
+
 ## 3.6.0 — 2026-10-02
 
 Une leçon n'est pas qu'un texte suivi d'exercices : c'est une forme. Jusqu'ici cette forme vivait

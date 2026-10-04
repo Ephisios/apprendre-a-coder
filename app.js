@@ -745,7 +745,12 @@ function panneauEtabli(mod, lecon, index, exos) {
   let liste = '';
   exos.forEach((ex, i) => {
     const fait = exoFait(lecon.id, i);
-    const nom = ex.etiquette || (exos.length === 1 ? '✏️ À toi de jouer !' : etiquettes[Math.min(i, 3)] + ' ' + (i + 1) + '/' + exos.length);
+    // Un QCM n'est pas l'exercice dont il occupe le rang : nommé d'après sa
+    // position, il s'annonçait « 🎯 Défi 3/3 » alors qu'il se répond en vingt
+    // secondes. Le libellé suit donc le type ; la numérotation, elle, reste,
+    // pour que le compteur du titre dise la vérité.
+    const famille = ex.type === 'qcm' ? '❓ Question' : etiquettes[Math.min(i, 3)];
+    const nom = ex.etiquette || (exos.length === 1 ? '✏️ À toi de jouer !' : famille + ' ' + (i + 1) + '/' + exos.length);
     liste += '<li class="etabli-exo' + (fait ? ' fait' : '') + '">' +
       '<a href="#exercice-' + i + '" onclick="allerExercice(' + i + '); return false;">' +
       '<span class="etabli-coche" aria-hidden="true">' + (fait ? '✔' : '○') + '</span>' +

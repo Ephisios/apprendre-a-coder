@@ -23,7 +23,7 @@ en français, sans jargon.
 |  |  |
 |---|---|
 | **167 leçons** | progressives, de « c'est quoi coder ? » aux pointeurs et aux classes |
-| **490 exercices** | tous corrigés automatiquement, avec un message d'erreur écrit à la main |
+| **501 exercices** | tous corrigés automatiquement, avec un message d'erreur écrit à la main |
 | **12 modules** | le parcours se suit dans l'ordre, ou se pioche |
 | **7 langages** | HTML, CSS, JavaScript, Python, SQL, C, Java |
 | **13 mémos** | une encyclopédie consultable à tout moment, avec recherche |
@@ -109,7 +109,7 @@ Les refaire ne touche à rien.
 
 ## Comment le contenu est vérifié
 
-490 exercices corrigés automatiquement, c'est 431 correcteurs écrits à la main. Un correcteur trop
+501 exercices corrigés automatiquement, c'est 431 correcteurs écrits à la main (les 70 QCM se corrigent, eux, par leur indice de bonne réponse). Un correcteur trop
 permissif est pire qu'absent : il félicite pour une réponse fausse. Deux harnais veillent.
 
 ```bash
@@ -169,6 +169,7 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
  16 vérifications au navigateur   — 0 échec (Worker, contraste, focus, souris)
 431 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
  16 leçons au gabarit             — 0 à qui il manque une partie
+ 70 QCM                           — 0 sans explication, 0 mauvaise réponse sans aide
 ```
 
 Soit **431 correcteurs sur 431** mis à l'épreuve, et pas seulement exécutés — le tout en une seule
@@ -193,7 +194,7 @@ sql-moteur.js       le moteur SQL et sa base de cinéma
 moteur-cj.js        l'interpréteur C et Java
 skulpt*.js          l'interpréteur Python, chargé au premier code Python
                     seulement (tiers — voir NOTICE.md)
-data-*.js           les 167 leçons et 490 exercices
+data-*.js           les 167 leçons et 501 exercices
 outils/             les harnais de vérification (développement)
   verifier-contenu.js       rejoue les exercices et sabote les copies (Node)
   test-interface.js         l'aide, les genres, la recherche, la sauvegarde (jsdom)

@@ -7,7 +7,7 @@ ou sur le fichier  index.html
 
 Ce que contient ce logiciel :
 - 167 leçons progressives en français, pensées pour un vrai débutant
-- 490 exercices corrigés automatiquement : exercices guidés, entraînements,
+- 501 exercices corrigés automatiquement : exercices guidés, entraînements,
   défis, chasses aux bugs et QCM — dans un éditeur de code intégré
 - 12 modules, SEPT langages :
     1. Bienvenue (comprendre ce qu'est le code)

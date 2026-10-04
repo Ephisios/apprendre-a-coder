@@ -132,6 +132,24 @@ console.log(total);       // 10</pre>
         }
         return { ok: true, message: 'Boucle + interpolation + calcul dans le \${} : trois notions imbriquées sans effort. Tu peux générer la table de n\'importe quel nombre en changeant un chiffre.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Combien de tours fait la boucle <code>for (let i = 1; i &lt; 5; i++)</code> ?',
+      choix: [
+        '5 tours',
+        '3 tours',
+        'Une infinité : rien ne l\'arrête',
+        '4 tours'
+      ],
+      bonne: 3,
+      explication: '<code>i</code> prend les valeurs 1, 2, 3 puis 4 : quatre tours. Quand <code>i</code> atteint 5, la condition <code>i &lt; 5</code> devient fausse et la boucle s\'arrête — le 5 n\'est jamais utilisé. Le réflexe qui fait gagner du temps : écrire à la main les deux premiers tours et le dernier, plutôt que de deviner.',
+      aides: [
+        'Cinq serait le compte si la boucle partait de 0, ou si la condition était <code>i &lt;= 5</code>. Ici elle part de 1 et s\'arrête <em>avant</em> 5.',
+        'Compte les valeurs que prend <code>i</code> : 1, puis 2, puis 3, puis 4. Elle s\'arrête seulement quand <code>i</code> atteint 5.',
+        'Non : <code>i++</code> fait grandir <code>i</code> à chaque tour, donc la condition finit par devenir fausse. Une boucle est infinie quand <em>rien</em> ne rapproche sa condition de false.',
+        ''
+      ]
     }
   ]
 },
@@ -260,6 +278,24 @@ for (let i = 0; i &lt; invites.length; i++) {
         if (!/notes\.length/.test(ctx.code.split('somme')[1] || ctx.code)) return { ok: false, message: 'Utilise <code>notes.length</code> pour diviser, pas le chiffre 5 écrit à la main — ton code doit marcher même si on ajoute des notes.' };
         return { ok: true, message: 'Somme, moyenne, sur n\'importe quelle liste : tu viens d\'écrire ton premier vrai traitement de données.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Avec <code>let fruits = ["pomme", "poire", "kiwi"];</code>, que vaut <code>fruits[3]</code> ?',
+      choix: [
+        '"kiwi"',
+        '"pomme"',
+        'undefined',
+        'Une erreur : l\'indice dépasse le tableau'
+      ],
+      bonne: 2,
+      explication: 'Un tableau de 3 éléments occupe les indices 0, 1 et 2 : <code>fruits[3]</code> vise la case juste après la fin. JavaScript répond <code>undefined</code> sans rien signaler. D\'où le symptôme classique : une boucle écrite avec <code>i &lt;= t.length</code> fait un tour de trop et affiche un <code>undefined</code> à la fin.',
+      aides: [
+        '<code>kiwi</code> est bien le troisième fruit, mais son indice est 2 : on compte à partir de 0. Le dernier s\'écrit <code>fruits[fruits.length - 1]</code>.',
+        '<code>pomme</code> est en <code>fruits[0]</code>. L\'indice 3 vise une quatrième case, qui n\'existe pas.',
+        '',
+        'JavaScript ne proteste pas : il répond <code>undefined</code>, « non défini ». C\'est plus discret qu\'une erreur — et donc plus traître.'
+      ]
     }
   ]
 },
@@ -392,6 +428,24 @@ console.log(doubler(5) + 1);  // 11</pre>
         if (!/Clavier\s*:\s*60\s*euros\s*TTC/.test(sortie)) return { ok: false, message: 'Attendu : <code>Clavier : 60 euros TTC</code> (obtenu : « ' + (ctx.logs[0] || 'rien').replace(/</g, '&lt;') + ' »). Vérifie le calcul (50 × 1.2 = 60) et le format de la phrase.' };
         return { ok: true, message: 'Des fonctions qui s\'appuient sur d\'autres fonctions : tu viens de découvrir comment les logiciels de millions de lignes restent organisés.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Une fonction affiche au lieu de renvoyer :<br><code>function doubler(n) { console.log(n * 2); }</code><br>Qu\'affiche ensuite <code>console.log(doubler(4));</code> ?',
+      choix: [
+        '8, et rien d\'autre',
+        '8, puis undefined',
+        'undefined, puis 8',
+        'undefined, et rien d\'autre'
+      ],
+      bonne: 1,
+      explication: 'Deux lignes s\'affichent. Le <code>console.log</code> de l\'<em>intérieur</em> montre 8 ; puis l\'appel <code>doubler(4)</code>, qui n\'a pas de <code>return</code>, vaut <code>undefined</code> — et c\'est lui que le <code>console.log</code> de l\'<em>extérieur</em> affiche. <strong>console.log montre, return transmet</strong> : une fonction qui calcule doit renvoyer, sinon son résultat est jeté.',
+      aides: [
+        'Le 8 s\'affiche bien, c\'est le <code>console.log</code> de l\'intérieur. Mais il y a un second <code>console.log</code>, à l\'extérieur : lui aussi affiche quelque chose.',
+        '',
+        'L\'ordre est l\'inverse : la fonction s\'exécute d\'abord — et affiche 8 — et c\'est seulement ensuite que son résultat est affiché.',
+        'Le <code>console.log</code> de l\'intérieur affiche bien 8. Ce qui vaut <code>undefined</code>, c\'est ce que la fonction <em>renvoie</em>, donc uniquement la seconde ligne.'
+      ]
     }
   ]
 },
@@ -527,6 +581,24 @@ for (let i = 0; i &lt; films.length; i++) {
         if (ctx.logs[1] !== 'Inconnu') return { ok: false, message: 'La recherche marche ! Mais <code>chercher("Bob")</code> doit retourner « Inconnu » : place <code>return "Inconnu";</code> APRÈS la boucle (s\'il était dans la boucle, il s\'exécuterait dès le premier contact non-correspondant).' };
         return { ok: true, message: 'Tu viens d\'écrire un moteur de recherche miniature. Le placement du « Inconnu » après la boucle est une subtilité que beaucoup ratent — pas toi.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Avec <code>let chat = { nom: "Félix", age: 3 };</code>, que vaut <code>chat.Nom</code> — avec un <strong>N majuscule</strong> ?',
+      choix: [
+        'undefined',
+        '"Félix"',
+        'null',
+        'Une erreur : la clé Nom n\'existe pas'
+      ],
+      bonne: 0,
+      explication: 'Une clé mal orthographiée se comporte <em>exactement</em> comme une clé absente : <code>undefined</code>, sans la moindre erreur. Le réflexe quand un <code>undefined</code> apparaît à l\'écran : comparer lettre à lettre le nom de la clé avec celui écrit dans l\'objet.',
+      aides: [
+        '',
+        '<code>Nom</code> et <code>nom</code> sont deux clés différentes : JavaScript distingue les majuscules jusque dans les noms de clés.',
+        '<code>null</code> signifie « vide, et c\'est voulu ». Une clé absente donne autre chose : <code>undefined</code>, « non défini ».',
+        'Aucune erreur : demander une clé qui n\'existe pas est autorisé. JavaScript répond simplement <code>undefined</code>.'
+      ]
     }
   ]
 },
@@ -766,6 +838,24 @@ for (let i = 0; i &lt; films.length; i++) {
         if (parseInt(aff.textContent) !== 1) return { ok: false, message: 'Le plancher marche, mais le compteur normal est cassé : +1, +1, -1 devrait donner 1 (affiché : « ' + aff.textContent + ' »).' };
         return { ok: true, message: '🏆🏆 MODULE JAVASCRIPT TERMINÉ ! Gérer les « cas limites » (comme le zéro), c\'est ce qui distingue un programme qui marche d\'un programme solide. Direction le JavaScript avancé.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Dans un compteur, la ligne <code>let compteur = 0;</code> a été écrite <strong>à l\'intérieur</strong> de la fonction du clic. Qu\'affiche l\'écran après trois clics sur « +1 » ?',
+      choix: [
+        '3',
+        '1',
+        '0',
+        'undefined'
+      ],
+      bonne: 1,
+      explication: 'Chaque clic rejoue la fonction depuis le début : <code>let compteur = 0</code> remet la boîte à zéro, <code>compteur++</code> la monte à 1, et l\'écran affiche 1. Encore, et encore. <strong>La variable se crée une seule fois, en dehors des écouteurs</strong> — c\'est ce qui lui permet de se souvenir d\'un clic au suivant.',
+      aides: [
+        'Ce serait le cas si la variable vivait en dehors de l\'écouteur. À l\'intérieur, elle est recréée à 0 au début de chaque clic.',
+        '',
+        'Le <code>compteur++</code> s\'exécute bien à chaque clic : on passe bien de 0 à 1. Ce qui ne se garde pas, c\'est le résultat d\'un clic au suivant.',
+        'La variable est bien créée et bien augmentée — simplement, elle repart de 0 à chaque clic.'
+      ]
     }
   ]
 },

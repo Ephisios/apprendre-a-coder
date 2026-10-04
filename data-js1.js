@@ -116,6 +116,24 @@ console.log("c");</pre>
         if (l[3].replace(/\s+/g, ' ') !== '/ \\' && l[3] !== '/  \\') return { ok: false, message: 'La ligne 4 doit être <code>/  \\</code> (barre, espaces, contre-barre doublée dans le code).' };
         return { ok: true, message: '🚀 Et au passage, tu as découvert les « caractères d\'échappement » (\\\\) — un détail que même des développeurs confirmés oublient.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Un programme contient la ligne <code>Console.log("Bonjour");</code>, avec un <strong>C majuscule</strong>. Que se passe-t-il ?',
+      choix: [
+        'Rien ne s\'affiche : JavaScript répond que Console n\'existe pas',
+        'Bonjour s\'affiche quand même — la majuscule n\'a pas d\'importance',
+        'BONJOUR s\'affiche, tout en majuscules',
+        'Le texte Console.log("Bonjour") s\'affiche tel quel'
+      ],
+      bonne: 0,
+      explication: 'Le message « Console is not defined » se traduit par « Console n\'existe pas ». JavaScript ne corrige jamais une faute de frappe : il cherche <em>exactement</em> ce que tu as écrit, et le dit quand il ne trouve pas. Savoir lire ce message, c\'est déjà la moitié du dépannage.',
+      aides: [
+        '',
+        'JavaScript distingue les majuscules des minuscules, toujours. <code>Console</code> et <code>console</code> sont deux noms différents — et un seul des deux existe.',
+        'La majuscule est dans le nom de l\'outil, pas dans le texte. Elle ne transforme rien : elle empêche JavaScript de trouver <code>console</code>.',
+        'Pour afficher du texte tel quel, il faudrait l\'entourer de guillemets. Ici, c\'est le nom de l\'instruction qui est mal écrit.'
+      ]
     }
   ]
 },
@@ -239,6 +257,24 @@ score = score + 5;</pre>
         if (ctx.logs[0] !== 'eau' || ctx.logs[1] !== 'jus') return { ok: false, message: 'Résultat attendu : <code>eau</code> puis <code>jus</code> (actuellement : ' + ctx.logs.join(', ') + '). Attention à l\'ordre des 3 étapes — si tu fais <code>verreA = verreB</code> en premier, le jus est perdu !' };
         return { ok: true, message: 'L\'échange de variables est un grand classique des entretiens d\'embauche de développeurs. Sérieusement. Et tu viens de le réussir.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Un programme contient <code>let score = 100;</code> puis <code>console.log("score");</code>. Qu\'affiche-t-il ?',
+      choix: [
+        '100',
+        'score',
+        '"score", avec les guillemets',
+        'Une erreur : le nom score est déjà pris'
+      ],
+      bonne: 1,
+      explication: 'C\'est la frontière la plus utile du langage : <strong>avec des guillemets, c\'est un texte ; sans guillemets, c\'est une variable</strong>. Les deux écritures sont correctes pour JavaScript, qui ne peut pas deviner laquelle tu voulais — d\'où un programme qui tourne sans la moindre erreur et affiche la mauvaise chose.',
+      aides: [
+        'Ce serait le cas <em>sans</em> les guillemets : <code>console.log(score)</code> affiche le contenu de la boîte. Avec des guillemets, le mot est pris tel quel.',
+        '',
+        'Les guillemets délimitent le texte, ils ne s\'affichent pas. Tu verras <code>score</code>, sans guillemets autour.',
+        'Aucune erreur : afficher le mot « score » est parfaitement valide. C\'est justement ce qui rend ce piège difficile à repérer.'
+      ]
     }
   ]
 },
@@ -364,6 +400,24 @@ score += 10;</pre>
         if (!ctx.logs.includes('15')) return { ok: false, message: 'Les heures sont bonnes ! Reste les minutes : <code>totalMinutes % 60</code> donne le reste, soit 15.' };
         return { ok: true, message: 'Le modulo vient de te servir pour de vrai — et tu as rencontré <code>Math.floor</code>, ta première fonction mathématique intégrée.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Que vaut <code>"5" + 3</code> ? (Attention aux guillemets autour du 5.)',
+      choix: [
+        '8',
+        'Une erreur : on ne peut pas additionner un texte et un nombre',
+        '"53"',
+        '15'
+      ],
+      bonne: 2,
+      explication: 'Le <code>+</code> a deux métiers : additionner des nombres, et coller des textes. Dès qu\'un seul des deux côtés est un texte, c\'est le collage qui gagne — <code>"5" + 3</code> donne <code>"53"</code>. Rien n\'est signalé : voilà pourquoi on garde les nombres <em>hors</em> des guillemets.',
+      aides: [
+        'Ce serait le cas si les deux étaient des nombres. Mais <code>"5"</code> est entre guillemets : pour JavaScript, c\'est un texte.',
+        'JavaScript ne refuse pas : il se débrouille. Et sa façon de se débrouiller avec un <code>+</code> entre un texte et un nombre, c\'est de coller les deux bout à bout.',
+        '',
+        'Curieusement, <code>"5" * 3</code> donne bien 15 : la multiplication n\'a pas d\'autre sens possible, donc JavaScript convertit. Le <code>+</code>, lui, est ambigu — il sait aussi coller.'
+      ]
     }
   ]
 },
@@ -492,6 +546,24 @@ console.log(ville.toLowerCase());   // marseille</pre>
         if (!ctx.logs.includes(mdp.toLowerCase())) return { ok: false, message: 'Dernier affichage manquant : le mot de passe en minuscules avec <code>.toLowerCase()</code>.' };
         return { ok: true, message: 'Propriété (.length), méthode (.toLowerCase()), interpolation (backticks) : trois outils de manipulation de texte d\'un coup. Les vrais sites vérifient les mots de passe exactement comme ça.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Avec <code>let prenom = "Camille";</code>, qu\'affiche <code>console.log("Bonjour ${prenom}");</code> — écrit avec des guillemets droits ?',
+      choix: [
+        'Bonjour ${prenom}',
+        'Bonjour Camille',
+        'Bonjour',
+        'Une erreur : ${...} n\'est pas valide ici'
+      ],
+      bonne: 0,
+      explication: 'Le remplacement <code>${...}</code> n\'existe qu\'entre <strong>backticks</strong> (`), la touche à gauche du 1. Entre guillemets droits, c\'est du texte ordinaire. Le symptôme est facile à reconnaître : si tu vois <code>${quelquechose}</code> s\'afficher à l\'écran, tu as pris les mauvais guillemets.',
+      aides: [
+        '',
+        'Ce serait le cas avec des backticks. Entre guillemets droits, le <code>${...}</code> n\'a aucun pouvoir particulier.',
+        'Rien n\'est retiré : tout ce qui est entre les guillemets s\'affiche, <code>${prenom}</code> compris, caractère par caractère.',
+        'Aucune erreur : <code>${prenom}</code> entre guillemets droits est du texte parfaitement valide. C\'est bien ce qui rend ce piège sournois.'
+      ]
     }
   ]
 },
@@ -639,6 +711,24 @@ if (heure &lt; 12) {
         }
         return { ok: true, message: 'Conditions + méthodes de texte combinées : tu commences à assembler tes outils, comme un vrai développeur.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> La variable <code>age</code> vaut 16. Que fait <code>if (age = 18) { ... }</code> — avec <strong>un seul</strong> signe égal ?',
+      choix: [
+        'Le bloc ne s\'exécute pas, car 16 n\'est pas 18',
+        'JavaScript signale une erreur : il faut === dans un if',
+        'Le bloc s\'exécute, et age vaut maintenant 18',
+        'Le bloc s\'exécute, mais age vaut toujours 16'
+      ],
+      bonne: 2,
+      explication: '<code>=</code> range, <code>===</code> compare. Avec un seul <code>=</code>, JavaScript range 18 dans <code>age</code>, puis regarde ce que vaut l\'opération : 18, qu\'il considère comme vrai. Le bloc s\'exécute donc <em>toujours</em>, quelle que soit la valeur de départ — et la variable a été écrasée au passage. Deux bugs pour le prix d\'un.',
+      aides: [
+        'Ce serait le cas avec <code>===</code>. Avec un seul <code>=</code>, il n\'y a aucune comparaison : la valeur est simplement rangée dans la variable.',
+        'Aucune erreur n\'est signalée : écrire <code>=</code> dans un <code>if</code> est autorisé. C\'est précisément ce qui en fait LE piège du JavaScript.',
+        '',
+        'Le <code>=</code> range pour de bon : après cette ligne, <code>age</code> vaut 18. Le dégât est double — la condition est faussée, et la variable a changé en douce.'
+      ]
     }
   ]
 },
@@ -776,6 +866,24 @@ if (jour === "samedi" || jour === "dimanche") {
         if (!sortie.includes(attendu)) return { ok: false, message: 'Avec age = ' + a + ', l\'affichage attendu est « ' + (attendu === 'gratuit' ? 'Gratuit' : attendu + ' euros') + ' ». Relis ta logique à voix haute avec « ou » et « sinon si ».' };
         return { ok: true, message: 'Cette grille tarifaire, c\'est EXACTEMENT le genre de logique qu\'on code tous les jours en entreprise. Tu es prêt pour les boucles !' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> On est <strong>lundi</strong>. La condition <code>if (jour === "samedi" || "dimanche")</code> est-elle vraie ?',
+      choix: [
+        'Non : lundi n\'est ni samedi ni dimanche',
+        'Non : JavaScript signale une erreur',
+        'Cela dépend de ce que contient jour',
+        'Oui — et elle le serait n\'importe quel jour'
+      ],
+      bonne: 3,
+      explication: 'Le <code>||</code> sépare <strong>deux conditions complètes</strong>, pas deux valeurs. À droite il ne reste que <code>"dimanche"</code> : un texte non vide, que JavaScript tient pour vrai. Et « quelque chose OU vrai » est toujours vrai. Il faut répéter la comparaison en entier : <code>jour === "samedi" || jour === "dimanche"</code>.',
+      aides: [
+        'C\'est ce que la phrase semble dire en français, mais JavaScript ne lit pas le français. Il voit deux morceaux séparés par <code>||</code> et évalue chacun de son côté.',
+        'Aucune erreur : chaque morceau est valide pris isolément. Le problème n\'est pas la syntaxe, c\'est le sens.',
+        'Non, et c\'est bien ce qui le rend dangereux : le résultat est le même quelle que soit la valeur de <code>jour</code>.',
+        ''
+      ]
     }
   ]
 },

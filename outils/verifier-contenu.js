@@ -378,6 +378,29 @@ for (const item of lecons) {
       if (Array.isArray(ex.choix) && ex.aides && ex.aides.length > ex.choix.length) {
         pb.push(tag + ' : plus d\'aides que de choix');
       }
+      /* Un QCM mal écrit ne casse rien : il DÉGRADE, en silence. app.js
+         affiche l'explication sur une bonne réponse, et aides[choix] sur une
+         mauvaise — à défaut, un « Ce n'est pas la bonne réponse » générique
+         qui n'apprend rien. Ce qui suit n'a donc pas d'équivalent à l'écran :
+         personne ne verrait le manque autrement qu'en répondant faux exprès,
+         une fois par choix, sur chacun des 70 QCM. */
+      if (Array.isArray(ex.choix) && typeof ex.bonne === 'number' && ex.bonne >= 0 && ex.bonne < ex.choix.length) {
+        if (!String(ex.explication || '').trim()) {
+          pb.push(tag + ' : QCM sans explication — l\'élève qui trouve la bonne réponse lit un message vide');
+        }
+        const aides = ex.aides || [];
+        ex.choix.forEach((_, j) => {
+          if (j !== ex.bonne && !String(aides[j] || '').trim()) {
+            pb.push(tag + ' : pas d\'aide sur le choix ' + j + ' — il retombe sur le message passe-partout');
+          }
+        });
+        if (String(aides[ex.bonne] || '').trim()) {
+          pb.push(tag + ' : une aide est écrite sur la BONNE réponse (' + ex.bonne + ') — elle ne sera jamais lue, et le plus souvent c\'est bonne qui est décalé');
+        }
+        if (new Set(ex.choix).size !== ex.choix.length) {
+          pb.push(tag + ' : deux choix identiques — l\'un des deux est impossible à distinguer');
+        }
+      }
       return;
     }
     if (typeof ex.verifier !== 'function') { pb.push(tag + ' : correcteur verifier() absent'); return; }
