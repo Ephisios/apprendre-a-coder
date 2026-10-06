@@ -6,6 +6,58 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.8.0 — 2026-10-06
+
+Le cours était **trop court**, et le chiffre le dit mieux qu'une impression : médiane de **155 mots
+de cours par leçon**. Un ou deux paragraphes, puis les exercices commençaient. Les 12 leçons déjà
+passées au gabarit, elles, tenaient 511 mots. L'écart ne tenait pas au sujet : il tenait à ce qu'on
+avait pris le temps d'écrire.
+
+Cette version attaque le début du parcours — ce qu'un débutant lit en premier.
+
+### Changé
+
+- **Les 8 leçons du module HTML passent au gabarit.** De 147-188 mots à **482-676**, soit trois fois
+  plus. Chacune gagne un « Pourquoi ça existe », une trace pas à pas, une section « Les pièges »
+  nommés, un « Dans la vraie vie » et un « À retenir ».
+
+### Ajouté
+
+- **`html-listes` — « Les listes : à puces ou numérotées »**, détachée de `html-3` qui empilait
+  deux sujets sans rapport en 155 mots : la mise en valeur du texte *et* les listes. Les trois
+  exercices existants portaient tous sur les listes ; ils suivent la notion dans la leçon neuve, et
+  `html-3` reçoit trois exercices écrits pour lui — dont une chasse au bug sur la fermante oubliée.
+
+### Ce que la mesure a corrigé
+
+Aucun comportement n'a été décrit de mémoire : chaque faute enseignée a d'abord été lancée dans un
+vrai Chrome. Trois résultats ont changé ce qui allait être écrit.
+
+- **Les guillemets oubliés ne cassent pas un lien.** `href=page2.html` fonctionne — le navigateur
+  les rajoute. `html-4` enseignait pourtant l'inverse. Le vrai point de rupture est **l'espace** :
+  `alt=Un chat roux` ne garde que `alt="Un"` et invente deux attributs `chat=""` et `roux=""`. Comme
+  un texte alternatif fait presque toujours plusieurs mots, c'est en `html-5` que le piège mord.
+
+- **`&lt;b&gt;` et `&lt;strong&gt;` rendent exactement pareil** — graisse 700 tous les deux, comme
+  `&lt;i&gt;` et `&lt;em&gt;`. La différence n'est donc pas visuelle du tout : elle est de sens. La
+  leçon le dit maintenant ainsi.
+
+- **Un `&lt;h4&gt;` s'affiche à la taille d'un paragraphe**, simplement en gras. Prendre un `h4`
+  « pour que ce soit plus petit » revient souvent à n'avoir plus de titre visible.
+
+### Corrigé
+
+- **Les encarts affichaient deux émoji.** Le CSS pose déjà 💡, ⚠️ ou 📌 en tête d'un `astuce`,
+  `attention` ou `info` — et **44 encarts sur 150** en retapaient un dans leur texte. Le gabarit
+  l'interdisait déjà ; les leçons réécrites sont à jour, les autres restent à nettoyer.
+
+### Où en est la conversion
+
+**25 leçons sur 168**, contre 16. Le module HTML rejoint « JavaScript — La logique ». Reste 143
+leçons, dont la médiane est toujours de 153 mots : HTML 2 et 3, puis CSS, dans l'ordre du parcours.
+
+---
+
 ## 3.7.0 — 2026-10-04
 
 Le module où l'on apprend à programmer pour de bon n'avait presque aucune question de contrôle :
