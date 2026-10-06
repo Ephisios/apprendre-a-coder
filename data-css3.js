@@ -6,32 +6,50 @@ window.DATA_CSS3 = [
   id: 'css-16',
   titre: 'Les sélecteurs de combinaison',
   contenu: `
-<p>Tu sais viser une balise, une classe, un id. Voici comment viser un élément <strong>selon sa position</strong> par rapport à un autre — sans avoir à lui ajouter une classe.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais viser une balise, une classe, un identifiant. Mais il arrive souvent qu'on veuille viser un élément <em>selon sa place</em> : le paragraphe qui suit un titre, les liens d'un menu et d'aucun autre, le premier enfant d'une carte.</p>
+<p>On peut toujours ajouter une classe à chacun. Les combinateurs évitent ce travail — et surtout, ils évitent de devoir y repenser chaque fois que le contenu change.</p>
 
-<table class="memo-table">
-<tr><th>Écriture</th><th>Vise</th></tr>
-<tr><td>.carte p</td><td>TOUS les p à l'intérieur d'une carte, même profondément imbriqués</td></tr>
-<tr><td>.carte &gt; p</td><td>seulement les p <strong>enfants directs</strong> de la carte</td></tr>
-<tr><td>h2 + p</td><td>le p qui suit IMMÉDIATEMENT un h2</td></tr>
-<tr><td>h2 ~ p</td><td>TOUS les p qui suivent un h2 (même niveau)</td></tr>
+<h2>Les quatre combinateurs</h2>
+<ul>
+<li><code>.carte p</code> — <strong>une espace</strong> : tous les paragraphes à l'intérieur d'une carte, même profondément imbriqués ;</li>
+<li><code>.carte &gt; p</code> — <strong>le chevron</strong> : seulement les enfants directs ;</li>
+<li><code>h2 + p</code> — <strong>le plus</strong> : le paragraphe qui suit immédiatement un titre, et lui seul ;</li>
+<li><code>h2 ~ p</code> — <strong>le tilde</strong> : tous les paragraphes qui suivent un titre, au même niveau.</li>
+</ul>
+<p>L'espace et le chevron descendent dans l'arbre ; le plus et le tilde se déplacent latéralement, entre voisins du même parent.</p>
+
+<h2>Pas à pas</h2>
+<p>Sur une carte contenant un titre, deux paragraphes, puis une boîte contenant un troisième paragraphe :</p>
+<table class="memo-table trace">
+<tr><th>Sélecteur</th><th>Ce qu'il attrape</th></tr>
+<tr><td><code>.carte p</code></td><td>les trois paragraphes — l'imbrication n'a pas d'importance</td></tr>
+<tr><td><code>.carte &gt; p</code></td><td>les deux premiers : le troisième est dans une boîte</td></tr>
+<tr><td><code>h2 + p</code></td><td>le premier seulement</td></tr>
+<tr><td><code>h2 ~ p</code></td><td>les deux premiers</td></tr>
 </table>
 
-<h2>Descendant ou enfant direct ?</h2>
-<pre class="bloc-code">&lt;div class="carte"&gt;
-  &lt;p&gt;Directement dans la carte&lt;/p&gt;
-  &lt;div&gt;
-    &lt;p&gt;Plus profond&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
-<p><code>.carte p</code> touche les <strong>deux</strong> paragraphes. <code>.carte &gt; p</code> ne touche que le premier — le second n'est pas un enfant direct, c'est un petit-enfant.</p>
+<h2>Les pièges</h2>
+<p><strong>Mettre une espace là où il n'en faut pas.</strong> <code>.rouge.gras</code> vise un élément qui porte <em>les deux</em> classes ; <code>.rouge .gras</code>, avec une espace, vise un élément de classe <code>gras</code> à l'intérieur d'un élément de classe <code>rouge</code>. Une espace, et le sens change complètement. C'est l'erreur la plus difficile à repérer à la relecture.</p>
+<p><strong>Descendre trop profond.</strong> <code>.page .contenu .carte .titre span</code> fonctionne, et devient impossible à maintenir : la règle casse dès qu'on déplace un bloc. Deux niveaux suffisent presque toujours ; au-delà, une classe sur l'élément visé est plus solide.</p>
+<p><strong>Croire que <code>+</code> regarde en arrière.</strong> Les combinateurs latéraux ne vont que vers l'avant. Il n'existe aucun sélecteur « l'élément qui précède » — une limite assumée, liée à la façon dont le navigateur lit la page, de haut en bas.</p>
 
-<h2>Le frère immédiat</h2>
-<pre class="bloc-code">h2 + p {
-  font-weight: bold;    /* le chapô juste après un titre */
-}</pre>
-<p>C'est l'astuce classique du chapô : le premier paragraphe après un titre se met en valeur, sans qu'on ait à lui ajouter une classe. Le HTML reste propre, la mise en forme vit entièrement dans le CSS.</p>
+<h2>Dans la vraie vie</h2>
+<p><code>h2 + p</code> sert à rapprocher un chapeau de son titre. <code>li + li</code> pose une bordure entre les éléments d'une liste, sans en mettre une avant le premier. <code>.menu &gt; li</code> ne vise que le premier niveau d'un menu déroulant, sans toucher aux sous-menus — un cas où le chevron est indispensable.</p>
 
-<div class="astuce"><div>Ces sélecteurs évitent de polluer le HTML avec des classes purement décoratives. Moins de classes, c'est moins de choses à maintenir quand la structure évolue.</div></div>
+<div class="a-retenir">
+<ul>
+<li>Une espace veut dire « à l'intérieur », le chevron « enfant direct ».</li>
+<li><code>+</code> vise le voisin immédiat, <code>~</code> tous les suivants du même niveau.</li>
+<li><code>.a.b</code> (collés) et <code>.a .b</code> (espacés) ne veulent pas du tout dire la même chose.</li>
+<li>Aucun sélecteur ne regarde en arrière.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le navigateur lit de droite à gauche</summary>
+<p>Pour <code>.page .carte p</code>, il ne cherche pas les <code>.page</code> : il part de <em>tous</em> les paragraphes, puis remonte vérifier leurs ancêtres. C'est plus efficace, et ça explique pourquoi un sélecteur très long coûte plus cher qu'un sélecteur court. Sur une page ordinaire la différence est imperceptible — mais c'est une bonne raison de plus de ne pas empiler cinq niveaux.</p>
+</details>
 `,
   exercices: [
     {
@@ -109,34 +127,66 @@ window.DATA_CSS3 = [
   id: 'css-17',
   titre: 'Les sélecteurs d\'attribut',
   contenu: `
-<p>On peut viser un élément selon la <strong>valeur d'un de ses attributs</strong>. C'est particulièrement utile pour les formulaires et les liens.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Certains éléments se distinguent par un <strong>attribut</strong>, pas par une classe. Un champ désactivé porte <code>disabled</code>, un champ d'adresse électronique porte <code>type="email"</code>, un lien externe commence par <code>https</code>.</p>
+<p>Ces informations sont déjà dans le HTML. Leur ajouter une classe serait les écrire deux fois — avec le risque que les deux se désynchronisent.</p>
 
-<table class="memo-table">
-<tr><th>Écriture</th><th>Vise les éléments dont l'attribut…</th></tr>
-<tr><td>[disabled]</td><td>existe, quelle que soit sa valeur</td></tr>
-<tr><td>[type="email"]</td><td>vaut exactement « email »</td></tr>
-<tr><td>[href^="https"]</td><td>COMMENCE par « https »</td></tr>
-<tr><td>[href$=".pdf"]</td><td>SE TERMINE par « .pdf »</td></tr>
-<tr><td>[href*="video"]</td><td>CONTIENT « video »</td></tr>
-</table>
-
-<p>Les trois symboles se retiennent facilement : <code>^</code> pointe vers le début, <code>$</code> marque la fin (comme dans les expressions régulières), <code>*</code> veut dire « n'importe où ».</p>
-
-<h2>Un usage très courant</h2>
-<pre class="bloc-code">input[type="email"] {
-  border: 2px solid blue;
+<h2>Les formes</h2>
+<ul>
+<li><code>[disabled]</code> — l'attribut existe, quelle que soit sa valeur ;</li>
+<li><code>[type="email"]</code> — il vaut exactement « email » ;</li>
+<li><code>[href^="https"]</code> — il <strong>commence</strong> par « https » ;</li>
+<li><code>[href$=".pdf"]</code> — il <strong>finit</strong> par « .pdf » ;</li>
+<li><code>[href*="exemple"]</code> — il <strong>contient</strong> « exemple ».</li>
+</ul>
+<p>Les trois symboles se retiennent par analogie : <code>^</code> est le signe du début en expression régulière, <code>$</code> celui de la fin, et <code>*</code> évoque « n'importe où ».</p>
+<pre class="bloc-code">a[href$=".pdf"]::after {
+  content: " (PDF)";
 }
 
-a[href$=".pdf"]::after {
-  content: " 📄";        /* signale un lien vers un PDF */
-}
-
-button[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
+input[required] {
+  border-left: 3px solid orange;
 }</pre>
 
-<div class="astuce"><div>Tous les <code>&lt;input&gt;</code> partagent la même balise mais font des choses très différentes selon leur <code>type</code>. Le sélecteur d'attribut est le seul moyen de les distinguer sans leur ajouter une classe à chacun.</div></div>
+<h2>Pas à pas</h2>
+<p>Sur quatre liens, voyons ce que chaque sélecteur attrape :</p>
+<table class="memo-table trace">
+<tr><th>Le lien pointe vers</th><th>[href^="https"]</th><th>[href$=".pdf"]</th></tr>
+<tr><td>https://exemple.com</td><td>oui</td><td>non</td></tr>
+<tr><td>https://exemple.com/notice.pdf</td><td>oui</td><td>oui</td></tr>
+<tr><td>page2.html</td><td>non</td><td>non</td></tr>
+<tr><td>/docs/guide.pdf</td><td>non</td><td>oui</td></tr>
+</table>
+<p>Les deux sélecteurs sont indépendants et peuvent se cumuler : <code>a[href^="https"][href$=".pdf"]</code> ne vise que la deuxième ligne.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier les guillemets.</strong> <code>[type=email]</code> fonctionne tant que la valeur est un mot simple, et casse dès qu'elle contient une espace ou un tiret. Mets-les toujours : tu n'auras pas à te demander si ce cas-ci en a besoin.</p>
+<p><strong>Confondre <code>^</code> et <code>*</code>.</strong> <code>[href*="https"]</code> attrape aussi une adresse qui contient « https » <em>au milieu</em> — par exemple une adresse de redirection. Pour un vrai test de début, c'est <code>^</code>.</p>
+<p><strong>Croire que ça remplace une classe.</strong> Un sélecteur d'attribut dépend de la <em>valeur</em> écrite dans le HTML. Si quelqu'un change une adresse, ton style disparaît sans prévenir. C'est excellent pour les attributs structurels — <code>type</code>, <code>disabled</code>, <code>required</code> — et fragile pour le reste.</p>
+
+<h2>Le cas des attributs data-</h2>
+<p>Les sélecteurs d'attribut prennent tout leur sens avec les <code>data-</code>, ces informations qu'on range soi-même dans le HTML. Un article marqué <code>data-stock="0"</code> peut être grisé par une seule règle :</p>
+<pre class="bloc-code">.article[data-stock="0"] {
+  opacity: 0.5;
+}</pre>
+<p>L'information n'est écrite qu'une fois, là où elle a du sens — dans le HTML — et le style la suit. Le jour où le stock change, rien à faire du côté du CSS.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Marquer les liens externes d'une flèche, signaler les liens de téléchargement, griser les champs désactivés, repérer les champs obligatoires : tout cela se fait sans toucher au HTML. Les bibliothèques de composants s'en servent énormément — un menu déroulant change d'apparence selon un <code>data-etat="ouvert"</code> posé par le JavaScript, sans qu'il ait à manipuler la moindre classe.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>[attribut]</code> teste l'existence, <code>[attribut="valeur"]</code> l'égalité exacte.</li>
+<li><code>^=</code> pour le début, <code>$=</code> pour la fin, <code>*=</code> pour « contient ».</li>
+<li>Les guillemets autour de la valeur, toujours.</li>
+<li>Idéal pour les attributs structurels ; fragile pour ceux qui changent souvent.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ignorer la casse</summary>
+<p>Un <code>i</code> avant le crochet fermant rend la comparaison insensible aux majuscules : <code>[href$=".PDF" i]</code> attrape aussi <code>.pdf</code> et <code>.Pdf</code>. C'est précieux sur des adresses venues d'un serveur qu'on ne contrôle pas, où la casse des extensions n'est jamais garantie.</p>
+</details>
 `,
   exercices: [
     {
@@ -211,32 +261,63 @@ button[disabled] {
   id: 'css-18',
   titre: ':not, :is et :has',
   contenu: `
-<p>Trois pseudo-classes modernes qui remplacent des acrobaties compliquées.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Trois situations reviennent sans cesse, et chacune demandait autrefois des contorsions : styler tout <em>sauf</em> un élément, appliquer la même règle à plusieurs sélecteurs sans tout réécrire, et styler un parent <em>selon ce qu'il contient</em>.</p>
+<p>Trois pseudo-classes modernes règlent les trois. La dernière, <code>:has</code>, faisait partie des manques les plus anciens du langage.</p>
 
 <h2>:not — tout sauf</h2>
 <pre class="bloc-code">li:not(.actif) {
-  opacity: 0.6;        /* tous les éléments SAUF l'actif */
+  opacity: 0.6;
 }</pre>
-<p>Sans <code>:not</code>, il aurait fallu styler tous les <code>li</code> puis annuler la règle pour l'actif. Une règle au lieu de deux, et surtout : pas de risque d'oublier d'annuler.</p>
+<p>Sans elle, il fallait deux règles : styler tous les <code>li</code>, puis annuler pour l'actif. Une règle au lieu de deux, et surtout plus aucun risque d'oublier d'annuler quelque chose.</p>
 
-<h2>:is — factoriser une liste de sélecteurs</h2>
-<pre class="bloc-code">/* Avant */
-article h1, article h2, article h3 { color: navy; }
+<h2>:is — factoriser</h2>
+<pre class="bloc-code">:is(h1, h2, h3) + p {
+  margin-top: 0;
+}</pre>
+<p>Équivaut à écrire trois sélecteurs séparés par des virgules — en beaucoup plus court dès que la partie commune est longue.</p>
 
-/* Avec :is */
-article :is(h1, h2, h3) { color: navy; }</pre>
-<p>Le gain devient énorme quand la partie gauche est longue : <code>.page .contenu article :is(h1, h2, h3)</code> évite d'écrire trois fois le même chemin.</p>
-
-<h2>:has — le sélecteur de parent</h2>
+<h2>:has — le parent qui dépend de son contenu</h2>
 <pre class="bloc-code">.carte:has(img) {
-  padding: 0;          /* les cartes QUI CONTIENNENT une image */
+  padding: 0;
 }</pre>
-<p>C'est la nouveauté la plus attendue du CSS depuis vingt ans. Jusqu'ici, on ne pouvait styler un élément qu'en fonction de lui-même ou de ses ancêtres — jamais en fonction de son contenu. <code>:has</code> permet enfin de remonter, et rend inutiles beaucoup de lignes de JavaScript.</p>
+<p>« Une carte <em>qui contient</em> une image. » Pendant vingt ans, le CSS ne savait pas faire ça : un sélecteur ne pouvait que descendre. On passait donc par du JavaScript, pour ajouter une classe au parent. Aujourd'hui, une ligne suffit.</p>
 
-<pre class="bloc-code">/* Un champ dont le label suit, quand il est coché */
-label:has(input:checked) { font-weight: bold; }</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>On veut</th><th>Avant</th><th>Maintenant</th></tr>
+<tr><td>tout sauf l'actif</td><td>deux règles, dont une d'annulation</td><td><code>:not(.actif)</code></td></tr>
+<tr><td>la même règle pour 3 titres</td><td>trois sélecteurs recopiés</td><td><code>:is(h1, h2, h3)</code></td></tr>
+<tr><td>un parent selon son contenu</td><td>du JavaScript</td><td><code>:has(img)</code></td></tr>
+</table>
 
-<div class="info"><div><code>:has</code> est disponible dans tous les navigateurs modernes depuis 2023. Pour un site devant supporter de vieux navigateurs, prévois une apparence de repli acceptable.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Empiler les <code>:not</code>.</strong> <code>li:not(.a):not(.b):not(.c)</code> fonctionne, et devient illisible. Au troisième, une classe posée sur les éléments concernés est plus claire.</p>
+<p><strong>Oublier que <code>:is</code> prend la spécificité du plus fort.</strong> <code>:is(#menu, .carte)</code> hérite du poids de l'identifiant, même quand c'est la carte qui correspond. Pour factoriser sans alourdir, il existe <code>:where</code>, identique mais de poids nul — bien plus prévisible dans une feuille de style partagée.</p>
+<p><strong>Mettre <code>:has</code> partout.</strong> Il oblige le navigateur à regarder en avant dans l'arbre, ce qui coûte plus cher que les autres sélecteurs. Sur quelques règles, invisible ; sur une feuille entière écrite comme ça, perceptible.</p>
+
+<h2>Elles acceptent des listes</h2>
+<p>Les trois prennent plusieurs sélecteurs, séparés par des virgules, et correspondent dès que l'un d'eux correspond :</p>
+<pre class="bloc-code">.carte:not(.active, .desactivee) {
+  border-color: grey;
+}</pre>
+<p>Une carte qui n'est ni active ni désactivée. Cette écriture est récente — longtemps, <code>:not</code> n'acceptait qu'un seul argument, et il fallait les enchaîner. Si tu croises du code avec trois <code>:not</code> collés les uns aux autres, c'est l'ancienne forme.</p>
+
+<h2>Dans la vraie vie</h2>
+<p><code>:has</code> a changé des habitudes bien installées. Un formulaire peut maintenant signaler une erreur sur la ligne entière — <code>.ligne:has(input:invalid)</code> — alors qu'il fallait auparavant du JavaScript pour poser une classe sur le parent. Beaucoup de code écrit dans les années 2010 n'existait que pour contourner ce manque, et peut aujourd'hui être supprimé.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>:not()</code> exclut, <code>:is()</code> factorise, <code>:has()</code> regarde le contenu.</li>
+<li><code>:is()</code> prend la spécificité de son argument le plus fort ; <code>:where()</code> ne pèse rien.</li>
+<li><code>:has()</code> permet enfin de styler un parent selon ce qu'il contient.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi :has a tant tardé</summary>
+<p>Le navigateur lit la page de haut en bas, et applique les styles au fur et à mesure. Savoir si un élément contient une image demande de connaître la suite — donc, en principe, d'attendre. Pendant des années, cela a été jugé trop coûteux. Les moteurs modernes ont fini par trouver comment le faire sans tout ralentir, et <code>:has</code> est arrivé dans tous les navigateurs en 2023.</p>
+</details>
 `,
   exercices: [
     {
@@ -312,29 +393,54 @@ label:has(input:checked) { font-weight: bold; }</pre>
   id: 'css-19',
   titre: 'La spécificité : qui gagne ?',
   contenu: `
-<p>Quand deux règles visent le même élément avec des valeurs contradictoires, laquelle s'applique ? Ce n'est pas forcément la dernière écrite : c'est la <strong>plus spécifique</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu as écrit une règle, elle est correcte, et elle ne s'applique pas. C'est la situation la plus frustrante du CSS, et la plus courante. La cause est presque toujours la même : une autre règle, écrite ailleurs, l'emporte.</p>
+<p>Ce n'est pas un bug. Le conflit entre règles est prévu par le langage, et arbitré par un calcul précis qu'on peut apprendre en cinq minutes — après quoi le CSS cesse d'être imprévisible.</p>
 
-<h2>Le calcul, en trois nombres</h2>
-<p>Chaque sélecteur reçoit un score sous la forme (ids, classes, balises) :</p>
-<table class="memo-table">
-<tr><th>Sélecteur</th><th>Score</th><th>Compte</th></tr>
-<tr><td>p</td><td>0-0-1</td><td>une balise</td></tr>
-<tr><td>.rouge</td><td>0-1-0</td><td>une classe</td></tr>
-<tr><td>p.rouge</td><td>0-1-1</td><td>une classe + une balise</td></tr>
-<tr><td>#titre</td><td>1-0-0</td><td>un id</td></tr>
-<tr><td>#titre p.rouge</td><td>1-1-1</td><td>un id, une classe, une balise</td></tr>
+<h2>Le calcul en trois nombres</h2>
+<p>Chaque sélecteur reçoit un score à trois chiffres : <strong>(identifiants, classes, balises)</strong>.</p>
+<table class="memo-table trace">
+<tr><th>Sélecteur</th><th>Score</th><th>Pourquoi</th></tr>
+<tr><td><code>p</code></td><td>0-0-1</td><td>une balise</td></tr>
+<tr><td><code>.rouge</code></td><td>0-1-0</td><td>une classe</td></tr>
+<tr><td><code>#menu</code></td><td>1-0-0</td><td>un identifiant</td></tr>
+<tr><td><code>.carte p</code></td><td>0-1-1</td><td>une classe et une balise</td></tr>
+<tr><td><code>#menu .item a</code></td><td>1-1-1</td><td>un de chaque</td></tr>
 </table>
-<p>On compare de gauche à droite : un seul id l'emporte sur cent classes. C'est pour ça qu'on évite de styler par id — on se retrouve coincé, incapable de surcharger la règle sans ajouter un autre id.</p>
+<p>On compare chiffre par chiffre, de gauche à droite, et le premier écart tranche. Conséquence qui surprend : <strong>aucune accumulation de classes ne battra jamais un seul identifiant</strong>. Même <code>.a.b.c.d.e</code>, à 0-5-0, perd contre <code>#x</code>, à 1-0-0.</p>
 
-<h2>À spécificité égale, le dernier gagne</h2>
-<pre class="bloc-code">p { color: blue; }
-p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
+<h2>Pas à pas</h2>
+<p>Un paragraphe <code>&lt;p id="titre" class="rouge"&gt;</code>, visé par trois règles. Mesuré :</p>
+<table class="memo-table trace">
+<tr><th>Règle</th><th>Score</th><th>Verdict</th></tr>
+<tr><td><code>p { color: blue; }</code></td><td>0-0-1</td><td>perd</td></tr>
+<tr><td><code>.rouge { color: red; }</code></td><td>0-1-0</td><td>perd</td></tr>
+<tr><td><code>#titre { color: green; }</code></td><td>1-0-0</td><td><strong>gagne</strong> — le texte est vert</td></tr>
+</table>
+<p>Et à score identique ? La <strong>dernière écrite</strong> l'emporte. C'est la seule situation où l'ordre compte.</p>
 
-<h2>!important : l'arme à ne pas utiliser</h2>
-<pre class="bloc-code">p { color: red !important; }   /* écrase tout */</pre>
-<p><code>!important</code> court-circuite tout le calcul. Le problème : quand on veut ensuite surcharger cette règle, il faut un autre <code>!important</code>, puis un autre… Et le CSS devient impossible à maintenir. Il n'existe pratiquement aucune bonne raison de l'utiliser dans son propre code.</p>
+<h2>Les pièges</h2>
+<p><strong>Croire que la dernière règle gagne toujours.</strong> Elle ne gagne qu'à score égal. Une règle de classe écrite en premier bat une règle de balise écrite en dernier — et c'est l'origine de la plupart des « mais ma règle est pourtant en bas ! ».</p>
+<p><strong>Répondre à un conflit en montant d'un cran.</strong> La tentation est d'ajouter un identifiant, ou un sélecteur plus long, pour forcer le passage. Chaque surenchère rend la suivante plus difficile, et la feuille de style devient une course aux armements. La bonne réponse est de <em>baisser</em> le poids de la règle adverse.</p>
+<p><strong>Utiliser <code>!important</code>.</strong> Il écrase tout, y compris les identifiants. Et il ne se bat plus qu'avec un autre <code>!important</code> — placé plus bas. On le réserve à un seul cas honnête : surcharger une bibliothèque extérieure qu'on ne peut pas modifier.</p>
 
-<div class="astuce"><div>La bonne pratique moderne : styler presque tout par <strong>classes</strong> (0-1-0), qui se surchargent facilement entre elles. Les ids servent aux ancres et au JavaScript, pas à la mise en forme.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>L'inspecteur du navigateur affiche toutes les règles qui visent un élément, les perdantes <strong>barrées</strong>, dans l'ordre de priorité. C'est le moyen le plus rapide de comprendre un conflit — et il montre le résultat du calcul, sans avoir à le faire.</p>
+<p>Les équipes qui souffrent le moins de spécificité sont celles qui n'emploient que des classes, toutes au même niveau : à score égal partout, seul l'ordre compte, et l'ordre se lit.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Le score s'écrit (identifiants, classes, balises) et se compare de gauche à droite.</li>
+<li>Un identifiant bat n'importe quel nombre de classes.</li>
+<li>À score égal, la dernière règle écrite gagne — c'est le seul cas où l'ordre compte.</li>
+<li><code>!important</code> écrase tout, et n'a qu'un usage honnête : surcharger du code extérieur.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les couches en cascade</summary>
+<p>Une addition récente, <code>@layer</code>, permet de déclarer des couches ordonnées : tout ce qui est dans une couche supérieure gagne, <em>quelle que soit</em> la spécificité. On peut ainsi ranger une bibliothèque extérieure dans une couche basse et son propre CSS dans une couche haute — et surcharger ses règles avec un simple sélecteur de classe, sans jamais écrire <code>!important</code>.</p>
+</details>
 `,
   exercices: [
     {
@@ -406,29 +512,50 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
   id: 'css-20',
   titre: 'overflow et z-index',
   contenu: `
-<h2>overflow : que faire du contenu qui déborde ?</h2>
-<p>Quand un contenu est plus grand que sa boîte, CSS te laisse choisir.</p>
-<table class="memo-table">
-<tr><th>Valeur</th><th>Effet</th></tr>
-<tr><td>visible</td><td>le contenu déborde et reste visible (par défaut)</td></tr>
-<tr><td>hidden</td><td>ce qui dépasse est coupé</td></tr>
-<tr><td>scroll</td><td>une barre de défilement, toujours affichée</td></tr>
-<tr><td>auto</td><td>une barre de défilement, seulement si nécessaire</td></tr>
+<h2>Pourquoi ça existe</h2>
+<p>Deux questions se posent dès qu'une page devient dense. Que faire d'un contenu trop grand pour sa boîte ? Et quand deux éléments se superposent, lequel passe devant ?</p>
+<p>Les deux propriétés de cette leçon y répondent — et toutes deux réservent une surprise.</p>
+
+<h2>overflow : le contenu qui déborde</h2>
+<ul>
+<li><code>visible</code> — il déborde et reste visible. C'est le défaut ;</li>
+<li><code>hidden</code> — ce qui dépasse est coupé ;</li>
+<li><code>scroll</code> — une barre de défilement, toujours affichée ;</li>
+<li><code>auto</code> — une barre, seulement si nécessaire. C'est presque toujours le bon choix.</li>
+</ul>
+<p>Un point mesuré, qui compte : <code>overflow: hidden</code> ne <em>réduit</em> rien. Un bloc de 400 pixels dans un conteneur de 100 mesure toujours 400 pixels — il n'en est visible que 100. Le contenu est caché, pas redimensionné.</p>
+
+<h2>Pas à pas : z-index ne marche pas seul</h2>
+<p>Voici le piège le plus déroutant du CSS, mesuré sur deux carrés superposés. Le rouge vient en premier dans le HTML, avec <code>z-index: 99</code> ; le bleu vient après, sans rien :</p>
+<table class="memo-table trace">
+<tr><th>Le rouge a…</th><th>Qui est devant</th></tr>
+<tr><td><code>z-index: 99</code> seul</td><td><strong>le bleu</strong> — le z-index est ignoré</td></tr>
+<tr><td><code>z-index: 99</code> + <code>position: relative</code></td><td>le rouge, enfin</td></tr>
 </table>
-<pre class="bloc-code">.boite {
-  height: 100px;
-  overflow: auto;      /* le meilleur choix par défaut */
-}</pre>
-<p><code>overflow-x</code> et <code>overflow-y</code> permettent de traiter chaque axe séparément — c'est ainsi qu'on rend un tableau large défilable horizontalement sans que toute la page ne bouge.</p>
+<p>La règle est sans exception : <strong><code>z-index</code> n'a aucun effet sur un élément non positionné</strong>. Il faut une <code>position</code> autre que <code>static</code> — <code>relative</code> suffit, même sans décalage.</p>
+<p>Et par défaut, sans z-index du tout, c'est le <em>dernier écrit</em> qui passe devant. D'où le réflexe à avoir : si ton z-index ne fait rien, ne l'augmente pas — ajoute <code>position: relative</code>.</p>
 
-<h2>z-index : qui passe devant ?</h2>
-<p>Quand des éléments se superposent, <code>z-index</code> décide de l'ordre de profondeur. Plus le nombre est grand, plus l'élément est devant.</p>
-<pre class="bloc-code">.derriere { position: relative; z-index: 1; }
-.devant   { position: relative; z-index: 2; }</pre>
+<h2>Les pièges</h2>
+<p><strong>Monter le z-index indéfiniment.</strong> <code>z-index: 9999</code> est le symptôme d'un problème mal compris. Soit l'élément n'est pas positionné — et aucune valeur ne marchera — soit il est pris dans un contexte d'empilement dont il ne peut pas sortir.</p>
+<p><strong>Un parent qui emprisonne ses enfants.</strong> Un élément positionné avec un z-index crée un <strong>contexte d'empilement</strong> : ses enfants ne peuvent plus passer devant ses voisins à lui, quelle que soit leur valeur. Une infobulle enfermée dans une carte au z-index bas restera derrière la carte d'à côté. C'est la vraie raison des z-index qui « ne marchent pas ».</p>
+<p><strong>Mettre <code>overflow: hidden</code> pour cacher un débordement.</strong> Ça masque le symptôme, et ça coupe parfois une infobulle ou un menu déroulant qui avaient besoin de sortir. Mieux vaut d'abord comprendre pourquoi le contenu déborde.</p>
 
-<div class="attention"><div><strong>Le piège :</strong> <code>z-index</code> n'a aucun effet sur un élément en <code>position: static</code> — c'est-à-dire la valeur par défaut. Si ton z-index « ne marche pas », c'est presque toujours qu'il manque un <code>position: relative</code>.</div></div>
+<h2>Dans la vraie vie</h2>
+<p><code>overflow: auto</code> sert aux zones de code et aux tableaux larges sur mobile. <code>overflow: hidden</code> sert à découper une image dans un cadre arrondi. Quant aux z-index, les équipes sérieuses en définissent une petite échelle — 10 pour les menus, 100 pour les fenêtres modales, 1000 pour les notifications — plutôt que de laisser chacun improviser.</p>
 
-<div class="astuce"><div>Évite les valeurs comme <code>z-index: 9999</code>. Elles trahissent une guerre d'empilement qu'on finit toujours par perdre. Une échelle simple et documentée (10 pour les menus, 20 pour les fenêtres, 30 pour les alertes) reste maîtrisable.</div></div>
+<div class="a-retenir">
+<ul>
+<li><code>overflow: auto</code> dans le doute ; <code>hidden</code> coupe sans redimensionner.</li>
+<li><code>z-index</code> est ignoré si l'élément n'est pas positionné.</li>
+<li>Sans z-index, c'est le dernier élément écrit qui passe devant.</li>
+<li>Un parent positionné enferme ses enfants dans son propre contexte d'empilement.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ce qui crée un contexte d'empilement</summary>
+<p><code>position</code> et <code>z-index</code> ne sont pas les seuls. Une <code>opacity</code> inférieure à 1, un <code>transform</code>, un <code>filter</code> en créent aussi — sans qu'on l'ait demandé. C'est ce qui explique les cas les plus obscurs : on ajoute une animation sur une carte, et une infobulle qui fonctionnait se met à passer derrière. L'inspecteur signale ces contextes, et c'est souvent la seule façon de s'en sortir.</p>
+</details>
 `,
   exercices: [
     {
@@ -502,8 +629,11 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
   id: 'css-21',
   titre: 'Les arrière-plans en détail',
   contenu: `
-<p>La propriété <code>background</code> cache en réalité plusieurs réglages, qu'on peut piloter séparément.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu as posé des couleurs de fond. Mais une bannière avec une photo, une texture derrière un bloc, un dégradé par-dessus une image : tout cela passe par la même famille de propriétés, et <code>background</code> en cache en réalité cinq.</p>
+<p>Les piloter séparément évite une mauvaise surprise fréquente, sur laquelle on revient plus bas.</p>
 
+<h2>Les cinq réglages</h2>
 <pre class="bloc-code">.banniere {
   background-color: #333;
   background-image: url("photo.jpg");
@@ -511,26 +641,53 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
   background-position: center;
   background-repeat: no-repeat;
 }</pre>
+<ul>
+<li><code>background-color</code> — la couleur, visible là où l'image ne couvre pas ;</li>
+<li><code>background-image</code> — le fichier, ou un dégradé ;</li>
+<li><code>background-size</code> — comment l'image remplit la boîte ;</li>
+<li><code>background-position</code> — quelle partie reste visible si l'image est recadrée ;</li>
+<li><code>background-repeat</code> — si elle se répète en mosaïque.</li>
+</ul>
 
-<h2>background-size : les deux valeurs à connaître</h2>
-<table class="memo-table">
-<tr><th>Valeur</th><th>Effet</th></tr>
-<tr><td>cover</td><td>remplit toute la boîte, quitte à rogner l'image</td></tr>
-<tr><td>contain</td><td>montre l'image entière, quitte à laisser du vide</td></tr>
-<tr><td>100% 200px</td><td>largeur et hauteur imposées</td></tr>
+<h2>cover ou contain</h2>
+<p>Deux valeurs de <code>background-size</code> répondent à deux besoins opposés, et les confondre est l'erreur la plus visible :</p>
+<table class="memo-table trace">
+<tr><th>Valeur</th><th>Ce qu'elle garantit</th><th>Ce qu'elle sacrifie</th></tr>
+<tr><td><code>cover</code></td><td>la boîte est entièrement remplie</td><td>une partie de l'image est coupée</td></tr>
+<tr><td><code>contain</code></td><td>l'image est entièrement visible</td><td>des bandes vides apparaissent</td></tr>
 </table>
-<p><code>cover</code> pour une bannière (aucun trou visible), <code>contain</code> pour un logo (rien ne doit être coupé). Ce choix résume 90 % des cas.</p>
+<p>Pour une bannière, c'est <code>cover</code> : mieux vaut recadrer que laisser des vides. Pour un logo ou un schéma, c'est <code>contain</code> : on ne coupe pas un logo.</p>
+<p>Avec <code>cover</code>, <code>background-position</code> décide de ce qui survit au recadrage. <code>center</code> convient presque toujours ; sur un portrait, <code>top</code> évite de couper les têtes.</p>
 
-<h2>Superposer plusieurs fonds</h2>
-<pre class="bloc-code">.hero {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-    url("photo.jpg");
-  background-size: cover;
-}</pre>
-<p>Les fonds se déclarent du <strong>plus proche au plus lointain</strong> : le dégradé noir semi-transparent est devant la photo, ce qui l'assombrit et rend le texte lisible par-dessus. C'est la technique universelle des bannières de site.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'on écrit</th><th>Ce qu'on voit</th></tr>
+<tr><td>une image seule</td><td>à sa taille réelle, répétée en mosaïque si elle est plus petite que la boîte</td></tr>
+<tr><td>+ <code>no-repeat</code></td><td>une seule fois, en haut à gauche</td></tr>
+<tr><td>+ <code>size: cover</code></td><td>agrandie jusqu'à remplir, le débord coupé</td></tr>
+<tr><td>+ <code>position: center</code></td><td>recadrée autour du centre</td></tr>
+</table>
 
-<div class="astuce"><div>Une image décorative va en <code>background-image</code> ; une image porteuse d'information va en <code>&lt;img&gt;</code> avec un <code>alt</code>. La différence compte pour l'accessibilité : un lecteur d'écran ignore complètement les arrière-plans.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Le raccourci qui efface tout.</strong> <code>background: red;</code> ne se contente pas de poser une couleur : il <em>réinitialise</em> les quatre autres réglages. Une image définie plus haut disparaît, sans message. Quand tu ne veux changer qu'une chose, écris la propriété complète.</p>
+<p><strong>Oublier les guillemets dans <code>url()</code>.</strong> Souvent toléré, et rompu dès que le chemin contient une espace ou une parenthèse.</p>
+<p><strong>Du texte sur une photo, sans précaution.</strong> Une photo a des zones claires et des zones sombres : un texte blanc lisible sur l'une devient invisible sur l'autre. On pose un voile entre les deux — un dégradé semi-transparent dans la même propriété, avant l'image, séparé par une virgule.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Toutes les grandes bannières de site fonctionnent ainsi : <code>cover</code>, <code>center</code>, <code>no-repeat</code>, et un voile sombre par-dessus pour que le titre reste lisible. C'est devenu une combinaison si standard qu'on la reconnaît d'un coup d'œil.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>background</code> est un raccourci qui réinitialise les cinq réglages : attention aux effacements silencieux.</li>
+<li><code>cover</code> remplit en coupant, <code>contain</code> montre tout en laissant des vides.</li>
+<li><code>background-position</code> choisit ce qui survit au recadrage.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : plusieurs fonds superposés</summary>
+<p>Une même propriété accepte plusieurs images séparées par des virgules — la première passe devant. C'est ainsi qu'on pose un dégradé sombre par-dessus une photo en une seule déclaration. Chaque réglage accepte alors lui aussi une liste, dans le même ordre. C'est puissant, et vite illisible au-delà de deux couches.</p>
+</details>
 `,
   exercices: [
     {
@@ -602,32 +759,52 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
   id: 'css-22',
   titre: 'transform : déplacer, tourner, agrandir',
   contenu: `
-<p><code>transform</code> modifie l'apparence d'un élément <strong>sans déranger ses voisins</strong>. C'est sa grande force : la place occupée dans la mise en page reste exactement la même.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Déplacer un élément de dix pixels avec <code>margin-left</code> fonctionne — et pousse tous ses voisins. Agrandir une carte avec <code>width</code> décale tout ce qui l'entoure. Pour une animation au survol, c'est catastrophique : la page entière frémit à chaque passage de souris.</p>
+<p><code>transform</code> règle exactement ce problème : il modifie l'apparence d'un élément <strong>sans déranger la mise en page</strong>.</p>
 
-<table class="memo-table">
-<tr><th>Fonction</th><th>Effet</th></tr>
-<tr><td>translate(20px, 10px)</td><td>déplace de 20px à droite, 10px vers le bas</td></tr>
-<tr><td>scale(1.2)</td><td>agrandit de 20 %</td></tr>
-<tr><td>rotate(45deg)</td><td>fait pivoter de 45 degrés</td></tr>
-<tr><td>skew(10deg)</td><td>incline</td></tr>
+<h2>Les quatre fonctions</h2>
+<ul>
+<li><code>translate(20px, 10px)</code> — déplace de 20 à droite, 10 vers le bas ;</li>
+<li><code>scale(1.2)</code> — agrandit de 20 % ;</li>
+<li><code>rotate(45deg)</code> — fait pivoter ;</li>
+<li><code>skew(10deg)</code> — incline.</li>
+</ul>
+<p>Elles se combinent sur une seule ligne, séparées par des espaces : <code>transform: translateY(-4px) scale(1.02);</code> — le petit soulèvement au survol d'une carte.</p>
+
+<h2>Pas à pas : la place reste la même</h2>
+<p>Mesuré sur deux blocs empilés, le premier agrandi au double :</p>
+<table class="memo-table trace">
+<tr><th>Situation</th><th>Position du second bloc</th></tr>
+<tr><td>sans transform</td><td>28 px du haut</td></tr>
+<tr><td>le premier en <code>scale(2)</code></td><td><strong>28 px</strong> — il n'a pas bougé</td></tr>
 </table>
+<p>Le premier bloc paraît deux fois plus grand, et déborde par-dessus son voisin. Mais la place qu'il <em>occupe</em> dans le flux n'a pas changé d'un pixel. C'est à la fois sa grande force et son principal piège : un élément transformé peut en recouvrir un autre sans que rien ne le signale.</p>
 
-<h2>Les combiner</h2>
-<pre class="bloc-code">.carte:hover {
-  transform: translateY(-4px) scale(1.02);
-}</pre>
-<p>L'ordre compte : les transformations s'appliquent de gauche à droite. Une rotation avant une translation ne donne pas le même résultat qu'après.</p>
+<h2>Pourquoi c'est fluide</h2>
+<p>Il y a une raison technique, et elle vaut d'être connue. Modifier <code>width</code> ou <code>margin</code> oblige le navigateur à recalculer la position de tout ce qui suit, puis à redessiner. Un <code>transform</code>, lui, ne change aucune position : le navigateur peut confier la transformation à la carte graphique, qui la traite sans rien recalculer.</p>
+<p>C'est pourquoi <code>transform</code> et <code>opacity</code> sont les deux seules propriétés qu'on anime sans crainte.</p>
 
-<h2>Pourquoi c'est la propriété reine des animations</h2>
-<p>Animer <code>top</code> ou <code>width</code> oblige le navigateur à <strong>recalculer toute la mise en page</strong> à chaque image — c'est lent, et ça saccade. <code>transform</code> et <code>opacity</code>, eux, sont traités directement par la carte graphique : l'animation reste fluide même sur un téléphone modeste.</p>
-<pre class="bloc-code">.carte {
-  transition: transform 0.2s;
-}
-.carte:hover {
-  transform: translateY(-4px);
-}</pre>
+<h2>Les pièges</h2>
+<p><strong>Écrire deux <code>transform</code> dans la même règle.</strong> La seconde écrase la première, comme pour n'importe quelle propriété. Il faut tout mettre sur une seule ligne.</p>
+<p><strong>L'ordre des fonctions compte.</strong> <code>rotate(45deg) translateX(20px)</code> et <code>translateX(20px) rotate(45deg)</code> ne donnent pas le même résultat : dans le premier cas, le déplacement suit l'axe déjà tourné. Elles s'appliquent de droite à gauche.</p>
+<p><strong>Oublier qu'un <code>transform</code> crée un contexte d'empilement.</strong> Un élément transformé devient une référence pour ses enfants en position absolue, et peut emprisonner leurs z-index. C'est la cause de bien des infobulles qui passent soudain derrière leur voisine après l'ajout d'une animation.</p>
 
-<div class="astuce"><div>Retiens la règle : pour animer, n'utilise que <code>transform</code> et <code>opacity</code>. Si tu te surprends à animer <code>margin</code>, <code>width</code> ou <code>top</code>, il existe presque toujours une façon de faire la même chose avec un transform.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>La carte qui se soulève au survol, l'icône qui pivote quand un menu s'ouvre, l'image qui zoome doucement dans son cadre — toutes en <code>transform</code>. Les panneaux latéraux qui glissent depuis le bord de l'écran aussi : <code>translateX</code> de 100 % à 0, sans jamais toucher à la mise en page.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>transform</code> change l'apparence sans modifier la place occupée — les voisins ne bougent pas.</li>
+<li>Les fonctions se combinent sur une seule ligne, et leur ordre change le résultat.</li>
+<li>C'est la propriété la plus fluide à animer, parce qu'elle ne fait rien recalculer.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : déplacer le point de pivot</summary>
+<p>Par défaut, tout tourne et s'agrandit autour du <em>centre</em> de l'élément. <code>transform-origin</code> déplace ce point : <code>left center</code> fait pivoter autour du bord gauche, comme une porte sur ses gonds. C'est indispensable pour une aiguille d'horloge, ou pour un menu qui se déplie depuis son coin supérieur.</p>
+</details>
 `,
   exercices: [
     {
@@ -706,31 +883,56 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
   id: 'css-23',
   titre: 'Flexbox : la répartition de l\'espace',
   contenu: `
-<p>Tu sais aligner avec Flexbox. Voici comment contrôler précisément <strong>comment l'espace se distribue</strong> entre les éléments.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais aligner avec Flexbox. Il reste une question que <code>justify-content</code> ne règle pas : quand il reste de la place, <strong>qui la prend</strong> ? Et quand il en manque, qui rétrécit ?</p>
+<p>C'est ce qui sépare une barre de navigation qui tient à toutes les tailles d'une barre qui casse dès qu'un mot s'allonge.</p>
 
-<h2>flex-grow : qui prend la place restante ?</h2>
+<h2>flex-grow : partager ce qui reste</h2>
 <pre class="bloc-code">.conteneur { display: flex; }
-.gauche  { flex-grow: 1; }   /* prend 1 part */
-.droite  { flex-grow: 2; }   /* prend 2 parts */</pre>
-<p>L'espace <em>disponible</em> est réparti en 3 parts : une pour la gauche, deux pour la droite. Avec <code>flex-grow: 0</code> (le défaut), un élément ne s'étire pas du tout.</p>
+.gauche    { flex-grow: 1; }
+.droite    { flex-grow: 2; }</pre>
+<p>L'espace disponible est découpé en parts. Mesuré dans un conteneur de 300 pixels : la gauche obtient <strong>100 pixels</strong>, la droite <strong>200</strong>. Une part contre deux.</p>
+<p>La valeur par défaut est <code>0</code> : sans rien écrire, un élément ne grandit pas, et l'espace reste vide à la fin de la rangée.</p>
 
-<h2>flex-shrink : qui rétrécit quand ça déborde ?</h2>
-<pre class="bloc-code">.logo { flex-shrink: 0; }    /* ne rétrécit JAMAIS */</pre>
-<p>C'est l'astuce indispensable pour qu'un logo ou une icône ne s'écrase pas quand la place manque.</p>
+<h2>Les deux autres</h2>
+<ul>
+<li><code>flex-shrink</code> — à quel point l'élément accepte de rétrécir quand la place manque. Par défaut <code>1</code> : tout le monde rétrécit. Mettre <code>0</code> protège un logo qu'on ne veut jamais voir écrasé ;</li>
+<li><code>flex-basis</code> — la taille de départ, avant tout partage. C'est elle, et non <code>width</code>, que Flexbox regarde en premier.</li>
+</ul>
+<p>Le raccourci <code>flex: 1</code> réunit les trois : grandir d'une part, accepter de rétrécir, partir de zéro. C'est l'écriture qu'on croise le plus souvent.</p>
 
-<h2>flex-basis : la taille de départ</h2>
-<pre class="bloc-code">.colonne { flex-basis: 200px; }   /* avant répartition */</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Réglage</th><th>Résultat dans 300 px</th></tr>
+<tr><td>rien</td><td>chacun à sa taille naturelle, du vide à la fin</td></tr>
+<tr><td><code>flex-grow: 1</code> sur le premier</td><td>il absorbe tout l'espace restant</td></tr>
+<tr><td><code>1</code> et <code>2</code></td><td>100 px et 200 px</td></tr>
+<tr><td><code>flex: 1</code> sur les deux</td><td>150 px chacun, quel que soit leur contenu</td></tr>
+</table>
+<p>La dernière ligne mérite attention : avec <code>flex: 1</code>, la base passe à zéro, et le contenu ne compte plus. C'est ce qu'on veut pour des colonnes égales — et pas du tout ce qu'on veut pour des boutons de longueurs différentes.</p>
 
-<h2>Le raccourci flex</h2>
-<pre class="bloc-code">.element { flex: 1; }            /* = grow 1, shrink 1, basis 0 */
-.element { flex: 0 0 200px; }    /* largeur fixe de 200px */</pre>
-<p><code>flex: 1</code> est de loin le plus utilisé : « prends toute la place disponible, à égalité avec les autres ».</p>
+<h2>Les pièges</h2>
+<p><strong>Croire que <code>flex-grow: 2</code> donne un élément deux fois plus large.</strong> Il reçoit deux parts de l'<em>espace restant</em>, pas deux fois la largeur totale. Si les éléments ont déjà des tailles différentes, le rapport final n'est pas de un à deux.</p>
+<p><strong>Oublier que <code>width</code> s'efface devant <code>flex-basis</code>.</strong> Une largeur qui semble ignorée dans un conteneur flex, c'est presque toujours ça.</p>
+<p><strong>Laisser un logo rétrécir.</strong> Par défaut tout le monde rétrécit, images comprises, et un logo finit écrasé sur un écran étroit. <code>flex-shrink: 0</code> le protège.</p>
+<p><strong>Oublier <code>min-width: 0</code>.</strong> Un élément flex refuse par défaut de devenir plus petit que son contenu — un long mot sans espace, par exemple. Il déborde alors du conteneur. <code>min-width: 0</code> lève ce blocage ; c'est l'un des réglages les plus obscurs du langage, et l'un des plus utiles.</p>
 
-<h2>align-self et order</h2>
-<pre class="bloc-code">.special { align-self: flex-end; }   /* cet élément seul s'aligne en bas */
-.premier { order: -1; }              /* passe devant, sans toucher au HTML */</pre>
+<h2>Dans la vraie vie</h2>
+<p>La barre de recherche qui s'étire entre un logo fixe et un bouton fixe, c'est <code>flex: 1</code> au milieu et <code>flex-shrink: 0</code> aux extrémités. Une mise en page en deux colonnes dont l'une suit le contenu et l'autre prend le reste : même principe, deux lignes.</p>
 
-<div class="astuce"><div>La mise en page classique « barre latérale fixe + contenu élastique » tient en deux lignes : <code>.barre { flex: 0 0 250px; }</code> et <code>.contenu { flex: 1; }</code>.</div></div>
+<div class="a-retenir">
+<ul>
+<li><code>flex-grow</code> partage l'espace <strong>restant</strong>, en parts.</li>
+<li><code>flex-shrink: 0</code> protège ce qui ne doit jamais être écrasé.</li>
+<li>Dans un conteneur flex, <code>flex-basis</code> passe avant <code>width</code>.</li>
+<li><code>min-width: 0</code> débloque un élément qui déborde à cause de son contenu.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : passer à la ligne</summary>
+<p>Par défaut, une rangée flex ne passe jamais à la ligne : les éléments rétrécissent jusqu'à déborder. <code>flex-wrap: wrap</code> les autorise à revenir à la ligne quand la place manque. Combiné à un <code>flex-basis</code> et à <code>flex-grow: 1</code>, cela donne une grille qui se réorganise seule — sans une seule media query.</p>
+</details>
 `,
   exercices: [
     {
@@ -814,39 +1016,61 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
   id: 'css-24',
   titre: 'Grid avancé',
   contenu: `
-<p>Tu connais les colonnes de Grid. Voici les outils qui rendent une grille réellement adaptative.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais déclarer trois colonnes. Mais trois colonnes restent trois colonnes, y compris sur un téléphone où elles font chacune soixante pixels. On ajoute alors des media queries : deux colonnes en dessous de 900 pixels, une seule en dessous de 600. Ça marche, et ça se maintient mal — chaque nouvelle grille veut ses propres seuils.</p>
+<p>Grid sait faire autrement : décrire une <em>intention</em>, et laisser le navigateur compter.</p>
 
-<h2>repeat, auto-fit et minmax : la grille qui se réorganise seule</h2>
+<h2>La ligne qui remplace les media queries</h2>
 <pre class="bloc-code">.galerie {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }</pre>
-<p>Cette seule ligne remplace toutes les media queries d'une galerie. Elle se lit ainsi : « fais autant de colonnes que possible, chacune d'au moins 200px, et répartis l'espace restant à parts égales ». Sur un grand écran tu obtiens 4 colonnes, sur un téléphone une seule — sans qu'aucun point de rupture n'ait été écrit.</p>
+<p>Elle se lit : « autant de colonnes que possible, chacune d'au moins 200 pixels, et qui se partagent l'espace restant à égalité ».</p>
+<ul>
+<li><code>repeat()</code> — répète une définition de colonne ;</li>
+<li><code>auto-fit</code> — « autant que ça rentre », au lieu d'un nombre fixe ;</li>
+<li><code>minmax(200px, 1fr)</code> — jamais moins de 200 pixels, jamais plus qu'une part égale.</li>
+</ul>
+<p>Sur un écran large, six colonnes ; sur une tablette, trois ; sur un téléphone, une. Sans un seul seuil écrit à la main — et sans rien à modifier si le design change.</p>
 
-<h2>Les zones nommées</h2>
-<pre class="bloc-code">.page {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-template-areas:
-    "entete entete"
-    "menu   contenu"
-    "pied   pied";
-}
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Largeur disponible</th><th>Ce que le navigateur calcule</th></tr>
+<tr><td>1200 px</td><td>six colonnes de 200 tiennent : il en fait six</td></tr>
+<tr><td>700 px</td><td>trois tiennent, la quatrième non : trois colonnes, élargies pour remplir</td></tr>
+<tr><td>350 px</td><td>une seule tient : une colonne pleine largeur</td></tr>
+</table>
+<p>À chaque fois, le <code>1fr</code> de <code>minmax</code> fait élargir les colonnes retenues pour qu'il ne reste aucun vide.</p>
 
-.entete  { grid-area: entete; }
-.menu    { grid-area: menu; }
-.contenu { grid-area: contenu; }
-.pied    { grid-area: pied; }</pre>
-<p>La mise en page se <strong>dessine</strong> dans le CSS. C'est lisible d'un coup d'œil, même par quelqu'un qui découvre le projet — et réorganiser la page revient à déplacer des mots.</p>
-
-<h2>S'étendre sur plusieurs cases</h2>
+<h2>Placer un élément précisément</h2>
 <pre class="bloc-code">.vedette {
-  grid-column: span 2;    /* occupe 2 colonnes */
-  grid-row: span 2;       /* et 2 lignes */
+  grid-column: span 2;
+  grid-row: span 2;
 }</pre>
+<p>Cet élément occupe deux colonnes et deux lignes — un article mis en avant au milieu d'une grille de vignettes. Les autres se réorganisent autour, sans qu'on ait à y penser.</p>
 
-<div class="astuce"><div>Règle de choix : <strong>Flexbox pour une dimension</strong> (une rangée, une colonne), <strong>Grid pour deux</strong> (une vraie grille). Et les deux se combinent très bien : une grille dont chaque case est un conteneur flex.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Confondre <code>auto-fit</code> et <code>auto-fill</code>.</strong> Les deux créent autant de colonnes que possible. Mais s'il n'y a pas assez d'éléments pour les remplir, <code>auto-fit</code> fait disparaître les colonnes vides et élargit les autres, tandis qu'<code>auto-fill</code> les garde — laissant un grand vide à droite. Pour une galerie, c'est <code>auto-fit</code>.</p>
+<p><strong>Un minimum trop grand.</strong> <code>minmax(400px, 1fr)</code> sur un écran de 350 pixels donne une colonne de 400 : elle déborde. Le minimum doit tenir sur le plus petit écran visé.</p>
+<p><strong>Déclarer les lignes sans nécessité.</strong> Grid les crée au besoin. Fixer <code>grid-template-rows</code> à l'avance se retourne dès qu'il y a un élément de plus que prévu.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les galeries d'images, les grilles de produits, les tableaux de bord de cartes. Cette unique ligne a remplacé, dans beaucoup de projets, une cinquantaine de lignes de media queries — et surtout, elle continue de fonctionner quand le contenu change.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>repeat(auto-fit, minmax(200px, 1fr))</code> fabrique une grille qui s'adapte sans media query.</li>
+<li><code>auto-fit</code> absorbe les colonnes vides ; <code>auto-fill</code> les conserve.</li>
+<li><code>span</code> fait occuper plusieurs colonnes ou lignes à un élément.</li>
+<li>Les lignes se créent seules : on ne déclare que les colonnes.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : nommer les lignes de la grille</summary>
+<p>On peut donner des noms aux traits de la grille — <code>[debut-contenu]</code>, <code>[fin-contenu]</code> — et y placer les éléments par leur nom plutôt que par leur numéro. Le CSS devient lisible comme un plan, et surtout il ne casse plus quand on insère une colonne : les numéros auraient tous changé, les noms non.</p>
+</details>
 `,
   exercices: [
     {
@@ -923,30 +1147,53 @@ p { color: green; }    /* c'est celui-ci qui s'applique */</pre>
   id: 'css-25',
   titre: 'Les valeurs qui s\'adaptent',
   contenu: `
-<p>Trois fonctions modernes qui permettent d'écrire un CSS réellement adaptable, sans multiplier les media queries.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un titre de 48 pixels écrase un téléphone ; le même à 24 pixels paraît timide sur un grand écran. La réponse habituelle est une media query, puis une deuxième, puis une troisième — une par élément et par seuil.</p>
+<p>Trois fonctions permettent d'écrire directement la règle qu'on avait en tête : « grandis avec l'écran, mais jamais en dessous de ceci ni au-dessus de cela ».</p>
 
-<h2>clamp() : une valeur bornée</h2>
+<h2>clamp : une valeur bornée</h2>
 <pre class="bloc-code">h1 {
   font-size: clamp(1.5rem, 5vw, 3rem);
 }</pre>
-<p>Trois arguments : <strong>minimum, valeur idéale, maximum</strong>. Ici, le titre grandit avec la largeur de l'écran (5vw), mais ne descend jamais sous 1.5rem ni ne dépasse 3rem. Une seule ligne remplace trois media queries — et le résultat est fluide plutôt que par paliers.</p>
+<p>Trois arguments, dans cet ordre : <strong>minimum, valeur idéale, maximum</strong>. Le titre suit la largeur de l'écran (5 % de celle-ci), sans jamais descendre sous 1,5 rem ni dépasser 3 rem.</p>
+<p>Une ligne, et le titre est réglé pour toutes les tailles d'écran — y compris celles qui n'existent pas encore.</p>
 
-<h2>aspect-ratio : garder les proportions</h2>
-<pre class="bloc-code">.video {
-  width: 100%;
-  aspect-ratio: 16 / 9;    /* la hauteur suit automatiquement */
-}</pre>
-<p>Avant, obtenir ce résultat demandait une bidouille bien connue à base de <code>padding-bottom: 56.25%</code>. Aujourd'hui, une propriété suffit.</p>
+<h2>min et max</h2>
+<ul>
+<li><code>min(90%, 1200px)</code> — prend la plus petite des deux : 90 % sur un petit écran, plafonné à 1200 pixels sur un grand ;</li>
+<li><code>max(1rem, 3vw)</code> — prend la plus grande : au moins 1 rem, davantage si l'écran est large.</li>
+</ul>
+<p>Attention au sens, qui se retourne facilement dans la tête : <code>min()</code> sert à poser un <em>plafond</em>, <code>max()</code> un <em>plancher</em>. C'est logique — prendre toujours le plus petit, c'est interdire de dépasser — et ça demande un instant de réflexion à chaque fois.</p>
 
-<h2>object-fit : cadrer une image</h2>
-<pre class="bloc-code">img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;      /* remplit sans déformer */
-}</pre>
-<p>Sans <code>object-fit</code>, imposer une largeur et une hauteur à une image l'<strong>écrase</strong>. Avec <code>cover</code>, elle est recadrée intelligemment — exactement comme <code>background-size: cover</code>, mais sur une vraie balise <code>&lt;img&gt;</code> qui garde son <code>alt</code>.</p>
+<h2>Pas à pas</h2>
+<p><code>clamp(1.5rem, 5vw, 3rem)</code>, soit entre 24 et 48 pixels :</p>
+<table class="memo-table trace">
+<tr><th>Largeur d'écran</th><th>5vw donne</th><th>Taille retenue</th></tr>
+<tr><td>360 px</td><td>18 px</td><td>24 px — le minimum s'applique</td></tr>
+<tr><td>800 px</td><td>40 px</td><td>40 px — la valeur idéale passe</td></tr>
+<tr><td>1600 px</td><td>80 px</td><td>48 px — le maximum s'applique</td></tr>
+</table>
 
-<div class="astuce"><div>Ces trois propriétés ont remplacé des années de contournements. Si tu trouves un tutoriel qui explique le truc du <code>padding-bottom</code> pour les vidéos, c'est qu'il date d'avant 2021 : <code>aspect-ratio</code> fait la même chose en clair.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Se tromper d'ordre dans <code>clamp</code>.</strong> Minimum, idéal, maximum. Inverser le premier et le dernier donne un résultat figé, sans aucune erreur signalée.</p>
+<p><strong>Une valeur idéale en <code>vw</code> pur pour du texte.</strong> Si le visiteur zoome, une taille en <code>vw</code> ne bouge pas — elle dépend de l'écran, pas du réglage. Un texte devient alors impossible à agrandir. L'usage sûr est de mélanger : <code>clamp(1rem, 0.5rem + 1.5vw, 2rem)</code>, où la part en <code>rem</code> suit le zoom.</p>
+<p><strong>En mettre partout.</strong> Un <code>clamp</code> sur chaque propriété rend une feuille de style impossible à relire. On s'en sert là où l'échelle compte vraiment : les titres, la largeur du contenu, les grands espacements.</p>
+
+<h2>Dans la vraie vie</h2>
+<p><code>width: min(90%, 1200px)</code> est devenue l'écriture standard d'un conteneur centré : pleine largeur avec des marges sur mobile, plafonné sur grand écran — là où il fallait auparavant une largeur, une largeur maximale et une media query. Trois lignes remplacées par une.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>clamp(min, idéal, max)</code> borne une valeur qui s'adapte.</li>
+<li><code>min()</code> pose un plafond, <code>max()</code> un plancher — l'inverse de l'intuition.</li>
+<li>Pour du texte, mélange toujours une part en <code>rem</code>, sinon le zoom du visiteur est ignoré.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les calculs s'imbriquent</summary>
+<p>Ces trois fonctions acceptent des opérations à l'intérieur, sans avoir besoin de <code>calc()</code> : <code>clamp(1rem, 0.5rem + 1.5vw, 2rem)</code> est valide tel quel. On peut même les emboîter les unes dans les autres. La limite n'est pas technique mais humaine : au-delà de deux niveaux, plus personne ne sait ce que la ligne calcule — toi compris, dans trois mois.</p>
+</details>
 `,
   exercices: [
     {

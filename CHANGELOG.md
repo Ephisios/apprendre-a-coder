@@ -6,6 +6,53 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.10.0 — 2026-10-06
+
+Le CSS est terminé. **Ses 25 leçons sont au gabarit**, de la première règle aux valeurs qui
+s'adaptent. Avec HTML et « JavaScript — La logique », cela fait **64 leçons sur 168**.
+
+### Changé
+
+- **CSS (8 leçons)**, **CSS 2 (7)** et **CSS 3 (10)** passent au gabarit. De 97-200 mots à
+  **443-592**. Aucun exercice n'a été touché : seul le cours a été réécrit.
+
+### Ce que la mesure a établi
+
+Chaque nombre cité dans ces leçons a été relevé dans un vrai Chrome. Six résultats servent
+directement d'argument :
+
+- **`width: 200px` + 16 de padding + 2 de bordure donne 236 px à l'écran.** C'est le piège
+  fondateur du modèle de boîte, et `css-5` le montre en nombres plutôt qu'en principe.
+
+- **Les marges verticales fusionnent, pas les horizontales.** 20 et 20 donnent 20 px en vertical,
+  40 en horizontal. L'asymétrie surprend tout le monde ; elle est maintenant expliquée.
+
+- **`z-index` est purement ignoré sur un élément non positionné.** Mesuré : avec `z-index: 99`
+  seul, c'est l'autre carré qui passe devant ; avec `position: relative`, l'ordre s'inverse.
+  `css-20` en tire la règle utile — si ton z-index ne fait rien, n'augmente pas la valeur.
+
+- **`transform` ne déplace pas les voisins** : le bloc suivant reste à 28 px, que le précédent
+  soit à l'échelle 1 ou 2. C'est toute la force de `css-22`.
+
+- **`position: absolute` sans parent positionné se cale sur la page**, à 0 px du bord — et non
+  sur son conteneur, qui était à 88.
+
+- **`::before` n'entre pas dans le `textContent`.** L'élément contient « texte » quand l'écran
+  affiche « AVANT texte ». D'où la règle de `css-13` : jamais d'information importante dans un
+  `content`.
+
+### Où en est la conversion
+
+**64 leçons sur 168**, contre 39. Leur médiane est de **524 mots** ; celle des 104 restantes, de
+149. La médiane du cours entier passe de 155 à **181 mots**.
+
+Trois pistes complètes : HTML, CSS, et « JavaScript — La logique ». Restent les deux autres modules
+JavaScript, Python, SQL, C, Java et les projets.
+
+Les encarts à double émoji tombent de 44 à **15**.
+
+---
+
 ## 3.9.0 — 2026-10-06
 
 Le module HTML est terminé. **Ses 23 leçons sont au gabarit**, des premières balises au débogage.

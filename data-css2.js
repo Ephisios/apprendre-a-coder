@@ -5,23 +5,48 @@ window.DATA_CSS2 = [
   id: 'css-9',
   titre: 'Les unités : %, rem, vh',
   contenu: `
-<p>Tu n'as utilisé que des pixels. Les pros jonglent avec quatre familles d'unités — chacune résout un problème précis.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu n'as écrit que des pixels. C'est honnête, et c'est insuffisant : un pixel ne s'adapte à rien. Une colonne de 900 pixels déborde d'un téléphone, un texte de 14 pixels ignore le réglage d'une personne qui voit mal, une carte de 300 pixels de haut ne remplira jamais exactement l'écran.</p>
+<p>Les autres unités ne sont pas des variantes : chacune répond à une question précise, « relatif à <em>quoi</em> ? ».</p>
 
-<h2>Le pixel (px) : l'absolu</h2>
-<p>Taille fixe, identique partout. Parfait pour les bordures, les petits espacements... mais rigide pour les mises en page.</p>
+<h2>Les quatre familles</h2>
+<ul>
+<li><code>px</code> — fixe. Parfait pour une bordure, un petit espacement, un rayon d'angle ;</li>
+<li><code>%</code> — relatif au <strong>parent</strong>. <code>width: 50%</code> dans un conteneur de 300 pixels donne exactement 150 pixels ;</li>
+<li><code>rem</code> — relatif à la taille de police de la page, 16 pixels par défaut. <code>1.5rem</code> vaut 24 pixels — et suit le réglage du visiteur s'il l'a changé ;</li>
+<li><code>vw</code> et <code>vh</code> — relatifs à la <strong>fenêtre</strong>. <code>100vh</code>, c'est toute sa hauteur ; <code>50vw</code>, la moitié de sa largeur.</li>
+</ul>
 
-<h2>Le pourcentage (%) : relatif au parent</h2>
-<pre class="bloc-code">.colonne { width: 50%; }   /* la moitié de la largeur de son PARENT */</pre>
+<h2>Pas à pas : le piège des pourcentages de hauteur</h2>
+<p>La largeur et la hauteur ne se comportent pas pareil, et ça déroute. Mesuré :</p>
+<table class="memo-table trace">
+<tr><th>Ce qu'on écrit</th><th>Ce qu'on obtient</th></tr>
+<tr><td><code>width: 50%</code>, parent de 300 px</td><td>150 px — comme prévu</td></tr>
+<tr><td><code>height: 50%</code>, parent <em>sans hauteur</em></td><td>pas la moitié : la règle est ignorée</td></tr>
+</table>
+<p>La raison est logique une fois dite : un pourcentage de hauteur se calcule sur la hauteur du parent — et si le parent n'en a pas, étant lui-même à la taille de son contenu, il n'y a rien à diviser. La largeur, elle, est toujours connue : celle de la fenêtre, en dernier recours.</p>
+<p>D'où le réflexe : pour remplir l'écran en hauteur, on prend <code>100vh</code>, pas <code>100%</code>.</p>
 
-<h2>Le rem : relatif à la taille de texte de base</h2>
-<pre class="bloc-code">h1 { font-size: 2rem; }      /* 2 × 16px = 32px */
-p  { font-size: 1.125rem; }  /* 18px */</pre>
-<p><code>1rem</code> = la taille de texte racine du navigateur (16px par défaut). L'énorme avantage : si l'utilisateur agrandit le texte dans ses réglages (malvoyance...), tout ton site suit proportionnellement. Les pixels, eux, ignorent ce réglage. <strong>Le réflexe pro : rem pour les textes.</strong></p>
+<h2>Les pièges</h2>
+<p><strong>Tout mettre en pixels.</strong> Un texte en <code>px</code> ignore le réglage de taille du navigateur. Pour qui a augmenté la police par défaut — souvent parce qu'il voit mal — ton site reste minuscule. Les tailles de texte vont en <code>rem</code>.</p>
+<p><strong>Utiliser <code>100vh</code> sur mobile sans y penser.</strong> Sur téléphone, la barre d'adresse se rétracte quand on fait défiler : la hauteur de fenêtre change en cours de route, et un bloc en <code>100vh</code> se met à sauter. Les unités <code>dvh</code>, récentes, règlent ce cas précis.</p>
+<p><strong>Mélanger les repères sans y réfléchir.</strong> Un <code>padding</code> en pourcentage se calcule sur la <em>largeur</em> du parent, même en haut et en bas. C'est contre-intuitif, parfaitement normatif, et la cause de bien des espacements mystérieux.</p>
 
-<h2>vh / vw : relatifs à l'écran</h2>
-<pre class="bloc-code">.hero { height: 100vh; }   /* toute la hauteur de l'écran */
-.demi { height: 50vh; }    /* la moitié */</pre>
-<p><code>100vh</code> = 100% de la hauteur du <em>viewport</em> (la fenêtre), <code>vw</code> pareil en largeur. C'est l'unité des grandes sections d'accueil plein écran.</p>
+<h2>Dans la vraie vie</h2>
+<p>Un site bien réglé mélange les quatre : <code>rem</code> pour le texte et les espacements, <code>%</code> ou <code>fr</code> pour les largeurs de colonnes, <code>vh</code> pour une bannière plein écran, <code>px</code> pour les bordures. Ce n'est pas de la coquetterie : chaque unité répond à une question différente.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>%</code> dépend du parent, <code>rem</code> de la page, <code>vw</code> et <code>vh</code> de la fenêtre, <code>px</code> de rien.</li>
+<li>Un pourcentage de hauteur ne marche que si le parent a une hauteur.</li>
+<li>Les tailles de texte en <code>rem</code>, pour suivre le réglage du visiteur.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : l'unité ch</summary>
+<p><code>1ch</code> vaut la largeur du caractère « 0 » dans la police courante. Son usage le plus utile : limiter la largeur d'un paragraphe à <code>65ch</code>, soit environ soixante-cinq caractères par ligne. C'est la longueur que les typographes considèrent comme la plus confortable à lire — au-delà, l'œil peine à retrouver le début de la ligne suivante.</p>
+</details>
 `,
   exercices: [
     {
@@ -96,26 +121,49 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
   id: 'css-10',
   titre: 'position : sortir du flux',
   contenu: `
-<p>Par défaut, les éléments s'empilent dans l'ordre du HTML — le « flux normal ». La propriété <code>position</code> permet d'en sortir : superposer, épingler, ancrer.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Par défaut, les éléments s'empilent dans l'ordre du HTML, les uns après les autres. On appelle ça le <strong>flux normal</strong>, et c'est une bonne chose : c'est ce qui fait qu'une page reste lisible sans qu'on s'en occupe.</p>
+<p>Mais certaines choses ne vivent pas dans le flux. Une pastille de notification posée sur un coin d'icône, un en-tête qui reste collé en haut pendant qu'on défile, une fenêtre modale par-dessus la page. Pour celles-là, il faut pouvoir sortir du rang.</p>
 
 <h2>Les quatre modes</h2>
 <ul>
-<li><code>position: relative;</code> — l'élément reste à sa place, mais devient un <strong>point de repère</strong> pour ses enfants absolus (et peut être décalé avec top/left...) ;</li>
-<li><code>position: absolute;</code> — l'élément <strong>quitte le flux</strong> et se place par rapport à son ancêtre positionné le plus proche (le fameux parent en relative !) ;</li>
-<li><code>position: fixed;</code> — épinglé par rapport à la <strong>fenêtre</strong> : il ne bouge pas au défilement (bandeaux cookies, boutons de chat...) ;</li>
-<li><code>position: sticky;</code> — hybride : défile normalement, puis se colle en atteignant le bord (les en-têtes de menu qui restent visibles).</li>
+<li><code>static</code> — le défaut : dans le flux, <code>top</code> et <code>left</code> sans effet ;</li>
+<li><code>relative</code> — reste à sa place et garde la sienne, mais peut être décalé. Surtout : il devient un <strong>point de repère</strong> pour ses enfants en absolu ;</li>
+<li><code>absolute</code> — sort du flux et se place par rapport au premier parent positionné ;</li>
+<li><code>fixed</code> — sort du flux et se place par rapport à la <strong>fenêtre</strong>. Il ne bouge pas au défilement.</li>
 </ul>
+<p>Il en existe un cinquième, <code>sticky</code> : normal jusqu'à un certain point de défilement, puis épinglé. C'est ce qui donne les en-têtes de tableau qui restent visibles.</p>
 
-<h2>Le duo iconique : relative + absolute</h2>
-<pre class="bloc-code">.carte { position: relative; }
-.badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}</pre>
-<p>Le badge se cale en haut à droite <strong>de la carte</strong> (pas de la page !). Pastilles « Promo », compteurs de notifications, croix de fermeture : ce motif est partout.</p>
+<h2>Pas à pas : le couple relative et absolute</h2>
+<p>C'est la combinaison qu'on écrit tout le temps, et sa logique n'est pas devinable. Un élément en <code>absolute</code> avec <code>left: 0</code>, à l'intérieur d'un conteneur éloigné de 80 pixels du bord :</p>
+<table class="memo-table trace">
+<tr><th>Le parent est…</th><th>L'enfant se place à…</th></tr>
+<tr><td>sans position (défaut)</td><td><strong>0 px du bord de la page</strong> — il ignore son parent</td></tr>
+<tr><td><code>position: relative</code></td><td><strong>88 px</strong> — soit le coin de son parent</td></tr>
+</table>
+<p>Un élément en <code>absolute</code> remonte l'arbre à la recherche d'un ancêtre positionné. S'il n'en trouve aucun, il se cale sur la page entière. D'où la règle à retenir telle quelle : <strong>pour placer un enfant en absolu dans un parent, le parent doit être en <code>relative</code></strong>, même sans aucun décalage.</p>
 
-<div class="attention">⚠️ L'oubli du <code>relative</code> sur le parent est LE bug de position classique : l'enfant absolu se réfère alors à la page entière et atterrit n'importe où.</div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le <code>relative</code> sur le parent.</strong> L'élément part se coller dans un coin de la page, loin de l'endroit prévu. Le symptôme est spectaculaire et la cause invisible : il manque une seule déclaration, dans une <em>autre</em> règle que celle qu'on est en train de regarder.</p>
+<p><strong>Écrire <code>top</code> et <code>left</code> sur un élément <code>static</code>.</strong> Rien ne se passe. Les décalages n'ont d'effet que sur un élément positionné, et le CSS ne dit rien.</p>
+<p><strong>Se servir du positionnement pour faire une mise en page.</strong> C'était la technique d'avant Flexbox. Elle demande de tout calculer à la main, et casse dès que le contenu change de taille. Pour disposer des blocs, c'est Flexbox ou Grid ; le positionnement sert à <em>superposer</em>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le bandeau de cookies, le bouton « retour en haut », la pastille rouge sur une icône de messagerie, l'en-tête qui suit le défilement : tous sortent du flux. Remarque qu'ils ont un point commun — ce sont des éléments qui se superposent au contenu, jamais des éléments qui <em>sont</em> le contenu.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>relative</code> garde sa place et sert de repère ; <code>absolute</code> sort du flux ; <code>fixed</code> se cale sur la fenêtre.</li>
+<li>Un enfant en <code>absolute</code> se place par rapport au premier ancêtre positionné — sinon par rapport à la page.</li>
+<li><code>top</code> et <code>left</code> n'ont aucun effet sur un élément <code>static</code>.</li>
+<li>Le positionnement sert à superposer, pas à mettre en page.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : sortir du flux a un coût</summary>
+<p>Un élément en <code>absolute</code> ou <code>fixed</code> ne prend plus aucune place : ses voisins se referment sur lui comme s'il n'existait pas. C'est précisément ce qu'on veut pour une pastille — et c'est précisément le danger pour un bloc de contenu, qui peut en recouvrir un autre sans que rien ne le signale. Plus la fenêtre change de taille, plus ces collisions deviennent probables.</p>
+</details>
 `,
   exercices: [
     {
@@ -189,25 +237,56 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
   id: 'css-11',
   titre: 'CSS Grid : les grilles',
   contenu: `
-<p>Flexbox aligne sur UNE ligne (ou colonne). Pour un vrai quadrillage — galeries, tableaux de bord, pages entières — voici <strong>Grid</strong>, l'autre grand système de mise en page.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Flexbox aligne sur <em>une</em> ligne, ou une colonne. C'est parfait pour une barre de navigation. Ça devient acrobatique dès qu'on veut un vrai quadrillage — une galerie de douze vignettes, un tableau de bord, la structure générale d'une page.</p>
+<p>Grid est l'autre grand système de mise en page, et le seul à travailler en lignes <strong>et</strong> colonnes à la fois.</p>
 
-<h2>La base : définir les colonnes</h2>
+<h2>Définir une grille</h2>
 <pre class="bloc-code">.galerie {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;   /* 3 colonnes égales */
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
 }</pre>
-<p>Les enfants se rangent automatiquement dans la grille, ligne après ligne. L'unité <code>fr</code> (<em>fraction</em>) partage l'espace disponible : <code>1fr 1fr 1fr</code> = trois parts égales, <code>2fr 1fr</code> = deux tiers / un tiers.</p>
+<p>Trois colonnes égales, séparées de 16 pixels. Comme avec Flexbox, on active sur le <strong>conteneur</strong>, et les enfants se rangent tout seuls — sans qu'on ait à leur écrire quoi que ce soit.</p>
+<p>L'unité <code>fr</code> est propre à Grid : elle signifie « une part de l'espace disponible ». <code>1fr 2fr</code> dans 300 pixels donne donc 100 et 200 pixels — mesuré. Et comme c'est une part de ce qui <em>reste</em>, les <code>gap</code> sont déjà déduits : pas de calcul à faire.</p>
 
-<h2>Mélanger fixe et souple</h2>
-<pre class="bloc-code">.app {
-  display: grid;
-  grid-template-columns: 200px 1fr;   /* menu fixe + contenu extensible */
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'on écrit</th><th>Ce qui se passe</th></tr>
+<tr><td>rien</td><td>Les blocs s'empilent, un par ligne.</td></tr>
+<tr><td><code>display: grid</code></td><td>Une grille d'une seule colonne : rien ne change encore.</td></tr>
+<tr><td><code>grid-template-columns: 1fr 1fr 1fr</code></td><td>Trois colonnes. Les enfants se répartissent de gauche à droite, puis passent à la ligne.</td></tr>
+<tr><td>un 4e enfant</td><td>Une deuxième ligne apparaît toute seule, sans qu'on l'ait déclarée.</td></tr>
+</table>
+<p>C'est le trait qui distingue Grid : on décrit les <em>colonnes</em>, et les lignes se créent au besoin.</p>
+
+<h2>Occuper plusieurs cases</h2>
+<pre class="bloc-code">.vedette {
+  grid-column: span 2;
 }</pre>
-<p>La mise en page de CE logiciel (menu à gauche, contenu à droite) suit exactement cette logique !</p>
+<p>Cet élément occupera deux colonnes au lieu d'une — l'équivalent du <code>colspan</code> d'un tableau. C'est ce qui permet qu'un article mis en avant soit deux fois plus large que ses voisins, sans toucher au HTML.</p>
 
-<h2>Grid ou Flexbox ?</h2>
-<div class="astuce">✅ La règle simple : <strong>une dimension → Flexbox</strong> (une barre de nav, une rangée de boutons) ; <strong>deux dimensions → Grid</strong> (une galerie, un dashboard). Les deux se combinent sans problème dans une même page — c'est même la norme.</div>
+<h2>Les pièges</h2>
+<p><strong>Déclarer les colonnes sur les enfants.</strong> Comme pour Flexbox, <code>grid-template-columns</code> va sur le conteneur. L'erreur est universelle, et silencieuse.</p>
+<p><strong>Confondre <code>fr</code> et <code>%</code>.</strong> Trois colonnes à <code>33%</code> avec un <code>gap</code> de 16 pixels débordent : les pourcentages ignorent les espaces. Trois colonnes à <code>1fr</code> ne débordent jamais, parce que <code>fr</code> partage ce qui <em>reste</em> après les gaps.</p>
+<p><strong>Choisir Grid quand Flexbox suffit.</strong> Une seule rangée de boutons ne demande pas une grille. La règle est nette : une dimension, c'est Flexbox ; deux dimensions, c'est Grid.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les galeries de photos, les tableaux de bord, les grilles d'articles d'un site d'actualités. Grid sert aussi à poser la structure générale d'une page — en-tête, menu latéral, contenu, pied — en une seule règle, là où il fallait autrefois des colonnes flottantes et beaucoup de patience.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>display: grid</code> sur le conteneur, puis <code>grid-template-columns</code> pour décrire les colonnes.</li>
+<li>L'unité <code>fr</code> partage l'espace <em>restant</em> : les <code>gap</code> sont déjà pris en compte.</li>
+<li>Les lignes se créent toutes seules ; seules les colonnes se déclarent.</li>
+<li>Une dimension, Flexbox ; deux dimensions, Grid.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : dessiner la page en ASCII</summary>
+<p>Grid permet de nommer des zones et de dessiner la mise en page littéralement, dans le CSS : <code>grid-template-areas</code> accepte des lignes de texte où chaque mot est une zone. On lit la structure d'un coup d'œil, et la réorganiser pour mobile revient à redessiner trois lignes. C'est la fonctionnalité la plus lisible de tout le CSS moderne — et l'une des moins connues.</p>
+</details>
 `,
   exercices: [
     {
@@ -283,27 +362,55 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
   id: 'css-12',
   titre: 'Ombres, dégradés et transparence',
   contenu: `
-<p>Trois effets qui transforment un design plat en design qui a de la profondeur — avec modération, comme le sel.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une interface entièrement plate est difficile à lire : rien ne dit ce qui est au-dessus de quoi, ce qui est cliquable, ce qui flotte au-dessus du reste. Les ombres et les dégradés donnent de la <strong>profondeur</strong>, et la profondeur donne de la hiérarchie.</p>
+<p>Ce sont aussi les effets qu'on surdose le plus volontiers. La bonne mesure est celle du sel : on ne doit pas les remarquer.</p>
 
 <h2>Les ombres</h2>
 <pre class="bloc-code">.carte {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-/*           │  │   │    └ couleur (noir à 15% d'opacité)
-             │  │   └ flou
-             │  └ décalage vertical
-             └ décalage horizontal */</pre>
-<p><code>rgba()</code> = rgb + un 4e nombre : l'<strong>opacité</strong> (0 = invisible, 1 = opaque). Une ombre douce et légère (grand flou, faible opacité) donne l'effet « carte qui flotte » de tous les designs modernes. Il existe aussi <code>text-shadow</code> pour le texte.</p>
+}</pre>
+<p>Quatre valeurs, dans cet ordre : décalage horizontal, décalage vertical, flou, couleur. Ici : aucun décalage à droite, 4 pixels vers le bas, 12 pixels de flou, et un noir à 15 % d'opacité.</p>
+<p>La règle qui rend une ombre crédible : la lumière vient d'en haut. Le décalage horizontal reste donc à zéro, et seul le vertical est positif. Une ombre décalée latéralement paraît fausse sans qu'on sache dire pourquoi.</p>
+<p>La seconde règle est l'opacité : une ombre noire pure est toujours trop dure. On travaille entre 0,08 et 0,2.</p>
 
 <h2>Les dégradés</h2>
 <pre class="bloc-code">.banniere {
-  background: linear-gradient(135deg, #4f6df5, #7a5df5);
+  background-image: linear-gradient(to right, #4f6df5, #22c55e);
 }</pre>
-<p>Un dégradé est un <em>fond généré</em> : direction (angle ou <code>to right</code>), puis les couleurs étapes. Le bandeau d'accueil de ce logiciel est exactement ce dégradé !</p>
+<p>Un dégradé n'est pas une couleur : c'est une <strong>image</strong>, générée par le navigateur. D'où <code>background-image</code> et non <code>background-color</code> — une confusion fréquente, et silencieuse.</p>
+<p>La direction s'écrit en clair (<code>to right</code>, <code>to bottom</code>) ou en degrés (<code>135deg</code>), et on peut enchaîner autant de couleurs qu'on veut.</p>
 
-<h2>La transparence</h2>
-<pre class="bloc-code">.filigrane { opacity: 0.5; }              /* TOUT l'élément à 50% */
-.voile { background: rgba(30, 36, 50, 0.6); }  /* juste le fond */</pre>
+<h2>Pas à pas</h2>
+<p>Comment une ombre se construit, valeur par valeur :</p>
+<table class="memo-table trace">
+<tr><th>Valeur</th><th>Effet si on l'augmente</th></tr>
+<tr><td>décalage horizontal</td><td>l'ombre part sur le côté — à éviter</td></tr>
+<tr><td>décalage vertical</td><td>l'objet paraît plus haut au-dessus de la page</td></tr>
+<tr><td>flou</td><td>l'ombre s'adoucit ; un flou nul donne un bord net, dur</td></tr>
+<tr><td>opacité de la couleur</td><td>l'ombre s'assombrit — et devient vite sale</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Des ombres trop fortes.</strong> C'est l'erreur de débutant la plus visible : <code>rgba(0,0,0,0.5)</code> et 20 pixels de flou donnent une carte qui semble flotter à dix centimètres. Les interfaces soignées restent autour de <code>0 1px 3px rgba(0,0,0,0.1)</code>.</p>
+<p><strong>Mettre un dégradé dans <code>background-color</code>.</strong> La déclaration est ignorée, sans message. C'est <code>background-image</code>, ou le raccourci <code>background</code>.</p>
+<p><strong>Oublier le contraste du texte sur un dégradé.</strong> Un texte blanc lisible sur la partie foncée devient illisible sur la partie claire. Il faut vérifier aux <em>deux</em> extrémités, pas au milieu.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les systèmes de design des grandes applications définissent une petite échelle d'ombres — trois ou quatre niveaux, du presque invisible au bien détaché — et s'y tiennent. Chaque niveau correspond à une hauteur : une carte posée, un menu ouvert, une fenêtre modale. L'uniformité fait plus pour la qualité perçue que la beauté de chaque ombre prise isolément.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>box-shadow</code> prend décalage horizontal, vertical, flou, couleur — et l'horizontal reste à zéro.</li>
+<li>Une ombre crédible est légère : opacité entre 0,08 et 0,2.</li>
+<li>Un dégradé est une <strong>image</strong> : il va dans <code>background-image</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : l'ombre intérieure</summary>
+<p>Le mot-clé <code>inset</code>, ajouté en tête des valeurs, retourne l'ombre vers l'intérieur : l'élément paraît creusé plutôt que soulevé. C'est ce qui donne l'aspect enfoncé d'un champ de saisie, ou d'un bouton pendant qu'on appuie dessus. Deux ombres peuvent se cumuler sur un même élément, séparées par une virgule.</p>
+</details>
 `,
   exercices: [
     {
@@ -375,22 +482,58 @@ p  { font-size: 1.125rem; }  /* 18px */</pre>
   id: 'css-13',
   titre: 'Cibler sans classes : nth-child, before, after',
   contenu: `
-<p>Parfois, ajouter des classes partout est lourd. Le CSS sait cibler des éléments par leur <strong>position</strong> — et même créer du contenu décoratif sans toucher au HTML.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Ajouter une classe à chaque élément fonctionne, mais devient vite lourd : une classe sur le premier élément d'une liste, une autre sur les lignes paires d'un tableau, une troisième sur les puces décoratives. Et surtout, ces classes doivent être maintenues à la main — insérer une ligne au milieu casse tout.</p>
+<p>Le CSS sait viser un élément par sa <strong>position</strong>, et même fabriquer du contenu décoratif sans toucher au HTML.</p>
 
 <h2>Cibler par position</h2>
-<pre class="bloc-code">li:first-child { font-weight: bold; }   /* le premier li */
-li:last-child { border: none; }         /* le dernier */
-li:nth-child(odd) { background: #f6f7fb; }   /* les impairs (1, 3, 5...) */
-li:nth-child(even) { ... }              /* les pairs */
-li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
-<p>Le grand classique : les <strong>lignes zébrées</strong> des tableaux (une ligne sur deux colorée), qui guident l'œil sans effort.</p>
+<pre class="bloc-code">li:first-child  { font-weight: bold; }
+li:last-child   { border: none; }
+tr:nth-child(odd)  { background: #f6f6f6; }
+tr:nth-child(3n)   { color: red; }</pre>
+<ul>
+<li><code>:first-child</code> et <code>:last-child</code> — le premier, le dernier ;</li>
+<li><code>:nth-child(odd)</code> et <code>(even)</code> — impairs, pairs ;</li>
+<li><code>:nth-child(3n)</code> — un sur trois.</li>
+</ul>
+<p>Le grand avantage : la règle suit le contenu. Ajoute une ligne au milieu d'un tableau, et le zébrage se recalcule tout seul.</p>
 
-<h2>Le contenu généré : ::before et ::after</h2>
-<pre class="bloc-code">.etape::before {
-  content: "→ ";
-  color: #4f6df5;
+<h2>Fabriquer du contenu : ::before et ::after</h2>
+<pre class="bloc-code">.externe::after {
+  content: " (lien externe)";
+  color: grey;
 }</pre>
-<p><code>::before</code> insère un pseudo-élément AVANT le contenu (et <code>::after</code>, après). La propriété <code>content</code> est obligatoire, même vide. Usage : puces personnalisées, icônes décoratives, guillemets de citations... sans polluer le HTML — la décoration reste dans le CSS, à sa place.</p>
+<p>Ces deux <strong>pseudo-éléments</strong> insèrent quelque chose avant ou après le contenu d'un élément. L'attribut <code>content</code> est obligatoire, même vide : sans lui, rien n'apparaît du tout.</p>
+
+<h2>Pas à pas : ce contenu n'en est pas vraiment un</h2>
+<p>Mesuré sur un paragraphe « texte », avec un <code>::before</code> qui ajoute « AVANT » :</p>
+<table class="memo-table trace">
+<tr><th>Question</th><th>Réponse</th></tr>
+<tr><td>Ce que voit le visiteur</td><td>AVANT texte</td></tr>
+<tr><td>Ce que contient réellement l'élément</td><td><strong>« texte »</strong>, seulement</td></tr>
+</table>
+<p>Le contenu généré vit dans l'affichage, pas dans le document. Il ne se sélectionne pas toujours à la souris, et le JavaScript ne le voit pas. La conséquence pratique est nette : <strong>jamais d'information importante dans un <code>content</code></strong>. De la décoration, un symbole, un séparateur — oui. Un prix, un nom, une consigne — non.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>content</code>.</strong> Un <code>::before</code> sans <code>content</code> n'existe pas. C'est la cause numéro un des pseudo-éléments qui « ne marchent pas ».</p>
+<p><strong>Croire que <code>:first-child</code> vise le premier de son genre.</strong> <code>p:first-child</code> veut dire « un paragraphe qui est le premier enfant de son parent » — s'il est précédé d'un titre, il ne correspond à rien. Pour « le premier paragraphe parmi les paragraphes », c'est <code>p:first-of-type</code>.</p>
+<p><strong>Compter à partir de zéro.</strong> <code>:nth-child</code> commence à 1, contrairement aux tableaux que tu rencontreras en programmation. <code>:nth-child(1)</code> est bien le premier.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le zébrage d'un tableau, le trait de séparation absent sous le dernier élément d'une liste, la petite flèche après un lien externe, les guillemets décoratifs d'une citation : tous se font ainsi, sans une balise de plus dans le HTML. C'est précisément l'objectif — la décoration appartient au CSS.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>:nth-child()</code> et ses voisines visent par position, et suivent le contenu quand il change.</li>
+<li><code>::before</code> et <code>::after</code> exigent un <code>content</code>, même vide.</li>
+<li>Le contenu généré est décoratif : il n'est pas dans le document, donc jamais d'information importante dedans.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : lire nth-child(2n+1)</summary>
+<p>La formule générale s'écrit <code>an+b</code>, où <code>n</code> prend successivement les valeurs 0, 1, 2, 3… <code>2n+1</code> donne donc 1, 3, 5, 7 — les impairs, ce qu'<code>odd</code> dit plus simplement. Mais <code>3n+2</code> donne 2, 5, 8, et aucun mot-clé ne le résume. La formule sert dès que le motif sort des pairs et impairs.</p>
+</details>
 `,
   exercices: [
     {
@@ -461,34 +604,56 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
   id: 'css-14',
   titre: 'Animations : @keyframes',
   contenu: `
-<p>Les transitions animent un CHANGEMENT (survol...). Pour une animation <strong>autonome</strong> — qui tourne en boucle, sans interaction — voici <code>@keyframes</code>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une <code>transition</code> anime un <em>changement</em> : il faut un déclencheur, le survol par exemple. Mais certaines animations n'attendent rien — un indicateur de chargement qui tourne, une pastille qui pulse, un élément qui apparaît en fondu à l'ouverture de la page.</p>
+<p>Pour celles-là, il faut décrire une chorégraphie complète. C'est le rôle de <code>@keyframes</code>.</p>
 
-<h2>Deux temps : définir, puis appliquer</h2>
-<pre class="bloc-code">/* 1. La chorégraphie (les étapes-clés) */
-@keyframes pulsation {
+<h2>Deux temps : décrire, puis appliquer</h2>
+<pre class="bloc-code">@keyframes pulsation {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.15); }
   100% { transform: scale(1); }
 }
 
-/* 2. L'appliquer à un élément */
-.coeur {
-  animation: pulsation 1s infinite;
+.pastille {
+  animation: pulsation 2s infinite;
 }</pre>
+<p>Le bloc <code>@keyframes</code> nomme une chorégraphie et décrit ses <strong>étapes-clés</strong>, en pourcentages du temps total. Le navigateur calcule tout ce qu'il y a entre.</p>
+<p>La propriété <code>animation</code> la déclenche, avec au minimum un nom et une durée. <code>infinite</code> la fait recommencer sans fin ; sans ce mot, elle se joue une fois.</p>
+<p>Pour une animation simple, <code>from</code> et <code>to</code> remplacent <code>0%</code> et <code>100%</code>.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>Ce que fait le navigateur</th></tr>
+<tr><td>0 s</td><td>Taille normale — l'étape 0 %.</td></tr>
+<tr><td>0,5 s</td><td>Il calcule : à un quart du trajet entre 0 % et 50 %, la taille vaut environ 1,07.</td></tr>
+<tr><td>1 s</td><td>Taille 1,15 — l'étape 50 %.</td></tr>
+<tr><td>2 s</td><td>Retour à 1. Puis tout recommence, grâce à <code>infinite</code>.</td></tr>
+</table>
+<p>Tu ne décris que les étapes ; les images intermédiaires sont calculées. C'est exactement le principe du dessin animé, où un animateur chevronné dessine les poses clés et laisse remplir le reste.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Animer autre chose que <code>transform</code> et <code>opacity</code>.</strong> La même règle que pour les transitions, et elle compte davantage ici : une animation tourne soixante fois par seconde. Animer <code>width</code> ou <code>top</code> oblige le navigateur à recalculer toute la mise en page à chaque image, et ça saccade. <code>transform</code> et <code>opacity</code> ne coûtent presque rien.</p>
+<p><strong>Oublier la durée.</strong> <code>animation: pulsation;</code> sans durée vaut zéro seconde : l'animation se joue instantanément, donc ne se voit pas. Rien ne signale l'oubli.</p>
+<p><strong>Ne pas prévoir ceux que le mouvement gêne.</strong> Une animation en boucle peut provoquer malaises et vertiges. Une personne concernée l'a signalé dans les réglages de son système, et le CSS peut le lire : <code>@media (prefers-reduced-motion: reduce)</code>. On y met <code>animation: none</code>. C'est deux lignes.</p>
+<p><strong>Animer pour animer.</strong> Une animation attire l'œil — c'est sa fonction. Trois éléments animés en même temps sur une page ne s'ajoutent pas, ils se disputent l'attention et n'en captent plus aucune.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le cercle qui tourne pendant un chargement, le point qui clignote sur une notification, l'apparition en fondu d'une fenêtre modale. Les bonnes animations d'interface durent entre 0,2 et 0,4 seconde et ne se remarquent pas — elles expliquent ce qui vient de se passer, au lieu de décorer.</p>
+
+<div class="a-retenir">
 <ul>
-<li><code>@keyframes nom { ... }</code> — décrit les états à des pourcentages du parcours ;</li>
-<li><code>animation: nom durée répétitions;</code> — <code>infinite</code> = boucle sans fin, ou un nombre, ou rien (une seule fois) ;</li>
-<li>on peut aussi écrire <code>from { }</code> et <code>to { }</code> au lieu de 0% / 100% pour deux étapes simples.</li>
+<li><code>@keyframes</code> décrit des étapes-clés en pourcentages ; <code>animation</code> les déclenche.</li>
+<li>Une animation sans durée ne se voit pas.</li>
+<li>On anime <code>transform</code> et <code>opacity</code> — les autres propriétés font saccader.</li>
+<li><code>prefers-reduced-motion</code> permet de désactiver le mouvement pour qui l'a demandé.</li>
 </ul>
+</div>
 
-<h2>Le grand classique : le spinner de chargement</h2>
-<pre class="bloc-code">@keyframes tourne {
-  to { transform: rotate(360deg); }
-}
-.spinner { animation: tourne 1s linear infinite; }</pre>
-<p>(<code>linear</code> = vitesse constante, sans accélération — indispensable pour une rotation fluide.)</p>
-
-<div class="astuce">✅ Transition ou animation ? <strong>Réaction à un événement → transition. Mouvement autonome/répété → animation.</strong></div>
+<details class="plus-loin">
+<summary>Aller plus loin : la courbe du mouvement</summary>
+<p>Par défaut, une animation accélère puis ralentit légèrement. On peut choisir autrement avec <code>animation-timing-function</code> : <code>linear</code> donne une vitesse constante — indispensable pour un objet qui tourne en boucle, sinon la rotation paraît hoqueter. <code>ease-out</code>, qui démarre vite et finit doucement, est le choix habituel pour une apparition : l'élément semble se poser.</p>
+</details>
 `,
   exercices: [
     {
@@ -560,30 +725,61 @@ li:nth-child(3) { ... }                 /* le 3e précisément */</pre>
   id: 'css-15',
   titre: 'Variables CSS et cascade',
   contenu: `
-<h2>Les variables CSS : une couleur, un seul endroit</h2>
-<p>Ta couleur de marque apparaît 30 fois dans ton CSS ? Le jour où elle change, bonjour. La solution :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Ta couleur de marque apparaît trente fois dans ton CSS. Le jour où elle change, il faut trouver les trente — en espérant n'en oublier aucune, et ne pas modifier par erreur un bleu qui n'était pas celui-là.</p>
+<p>Les variables CSS résolvent ce problème, et un second, plus intéressant : elles permettent de changer tout un thème en modifiant une poignée de valeurs.</p>
+
+<h2>Déclarer et utiliser</h2>
 <pre class="bloc-code">:root {
-  --principale: #4f6df5;     /* déclaration : deux tirets */
+  --principale: #4f6df5;
   --rayon: 12px;
 }
 
-.bouton { background: var(--principale); border-radius: var(--rayon); }
-.lien   { color: var(--principale); }</pre>
+.bouton {
+  background: var(--principale);
+  border-radius: var(--rayon);
+}</pre>
 <ul>
-<li><code>:root</code> — la racine du document : les variables déclarées là sont visibles partout ;</li>
-<li><code>--nom: valeur;</code> — déclaration (deux tirets obligatoires) ;</li>
-<li><code>var(--nom)</code> — utilisation.</li>
+<li>une variable se déclare avec <strong>deux tirets</strong> devant son nom ;</li>
+<li>elle se lit avec <code>var(--nom)</code> ;</li>
+<li><code>:root</code> désigne la racine du document — donc « partout ».</li>
 </ul>
-<p>Change <code>--principale</code> UNE fois → tout le site suit. C'est exactement ainsi que ce logiciel gère ses couleurs (ouvre son style.css un jour : tout commence par un bloc :root !).</p>
+<p>Un nom de variable est sensible à la casse, et il n'y a pas de liste officielle : tu choisis les tiens.</p>
 
-<h2>La cascade : qui gagne en cas de conflit ?</h2>
-<p>Deux règles visent le même élément avec des valeurs différentes. Qui l'emporte ? Trois critères, dans l'ordre :</p>
-<ol>
-<li><strong>La spécificité</strong> : id (#) &gt; classe (.) &gt; balise. Un <code>#menu</code> écrase un <code>.menu</code> qui écrase un <code>nav</code> ;</li>
-<li>à spécificité égale : <strong>la dernière règle écrite</strong> gagne ;</li>
-<li>l'attribut <code>style="..."</code> directement dans le HTML bat presque tout (raison de plus pour l'éviter).</li>
-</ol>
-<div class="astuce">✅ Le « C » de CSS, c'est cette Cascade. Quand un style ne s'applique pas mystérieusement, il y a 9 chances sur 10 qu'une règle plus spécifique gagne ailleurs — F12 te montre laquelle (les styles barrés ont perdu).</div>
+<h2>Pas à pas : elles se transmettent</h2>
+<p>C'est leur propriété la plus utile, et elle est mesurée : une variable déclarée sur un élément est disponible dans <strong>tous ses descendants</strong>, aussi profonds soient-ils.</p>
+<table class="memo-table trace">
+<tr><th>Où on déclare</th><th>Qui peut l'utiliser</th></tr>
+<tr><td><code>:root</code></td><td>toute la page</td></tr>
+<tr><td>une carte</td><td>cette carte et tout ce qu'elle contient</td></tr>
+<tr><td>nulle part au-dessus</td><td>personne : <code>var()</code> ne trouve rien</td></tr>
+</table>
+<p>D'où la technique du mode sombre, qui tient en quelques lignes : on redéclare les mêmes variables sous une autre condition, et toute la page suit — sans toucher à une seule règle.</p>
+
+<h2>Une valeur de secours</h2>
+<p><code>var(--accent, blue)</code> prend <code>blue</code> si <code>--accent</code> n'existe pas. C'est utile quand on écrit un composant destiné à être réutilisé : il fonctionne même si la page hôte n'a défini aucune variable.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier les deux tirets.</strong> <code>principale: #4f6df5;</code> n'est pas une variable mais une propriété inconnue, ignorée en silence. Les deux tirets <em>sont</em> ce qui crée la variable.</p>
+<p><strong>Déclarer trop bas.</strong> Une variable posée sur <code>.carte</code> n'existe pas pour le pied de page. Quand un <code>var()</code> ne donne rien, la question n'est pas « ai-je bien écrit le nom ? » mais « suis-je à l'intérieur de l'élément où je l'ai déclarée ? ».</p>
+<p><strong>Confondre avec les variables d'un préprocesseur.</strong> Celles de Sass ou Less sont remplacées une fois pour toutes avant d'arriver au navigateur. Les variables CSS, elles, vivent dans la page : on peut les changer au survol, dans une media query, ou en JavaScript. C'est une différence de nature, pas de syntaxe.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Tous les systèmes de design modernes reposent dessus : une palette, une échelle d'espacements, des rayons d'angle, le tout en variables. Changer de thème revient alors à remplacer une liste de valeurs. Ce cours fonctionne exactement ainsi — son mode sombre ne redéfinit que des variables.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une variable se déclare avec deux tirets et se lit avec <code>var(--nom)</code>.</li>
+<li>Elle est disponible dans tous les descendants de l'élément où elle est déclarée : <code>:root</code> la rend globale.</li>
+<li><code>var(--nom, secours)</code> fournit une valeur de repli.</li>
+<li>Contrairement à celles d'un préprocesseur, elles vivent dans la page et peuvent changer à l'exécution.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les lire et les écrire en JavaScript</summary>
+<p>Parce qu'elles existent au moment où la page tourne, le JavaScript peut les modifier : une seule ligne change une variable, et tout ce qui en dépend se met à jour d'un coup. C'est ainsi que fonctionnent les sélecteurs de thème, ou les interfaces où l'utilisateur choisit sa couleur d'accent. Aucune autre façon de faire ne demande aussi peu de code.</p>
+</details>
 `,
   exercices: [
     {

@@ -5,31 +5,56 @@ window.DATA_CSS = [
   id: 'css-1',
   titre: 'C\'est quoi le CSS ?',
   contenu: `
-<p>Ton HTML structure le contenu, mais tout s'affiche en noir sur blanc, avec la police par défaut. Le <strong>CSS</strong> (<em>Cascading Style Sheets</em>, « feuilles de style ») va changer ça.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Ton HTML fonctionne, mais il est en noir sur blanc, dans la police par défaut du navigateur. Tu pourrais être tenté de corriger ça balise par balise — c'est d'ailleurs ce qu'on faisait dans les années 1990, avec des attributs de couleur sur chaque élément.</p>
+<p>Le problème sautait aux yeux au premier changement d'avis : pour passer trois cents titres du rouge au bleu, il fallait modifier trois cents balises. Le CSS (<em>Cascading Style Sheets</em>) sépare les deux questions une fois pour toutes. Le HTML dit <strong>ce que c'est</strong> ; le CSS dit <strong>à quoi ça ressemble</strong>. Une règle, et les trois cents titres changent ensemble.</p>
 
-<h2>La syntaxe CSS</h2>
-<p>Le CSS ne ressemble pas au HTML. Il s'écrit sous forme de <strong>règles</strong> :</p>
+<h2>La forme d'une règle</h2>
 <pre class="bloc-code">h1 {
   color: red;
   font-size: 40px;
 }</pre>
-<p>Cette règle se lit : « pour tous les <code>&lt;h1&gt;</code> de la page, mets la couleur du texte en rouge et la taille à 40 pixels ». Décortiquons :</p>
+<p>Cette règle se lit : « pour tous les titres <code>h1</code> de la page, mets le texte en rouge et la taille à 40 pixels ». Trois morceaux à nommer, parce qu'on va s'en servir tout le temps :</p>
 <ul>
-<li><code>h1</code> — le <strong>sélecteur</strong> : à QUI s'applique la règle ;</li>
-<li><code>{ }</code> — les accolades délimitent la liste des réglages ;</li>
-<li><code>color: red;</code> — une <strong>déclaration</strong> : une <strong>propriété</strong> (<code>color</code>), deux-points, une <strong>valeur</strong> (<code>red</code>), et un <strong>point-virgule</strong> pour terminer.</li>
+<li><code>h1</code> est le <strong>sélecteur</strong> : il désigne les éléments visés ;</li>
+<li><code>color</code> est une <strong>propriété</strong> : ce qu'on veut changer ;</li>
+<li><code>red</code> est la <strong>valeur</strong> : ce qu'on veut à la place.</li>
 </ul>
+<p>Le couple propriété-valeur s'appelle une <strong>déclaration</strong>. Elle se termine par un point-virgule, et toutes les déclarations d'une règle tiennent entre accolades.</p>
 
-<div class="attention">⚠️ Le point-virgule <code>;</code> à la fin de chaque déclaration est obligatoire. L'oublier est l'erreur n°1 en CSS — si un style ne s'applique pas, vérifie ça d'abord.</div>
+<h2>Où écrire le CSS</h2>
+<p>Dans les exercices de ce cours, il va dans une balise <code>&lt;style&gt;</code> à l'intérieur du HTML. Dans un vrai site, on le range plutôt dans un fichier à part — <code>style.css</code> — relié par une ligne dans le <code>&lt;head&gt;</code>. L'avantage est le même que celui qui a fait naître le CSS : un seul fichier sert toutes les pages du site.</p>
 
-<h2>Où écrit-on le CSS ?</h2>
-<p>Pour nos exercices, on l'écrira dans une balise <code>&lt;style&gt;</code> placée au-dessus du HTML :</p>
-<pre class="bloc-code">&lt;style&gt;
-  h1 { color: blue; }
-&lt;/style&gt;
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce que fait le navigateur</th></tr>
+<tr><td>Il lit le HTML</td><td>Il construit l'arbre des éléments : un h1, deux p.</td></tr>
+<tr><td>Il lit le CSS</td><td>Il range les règles, sans rien appliquer encore.</td></tr>
+<tr><td>Il croise les deux</td><td>Pour chaque élément, il cherche les règles dont le sélecteur correspond.</td></tr>
+<tr><td>Il applique</td><td>Le h1 reçoit <code>color: red</code> et <code>font-size: 40px</code>.</td></tr>
+<tr><td>Il dessine</td><td>La page s'affiche, enfin.</td></tr>
+</table>
 
-&lt;h1&gt;Ce titre sera bleu&lt;/h1&gt;</pre>
-<p>(Dans un vrai projet, on met plutôt le CSS dans un fichier séparé <code>style.css</code> — même principe, juste mieux rangé.)</p>
+<h2>Les pièges</h2>
+<p><strong>Le point-virgule oublié.</strong> C'est l'erreur numéro un, et son symptôme est déroutant : la déclaration fautive <em>et celle qui la suit</em> sont ignorées, tandis que le reste de la règle fonctionne. Tu vois donc une partie de tes styles s'appliquer et l'autre non. Aucun message d'erreur : le CSS ne plante jamais, il saute ce qu'il ne comprend pas.</p>
+<p><strong>Écrire du HTML dans le CSS, ou l'inverse.</strong> Les deux langages ne se ressemblent pas du tout : pas de chevrons en CSS, pas d'accolades en HTML. Une balise <code>&lt;p&gt;</code> égarée dans un bloc <code>&lt;style&gt;</code> ne provoque rien d'autre qu'une règle ignorée.</p>
+<p><strong>Confondre la propriété et la valeur.</strong> <code>red: color;</code> est accepté par le fichier et ignoré par le navigateur, qui ne connaît pas de propriété nommée <code>red</code>. L'ordre ne s'invente pas : propriété, deux-points, valeur.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le bouton « mode sombre » de tes applications est du CSS : le HTML ne change pas d'un caractère, seules les règles changent. C'est aussi ce qui permet à un même site de s'afficher différemment sur un téléphone et sur un écran large, sans rien réécrire du contenu.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Le HTML dit ce qu'est le contenu, le CSS à quoi il ressemble.</li>
+<li>Une règle, c'est un <strong>sélecteur</strong> puis des déclarations <strong>propriété: valeur;</strong> entre accolades.</li>
+<li>Le CSS ne plante pas : il ignore en silence ce qu'il ne comprend pas.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : que veut dire « cascading » ?</summary>
+<p>C'est le mot le plus important du nom, et le moins expliqué. Plusieurs règles peuvent viser le même élément, et parfois se contredire. La « cascade » est l'ensemble des arbitrages qui décident laquelle l'emporte — l'ordre d'écriture, la précision du sélecteur, l'origine de la feuille. Tu verras la mécanique à la leçon suivante ; retiens pour l'instant que le conflit est prévu par le langage, pas accidentel.</p>
+</details>
 `,
   exercices: [
     {
@@ -92,27 +117,68 @@ window.DATA_CSS = [
   id: 'css-2',
   titre: 'Les sélecteurs : viser juste',
   contenu: `
-<p>Mettre TOUS les paragraphes en vert, c'est rarement ce qu'on veut. Pour viser un élément précis, on utilise les <strong>classes</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Le sélecteur <code>p</code> vise <em>tous</em> les paragraphes de la page. C'est exactement ce qu'on veut pour la police ou l'interligne — et jamais pour un avertissement qu'on souhaite en rouge. Il faut pouvoir viser un élément précis, ou quelques-uns, sans toucher aux autres.</p>
+<p>D'où les classes : une étiquette qu'on pose soi-même sur les éléments à traiter ensemble.</p>
 
 <h2>Les classes</h2>
-<p>Côté HTML, on ajoute l'attribut <code>class</code> à l'élément qu'on veut marquer :</p>
-<pre class="bloc-code">&lt;p&gt;Un paragraphe normal.&lt;/p&gt;
-&lt;p class="important"&gt;Un paragraphe à mettre en valeur !&lt;/p&gt;</pre>
-<p>Côté CSS, on sélectionne cette classe avec un <strong>point</strong> devant son nom :</p>
+<p>Côté HTML, on pose l'étiquette :</p>
+<pre class="bloc-code">&lt;p&gt;Un paragraphe ordinaire.&lt;/p&gt;
+&lt;p class="important"&gt;Un paragraphe à mettre en valeur.&lt;/p&gt;</pre>
+<p>Côté CSS, on la vise avec un <strong>point</strong> devant son nom :</p>
 <pre class="bloc-code">.important {
   color: red;
   font-weight: bold;
 }</pre>
-<p>Seul le deuxième paragraphe devient rouge et gras. La même classe peut être posée sur autant d'éléments que tu veux — c'est ce qui rend les classes si pratiques.</p>
+<p>Une même classe peut être posée sur autant d'éléments qu'on veut, et un même élément peut en porter plusieurs, séparées par une espace : <code>class="carte premium"</code>. C'est ce qui rend les classes si pratiques — on combine des étiquettes au lieu d'écrire une règle par cas.</p>
 
-<h2>Récapitulatif des 3 sélecteurs de base</h2>
+<h2>Les trois sélecteurs de base</h2>
 <ul>
-<li><code>p { }</code> — tous les éléments <code>&lt;p&gt;</code> (sélecteur de balise) ;</li>
-<li><code>.important { }</code> — tous les éléments qui ont <code>class="important"</code> (le plus utilisé en pratique) ;</li>
-<li><code>#menu { }</code> — L'élément unique qui a <code>id="menu"</code>. Un <code>id</code> ne doit exister qu'une seule fois par page.</li>
+<li><code>p</code> — par balise : tous les paragraphes ;</li>
+<li><code>.important</code> — par classe : tous les éléments qui portent cette étiquette ;</li>
+<li><code>#menu</code> — par identifiant : l'élément unique qui porte cet <code>id</code>.</li>
 </ul>
+<p>Et pour viser plus finement : <code>.carte p</code> désigne les paragraphes <em>situés à l'intérieur</em> d'un élément de classe <code>carte</code> — une espace entre deux sélecteurs veut dire « à l'intérieur de ».</p>
 
-<div class="astuce">✅ Moyen mnémotechnique : le <strong>.point</strong> pour les <strong>classes</strong> (plusieurs possibles), le <strong>#dièse</strong> pour les <strong>id</strong> (unique). En cas de doute, utilise une classe.</div>
+<h2>Qui gagne quand deux règles se contredisent</h2>
+<p>C'est là que le mot « cascade » prend son sens. Le navigateur tranche selon deux critères, dans cet ordre :</p>
+<ol>
+<li><strong>La précision du sélecteur.</strong> Un <code>id</code> l'emporte sur une classe, qui l'emporte sur une balise — quelle que soit la position dans le fichier.</li>
+<li><strong>À précision égale, la dernière écrite gagne.</strong></li>
+</ol>
+
+<h2>Pas à pas</h2>
+<p>Un paragraphe <code>&lt;p id="titre" class="rouge"&gt;</code>, et trois règles qui le visent :</p>
+<table class="memo-table trace">
+<tr><th>La règle</th><th>Sa force</th><th>Résultat</th></tr>
+<tr><td>p { color: blue; }</td><td>une balise</td><td>perdue</td></tr>
+<tr><td>.rouge { color: red; }</td><td>une classe — plus fort</td><td>perdue aussi</td></tr>
+<tr><td>#titre { color: green; }</td><td>un id — le plus fort</td><td><strong>le texte sera vert</strong></td></tr>
+</table>
+<p>Et si deux classes se contredisent, sans <code>id</code> en jeu, c'est celle écrite en dernier qui gagne : mesuré, pas supposé.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier le point devant une classe.</strong> Écrire <code>important { ... }</code> au lieu de <code>.important { ... }</code> vise une balise nommée « important », qui n'existe pas. La règle ne s'applique à rien, et rien ne le signale. C'est l'erreur la plus fréquente du débutant en CSS.</p>
+<p><strong>Mettre le point dans le HTML.</strong> L'attribut s'écrit <code>class="important"</code>, sans point. Le point appartient au CSS, et à lui seul.</p>
+<p><strong>Se servir d'un <code>id</code> pour styler.</strong> Il est unique, donc non réutilisable, et sa force écrase les classes — ce qui crée des conflits pénibles à démêler. Les <code>id</code> servent aux ancres et au JavaScript ; pour le style, prends des classes.</p>
+<p><strong>Croire qu'une règle plus bas gagne toujours.</strong> Faux : la précision passe d'abord. Une règle de classe écrite en premier battra une règle de balise écrite en dernier.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ouvre l'inspecteur sur n'importe quel site, choisis un élément : le panneau des styles montre toutes les règles qui le visent, les perdantes <em>barrées</em>. C'est la cascade, rendue visible — et le meilleur outil pour comprendre pourquoi une règle ne s'applique pas.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une classe se pose en HTML (<code>class="nom"</code>) et se vise en CSS (<code>.nom</code>) — le point n'existe que d'un côté.</li>
+<li>Une espace entre deux sélecteurs veut dire « à l'intérieur de ».</li>
+<li>En cas de conflit : id &gt; classe &gt; balise ; et à force égale, la dernière écrite gagne.</li>
+<li>Pour le style, on prend des classes — les id sont trop forts et uniques.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le poids se compte vraiment</summary>
+<p>Derrière « id &gt; classe &gt; balise » se cache un calcul exact : chaque sélecteur reçoit un score à trois chiffres — nombre d'id, nombre de classes, nombre de balises. <code>#menu .item a</code> vaut 1-1-1, <code>.menu .item a</code> vaut 0-2-1. On compare chiffre par chiffre, de gauche à droite, et le premier écart tranche. C'est pourquoi aucune accumulation de classes ne battra jamais un seul id.</p>
+</details>
 `,
   exercices: [
     {
@@ -183,29 +249,57 @@ window.DATA_CSS = [
   id: 'css-3',
   titre: 'Couleurs et fonds',
   contenu: `
-<h2>Écrire une couleur</h2>
-<p>Trois façons principales d'exprimer une couleur en CSS :</p>
-<ul>
-<li><strong>Par son nom</strong> : <code>red</code>, <code>blue</code>, <code>orange</code>, <code>white</code>, <code>black</code>... (environ 140 noms existent) ;</li>
-<li><strong>En hexadécimal</strong> : <code>#ff0000</code> (rouge). Un <code>#</code> suivi de 6 caractères : deux pour le rouge, deux pour le vert, deux pour le bleu. C'est le format que tu croiseras partout ;</li>
-<li><strong>En RGB</strong> : <code>rgb(255, 0, 0)</code> — les mêmes trois quantités, de 0 à 255.</li>
-</ul>
+<h2>Pourquoi ça existe</h2>
+<p>La couleur est le premier outil qu'on saisit en CSS, et pour de bonnes raisons : elle hiérarchise, elle regroupe, elle signale. Un bouton rouge et un bouton gris ne racontent pas la même chose, même sans un mot.</p>
+<p>Encore faut-il savoir l'écrire — et le CSS propose trois notations, qu'on croise toutes les trois dans du code réel.</p>
 
-<h2>Texte et arrière-plan</h2>
+<h2>Trois façons d'écrire la même couleur</h2>
+<ul>
+<li><strong>Par son nom</strong> : <code>red</code>, <code>blue</code>, <code>tomato</code>, <code>rebeccapurple</code>… environ 140 existent. Pratique pour essayer, trop limité pour un vrai design ;</li>
+<li><strong>En hexadécimal</strong> : <code>#ff0000</code>. Un dièse, puis six caractères : deux pour le rouge, deux pour le vert, deux pour le bleu, de <code>00</code> à <code>ff</code>. C'est la notation que tu croiseras partout ;</li>
+<li><strong>En RGB</strong> : <code>rgb(255, 0, 0)</code>. Les mêmes trois quantités, écrites en clair de 0 à 255.</li>
+</ul>
+<p>Ces trois lignes donnent exactement le même rouge. L'hexadécimal est plus court, le RGB plus lisible quand on cherche une nuance à la main.</p>
+
+<h2>Le texte et le fond</h2>
 <pre class="bloc-code">.carte {
-  color: white;              /* couleur du TEXTE */
-  background-color: #4f6df5; /* couleur du FOND */
-  padding: 20px;
-  border-radius: 12px;
+  color: #1f2937;
+  background-color: #f3f4f6;
 }</pre>
-<ul>
-<li><code>color</code> — la couleur du texte ;</li>
-<li><code>background-color</code> — la couleur de l'arrière-plan ;</li>
-<li><code>border-radius</code> — arrondit les coins (petit bonus très utilisé) ;</li>
-<li>le texte entre <code>/*</code> et <code>*/</code> est un <strong>commentaire</strong> : ignoré par le navigateur, utile pour les humains.</li>
-</ul>
+<p>Deux propriétés à ne pas confondre : <code>color</code> concerne le <strong>texte</strong>, <code>background-color</code> le <strong>fond</strong>. Le nom de la première est trompeur — on s'attendrait à <code>text-color</code>, qui n'existe pas.</p>
+<p>Une couleur de fond s'étend à toute la boîte de l'élément, bordure comprise, et pas seulement derrière les lettres.</p>
 
-<div class="astuce">✅ Un texte doit toujours bien contraster avec son fond (texte clair sur fond foncé, ou l'inverse). C'est une question de lisibilité — et d'accessibilité.</div>
+<h2>Pas à pas</h2>
+<p>Comment lire <code>#4f6df5</code> sans outil :</p>
+<table class="memo-table trace">
+<tr><th>Morceau</th><th>Ce qu'il dit</th></tr>
+<tr><td>4f</td><td>rouge, à peu près un tiers du maximum</td></tr>
+<tr><td>6d</td><td>vert, un peu moins de la moitié</td></tr>
+<tr><td>f5</td><td>bleu, presque au maximum</td></tr>
+<tr><td>total</td><td>beaucoup de bleu, un peu de vert, peu de rouge : un bleu vif</td></tr>
+</table>
+<p>Deux repères suffisent pour s'y retrouver : <code>00</code> est le minimum, <code>ff</code> le maximum. <code>#000000</code> est donc noir, <code>#ffffff</code> blanc, et trois valeurs identiques donnent toujours un gris.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier le dièse.</strong> <code>color: ff0000;</code> ne veut rien dire pour le navigateur : il ignore la déclaration et garde la couleur précédente. Rien ne te prévient, et l'on cherche parfois longtemps.</p>
+<p><strong>Écrire <code>background</code> en croyant écrire <code>background-color</code>.</strong> Celle-là marche — <code>background</code> accepte une couleur — mais elle réinitialise au passage tout le reste du fond : une image, un dégradé posé ailleurs disparaissent sans explication.</p>
+<p><strong>Choisir des couleurs au contraste insuffisant.</strong> Un gris clair sur blanc est illisible au soleil, sur un vieil écran, ou pour une personne malvoyante. C'est l'un des défauts d'accessibilité les plus répandus, et il se mesure : des outils gratuits donnent le rapport de contraste d'un couple de couleurs.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les sites sérieux ne choisissent pas leurs couleurs une par une : ils définissent une petite palette — une couleur principale, une d'accent, deux ou trois gris — et s'y tiennent. C'est ce qui donne l'impression d'unité d'un site bien fait, bien plus que le choix des teintes elles-mêmes.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Trois notations pour la même couleur : nom, hexadécimal <code>#ff0000</code>, et <code>rgb(255, 0, 0)</code>.</li>
+<li><code>color</code> pour le texte, <code>background-color</code> pour le fond.</li>
+<li>En hexadécimal, <code>00</code> est le minimum et <code>ff</code> le maximum ; trois valeurs égales donnent un gris.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la transparence</summary>
+<p>Une quatrième valeur s'ajoute aux trois autres : l'opacité. En RGB, <code>rgba(255, 0, 0, 0.5)</code> donne un rouge à moitié transparent. En hexadécimal, on ajoute deux caractères à la fin : <code>#ff000080</code>. C'est ce qui permet de poser un voile sombre sur une photo pour que le texte reste lisible par-dessus — une technique qu'on retrouve sur presque toutes les bannières de site.</p>
+</details>
 `,
   exercices: [
     {
@@ -279,25 +373,63 @@ window.DATA_CSS = [
   id: 'css-4',
   titre: 'Le texte : taille, police, alignement',
   contenu: `
-<p>Le CSS offre un contrôle total sur le texte. Voici les propriétés que tu utiliseras sans arrêt :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un site, c'est presque entièrement du texte. Avant toute question de couleur ou de disposition, ce qui décide si une page est agréable ou pénible, c'est sa lisibilité : la taille des caractères, l'espace entre les lignes, la longueur des lignes.</p>
+<p>Ce sont aussi les propriétés que tu écriras le plus souvent — autant les connaître par cœur.</p>
 
-<pre class="bloc-code">.titre-hero {
-  font-size: 32px;        /* taille */
-  font-family: Arial, sans-serif;  /* police */
-  font-weight: bold;      /* graisse : bold, normal */
-  font-style: italic;     /* italique */
-  text-align: center;     /* alignement : left, center, right */
-  text-decoration: underline;  /* souligné */
-  line-height: 1.6;       /* hauteur des lignes (aération) */
+<h2>Les propriétés du texte</h2>
+<pre class="bloc-code">.article {
+  font-size: 18px;
+  font-family: Georgia, serif;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  text-decoration: underline;
+  line-height: 1.6;
 }</pre>
+<p>Deux méritent un mot de plus.</p>
+<p><code>font-family</code> prend une <strong>liste</strong>, pas une police. Le navigateur essaie la première ; si elle n'est pas installée, il passe à la suivante. On termine toujours par une famille générique — <code>serif</code>, <code>sans-serif</code>, <code>monospace</code> — qui existe partout, pour ne jamais tomber sur la police par défaut du navigateur.</p>
+<p><code>line-height</code> s'écrit sans unité : <code>1.6</code> veut dire « une fois et demie la taille du texte, et un peu plus ». L'avantage de l'absence d'unité est qu'il s'adapte : si un titre est plus gros, son interligne grandit proportionnellement.</p>
 
-<h2>Deux détails qui comptent</h2>
+<h2>Les unités de taille</h2>
+<p>Trois reviennent sans cesse, et la différence compte :</p>
 <ul>
-<li><code>font-size</code> se mesure le plus souvent en <strong>pixels</strong> (<code>px</code>). Le texte normal fait environ 16px, un grand titre 28 à 40px.</li>
-<li><code>font-family</code> accepte une <strong>liste</strong> de polices : le navigateur essaie la première, et passe à la suivante s'il ne la trouve pas. On termine par une famille générique (<code>sans-serif</code> = sans empattements, moderne ; <code>serif</code> = avec empattements, journal ; <code>monospace</code> = à chasse fixe, code).</li>
+<li><code>px</code> — une taille fixe. 18 pixels restent 18 pixels ;</li>
+<li><code>em</code> — relatif à la taille du <strong>parent</strong> ;</li>
+<li><code>rem</code> — relatif à la taille de <strong>la page entière</strong>, qui vaut 16 pixels par défaut.</li>
 </ul>
 
-<div class="info">💬 <code>text-align: center;</code> centre le texte <em>à l'intérieur</em> de son bloc. Centrer le bloc lui-même dans la page, c'est autre chose — on le verra avec Flexbox à la leçon 6.</div>
+<h2>Pas à pas</h2>
+<p>Le piège de <code>em</code>, mesuré sur une boîte dans une boîte, toutes deux en <code>font-size: 2em</code> :</p>
+<table class="memo-table trace">
+<tr><th>Élément</th><th>Avec em</th><th>Avec rem</th></tr>
+<tr><td>la page</td><td>16 px</td><td>16 px</td></tr>
+<tr><td>la boîte extérieure</td><td>32 px — deux fois 16</td><td>32 px</td></tr>
+<tr><td>la boîte intérieure</td><td><strong>64 px</strong> — deux fois 32 !</td><td>32 px — toujours deux fois 16</td></tr>
+</table>
+<p>Le <code>em</code> s'<strong>accumule</strong> à chaque niveau d'imbrication. C'est voulu, et très utile pour qu'un composant entier grandisse d'un coup — mais c'est la cause numéro un des tailles de texte devenues incontrôlables. Le <code>rem</code>, lui, repart toujours de la même référence.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Une seule police dans <code>font-family</code>.</strong> <code>font-family: Georgia;</code> fonctionne sur ta machine, où Georgia est installée. Ailleurs, le navigateur retombe sur sa police par défaut, et ta page ne ressemble plus à rien. Termine toujours par <code>serif</code> ou <code>sans-serif</code>.</p>
+<p><strong>Des <code>em</code> imbriqués.</strong> Deux niveaux à <code>1.2em</code> donnent déjà 1,44 fois la taille, trois en donnent 1,73. Quand des tailles s'emballent sans raison apparente, c'est presque toujours ça.</p>
+<p><strong>Oublier les guillemets sur une police à nom composé.</strong> <code>font-family: Times New Roman;</code> est ambigu ; il faut <code>"Times New Roman"</code>.</p>
+<p><strong>Un <code>line-height</code> trop serré.</strong> C'est le réglage qui change le plus le confort de lecture, et le plus souvent négligé. En dessous de 1,4 sur un paragraphe, l'œil accroche d'une ligne à l'autre.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les sites de presse travaillent ces trois réglages avant tout le reste : une taille d'au moins 18 pixels, un interligne autour de 1,6, et une largeur de colonne limitée à une soixantaine de caractères. Ce n'est pas une affaire de goût mais de fatigue oculaire — on lit plus longtemps sans s'épuiser.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>font-family</code> prend une liste de secours, terminée par une famille générique.</li>
+<li><code>line-height</code> s'écrit sans unité, et 1,5 à 1,6 convient à un paragraphe.</li>
+<li><code>em</code> dépend du parent et <strong>s'accumule</strong> ; <code>rem</code> part toujours des 16 pixels de la page.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi ne pas tout mettre en pixels ?</summary>
+<p>Parce qu'un visiteur peut avoir augmenté la taille de police par défaut de son navigateur — souvent parce qu'il voit mal. Les tailles en <code>rem</code> suivent ce réglage ; celles en <code>px</code> l'ignorent et restent minuscules. C'est la raison pour laquelle les sites soignés dimensionnent leur texte en <code>rem</code>, et réservent les pixels aux bordures et aux petits détails.</p>
+</details>
 `,
   exercices: [
     {
@@ -375,27 +507,64 @@ window.DATA_CSS = [
   id: 'css-5',
   titre: 'Le modèle de boîte : marges et bordures',
   contenu: `
-<p>Concept fondamental : en CSS, <strong>chaque élément est une boîte rectangulaire</strong>. Et chaque boîte a quatre couches, de l'intérieur vers l'extérieur :</p>
-<ol>
-<li>le <strong>contenu</strong> (le texte, l'image...) ;</li>
-<li>le <strong>padding</strong> — l'espace intérieur, entre le contenu et le bord ;</li>
-<li>la <strong>border</strong> — la bordure ;</li>
-<li>la <strong>margin</strong> — l'espace extérieur, qui repousse les autres boîtes.</li>
-</ol>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici tu as changé des couleurs et du texte, c'est-à-dire ce qu'il y a <em>dans</em> les éléments. Dès qu'on veut agir sur l'espace — écarter deux blocs, encadrer une carte, aérer un bouton — il faut comprendre une chose : en CSS, <strong>tout élément est une boîte rectangulaire</strong>. Même un mot en gras, même une image.</p>
+<p>Et cette boîte a quatre couches. Les confondre est la source de la moitié des problèmes de mise en page.</p>
 
-<pre class="bloc-code">.boite {
-  padding: 16px;              /* respiration intérieure */
-  border: 2px solid black;    /* épaisseur, style, couleur */
-  margin: 24px;               /* distance avec les voisins */
-  width: 300px;               /* largeur du contenu */
+<h2>Les quatre couches</h2>
+<p>De l'intérieur vers l'extérieur :</p>
+<ul>
+<li>le <strong>contenu</strong> — le texte, l'image ;</li>
+<li>le <code>padding</code> — l'espace <em>intérieur</em>, entre le contenu et le bord. Il prend la couleur de fond ;</li>
+<li>la <code>border</code> — la bordure elle-même ;</li>
+<li>la <code>margin</code> — l'espace <em>extérieur</em>, qui repousse les boîtes voisines. Toujours transparent.</li>
+</ul>
+<pre class="bloc-code">.carte {
+  padding: 16px;
+  border: 2px solid #ccc;
+  margin: 24px;
 }</pre>
+<p>La distinction qui compte : <code>padding</code> agrandit la boîte vers l'intérieur et se colore ; <code>margin</code> creuse un vide autour et ne se colore jamais. Quand tu hésites, demande-toi si l'espace doit prendre la couleur de fond.</p>
 
-<h2>Comment retenir padding vs margin ?</h2>
-<div class="info">📦 Imagine un colis : le <strong>padding</strong> c'est le papier bulle À L'INTÉRIEUR du carton (protège le contenu du bord), la <strong>border</strong> c'est le carton lui-même, la <strong>margin</strong> c'est la distance avec les autres colis dans le camion.</div>
+<h2>Pas à pas : width ne veut pas dire largeur</h2>
+<p>Voici le piège le plus déroutant du CSS, en nombres mesurés. Une boîte en <code>width: 200px</code>, avec 16 pixels de padding et 2 de bordure :</p>
+<table class="memo-table trace">
+<tr><th>Couche</th><th>Largeur ajoutée</th></tr>
+<tr><td>le contenu (<code>width</code>)</td><td>200 px</td></tr>
+<tr><td>le padding, des deux côtés</td><td>+ 32 px</td></tr>
+<tr><td>la bordure, des deux côtés</td><td>+ 4 px</td></tr>
+<tr><td><strong>largeur réelle à l'écran</strong></td><td><strong>236 px</strong></td></tr>
+</table>
+<p>Par défaut, <code>width</code> dimensionne donc le <em>contenu seul</em>, pas la boîte. Deux cartes à 50 % côte à côte, avec du padding, déborderont — et c'est exactement ce qui arrive à tout le monde la première fois.</p>
 
-<p>La bordure demande 3 valeurs : épaisseur (<code>2px</code>), style (<code>solid</code> = trait plein, <code>dashed</code> = pointillés), couleur. Et tu peux cibler un seul côté : <code>margin-top</code>, <code>padding-left</code>, etc.</p>
+<h2>La ligne qui règle le problème</h2>
+<pre class="bloc-code">* {
+  box-sizing: border-box;
+}</pre>
+<p><code>border-box</code> dit : « que <code>width</code> compte la boîte entière, bordure comprise ». La même boîte mesure alors exactement 200 pixels, comme on l'attendait. L'étoile vise tous les éléments.</p>
+<p>Cette règle est posée en tête de pratiquement tous les sites modernes. Le comportement par défaut, lui, vient des années 1990 et ne pouvait plus être changé sans casser le web existant.</p>
 
-<div class="astuce">✅ Un design paraît « pro » quand il respire : en cas de doute, ajoute du padding. La différence entre une page amateur et une page soignée, c'est souvent juste de l'espace.</div>
+<h2>Les pièges</h2>
+<p><strong>Les marges verticales qui fusionnent.</strong> Deux blocs empilés, avec 20 pixels de marge chacun : l'espace entre eux n'est pas de 40 pixels, mais de <strong>20</strong>. Les marges verticales se « télescopent » — la plus grande l'emporte, elles ne s'additionnent pas. Horizontalement, en revanche, 20 et 20 font bien 40. Cette asymétrie surprend tout le monde ; elle est voulue, pour que des paragraphes successifs gardent un espacement régulier.</p>
+<p><strong>Confondre padding et margin pour écarter deux éléments.</strong> Un padding agrandit l'élément ; seule la margin crée du vide <em>entre</em> deux éléments. Si ton fond coloré s'étale plus que prévu, tu as pris le mauvais des deux.</p>
+<p><strong>Oublier le style d'une bordure.</strong> <code>border: 2px black;</code> n'affiche rien du tout : il manque <code>solid</code>. Les trois morceaux — épaisseur, style, couleur — sont attendus, et l'omission est silencieuse.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ouvre l'inspecteur et sélectionne un élément : un schéma en couches apparaît, avec les quatre zones et leurs tailles. C'est le diagramme du modèle de boîte, appliqué en direct — l'outil le plus rapide pour comprendre pourquoi un bloc est plus large que prévu.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Toute boîte a quatre couches : contenu, <code>padding</code>, <code>border</code>, <code>margin</code>.</li>
+<li>Le padding se colore avec le fond ; la margin reste toujours transparente.</li>
+<li>Par défaut, <code>width</code> ne compte que le contenu : 200 px deviennent 236 à l'écran. <code>box-sizing: border-box</code> corrige ça.</li>
+<li>Les marges verticales fusionnent (20 et 20 font 20) ; les horizontales s'additionnent.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi des marges qui fusionnent ?</summary>
+<p>Imagine une suite de paragraphes, chacun avec une marge en haut et en bas. Sans fusion, l'espace entre deux paragraphes serait le double de celui qui précède le premier — le texte paraîtrait mal calé. La fusion rend l'espacement régulier sans qu'on ait à réfléchir. C'est une décision de typographe, prise à une époque où le CSS servait surtout à mettre en page des documents.</p>
+</details>
 `,
   exercices: [
     {
@@ -469,25 +638,62 @@ window.DATA_CSS = [
   id: 'css-6',
   titre: 'Flexbox : aligner et centrer',
   contenu: `
-<p>Pendant des années, centrer un élément en CSS était un cauchemar. Puis <strong>Flexbox</strong> est arrivé et a tout simplifié. C'est aujourd'hui l'outil standard pour aligner des éléments.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Centrer un élément a longtemps été la blague récurrente du métier. Horizontalement, on s'en sortait ; verticalement, il fallait des astuces de contorsionniste — tableaux détournés, positionnements absolus, calculs à la main. Des générations de développeurs ont perdu des heures là-dessus.</p>
+<p>Flexbox a réglé la question. C'est aujourd'hui l'outil normal pour aligner des éléments, et le premier réflexe dès qu'il s'agit de placer des choses côte à côte.</p>
 
-<h2>Le principe</h2>
-<p>On l'active sur le <strong>parent</strong> (le conteneur), et ce sont ses <strong>enfants</strong> qui s'organisent :</p>
-<pre class="bloc-code">.conteneur {
-  display: flex;            /* active Flexbox */
-  justify-content: center;  /* alignement horizontal */
-  align-items: center;      /* alignement vertical */
-  gap: 16px;                /* espace entre les enfants */
+<h2>Le principe : on active sur le parent</h2>
+<p>C'est l'idée à saisir, et elle n'est pas intuitive : on ne touche pas aux éléments qu'on veut déplacer, mais à <strong>leur conteneur</strong>. Les enfants s'organisent alors tout seuls.</p>
+<pre class="bloc-code">.rangee {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }</pre>
-
 <ul>
-<li><code>display: flex;</code> — les enfants se placent côte à côte (au lieu d'empilés) ;</li>
-<li><code>justify-content</code> — répartition horizontale : <code>flex-start</code> (début), <code>center</code>, <code>flex-end</code> (fin), <code>space-between</code> (étalés aux extrémités) ;</li>
-<li><code>align-items</code> — alignement vertical : <code>center</code>, <code>flex-start</code>, <code>flex-end</code> ;</li>
-<li><code>gap</code> — l'espace entre chaque enfant, sans bidouiller les marges.</li>
+<li><code>display: flex</code> — active le mode. Les enfants, qui s'empilaient, se mettent côte à côte ;</li>
+<li><code>justify-content</code> — leur répartition sur l'axe <strong>horizontal</strong> ;</li>
+<li><code>align-items</code> — leur alignement sur l'axe <strong>vertical</strong> ;</li>
+<li><code>gap</code> — l'espace entre eux, sans avoir à poser de marges.</li>
 </ul>
 
-<div class="astuce">✅ La formule magique à retenir par cœur pour centrer parfaitement quelque chose (menus, pages de connexion, popups...) :<br><code>display: flex; justify-content: center; align-items: center;</code></div>
+<h2>Les valeurs qui servent vraiment</h2>
+<p>Pour <code>justify-content</code> : <code>flex-start</code> (tout à gauche, le défaut), <code>center</code>, <code>flex-end</code>, <code>space-between</code> (collés aux deux bords, l'espace réparti entre eux) et <code>space-around</code>.</p>
+<p>Pour <code>align-items</code> : <code>stretch</code> (le défaut — les enfants prennent toute la hauteur), <code>center</code>, <code>flex-start</code>, <code>flex-end</code>.</p>
+<p>Le centrage parfait, celui qui coûtait si cher autrefois, tient désormais en trois lignes : <code>display: flex</code>, <code>justify-content: center</code>, <code>align-items: center</code>.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'on écrit</th><th>Ce qui change</th></tr>
+<tr><td>rien</td><td>Les blocs s'empilent, chacun sur sa ligne.</td></tr>
+<tr><td><code>display: flex</code></td><td>Ils se mettent côte à côte, collés à gauche.</td></tr>
+<tr><td><code>gap: 16px</code></td><td>Seize pixels les séparent, sans marge à écrire.</td></tr>
+<tr><td><code>justify-content: center</code></td><td>Le groupe entier glisse au milieu, horizontalement.</td></tr>
+<tr><td><code>align-items: center</code></td><td>Il se centre aussi en hauteur.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Écrire <code>display: flex</code> sur l'enfant.</strong> C'est l'erreur de départ de tout le monde. La propriété va sur le <em>conteneur</em>, et elle n'agit que sur ses enfants directs — pas sur les petits-enfants.</p>
+<p><strong>Confondre les deux axes.</strong> <code>justify-content</code> agit horizontalement, <code>align-items</code> verticalement. Les noms ne le disent pas, et il n'y a pas de truc pour s'en souvenir : c'est à apprendre tel quel. Et attention — si tu ajoutes <code>flex-direction: column</code>, les deux axes s'échangent.</p>
+<p><strong>Centrer verticalement dans une boîte sans hauteur.</strong> <code>align-items: center</code> centre dans la hauteur <em>disponible</em>. Si le conteneur fait exactement la hauteur de son contenu, il n'y a rien à centrer et rien ne bouge. Il faut d'abord lui donner une <code>height</code> ou une <code>min-height</code>.</p>
+<p><strong>Poser des marges au lieu de <code>gap</code>.</strong> Ça marche, mais la dernière marge dépasse à droite, et il faut ensuite la rattraper. <code>gap</code> n'espace qu'<em>entre</em> les éléments.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La barre de navigation de presque tous les sites est un conteneur flex : logo à gauche, menu à droite, obtenus par un simple <code>justify-content: space-between</code>. Les cartes alignées d'une boutique, les boutons d'un formulaire, la barre d'outils d'un éditeur : toutes sont des rangées flex.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>display: flex</code> se met sur le <strong>conteneur</strong> ; ce sont ses enfants directs qui s'organisent.</li>
+<li><code>justify-content</code> aligne horizontalement, <code>align-items</code> verticalement.</li>
+<li><code>gap</code> espace les enfants sans ajouter de marge en trop sur les bords.</li>
+<li>Centrer verticalement demande un conteneur qui a de la hauteur.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : Flexbox ou Grid ?</summary>
+<p>Il existe un second système, CSS Grid, qui travaille en lignes <em>et</em> colonnes simultanément. La règle de choix est simple : Flexbox pour une dimension — une rangée, une colonne — et Grid pour une vraie grille à deux dimensions, comme la mise en page générale d'une page. Les deux coexistent très bien, souvent dans le même site : Grid pour la structure d'ensemble, Flexbox à l'intérieur de chaque bloc.</p>
+</details>
 `,
   exercices: [
     {
@@ -560,26 +766,59 @@ window.DATA_CSS = [
   id: 'css-7',
   titre: 'Survol et transitions : donner vie',
   contenu: `
-<p>Un site moderne <em>réagit</em> : les boutons changent au survol de la souris, en douceur. Deux outils CSS suffisent.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une page figée donne l'impression d'être cassée. Quand la souris passe sur un bouton et qu'il ne se passe rien, on ne sait pas s'il est cliquable. La réaction au survol n'est pas une coquetterie : c'est un <strong>retour d'information</strong>, qui dit « cet élément t'attend ».</p>
+<p>Deux outils suffisent à le faire, et bien.</p>
 
-<h2>1. La pseudo-classe :hover</h2>
-<p>En ajoutant <code>:hover</code> à un sélecteur, la règle ne s'applique que <strong>quand la souris survole</strong> l'élément :</p>
+<h2>La pseudo-classe :hover</h2>
 <pre class="bloc-code">.bouton {
   background-color: #4f6df5;
 }
-.bouton:hover {
-  background-color: #22c55e;  /* devient vert au survol */
-}</pre>
 
-<h2>2. La transition</h2>
-<p>Par défaut, le changement est instantané — brutal. La propriété <code>transition</code> le rend progressif :</p>
+.bouton:hover {
+  background-color: #22c55e;
+}</pre>
+<p>En ajoutant <code>:hover</code> à un sélecteur, la règle ne s'applique que pendant que la souris survole l'élément. On appelle ça une <strong>pseudo-classe</strong> : une condition sur l'état, pas sur l'élément lui-même.</p>
+<p>D'autres suivent la même logique : <code>:focus</code> (l'élément a le curseur, au clavier), <code>:active</code> (on est en train de cliquer), <code>:first-child</code> (le premier enfant de son parent).</p>
+
+<h2>La transition</h2>
+<p>Sans rien de plus, le changement est instantané — et brutal. La propriété <code>transition</code> étale le passage dans le temps :</p>
 <pre class="bloc-code">.bouton {
   background-color: #4f6df5;
   transition: background-color 0.3s;
 }</pre>
-<p>Ça se lit : « quand <code>background-color</code> change, étale le changement sur 0,3 seconde ». On peut aussi écrire <code>transition: all 0.3s;</code> pour animer tous les changements.</p>
+<p>Trois dixièmes de seconde pour passer d'une couleur à l'autre. En dessous de 0,15 s on ne voit rien ; au-delà de 0,5 s, l'interface paraît lente.</p>
 
-<div class="info">💬 Important : la transition se déclare sur l'état <strong>normal</strong> (pas dans le <code>:hover</code>), pour que l'animation joue à l'aller ET au retour de la souris.</div>
+<h2>Pas à pas : pourquoi la transition va dans la règle normale</h2>
+<p>C'est la question qui revient toujours, et elle a une réponse nette. Comparons les deux écritures :</p>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>transition dans <code>.bouton</code></th><th>transition dans <code>:hover</code></th></tr>
+<tr><td>La souris arrive</td><td>passage en douceur</td><td>passage en douceur</td></tr>
+<tr><td>La souris repart</td><td>retour en douceur</td><td><strong>retour instantané</strong></td></tr>
+</table>
+<p>Quand la souris quitte l'élément, la règle <code>:hover</code> ne s'applique plus — et la transition qu'elle contenait disparaît avec elle. D'où ce retour sec, qu'on remarque sans savoir l'expliquer. Mise dans la règle normale, la transition vaut dans les deux sens.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Animer toutes les propriétés d'un coup.</strong> <code>transition: all 0.3s;</code> est tentant, et c'est un mauvais réflexe : le navigateur surveille tout, y compris des propriétés dont l'animation coûte cher à calculer. Nomme ce que tu animes.</p>
+<p><strong>Animer des propriétés qui font recalculer la page.</strong> Changer <code>width</code>, <code>height</code> ou <code>margin</code> oblige le navigateur à refaire toute la mise en page, soixante fois par seconde — l'animation saccade. <code>transform</code> (déplacer, agrandir) et <code>opacity</code> sont les deux propriétés qu'il sait animer sans rien recalculer. Pour qu'une carte se soulève, on préfère donc <code>transform: scale(1.05)</code> à un changement de largeur.</p>
+<p><strong>Ne penser qu'à la souris.</strong> <code>:hover</code> n'existe pas sur un écran tactile, et ne se déclenche pas au clavier. Un bouton dont l'état ne change qu'au survol laisse sans repère qui navigue au clavier. On écrit donc souvent <code>.bouton:hover, .bouton:focus</code> ensemble.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ouvre n'importe quel site soigné et promène la souris : les liens changent de couleur, les cartes se soulèvent de quelques pixels, les boutons s'assombrissent. Presque tout est en <code>transform</code> et <code>opacity</code>, sur des durées entre 0,15 et 0,3 seconde. Ce sont ces détails, pris ensemble, qui donnent l'impression d'un site « bien fait ».</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>:hover</code> est une pseudo-classe : une règle conditionnée par l'état de l'élément.</li>
+<li>La <code>transition</code> se met dans la règle <strong>normale</strong>, pour valoir à l'aller comme au retour.</li>
+<li>On anime <code>transform</code> et <code>opacity</code> : les autres propriétés font recalculer la page.</li>
+<li><code>:hover</code> n'existe ni au doigt ni au clavier — pense à <code>:focus</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : respecter ceux que le mouvement gêne</summary>
+<p>Les animations peuvent provoquer nausées et vertiges chez certaines personnes, qui désactivent le mouvement dans les réglages de leur système. Une règle CSS permet de le détecter : <code>@media (prefers-reduced-motion: reduce)</code>. On y annule les transitions. C'est deux lignes, et c'est la différence entre un site utilisable et un site qui rend malade.</p>
+</details>
 `,
   exercices: [
     {
@@ -649,31 +888,58 @@ window.DATA_CSS = [
   id: 'css-8',
   titre: 'Responsive : s\'adapter aux écrans',
   contenu: `
-<p>Ta page sera vue sur des écrans de 30 pouces et des téléphones de 6 pouces. Le design <strong>responsive</strong> (« adaptatif »), c'est faire en sorte qu'elle soit belle partout.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Ta page sera lue sur un écran de 30 pouces et sur un téléphone de 6. Une mise en page en trois colonnes, parfaite sur l'un, devient illisible sur l'autre : trois colonnes de quinze caractères de large.</p>
+<p>Pendant quelques années, on a fabriqué deux sites séparés — un « normal » et un « mobile ». C'était deux fois le travail, et deux fois les oublis. Le <strong>responsive</strong> fait l'inverse : un seul site, qui se réorganise selon la place dont il dispose.</p>
 
-<h2>Les media queries</h2>
-<p>L'outil principal : la <strong>media query</strong>, un bloc de CSS qui ne s'applique que si une condition d'écran est remplie :</p>
+<h2>La media query</h2>
 <pre class="bloc-code">.colonnes {
   display: flex;
   gap: 16px;
 }
 
-/* Si l'écran fait 600px de large ou moins... */
 @media (max-width: 600px) {
   .colonnes {
-    flex-direction: column;  /* ...on empile au lieu d'aligner */
+    flex-direction: column;
   }
 }</pre>
-<p>Ça se lit : « par défaut, les colonnes sont côte à côte ; mais sur un écran étroit (≤ 600px), empile-les verticalement ». <code>flex-direction: column;</code> est une propriété Flexbox qui change le sens d'empilement.</p>
+<p>Un bloc <code>@media</code> contient du CSS qui ne s'applique <em>que si</em> une condition d'écran est remplie. Ici : en dessous de 600 pixels de large, les colonnes s'empilent au lieu de se juxtaposer.</p>
+<p><code>max-width: 600px</code> se lit « si la fenêtre fait au plus 600 pixels ». Son contraire, <code>min-width</code>, veut dire « au moins ». Les deux existent, et le choix entre les deux dessine deux façons de travailler.</p>
 
-<h2>Les bons réflexes responsive</h2>
+<h2>Commencer par le petit écran</h2>
+<p>L'usage est d'écrire d'abord le CSS du <strong>téléphone</strong>, puis d'ajouter des <code>@media (min-width: ...)</code> pour les écrans plus larges. Cela paraît à l'envers, et c'est pourtant plus simple : la version mobile est la plus contrainte, donc celle qui force à décider de l'essentiel. Élargir ensuite est facile ; rétrécir après coup ne l'est jamais.</p>
+
+<h2>Pas à pas : l'image qui déborde</h2>
+<p>Une image de 800 pixels dans un cadre de 300 :</p>
+<table class="memo-table trace">
+<tr><th>CSS appliqué</th><th>Largeur réelle de l'image</th></tr>
+<tr><td>aucun</td><td><strong>800 px</strong> — elle sort du cadre</td></tr>
+<tr><td><code>max-width: 100%</code></td><td><strong>300 px</strong> — elle rentre</td></tr>
+</table>
+<p>Mesuré, et c'est la règle la plus rentable de toute la leçon : <code>img { max-width: 100%; }</code> suffit à régler l'immense majorité des débordements sur mobile. <code>max-width</code> plutôt que <code>width</code>, pour qu'une petite image ne soit jamais étirée au-delà de sa taille réelle.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier la balise <code>viewport</code>.</strong> Sans <code>&lt;meta name="viewport"&gt;</code> dans le <code>&lt;head&gt;</code>, le téléphone affiche la page en miniature et <em>aucune</em> media query ne se déclenche — il prétend avoir un écran large. On peut passer des heures à chercher pourquoi le responsive ne marche pas, alors qu'il manque une ligne de HTML.</p>
+<p><strong>Choisir des seuils d'après les modèles de téléphone.</strong> Les tailles d'écran changent tous les ans. On place un seuil là où <em>la mise en page</em> commence à être à l'étroit — en réduisant la fenêtre jusqu'à ce que ça coince — pas à la largeur d'un appareil précis.</p>
+<p><strong>Mettre des largeurs fixes.</strong> <code>width: 900px</code> débordera de tout écran plus étroit. Les pourcentages, <code>max-width</code> et Flexbox s'adaptent ; les pixels non.</p>
+<p><strong>Tester en redimensionnant la fenêtre seulement.</strong> C'est utile, mais ça ne reproduit ni le doigt, ni le clavier qui recouvre la moitié de l'écran, ni les zones qu'on n'atteint pas d'une main.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Plus de la moitié du trafic web vient des téléphones, et les moteurs de recherche évaluent désormais les sites sur leur version mobile. Un site qui demande de zoomer est pénalisé deux fois : par le visiteur qui s'en va, et par le classement.</p>
+
+<div class="a-retenir">
 <ul>
-<li>éviter les largeurs fixes trop grandes (préférer <code>max-width</code> ou les pourcentages) ;</li>
-<li><code>img { max-width: 100%; }</code> pour que les images ne débordent jamais ;</li>
-<li>tester en réduisant la fenêtre de son navigateur.</li>
+<li><code>@media (max-width: 600px) { ... }</code> n'applique son CSS qu'en dessous de 600 pixels.</li>
+<li>Sans la balise <code>viewport</code> dans le HTML, aucune media query ne se déclenche sur mobile.</li>
+<li><code>img { max-width: 100%; }</code> règle la plupart des débordements.</li>
+<li>On place un seuil là où la mise en page casse, jamais d'après un modèle de téléphone.</li>
 </ul>
+</div>
 
-<div class="astuce">✅ Tu peux tester en direct : dans les exercices ci-dessous, la zone d'aperçu est étroite (moins de 600px), donc tes media queries s'y déclencheront !</div>
+<details class="plus-loin">
+<summary>Aller plus loin : s'adapter au conteneur, pas à la fenêtre</summary>
+<p>Une media query interroge la <em>fenêtre</em>. Or une carte placée dans une colonne étroite devrait se réorganiser même si la fenêtre est large — ce qu'aucune media query ne sait voir. Les <em>container queries</em>, arrivées récemment dans tous les navigateurs, interrogent la largeur du conteneur parent. C'est ce qui manquait depuis quinze ans pour écrire des composants vraiment réutilisables.</p>
+</details>
 `,
   exercices: [
     {
