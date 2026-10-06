@@ -6,6 +6,48 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.9.0 — 2026-10-06
+
+Le module HTML est terminé. **Ses 23 leçons sont au gabarit**, des premières balises au débogage.
+
+### Changé
+
+- **HTML 2 (6 leçons)** et **HTML 3 (8 leçons)** passent au gabarit. De 104-268 mots à **499-638**.
+  Chacune gagne un « Pourquoi ça existe », une trace pas à pas, des pièges nommés, un « Dans la
+  vraie vie » et un « À retenir ».
+
+  Aucun exercice n'a été touché : seul le cours a été réécrit. Les 504 exercices et leurs 434
+  correcteurs sont ceux de la 3.8.0.
+
+### Ce que la mesure a établi
+
+Comme pour la fournée précédente, chaque comportement enseigné a d'abord été lancé dans un vrai
+Chrome. Quatre résultats servent directement d'argument dans les leçons :
+
+- **Un `&lt;div&gt;` n'est pas atteignable au clavier ; un `&lt;button&gt;` l'est.** Mesuré, pas
+  affirmé : `tabIndex` vaut -1 sur l'un, 0 sur l'autre. C'est le cœur de `html-19` — le faux bouton
+  n'est pas une question de style, il est inaccessible.
+
+- **Deux boutons radio de `name` différent se cochent tous les deux** et ne se décochent jamais ;
+  avec le même `name`, cocher l'un décoche l'autre. Le symptôme déroutant de `html-11` est donc
+  exact, et il ne lève aucune erreur.
+
+- **`&lt;time&gt;` ne change rien à l'affichage.** C'est le cas le plus pur de ce que fait le HTML :
+  ajouter du sens sans toucher à l'apparence. `html-16` s'appuie dessus.
+
+- **`&lt;dd&gt;`, `&lt;blockquote&gt;` et `&lt;figure&gt;` portent 40 pixels de marge à gauche**
+  par défaut. Un décalage qui surprend quand on ne l'attend pas, et que les leçons annoncent.
+
+### Où en est la conversion
+
+**39 leçons sur 168**, contre 25. Les 39 tiennent une médiane de **536 mots** ; les 129 restantes
+sont à 149. Le module HTML rejoint « JavaScript — La logique » : deux modules complets.
+
+Reste le nettoyage des encarts à double émoji — **28 sur 121**, contre 44 ce matin. Ils disparaissent
+au fil des réécritures.
+
+---
+
 ## 3.8.0 — 2026-10-06
 
 Le cours était **trop court**, et le chiffre le dit mieux qu'une impression : médiane de **155 mots

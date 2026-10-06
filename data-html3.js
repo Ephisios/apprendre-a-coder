@@ -6,8 +6,11 @@ window.DATA_HTML3 = [
   id: 'html-15',
   titre: 'Les listes de définition',
   contenu: `
-<p>Tu connais <code>&lt;ul&gt;</code> (liste à puces) et <code>&lt;ol&gt;</code> (liste numérotée). Il existe une troisième liste, moins connue et pourtant très utile : la <strong>liste de définition</strong>, qui associe des termes à leur explication.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu connais deux listes : à puces et numérotée. Toutes deux énumèrent des éléments de même nature. Mais certaines informations vont par <strong>paires</strong> : un terme et son explication, une caractéristique et sa valeur, une question et sa réponse.</p>
+<p>Écrire cela dans une liste à puces oblige à inventer un séparateur — « HTML : le langage des pages » — et le lien entre les deux moitiés n'existe alors que dans la tête du lecteur. La liste de définition rend ce lien explicite.</p>
 
+<h2>Trois balises</h2>
 <pre class="bloc-code">&lt;dl&gt;
   &lt;dt&gt;HTML&lt;/dt&gt;
   &lt;dd&gt;Le langage qui décrit la structure d'une page.&lt;/dd&gt;
@@ -15,21 +18,48 @@ window.DATA_HTML3 = [
   &lt;dt&gt;CSS&lt;/dt&gt;
   &lt;dd&gt;Le langage qui décrit son apparence.&lt;/dd&gt;
 &lt;/dl&gt;</pre>
+<ul>
+<li><code>&lt;dl&gt;</code> — la liste entière (<em>description list</em>) ;</li>
+<li><code>&lt;dt&gt;</code> — le terme décrit (<em>description term</em>) ;</li>
+<li><code>&lt;dd&gt;</code> — sa description (<em>description details</em>).</li>
+</ul>
+<p>Par défaut, le navigateur décale chaque <code>&lt;dd&gt;</code> de 40 pixels vers la droite : le couple se lit d'un coup d'œil, sans aucun CSS.</p>
+<p>Rien n'oblige à les apparier un pour un. Un terme peut avoir plusieurs descriptions — plusieurs <code>&lt;dd&gt;</code> à la suite — et plusieurs termes peuvent partager la même, en empilant les <code>&lt;dt&gt;</code> avant le <code>&lt;dd&gt;</code>.</p>
 
-<table class="memo-table">
-<tr><th>Balise</th><th>Signifie</th><th>Contient</th></tr>
-<tr><td>&lt;dl&gt;</td><td>definition list</td><td>toute la liste</td></tr>
-<tr><td>&lt;dt&gt;</td><td>definition term</td><td>le terme</td></tr>
-<tr><td>&lt;dd&gt;</td><td>definition description</td><td>son explication</td></tr>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'il lit</th><th>Ce qu'il en fait</th></tr>
+<tr><td>&lt;dl&gt;</td><td>« Une liste de couples commence. »</td></tr>
+<tr><td>&lt;dt&gt;HTML&lt;/dt&gt;</td><td>Un terme, affiché contre la marge gauche.</td></tr>
+<tr><td>&lt;dd&gt;Le langage…&lt;/dd&gt;</td><td>Sa description, décalée de 40 pixels : elle appartient au terme au-dessus.</td></tr>
+<tr><td>&lt;dt&gt;CSS&lt;/dt&gt;</td><td>Nouveau terme : le couple précédent est clos.</td></tr>
+<tr><td>&lt;/dl&gt;</td><td>Fin de la liste — deux couples en tout.</td></tr>
 </table>
 
-<h2>Quand l'utiliser</h2>
-<p>Dès qu'il s'agit de <strong>paires nom / valeur</strong> : un glossaire, les caractéristiques d'un produit, une fiche d'identité, une FAQ. Un même <code>&lt;dt&gt;</code> peut d'ailleurs recevoir plusieurs <code>&lt;dd&gt;</code>.</p>
+<h2>Liste de définition ou tableau ?</h2>
+<p>La question revient souvent, et elle a une réponse nette. Un tableau a <strong>deux dimensions</strong> : plusieurs lignes <em>et</em> plusieurs colonnes, dont le croisement porte le sens. Une <code>&lt;dl&gt;</code> n'en a qu'une : une suite de couples.</p>
+<p>Prix, couleur et poids d'un seul produit ? C'est une <code>&lt;dl&gt;</code>. Prix, couleur et poids de <em>douze</em> produits ? C'est un tableau — les colonnes deviennent comparables.</p>
 
-<h2>Pourquoi pas un simple tableau ?</h2>
-<p>Un tableau sert à croiser des <strong>données à deux dimensions</strong> (des lignes et des colonnes qui ont chacune un sens). Une liste de définition exprime une relation à une seule dimension : ce terme, cette explication. Choisir la bonne balise, c'est donner du sens à ta page — pour les moteurs de recherche comme pour les lecteurs d'écran.</p>
+<h2>Les pièges</h2>
+<p><strong>Mettre un <code>&lt;dt&gt;</code> ou un <code>&lt;dd&gt;</code> hors d'une <code>&lt;dl&gt;</code>.</strong> Rien ne casse à l'écran, mais le couple n'existe plus pour les machines : le lien entre terme et description est précisément ce que la <code>&lt;dl&gt;</code> apporte. Sans elle, il ne reste que deux blocs voisins.</p>
+<p><strong>Glisser un <code>&lt;p&gt;</code> entre les couples.</strong> Une <code>&lt;dl&gt;</code> ne contient que des <code>&lt;dt&gt;</code> et des <code>&lt;dd&gt;</code>. Pour aérer, on les regroupe dans un <code>&lt;div&gt;</code> — c'est autorisé — mais on n'y intercale pas de paragraphe.</p>
+<p><strong>S'en servir pour un dialogue.</strong> C'était un usage recommandé autrefois, il ne l'est plus : une <code>&lt;dl&gt;</code> associe un terme à sa description, pas un locuteur à sa réplique.</p>
 
-<div class="astuce"><div>Les <code>&lt;dd&gt;</code> sont indentés par défaut. Comme toujours, l'apparence se corrige en CSS : le choix de la balise doit dépendre du <em>sens</em>, jamais du rendu.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>Les caractéristiques techniques d'un produit, un glossaire, les métadonnées d'un article — auteur, date, catégorie — sont des <code>&lt;dl&gt;</code>. Tu ne les reconnaîtras pas à l'œil, parce que le CSS les remet presque toujours en forme, souvent sur deux colonnes.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>&lt;dl&gt;</code> contient des couples <code>&lt;dt&gt;</code> (le terme) et <code>&lt;dd&gt;</code> (sa description).</li>
+<li>Le <code>&lt;dd&gt;</code> est décalé de 40 pixels par défaut : le couple se voit sans CSS.</li>
+<li>Une dimension, c'est une <code>&lt;dl&gt;</code> ; deux dimensions comparables, c'est un tableau.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le « d » veut dire description, pas définition</summary>
+<p>Longtemps appelée « liste de définition », elle a été renommée « liste de description » dans la norme — parce que son usage réel dépassait largement les définitions de dictionnaire. Les noms des balises, eux, n'ont pas changé : <code>dl</code>, <code>dt</code>, <code>dd</code>. Tu croiseras les deux appellations, elles désignent la même chose.</p>
+</details>
 `,
   exercices: [
     {
@@ -104,27 +134,55 @@ window.DATA_HTML3 = [
   id: 'html-16',
   titre: 'Les balises de texte fines',
   contenu: `
-<p>Au-delà de <code>&lt;strong&gt;</code> et <code>&lt;em&gt;</code>, HTML propose des balises qui donnent un <strong>sens précis</strong> à des fragments de texte.</p>
+<h2>Pourquoi ça existe</h2>
+<p><code>&lt;strong&gt;</code> et <code>&lt;em&gt;</code> couvrent l'essentiel : ce qui est important, ce qui est accentué. Mais beaucoup de fragments de texte ont un sens plus précis — une abréviation, une date, une formule chimique, un résultat de recherche surligné.</p>
+<p>À chaque fois, la même logique que depuis le début : une balise qui <em>dit ce que c'est</em> vaut mieux qu'une mise en forme qui ne dit rien.</p>
 
-<table class="memo-table">
-<tr><th>Balise</th><th>Sens</th></tr>
-<tr><td>&lt;abbr title="..."&gt;</td><td>une abréviation, avec sa signification</td></tr>
-<tr><td>&lt;time datetime="..."&gt;</td><td>une date lisible par une machine</td></tr>
-<tr><td>&lt;mark&gt;</td><td>un passage surligné, pertinent</td></tr>
-<tr><td>&lt;sup&gt; / &lt;sub&gt;</td><td>exposant / indice</td></tr>
-<tr><td>&lt;q&gt; / &lt;blockquote&gt;</td><td>citation courte / longue</td></tr>
-<tr><td>&lt;cite&gt;</td><td>la source d'une citation</td></tr>
-</table>
-
-<h2>Pourquoi ne pas simplement styler avec CSS ?</h2>
-<p>Parce que ces balises transmettent une <strong>information</strong>, pas seulement une apparence :</p>
+<h2>Le petit peuple des balises de texte</h2>
 <ul>
-<li><code>&lt;abbr title&gt;</code> affiche la signification au survol, et un lecteur d'écran peut l'annoncer ;</li>
-<li><code>&lt;time datetime&gt;</code> donne la date dans un format qu'une machine comprend, quelle que soit la façon dont tu l'écris à l'écran. C'est ce qui permet à un moteur de recherche d'afficher la date d'un article ;</li>
-<li><code>&lt;mark&gt;</code> dit « ce passage est pertinent pour ce que cherche le lecteur » — c'est ce qu'utilise un site pour surligner les mots d'une recherche.</li>
+<li><code>&lt;abbr title="..."&gt;</code> — une abréviation, avec sa signification en infobulle. Le navigateur la souligne en <strong>pointillés</strong> ;</li>
+<li><code>&lt;time datetime="2026-10-06"&gt;</code> — une date. Le texte affiché reste le tien, mais le <code>datetime</code> donne la version que lit une machine ;</li>
+<li><code>&lt;mark&gt;</code> — un passage surligné parce qu'il est pertinent <em>ici et maintenant</em> ;</li>
+<li><code>&lt;sup&gt;</code> et <code>&lt;sub&gt;</code> — exposant et indice, affichés plus petits ;</li>
+<li><code>&lt;code&gt;</code> — un fragment de code ;</li>
+<li><code>&lt;blockquote&gt;</code> — une citation longue, décalée de 40 pixels par défaut ;</li>
+<li><code>&lt;q&gt;</code> — une citation courte, dans le fil du texte.</li>
 </ul>
+<pre class="bloc-code">&lt;p&gt;La surface est de 25 m&lt;sup&gt;2&lt;/sup&gt;, mesurée le
+&lt;time datetime="2026-10-06"&gt;6 octobre&lt;/time&gt;.&lt;/p&gt;</pre>
 
-<div class="astuce"><div>Le format de <code>datetime</code> est toujours le même : <strong>AAAA-MM-JJ</strong>, du plus grand au plus petit. C'est la norme internationale ISO 8601, et elle a un avantage précieux : trier ces dates alphabétiquement revient à les trier chronologiquement.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Balise</th><th>Ce que ça change à l'écran</th><th>Ce que ça dit en plus</th></tr>
+<tr><td>&lt;abbr title&gt;</td><td>un soulignement pointillé</td><td>la forme complète, en infobulle</td></tr>
+<tr><td>&lt;time&gt;</td><td><strong>rien du tout</strong></td><td>une date exploitable par une machine</td></tr>
+<tr><td>&lt;mark&gt;</td><td>un fond surligné</td><td>« ce passage répond à ta recherche »</td></tr>
+<tr><td>&lt;sup&gt;</td><td>plus petit, surélevé</td><td>un exposant, pas une décoration</td></tr>
+</table>
+<p>Regarde la ligne de <code>&lt;time&gt;</code> : elle ne change strictement rien à l'affichage. C'est le cas le plus pur de ce que fait le HTML — ajouter du sens sans toucher à l'apparence.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Se servir de <code>&lt;mark&gt;</code> comme d'un surligneur décoratif.</strong> Le sens de <code>mark</code> est « pertinent pour ce que tu cherches en ce moment » — typiquement, les mots trouvés dans une page de résultats. Pour insister durablement sur un mot, c'est <code>&lt;strong&gt;</code>.</p>
+<p><strong>Écrire une date au format français dans <code>datetime</code>.</strong> L'attribut attend un format machine, année en premier : <code>2026-10-06</code>. Le texte affiché, lui, s'écrit comme tu veux — « 6 octobre », « hier soir ». C'est tout l'intérêt d'avoir les deux.</p>
+<p><strong>Confondre <code>&lt;blockquote&gt;</code> et <code>&lt;q&gt;</code>.</strong> Le premier est un bloc, détaché du paragraphe ; le second s'insère dans une phrase et ajoute les guillemets tout seul. Mettre un <code>blockquote</code> au milieu d'un texte coupe le paragraphe en deux.</p>
+<p><strong>Abréger sans le <code>title</code>.</strong> Un <code>&lt;abbr&gt;</code> sans sa signification ne sert à rien : il souligne un mot sans l'expliquer. L'attribut <em>est</em> la balise.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les mots surlignés dans un moteur de recherche sont des <code>&lt;mark&gt;</code>. Les dates d'un blog sont des <code>&lt;time&gt;</code> — c'est ce qui permet à un agrégateur de les trier sans comprendre le français. Et les sigles d'un site administratif portent presque toujours un <code>&lt;abbr&gt;</code>.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Ces balises nomment un <em>fragment</em> : abréviation, date, exposant, citation.</li>
+<li><code>&lt;time&gt;</code> ne change rien à l'écran — son <code>datetime</code> s'adresse aux machines.</li>
+<li><code>&lt;mark&gt;</code> veut dire « pertinent maintenant », pas « joli en jaune ».</li>
+<li>Un <code>&lt;abbr&gt;</code> sans <code>title</code> est une balise vide de sens.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi un format de date à l'envers ?</summary>
+<p><code>2026-10-06</code> suit la norme internationale ISO 8601, et son ordre n'est pas arbitraire : du plus grand au plus petit. L'avantage est qu'un tri alphabétique de ces chaînes donne exactement un tri chronologique — propriété que n'a ni le format français ni l'américain. Tu retrouveras ce format partout : bases de données, fichiers journaux, noms de sauvegardes.</p>
+</details>
 `,
   exercices: [
     {
@@ -199,40 +257,65 @@ window.DATA_HTML3 = [
   id: 'html-17',
   titre: 'Les tableaux structurés',
   contenu: `
-<p>Tu sais faire un tableau simple. Voici les balises qui le rendent réellement exploitable.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais faire un tableau : des <code>&lt;tr&gt;</code>, des <code>&lt;th&gt;</code>, des <code>&lt;td&gt;</code>. Ça suffit pour l'afficher. Ça ne suffit pas pour qu'il soit <em>utilisable</em>.</p>
+<p>Imagine qu'on te lise un tableau à voix haute, cellule par cellule : « Janvier. 1200. Février. 1450. » Tu t'y retrouves parce que tu vois les colonnes. Une personne aveugle, non — à moins que le tableau ne dise lui-même quelle cellule nomme quoi. Les balises de cette leçon servent à ça.</p>
 
+<h2>Un tableau complet</h2>
 <pre class="bloc-code">&lt;table&gt;
   &lt;caption&gt;Ventes du premier trimestre&lt;/caption&gt;
   &lt;thead&gt;
-    &lt;tr&gt;&lt;th&gt;Mois&lt;/th&gt;&lt;th&gt;Montant&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th scope="col"&gt;Mois&lt;/th&gt;&lt;th scope="col"&gt;Montant&lt;/th&gt;&lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
-    &lt;tr&gt;&lt;td&gt;Janvier&lt;/td&gt;&lt;td&gt;1 200 €&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th scope="row"&gt;Janvier&lt;/th&gt;&lt;td&gt;1 200&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th scope="row"&gt;Février&lt;/th&gt;&lt;td&gt;1 450&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
   &lt;tfoot&gt;
-    &lt;tr&gt;&lt;td&gt;Total&lt;/td&gt;&lt;td&gt;2 650 €&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;th scope="row"&gt;Total&lt;/th&gt;&lt;td&gt;2 650&lt;/td&gt;&lt;/tr&gt;
   &lt;/tfoot&gt;
 &lt;/table&gt;</pre>
-
-<table class="memo-table">
-<tr><th>Balise</th><th>Rôle</th></tr>
-<tr><td>&lt;caption&gt;</td><td>le titre du tableau, annoncé aux lecteurs d'écran</td></tr>
-<tr><td>&lt;thead&gt;</td><td>la ligne d'en-tête</td></tr>
-<tr><td>&lt;tbody&gt;</td><td>le corps des données</td></tr>
-<tr><td>&lt;tfoot&gt;</td><td>la ligne de totaux</td></tr>
-<tr><td>&lt;th&gt;</td><td>une cellule d'en-tête (au lieu de &lt;td&gt;)</td></tr>
-</table>
+<ul>
+<li><code>&lt;caption&gt;</code> — le titre du tableau. Il s'affiche au-dessus et fait partie du tableau, contrairement à un <code>&lt;h3&gt;</code> posé juste avant ;</li>
+<li><code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code> — l'en-tête, le corps, le pied ;</li>
+<li><code>scope="col"</code> ou <code>scope="row"</code> — cet en-tête nomme-t-il une colonne, ou une ligne ?</li>
+</ul>
 
 <h2>Fusionner des cellules</h2>
-<pre class="bloc-code">&lt;td colspan="2"&gt;Sur deux colonnes&lt;/td&gt;
-&lt;td rowspan="3"&gt;Sur trois lignes&lt;/td&gt;</pre>
+<p>Deux attributs étendent une cellule sur ses voisines : <code>colspan="2"</code> l'étale sur deux colonnes, <code>rowspan="3"</code> sur trois lignes. Utile pour une ligne de total, ou un en-tête qui chapeaute plusieurs colonnes.</p>
+<p>Attention au décompte : une cellule en <code>colspan="2"</code> en remplace deux. La ligne qui la contient aura donc une balise de moins que les autres — et c'est normal.</p>
 
-<h2>scope : préciser ce que l'en-tête décrit</h2>
-<pre class="bloc-code">&lt;th scope="col"&gt;Mois&lt;/th&gt;
-&lt;th scope="row"&gt;Janvier&lt;/th&gt;</pre>
-<p>Sans <code>scope</code>, un lecteur d'écran ne sait pas rattacher une cellule à son en-tête. Avec, il annonce « Mois : Janvier, Montant : 1 200 € » — le tableau redevient compréhensible sans le voir.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Avec scope</th><th>Sans scope</th></tr>
+<tr><td>« Janvier, Montant : 1 200 »</td><td>« 1 200 »</td></tr>
+<tr><td>« Février, Montant : 1 450 »</td><td>« 1 450 »</td></tr>
+<tr><td>« Total, Montant : 2 650 »</td><td>« 2 650 »</td></tr>
+</table>
+<p>Voilà ce qu'entend une personne qui parcourt le tableau au lecteur d'écran. À gauche, chaque nombre arrive avec ses deux étiquettes. À droite, une suite de nombres nus.</p>
 
-<div class="attention"><div>Un tableau sert à présenter des <strong>données</strong>, jamais à faire une mise en page. Cette pratique a disparu depuis quinze ans : Flexbox et Grid font ça bien mieux, et un tableau de mise en page rend la page incompréhensible pour un lecteur d'écran.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Écrire le titre du tableau dans un <code>&lt;h3&gt;</code> juste au-dessus.</strong> Visuellement c'est pareil, mais le lien est perdu : rien ne dit que ce titre appartient à ce tableau. Le <code>&lt;caption&gt;</code> est <em>dans</em> la balise <code>&lt;table&gt;</code>, et il doit être son premier enfant — placé ailleurs, il est déplacé ou ignoré.</p>
+<p><strong>Croire que <code>&lt;tfoot&gt;</code> doit s'écrire en dernier.</strong> Sa place dans le code n'a pas d'importance : le navigateur l'affiche en bas quoi qu'il arrive.</p>
+<p><strong>Compter faux avec <code>colspan</code>.</strong> Si le total des cellules d'une ligne, fusions comprises, ne tombe pas sur le nombre de colonnes, le tableau se décale en silence — un trou apparaît, ou une colonne de plus. Aucun message ne te prévient.</p>
+<p><strong>Oublier le <code>&lt;tbody&gt;</code>… ou plutôt, croire qu'on l'a oublié.</strong> Le navigateur l'ajoute toujours lui-même, même si tu ne l'écris pas. Tu le verras apparaître en inspectant ta page : ce n'est pas une erreur de ta part.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un relevé bancaire, un comparatif de forfaits, un tableau de résultats sportifs. Le <code>&lt;thead&gt;</code> prend tout son sens sur un long tableau : c'est lui qui permet de garder l'en-tête visible pendant qu'on fait défiler, et de répéter les en-têtes sur chaque page à l'impression.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>&lt;caption&gt;</code> titre le tableau <em>de l'intérieur</em>, en premier enfant de <code>&lt;table&gt;</code>.</li>
+<li><code>scope="col"</code> et <code>scope="row"</code> disent ce que nomme chaque en-tête : c'est ce qui rend le tableau lisible à voix haute.</li>
+<li><code>colspan</code> et <code>rowspan</code> fusionnent — et changent le nombre de balises de la ligne.</li>
+<li>Le <code>&lt;tbody&gt;</code> est ajouté par le navigateur, écrit ou non.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : quand scope ne suffit plus</summary>
+<p>Sur un tableau à double entrée très complexe — plusieurs niveaux d'en-têtes imbriqués — <code>scope</code> devient ambigu. Il existe alors <code>headers</code>, qui liste les <code>id</code> des en-têtes dont dépend une cellule, un par un. C'est fastidieux à écrire, et c'est souvent le signe qu'il vaudrait mieux couper le tableau en deux.</p>
+</details>
 `,
   exercices: [
     {
@@ -307,31 +390,59 @@ window.DATA_HTML3 = [
   id: 'html-18',
   titre: 'Les formulaires bien construits',
   contenu: `
-<h2>label : la balise la plus importante d'un formulaire</h2>
+<h2>Pourquoi ça existe</h2>
+<p>Un formulaire mal construit ne se voit pas. Il s'affiche correctement, on peut taper dedans, et pourtant il met en difficulté une partie des visiteurs : celui qui navigue au clavier, celle qui n'entend que ce que son lecteur d'écran annonce, ou simplement la personne qui vise une case à cocher minuscule sur un téléphone.</p>
+<p>Les quelques attributs de cette leçon ne changent presque rien à l'écran. Ils changent tout à l'usage.</p>
+
+<h2>Le label, d'abord</h2>
 <pre class="bloc-code">&lt;label for="prenom"&gt;Prénom&lt;/label&gt;
 &lt;input type="text" id="prenom" name="prenom"&gt;</pre>
-<p>Le <code>for</code> du label doit valoir exactement l'<code>id</code> du champ. Deux bénéfices immédiats : cliquer sur le texte place le curseur dans le champ (précieux sur mobile, où les cases à cocher sont minuscules), et un lecteur d'écran annonce le bon libellé.</p>
+<p>Le <code>for</code> de l'étiquette doit valoir exactement l'<code>id</code> du champ. Deux bénéfices immédiats :</p>
+<ul>
+<li>cliquer sur le mot « Prénom » place le curseur dans le champ — et la zone cliquable d'une case à cocher passe de quelques pixels à toute la phrase ;</li>
+<li>un lecteur d'écran annonce « Prénom, zone de texte » au lieu de « zone de texte ».</li>
+</ul>
+<p>Et le <code>name</code> ? Il ne sert ni à l'un ni à l'autre : c'est lui qui étiquette la valeur au moment de l'envoi. Sans <code>name</code>, un champ est rempli à l'écran mais <strong>n'arrive jamais</strong> de l'autre côté. Trois attributs, trois rôles distincts : <code>for</code> relie, <code>id</code> nomme, <code>name</code> transmet.</p>
 
-<h2>fieldset et legend : regrouper</h2>
+<h2>Regrouper ce qui va ensemble</h2>
 <pre class="bloc-code">&lt;fieldset&gt;
-  &lt;legend&gt;Coordonnées&lt;/legend&gt;
-  &lt;label for="mail"&gt;Email&lt;/label&gt;
-  &lt;input type="email" id="mail" name="mail"&gt;
+  &lt;legend&gt;Taille du plat&lt;/legend&gt;
+  &lt;input type="radio" name="taille" id="p" value="petit"&gt;
+  &lt;label for="p"&gt;Petit&lt;/label&gt;
 &lt;/fieldset&gt;</pre>
-<p>Indispensable pour un groupe de boutons radio : la <code>&lt;legend&gt;</code> pose la question, les labels donnent les réponses possibles.</p>
+<p><code>&lt;fieldset&gt;</code> entoure un groupe de champs liés, et <code>&lt;legend&gt;</code> le nomme. Le navigateur dessine un cadre autour, avec la légende posée dessus. Pour un groupe de boutons radio, c'est indispensable : sans lui, la question « Taille du plat ? » n'est annoncée nulle part, et l'on entend seulement « Petit, bouton radio ».</p>
 
-<h2>Valider sans une ligne de JavaScript</h2>
-<table class="memo-table">
-<tr><th>Attribut</th><th>Effet</th></tr>
-<tr><td>required</td><td>le champ doit être rempli</td></tr>
-<tr><td>minlength / maxlength</td><td>longueur du texte</td></tr>
-<tr><td>min / max</td><td>bornes d'un nombre ou d'une date</td></tr>
-<tr><td>pattern="[0-9]{5}"</td><td>format imposé (ici : 5 chiffres)</td></tr>
-<tr><td>placeholder</td><td>exemple affiché en gris</td></tr>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce que fait le visiteur</th><th>Ce qui se passe</th></tr>
+<tr><td>Il appuie sur Tab</td><td>Le focus entre dans le champ. Le lecteur annonce son <code>&lt;label&gt;</code>.</td></tr>
+<tr><td>Il tape son prénom</td><td>La valeur se range dans le champ.</td></tr>
+<tr><td>Il clique sur le mot « Prénom »</td><td>Grâce au <code>for</code>, le curseur revient dans le champ.</td></tr>
+<tr><td>Il valide</td><td>Le couple <code>prenom = Camille</code> part — grâce au <code>name</code>.</td></tr>
 </table>
-<p>Le navigateur bloque l'envoi et affiche un message dans la langue de l'utilisateur — gratuitement.</p>
 
-<div class="attention"><div>Cette validation est un <strong>confort</strong>, pas une sécurité. Elle se contourne en trois clics. Toute donnée doit être revérifiée côté serveur, sans exception. Et <code>placeholder</code> ne remplace jamais un <code>label</code> : il disparaît dès qu'on tape.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Un <code>&lt;label&gt;</code> sans <code>for</code>.</strong> Le défaut le plus courant, et le plus invisible : à l'écran, rien ne distingue une étiquette reliée d'une étiquette qui ne l'est pas. Seul l'essai le révèle — clique sur le texte, et vois si le curseur bouge.</p>
+<p><strong>Un champ sans <code>name</code>.</strong> Le formulaire a l'air de marcher, l'utilisateur remplit tout, et la donnée se perd à l'envoi. Rien ne le signale.</p>
+<p><strong>Un <code>placeholder</code> à la place du <code>&lt;label&gt;</code>.</strong> C'est tentant : le texte gris dans le champ ressemble à une étiquette. Mais il disparaît dès qu'on tape — l'utilisateur qui s'interrompt ne sait plus ce qu'on lui demandait — et beaucoup de lecteurs d'écran ne l'annoncent pas. Le <code>placeholder</code> donne un exemple ; le <code>&lt;label&gt;</code> nomme. Les deux ne se remplacent pas.</p>
+<p><strong>Un <code>id</code> réutilisé.</strong> Deux champs avec le même <code>id</code>, et toutes les étiquettes pointent vers le premier. Le second devient inatteignable au clic.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Essaie, sur un site que tu utilises : clique sur le texte à côté d'une case à cocher. Si la case bascule, le formulaire est bien construit. Sinon, il manque un <code>for</code> — et tu viens de repérer un défaut d'accessibilité en une seconde, sans regarder une ligne de code.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>for</code> sur l'étiquette et <code>id</code> sur le champ, même valeur : c'est ce qui les relie.</li>
+<li><code>name</code> est ce qui transmet la valeur — sans lui, le champ n'arrive jamais au serveur.</li>
+<li><code>&lt;fieldset&gt;</code> et <code>&lt;legend&gt;</code> nomment un groupe, indispensable pour des boutons radio.</li>
+<li>Un <code>placeholder</code> n'est pas une étiquette : il disparaît dès qu'on écrit.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : l'étiquette qui entoure le champ</summary>
+<p>Il existe une seconde écriture : placer l'<code>&lt;input&gt;</code> <em>à l'intérieur</em> du <code>&lt;label&gt;</code>. Le lien est alors implicite, et <code>for</code> comme <code>id</code> deviennent inutiles. C'est plus court, et impossible à désynchroniser. L'inconvénient est que les deux éléments ne peuvent plus être séparés dans la page, ce qui gêne certaines mises en page en colonnes. Les deux formes sont correctes.</p>
+</details>
 `,
   exercices: [
     {
@@ -410,26 +521,58 @@ window.DATA_HTML3 = [
   id: 'html-19',
   titre: 'L\'accessibilité',
   contenu: `
-<p>Rendre une page accessible, c'est faire qu'elle reste utilisable par une personne aveugle, malvoyante, daltonienne, ou qui navigue au clavier faute de pouvoir tenir une souris. En France, c'est une <strong>obligation légale</strong> pour les services publics — et partout, c'est une question de qualité.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une page accessible est une page qui reste utilisable par une personne aveugle, malvoyante, daltonienne, ou qui navigue au clavier faute de pouvoir tenir une souris. En France, c'est une obligation légale pour les services publics. Partout ailleurs, c'est une question de qualité : les mêmes choix profitent à tout le monde, de la personne âgée au voyageur qui lit son écran en plein soleil.</p>
+<p>Bonne nouvelle : l'essentiel tient dans des balises que tu connais déjà, employées pour ce qu'elles sont.</p>
 
-<h2>1. Des alternatives textuelles utiles</h2>
-<pre class="bloc-code">&lt;img src="graphique.png" alt="Les ventes ont doublé entre janvier et juin"&gt;
+<h2>Un faux bouton est un piège</h2>
+<p>C'est l'erreur la plus répandue du web, et la plus facile à démontrer. Un <code>&lt;div&gt;</code> auquel on a donné l'apparence d'un bouton ressemble à un bouton, se clique comme un bouton… et s'arrête là.</p>
+<pre class="bloc-code">&lt;div class="bouton"&gt;Valider&lt;/div&gt;       &lt;!-- inatteignable au clavier --&gt;
+&lt;button class="bouton"&gt;Valider&lt;/button&gt; &lt;!-- atteignable, annonçable --&gt;</pre>
+<p>La différence est mesurable : un <code>&lt;div&gt;</code> est <strong>non atteignable par la touche Tab</strong>, un <code>&lt;button&gt;</code> l'est d'office. Qui navigue au clavier passera donc devant ton faux bouton sans jamais pouvoir l'atteindre. Et un lecteur d'écran annonce « bouton » sur le second, rien sur le premier.</p>
+<p>La règle qui en découle tient en une phrase : <strong>un bouton est un <code>&lt;button&gt;</code>, un lien est un <code>&lt;a&gt;</code></strong>. Si l'action change de page, c'est un lien ; si elle agit sur la page, c'est un bouton.</p>
 
-&lt;!-- Image purement décorative : alt VIDE, pas absent --&gt;
-&lt;img src="separateur.png" alt=""&gt;</pre>
-<p>Un <code>alt</code> décrit ce que l'image <strong>apporte</strong>, pas ce qu'elle montre. Écrire <code>alt="graphique"</code> ne sert à rien ; décrire ce qu'on y lit, si. Et un <code>alt=""</code> vide dit « ignore-moi », ce qui est exactement ce qu'il faut pour une décoration.</p>
-
-<h2>2. Des libellés partout</h2>
-<p>Un bouton qui ne contient qu'une icône n'a aucun texte à annoncer :</p>
+<h2>Nommer ce qui n'a pas de texte</h2>
+<p>Un bouton qui ne contient qu'une croix, une loupe ou une icône n'a rien à annoncer. L'attribut <code>aria-label</code> lui donne un nom, invisible à l'écran mais lu à voix haute :</p>
 <pre class="bloc-code">&lt;button aria-label="Fermer la fenêtre"&gt;X&lt;/button&gt;</pre>
+<p>C'est un filet de sécurité, pas une solution par défaut : quand un vrai texte est possible, il vaut toujours mieux.</p>
 
-<h2>3. Une navigation au clavier</h2>
-<p>Tout ce qui est cliquable doit être atteignable avec la touche Tab. C'est automatique avec <code>&lt;button&gt;</code> et <code>&lt;a&gt;</code> — et perdu si on met un gestionnaire de clic sur une <code>&lt;div&gt;</code>. Utilise la bonne balise, et l'accessibilité vient gratuitement.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Le visiteur appuie sur Tab</th><th>Avec un div</th><th>Avec un button</th></tr>
+<tr><td>Arrivée sur l'élément</td><td>jamais : il est sauté</td><td>le contour de focus apparaît</td></tr>
+<tr><td>Annonce vocale</td><td>aucune</td><td>« Valider, bouton »</td></tr>
+<tr><td>Touche Entrée</td><td>rien</td><td>l'action se déclenche</td></tr>
+</table>
 
-<h2>4. Un contraste suffisant</h2>
-<p>Le texte doit atteindre un rapport de contraste de <strong>4,5:1</strong> avec son fond. Du gris clair sur blanc est illisible pour beaucoup de gens — et sous le soleil, pour tout le monde.</p>
+<h2>Les trois autres réflexes</h2>
+<ul>
+<li><strong>Un <code>alt</code> qui porte l'information.</strong> Décoratif, <code>alt=""</code> ; informatif, une vraie phrase. Un graphique ne se décrit pas par « graphique » mais par ce qu'il montre ;</li>
+<li><strong>Des titres dans l'ordre.</strong> Un seul <code>&lt;h1&gt;</code>, pas de niveau sauté : c'est le plan avec lequel on navigue sans voir la page ;</li>
+<li><strong>La couleur ne porte jamais seule le sens.</strong> « Les champs en rouge sont obligatoires » ne dit rien à une personne daltonienne. Ajoute un mot, un symbole, un message.</li>
+</ul>
 
-<div class="astuce"><div>Le test le plus rapide : essaie de naviguer sur ta page <strong>uniquement au clavier</strong>. Si tu ne peux pas atteindre un bouton, ou si tu ne vois pas où tu te trouves, l'accessibilité est à revoir. Ce test prend deux minutes et détecte l'essentiel des problèmes.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Supprimer le contour de focus.</strong> On le trouve laid, on l'enlève en CSS — et l'on rend la navigation au clavier impossible : plus rien n'indique où l'on se trouve. On peut le redessiner autrement ; on ne le supprime pas.</p>
+<p><strong>Mettre un <code>aria-label</code> sur un bouton qui a déjà du texte.</strong> L'attribut <em>remplace</em> le texte visible pour le lecteur d'écran. Si les deux diffèrent, la personne entend autre chose que ce qu'elle lit — et si quelqu'un dicte « clique sur Envoyer » à une commande vocale, le bouton ne répondra pas.</p>
+<p><strong>Croire que l'accessibilité se rattrape à la fin.</strong> Choisir la bonne balise au moment de l'écrire ne coûte rien. Reprendre trois cents <code>&lt;div&gt;</code> six mois plus tard coûte très cher.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Tu peux tester n'importe quel site en dix secondes : pose la souris, et navigue à la touche Tab. Si tu vois clairement où tu es, et si tu peux atteindre tous les boutons, la page est correcte. Si le contour disparaît ou saute des éléments, tu viens de trouver un défaut réel.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Un <code>&lt;div&gt;</code> ne s'atteint pas au clavier ; un <code>&lt;button&gt;</code> si. La bonne balise fait le travail.</li>
+<li><code>aria-label</code> nomme ce qui n'a pas de texte — et remplace celui qui existe, donc à manier avec soin.</li>
+<li>Le contour de focus se redessine, jamais ne se supprime.</li>
+<li>La couleur ne doit jamais être le seul porteur d'une information.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la première règle d'ARIA</summary>
+<p>La norme ARIA fournit des dizaines d'attributs pour décrire des composants complexes. Sa toute première règle officielle est pourtant : <em>n'utilisez pas ARIA</em>. Autrement dit, si une balise HTML existe pour ce que vous faites, prenez-la — elle apporte déjà le clavier, l'annonce et le comportement attendu. ARIA sert à décrire ce que le HTML ne sait pas dire, pas à réparer une balise mal choisie.</p>
+</details>
 `,
   exercices: [
     {
@@ -500,29 +643,58 @@ window.DATA_HTML3 = [
   id: 'html-20',
   titre: 'Les images modernes',
   contenu: `
-<p>Une image mal servie est la première cause de lenteur d'un site. Voici les outils qui règlent le problème.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Les images représentent la plus grosse part du poids d'une page, et donc la première cause de lenteur. Le problème n'est pas qu'elles soient lourdes : c'est qu'on les sert mal. On télécharge une photo de 3000 pixels de large pour l'afficher sur 400, on charge trente images alors que le visiteur n'en verra que deux, et la page saute dans tous les sens pendant qu'elles arrivent.</p>
+<p>Trois attributs règlent l'essentiel.</p>
 
-<h2>loading="lazy" : ne charger qu'au moment utile</h2>
-<pre class="bloc-code">&lt;img src="photo.jpg" alt="..." loading="lazy"&gt;</pre>
-<p>L'image n'est téléchargée que lorsqu'elle approche de l'écran. Sur une page qui en contient trente, c'est un gain considérable — pour un seul attribut. À ne pas mettre sur les images visibles d'emblée, qu'on veut au contraire charger tout de suite.</p>
+<h2>Ne charger qu'au moment utile</h2>
+<pre class="bloc-code">&lt;img src="photo.jpg" alt="..." loading="lazy" width="800" height="600"&gt;</pre>
+<ul>
+<li><code>loading="lazy"</code> — l'image n'est téléchargée que lorsqu'elle approche de l'écran. Sur une page qui en contient trente, le gain est considérable ;</li>
+<li><code>width</code> et <code>height</code> — les dimensions réelles du fichier.</li>
+</ul>
 
-<h2>width et height : réserver la place</h2>
-<pre class="bloc-code">&lt;img src="photo.jpg" alt="..." width="800" height="600"&gt;</pre>
-<p>Sans ces attributs, le navigateur ignore la taille de l'image avant de l'avoir chargée : le texte saute au moment où elle apparaît. En les indiquant, il réserve l'espace à l'avance. C'est l'un des critères de qualité mesurés par Google.</p>
+<h2>Pourquoi écrire les dimensions si le CSS s'en charge</h2>
+<p>C'est la question qu'on se pose toujours, et la réponse est contre-intuitive. Ces deux attributs ne servent pas à <em>dimensionner</em> l'image : ils servent à en donner les <strong>proportions</strong> avant son arrivée.</p>
+<p>Sans eux, le navigateur ne sait pas quelle place réserver : il affiche le texte, puis l'image arrive et pousse tout vers le bas. C'est ce qui provoque ces sauts désagréables pendant le chargement — et le clic parti au mauvais endroit parce que le bouton a bougé au dernier moment. Avec eux, la place est réservée dès le départ, et rien ne bouge.</p>
 
-<h2>srcset : la bonne taille selon l'écran</h2>
-<pre class="bloc-code">&lt;img src="photo-800.jpg"
-     srcset="photo-400.jpg 400w, photo-800.jpg 800w"
-     sizes="(max-width: 600px) 100vw, 50vw"
-     alt="..."&gt;</pre>
-<p>Le navigateur choisit lui-même le fichier adapté. Inutile d'envoyer une image de 1600 pixels à un téléphone.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Sans width et height</th><th>Avec</th></tr>
+<tr><td>Le texte s'affiche</td><td>immédiatement</td><td>immédiatement</td></tr>
+<tr><td>Place de l'image</td><td>zéro : rien n'est réservé</td><td>un rectangle vide aux bonnes proportions</td></tr>
+<tr><td>L'image arrive</td><td>tout le contenu est poussé vers le bas</td><td>elle se pose dans son emplacement</td></tr>
+<tr><td>Le visiteur clique</td><td>le bouton a bougé entre-temps</td><td>rien n'a bougé</td></tr>
+</table>
 
-<h2>picture : changer carrément d'image</h2>
+<h2>Une image différente selon l'écran</h2>
+<p>La balise <code>&lt;picture&gt;</code> propose plusieurs fichiers et laisse le navigateur choisir :</p>
 <pre class="bloc-code">&lt;picture&gt;
-  &lt;source media="(max-width: 600px)" srcset="portrait.jpg"&gt;
-  &lt;img src="paysage.jpg" alt="..."&gt;
+  &lt;source media="(max-width: 600px)" srcset="petite.jpg"&gt;
+  &lt;img src="grande.jpg" alt="Le port au lever du jour"&gt;
 &lt;/picture&gt;</pre>
-<p>Là où <code>srcset</code> propose la même image en plusieurs tailles, <code>&lt;picture&gt;</code> permet d'en servir une <strong>différente</strong> — un cadrage vertical sur mobile, par exemple. La balise <code>&lt;img&gt;</code> finale reste obligatoire : c'est elle qui s'affiche si aucune condition ne correspond.</p>
+<p>Sur un écran de moins de 600 pixels, c'est <code>petite.jpg</code> qui part. Sinon, <code>grande.jpg</code>. Le <code>&lt;img&gt;</code> final n'est pas optionnel : c'est lui qui porte le <code>alt</code>, et c'est lui qui sert de repli si aucune <code>&lt;source&gt;</code> ne convient.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Mettre <code>loading="lazy"</code> sur la grande image du haut.</strong> Celle-là est visible immédiatement : la différer retarde précisément ce que le visiteur attend. On la réserve aux images situées plus bas.</p>
+<p><strong>Donner des dimensions qui ne sont pas celles du fichier.</strong> Les proportions seraient fausses, et l'image s'étirerait ou laisserait un vide. Ces valeurs décrivent le fichier, pas la taille d'affichage souhaitée — celle-là reste l'affaire du CSS.</p>
+<p><strong>Oublier le <code>&lt;img&gt;</code> dans un <code>&lt;picture&gt;</code>.</strong> Sans lui, rien ne s'affiche du tout : les <code>&lt;source&gt;</code> ne sont que des propositions.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les navigateurs mesurent maintenant ces sauts de mise en page et les comptent dans la note de qualité d'un site — une note qui influence le classement dans les résultats de recherche. Deux attributs sur chaque image, et le problème disparaît.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>loading="lazy"</code> diffère le téléchargement — mais jamais pour l'image du haut.</li>
+<li><code>width</code> et <code>height</code> réservent la place et suppriment les sauts de mise en page.</li>
+<li><code>&lt;picture&gt;</code> propose plusieurs fichiers ; le <code>&lt;img&gt;</code> final reste obligatoire.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les formats modernes</summary>
+<p>Au-delà du JPEG et du PNG, les formats WebP et AVIF produisent des fichiers deux à trois fois plus légers à qualité égale. On les sert avec <code>&lt;picture&gt;</code> et plusieurs <code>&lt;source&gt;</code> : le navigateur prend le premier format qu'il sait lire, et retombe sur le JPEG s'il ne connaît aucun des autres. C'est la façon la plus simple d'alléger un site sans rien perdre.</p>
+</details>
 `,
   exercices: [
     {
@@ -597,34 +769,54 @@ window.DATA_HTML3 = [
   id: 'html-21',
   titre: 'Les métadonnées de partage',
   contenu: `
-<p>Quand on colle le lien d'une page sur WhatsApp, Facebook ou LinkedIn, un aperçu apparaît : titre, description, image. Cet aperçu ne s'invente pas — il vient de balises <code>&lt;meta&gt;</code> placées dans le <code>&lt;head&gt;</code>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Colle le lien d'une page dans une messagerie, et un aperçu apparaît : une image, un titre, une description. Cet aperçu ne s'invente pas. Il est lu dans des balises <code>&lt;meta&gt;</code> placées dans le <code>&lt;head&gt;</code>.</p>
+<p>Sans elles, le lien s'affiche en texte brut, ou la messagerie attrape au hasard une image de la page — souvent le logo, parfois un bouton. Un bon contenu partagé sans aperçu est cliqué beaucoup moins : ces trois lignes décident de la première impression.</p>
 
-<h2>Open Graph : le standard du partage</h2>
+<h2>Open Graph</h2>
 <pre class="bloc-code">&lt;head&gt;
-  &lt;meta property="og:title" content="Apprendre à coder de A à Z"&gt;
-  &lt;meta property="og:description" content="121 leçons pour débuter."&gt;
-  &lt;meta property="og:image" content="https://exemple.fr/apercu.jpg"&gt;
-  &lt;meta property="og:url" content="https://exemple.fr/cours"&gt;
+  &lt;meta property="og:title" content="Recettes de saison"&gt;
+  &lt;meta property="og:description" content="Trente recettes simples, par mois."&gt;
+  &lt;meta property="og:image" content="https://monsite.fr/apercu.jpg"&gt;
+  &lt;meta property="og:url" content="https://monsite.fr/recettes"&gt;
 &lt;/head&gt;</pre>
+<p>Open Graph a été créé par un réseau social, puis adopté par tous les autres : c'est aujourd'hui le standard de fait. Remarque la différence avec les <code>&lt;meta&gt;</code> que tu connais : ici l'attribut s'appelle <code>property</code>, et non <code>name</code>.</p>
 
-<p>Remarque une différence : ces balises utilisent <code>property</code> alors que les meta classiques utilisent <code>name</code>. C'est une subtilité qui piège tout le monde une fois.</p>
+<h2>L'adresse de l'image doit être complète</h2>
+<p>C'est la règle qui coince le plus souvent. <code>og:image</code> exige une adresse <strong>absolue</strong> — avec <code>https://</code> et le nom de domaine. Pas <code>apercu.jpg</code>, pas <code>/images/apercu.jpg</code>.</p>
+<p>La raison est simple une fois dite : ce n'est pas ton visiteur qui lit cette balise, c'est le serveur de la messagerie, depuis ailleurs. Une adresse relative n'a de sens que par rapport à la page qui la contient — ce serveur, lui, n'a aucun moyen de la compléter. Il cherche l'image, ne la trouve pas, et n'affiche rien.</p>
 
-<table class="memo-table">
-<tr><th>Balise</th><th>Rôle</th></tr>
-<tr><td>og:title</td><td>le titre affiché dans l'aperçu</td></tr>
-<tr><td>og:description</td><td>le texte sous le titre</td></tr>
-<tr><td>og:image</td><td>l'image (adresse ABSOLUE, pas relative)</td></tr>
-<tr><td>og:url</td><td>l'adresse canonique de la page</td></tr>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>Tu colles le lien</td><td>La messagerie repère une adresse dans ton message.</td></tr>
+<tr><td>Elle va chercher la page</td><td>Depuis ses propres serveurs, pas depuis ton téléphone.</td></tr>
+<tr><td>Elle lit le <code>&lt;head&gt;</code></td><td>Elle y cherche les <code>og:</code>, et s'arrête là : le <code>&lt;body&gt;</code> ne l'intéresse pas.</td></tr>
+<tr><td>Elle fabrique l'aperçu</td><td>Titre, description, image — et met le tout en cache.</td></tr>
 </table>
+<p>Le dernier mot compte : <strong>en cache</strong>. Corriger une balise ne change pas un aperçu déjà fabriqué. Les grandes plateformes offrent un outil pour forcer la relecture.</p>
 
-<h2>Les métadonnées indispensables par ailleurs</h2>
-<pre class="bloc-code">&lt;meta charset="UTF-8"&gt;
-&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-&lt;meta name="description" content="Résumé pour les moteurs de recherche."&gt;
-&lt;title&gt;Le titre de l'onglet&lt;/title&gt;</pre>
-<p><code>charset</code> évite les accents transformés en symboles ; <code>viewport</code> est ce qui rend la page utilisable sur mobile ; <code>description</code> est le texte affiché sous ton lien dans les résultats de recherche.</p>
+<h2>Les pièges</h2>
+<p><strong>Écrire <code>name</code> au lieu de <code>property</code>.</strong> La balise est ignorée, sans aucun message. C'est la faute de frappe la plus fréquente de cette leçon, et la plus silencieuse.</p>
+<p><strong>Une image trop petite.</strong> En dessous de 600 pixels de large, la plupart des plateformes affichent une vignette minuscule à côté du texte, au lieu de la grande image. Une proportion de 1200 sur 630 est la valeur sûre.</p>
+<p><strong>Croire qu'<code>og:title</code> remplace <code>&lt;title&gt;</code>.</strong> Ce sont deux publics : le <code>&lt;title&gt;</code> sert à l'onglet et au moteur de recherche, l'<code>og:title</code> à l'aperçu partagé. Il manque souvent le nom du site dans le second, parce que le contexte est déjà donné par ailleurs.</p>
 
-<div class="attention"><div>L'adresse de <code>og:image</code> doit être <strong>absolue</strong> (commençant par <code>https://</code>). Les réseaux sociaux lisent ta page depuis leurs propres serveurs : une adresse relative ne mène nulle part pour eux.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>Chaque aperçu que tu as vu dans une conversation vient de là. Les rédactions soignent particulièrement l'<code>og:image</code> : c'est elle qui occupe le plus de place à l'écran, et donc ce qui décide du clic. Tu peux vérifier n'importe quel site en affichant sa source et en cherchant « og: ».</p>
+
+<div class="a-retenir">
+<ul>
+<li>Les balises <code>og:</code> du <code>&lt;head&gt;</code> fabriquent l'aperçu d'un lien partagé.</li>
+<li>Elles s'écrivent avec <code>property</code>, pas <code>name</code> — une confusion qui les rend muettes.</li>
+<li><code>og:image</code> exige une adresse absolue : c'est un serveur distant qui la lit.</li>
+<li>Les aperçus sont mis en cache : une correction n'est pas visible tout de suite.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : et si on ne met rien ?</summary>
+<p>Les plateformes se rabattent alors sur le <code>&lt;title&gt;</code> et la <code>meta description</code>, et cherchent une image dans la page — la première assez grande, en général. Le résultat est imprévisible : le logo, une publicité, ou rien. Ce n'est pas catastrophique, mais tu laisses quelqu'un d'autre choisir comment ton travail se présente.</p>
+</details>
 `,
   exercices: [
     {
@@ -708,32 +900,53 @@ window.DATA_HTML3 = [
   id: 'html-22',
   titre: 'Vérifier et déboguer sa page',
   contenu: `
-<p>Dernière leçon du module : comment repérer et corriger ce qui cloche, méthodiquement plutôt qu'au hasard.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Dernière leçon du module, et la plus utile le jour où ça ne marche pas. Le HTML a une particularité qui le rend déroutant à déboguer : <strong>il ne plante jamais</strong>. Une balise non fermée, un attribut inventé, une imbrication interdite — rien ne s'arrête, rien ne s'affiche en rouge. La page sort simplement de travers.</p>
+<p>Chercher au hasard dans deux cents lignes est épuisant. Voici de quoi chercher méthodiquement.</p>
 
-<h2>1. Le validateur officiel</h2>
-<p>Le W3C propose un outil gratuit qui analyse ton HTML et signale chaque erreur : <strong>validator.w3.org</strong>. Il détecte les balises non fermées, les attributs inventés, les imbrications interdites. Une page valide n'est pas forcément bonne, mais une page invalide réserve des surprises selon les navigateurs.</p>
+<h2>Les quatre outils</h2>
+<ul>
+<li><strong>Le validateur du W3C</strong> — <code>validator.w3.org</code> analyse ton HTML et liste chaque erreur avec son numéro de ligne : balises non fermées, attributs inconnus, imbrications interdites ;</li>
+<li><strong>L'inspecteur</strong> — la touche F12 ouvre les outils de ton navigateur. L'onglet « Éléments » montre l'arbre <em>tel que le navigateur l'a compris</em>, pas tel que tu l'as écrit ;</li>
+<li><strong>La console</strong> — dans ces mêmes outils, elle signale les fichiers introuvables : une image, une feuille de style ;</li>
+<li><strong>L'indentation</strong> — le plus simple, et celui qu'on néglige. Un code bien décalé rend une balise non fermée visible à l'œil nu.</li>
+</ul>
 
-<h2>2. Les outils de développement (F12)</h2>
-<table class="memo-table">
-<tr><th>Onglet</th><th>Sert à</th></tr>
-<tr><td>Éléments</td><td>voir le HTML réel et tester du CSS en direct</td></tr>
-<tr><td>Console</td><td>lire les erreurs JavaScript</td></tr>
-<tr><td>Réseau</td><td>repérer un fichier introuvable (erreur 404)</td></tr>
-<tr><td>Lighthouse</td><td>obtenir une note de performance et d'accessibilité</td></tr>
+<h2>L'inspecteur dit la vérité</h2>
+<p>C'est l'outil décisif, pour une raison précise : le navigateur <em>répare</em> ce qu'il ne comprend pas, silencieusement. Il ferme les balises restées ouvertes, déplace ce qui n'est pas à sa place, ajoute un <code>&lt;tbody&gt;</code>. Comparer ton fichier à l'arbre de l'inspecteur, c'est voir exactement ce qu'il a rafistolé — et donc où tu t'es trompé.</p>
+
+<h2>Pas à pas</h2>
+<p>La méthode, quand une page s'affiche de travers :</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qu'on cherche</th></tr>
+<tr><td>1. Regarder le symptôme</td><td>Tout est en gros ? en gras ? Le défaut commence où, exactement ?</td></tr>
+<tr><td>2. Remonter juste avant</td><td>La faute est presque toujours au <em>début</em> de la zone abîmée.</td></tr>
+<tr><td>3. Ouvrir l'inspecteur</td><td>Comparer l'arbre réel à ce qu'on croyait avoir écrit.</td></tr>
+<tr><td>4. Passer au validateur</td><td>Si rien ne saute aux yeux : il donne la ligne.</td></tr>
+<tr><td>5. Corriger une seule chose</td><td>Puis regarder à nouveau. Deux corrections d'un coup brouillent la piste.</td></tr>
 </table>
-<p>L'onglet Éléments est le plus utile au quotidien : il montre le HTML <em>tel que le navigateur l'a compris</em>, ce qui peut différer de ce que tu as écrit — une balise mal fermée sera « réparée » automatiquement, souvent pas comme tu l'espérais.</p>
 
-<h2>3. Les erreurs les plus fréquentes</h2>
-<table class="memo-table">
-<tr><th>Symptôme</th><th>Cause probable</th></tr>
-<tr><td>Toute la page est en gras ou en lien</td><td>une balise jamais fermée</td></tr>
-<tr><td>Des caractères bizarres à la place des accents</td><td><code>&lt;meta charset="UTF-8"&gt;</code> manquant</td></tr>
-<tr><td>La page s'affiche minuscule sur mobile</td><td>balise <code>viewport</code> absente</td></tr>
-<tr><td>Le CSS ne s'applique pas</td><td>chemin du fichier erroné (à vérifier dans Réseau)</td></tr>
-<tr><td>Un clic sur un label ne fait rien</td><td><code>for</code> et <code>id</code> ne correspondent pas</td></tr>
-</table>
+<h2>Les pièges</h2>
+<p><strong>Les trois symptômes qui ont chacun une cause presque certaine.</strong> Tout le texte en gros : une balise de titre non fermée. Tout en gras à partir d'un endroit : un <code>&lt;strong&gt;</code> fermé sans sa barre oblique. Des accents en symboles bizarres : <code>&lt;meta charset="UTF-8"&gt;</code> absent du <code>&lt;head&gt;</code>. Connaître ces trois-là fait gagner un temps considérable.</p>
+<p><strong>Corriger sans comprendre.</strong> Ajouter des balises au hasard jusqu'à ce que ça rentre dans l'ordre donne parfois le bon résultat — et laisse un code que personne, toi compris, ne saura modifier le mois prochain.</p>
+<p><strong>Croire qu'une page valide est une bonne page.</strong> Le validateur contrôle la grammaire, pas le sens. Une page entièrement faite de <code>&lt;div&gt;</code>, sans un seul <code>alt</code>, peut passer sans la moindre erreur. Il élimine les fautes de syntaxe : c'est précieux, et ce n'est pas tout.</p>
 
-<div class="astuce"><div>La méthode qui marche toujours : <strong>réduire</strong>. Quand une page se comporte bizarrement, supprime la moitié du code. Si le problème persiste, il est dans la moitié restante ; sinon, il est dans celle que tu viens d'enlever. En cinq coupes, tu as isolé la ligne fautive.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>L'inspecteur est l'outil que les développeurs ouvrent le plus souvent, tous métiers confondus. Il sert aussi à comprendre comment les autres s'y prennent : sur n'importe quel site, tu peux ouvrir l'arbre et lire la structure. Beaucoup de gens ont appris le métier exactement comme ça.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Le HTML ne plante pas : il se répare tout seul, et c'est ce qui rend ses fautes discrètes.</li>
+<li>L'inspecteur (F12) montre l'arbre <em>compris</em> par le navigateur — comparer les deux révèle la faute.</li>
+<li>Tout en gros, tout en gras, accents cassés : trois symptômes, trois causes quasi certaines.</li>
+<li>Une page valide n'est pas forcément une bonne page.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi le HTML pardonne-t-il tout ?</summary>
+<p>C'est un choix d'origine, et il a été âprement discuté. Au début des années 2000, une tentative — XHTML — a voulu imposer la rigueur : la moindre balise mal fermée devait afficher une page d'erreur. L'idée a échoué, parce que des millions de pages existantes seraient devenues illisibles du jour au lendemain. La norme actuelle décrit donc, en détail, comment un navigateur doit rattraper chaque sorte de faute — pour que tous la rattrapent de la même façon.</p>
+</details>
 `,
   exercices: [
     {

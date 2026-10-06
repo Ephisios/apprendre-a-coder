@@ -5,25 +5,61 @@ window.DATA_HTML2 = [
   id: 'html-9',
   titre: 'Audio, vidéo et pages imbriquées',
   contenu: `
-<p>Le HTML moderne sait afficher bien plus que du texte et des images : du son, de la vidéo, et même... d'autres pages web.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Pendant longtemps, mettre une vidéo sur une page voulait dire installer un greffon — Flash, RealPlayer — que chaque visiteur devait avoir, et qui tombait en panne. Le HTML moderne a pris le problème à sa racine : le son et la vidéo sont devenus des balises, comme les images.</p>
+<p>Même logique qu'avec <code>&lt;img&gt;</code> : la balise ne contient pas le film, elle dit où le trouver.</p>
 
-<h2>La vidéo</h2>
-<pre class="bloc-code">&lt;video src="film.mp4" controls width="400"&gt;&lt;/video&gt;</pre>
+<h2>Vidéo et audio</h2>
+<pre class="bloc-code">&lt;video src="recette.mp4" controls width="400"&gt;&lt;/video&gt;
+
+&lt;audio src="podcast.mp3" controls&gt;&lt;/audio&gt;</pre>
 <ul>
-<li><code>controls</code> — affiche les boutons lecture/pause/volume. C'est un <strong>attribut booléen</strong> : sa seule présence suffit, pas de valeur à écrire ;</li>
-<li><code>width</code> — la largeur en pixels ;</li>
-<li>autres attributs utiles : <code>autoplay</code> (lecture auto), <code>loop</code> (en boucle), <code>muted</code> (sans son), <code>poster="image.jpg"</code> (l'image de couverture).</li>
+<li><code>src</code> — le fichier, comme pour une image ;</li>
+<li><code>controls</code> — affiche les boutons lecture, pause et volume ;</li>
+<li><code>width</code> — la largeur, en pixels.</li>
 </ul>
+<p>Contrairement à <code>&lt;img&gt;</code>, ces deux balises <strong>se ferment</strong> : <code>&lt;/video&gt;</code>, <code>&lt;/audio&gt;</code>. Ce qu'on écrit entre les deux s'affiche seulement si le navigateur ne sait pas lire le fichier — un message de repli.</p>
 
-<h2>L'audio</h2>
-<pre class="bloc-code">&lt;audio src="musique.mp3" controls&gt;&lt;/audio&gt;</pre>
-<p>Même logique, sans dimension. Sans <code>controls</code>, le lecteur est invisible !</p>
+<h2>Un attribut qui n'a pas de valeur</h2>
+<p><code>controls</code> est un <strong>attribut booléen</strong> : sa seule présence suffit. On écrit <code>controls</code>, pas <code>controls="true"</code>. Et pour désactiver les boutons, on ne met pas <code>controls="false"</code> — on <em>retire</em> l'attribut. C'est tout ou rien.</p>
+<p>D'autres suivent la même règle : <code>autoplay</code> (démarre tout seul), <code>loop</code> (recommence), <code>muted</code> (sans son).</p>
 
-<h2>L'iframe : une page dans la page</h2>
-<pre class="bloc-code">&lt;iframe src="https://exemple.com" width="500" height="300"&gt;&lt;/iframe&gt;</pre>
-<p>Une <code>&lt;iframe&gt;</code> incruste une page web dans la tienne — c'est comme ça qu'on intègre une vidéo YouTube ou une carte Google Maps. D'ailleurs... les aperçus de CE logiciel sont des iframes ! Ton code s'exécute dans une page incrustée.</p>
+<h2>Une page dans une page</h2>
+<p>La balise <code>&lt;iframe&gt;</code> affiche une page entière à l'intérieur de la tienne — une carte, une vidéo hébergée ailleurs, un formulaire externe :</p>
+<pre class="bloc-code">&lt;iframe src="https://exemple.com" width="600" height="400"
+        title="Carte du quartier"&gt;&lt;/iframe&gt;</pre>
+<p>Le <code>title</code> n'est pas décoratif : c'est lui qu'annonce un lecteur d'écran en arrivant sur ce cadre. Sans lui, la personne entend « cadre », sans savoir ce qu'il contient.</p>
 
-<div class="info">💬 On travaille hors ligne, donc pas de vrais fichiers vidéo ici — mais les attributs, eux, se vérifient très bien. Dans tes futurs projets, il suffira de mettre un vrai chemin dans <code>src</code>.</div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'il lit</th><th>Ce qu'il en fait</th></tr>
+<tr><td>&lt;video</td><td>Il réserve un rectangle dans la page.</td></tr>
+<tr><td>src="recette.mp4"</td><td>Il commence à télécharger le fichier, sans bloquer le reste.</td></tr>
+<tr><td>controls</td><td>Présent : il dessine les boutons. Aucune valeur à lire.</td></tr>
+<tr><td>width="400"</td><td>Le rectangle fera 400 pixels de large.</td></tr>
+<tr><td>&lt;/video&gt;</td><td>Rien entre les deux balises : pas de message de repli.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>controls</code>.</strong> La vidéo est bien là, mais sans aucun bouton : impossible de la lancer. L'élève voit un rectangle noir et croit que son code n'a pas marché. Rien ne signale l'oubli — c'est l'erreur numéro un de cette leçon.</p>
+<p><strong>Écrire <code>controls="false"</code> en croyant les cacher.</strong> Un attribut booléen ne s'éteint pas avec une valeur : le navigateur voit que l'attribut est là, et affiche les boutons. Même chose pour <code>hidden="false"</code>, qui cache quand même.</p>
+<p><strong>Compter sur <code>autoplay</code>.</strong> Les navigateurs refusent de démarrer une vidéo avec du son sans action de l'utilisateur. C'est une protection contre les publicités sonores, et tu ne peux pas la contourner. Une vidéo <code>autoplay</code> ne démarre que si elle est aussi <code>muted</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le lecteur d'une plateforme vidéo, la carte d'un restaurant sur sa page de contact, le module de paiement d'une boutique : tous sont des <code>&lt;iframe&gt;</code>. C'est aussi ce que ce cours utilise pour t'afficher l'aperçu de tes pages, juste à côté de ton code.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>&lt;video&gt;</code> et <code>&lt;audio&gt;</code> lisent un fichier ; elles se ferment, contrairement à <code>&lt;img&gt;</code>.</li>
+<li>Un attribut booléen comme <code>controls</code> n'a pas de valeur : on le met, ou on le retire.</li>
+<li><code>&lt;iframe&gt;</code> encastre une page entière — avec un <code>title</code>, toujours.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi plusieurs formats ?</summary>
+<p>Tous les navigateurs ne lisent pas les mêmes fichiers vidéo. On peut donc, au lieu d'un seul <code>src</code>, placer plusieurs balises <code>&lt;source&gt;</code> à l'intérieur du <code>&lt;video&gt;</code> : le navigateur essaie la première, puis la suivante, jusqu'à en trouver une qu'il sait lire. Aujourd'hui le format MP4 passe à peu près partout, ce qui rend cette précaution moins nécessaire qu'avant.</p>
+</details>
 `,
   exercices: [
     {
@@ -91,26 +127,60 @@ window.DATA_HTML2 = [
   id: 'html-10',
   titre: 'Attributs globaux et caractères spéciaux',
   contenu: `
-<h2>Les attributs que TOUTES les balises acceptent</h2>
-<p>Tu connais <code>class</code> et <code>id</code>. Voici le reste de la famille des <strong>attributs globaux</strong> :</p>
-<ul>
-<li><code>title="..."</code> — une infobulle qui apparaît quand la souris reste sur l'élément ;</li>
-<li><code>hidden</code> — cache complètement l'élément (booléen). Très utilisé avec JavaScript pour montrer/cacher ;</li>
-<li><code>lang="en"</code> — signale un passage dans une autre langue (les lecteurs d'écran changent d'accent !) ;</li>
-<li><code>data-*</code> — range tes propres informations : <code>data-prix="12"</code>, <code>data-categorie="fruit"</code>... invisibles à l'écran, lisibles en JavaScript.</li>
-</ul>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici, chaque attribut appartenait à une balise précise : <code>href</code> au lien, <code>src</code> à l'image. Mais certains besoins ne dépendent pas de la balise — nommer un élément, le cacher, lui ajouter une infobulle. Ceux-là sont des <strong>attributs globaux</strong> : toutes les balises les acceptent, sans exception.</p>
 
-<h2>Les entités : afficher les caractères interdits</h2>
-<p>Comment afficher un chevron <code>&lt;</code> dans une page, alors qu'il annonce une balise ? Avec une <strong>entité HTML</strong> :</p>
-<table class="memo-table">
-<tr><th>Pour afficher</th><th>On écrit</th></tr>
-<tr><td>&lt;</td><td>&amp;lt; (less than)</td></tr>
-<tr><td>&gt;</td><td>&amp;gt; (greater than)</td></tr>
-<tr><td>&amp;</td><td>&amp;amp;</td></tr>
-<tr><td>" (dans un attribut)</td><td>&amp;quot;</td></tr>
-<tr><td>espace insécable</td><td>&amp;nbsp;</td></tr>
+<h2>La famille au complet</h2>
+<ul>
+<li><code>id="..."</code> — un nom <strong>unique</strong> dans la page. Sert d'ancre, et de cible au CSS et au JavaScript ;</li>
+<li><code>class="..."</code> — une étiquette <strong>partageable</strong> : plusieurs éléments peuvent porter la même ;</li>
+<li><code>title="..."</code> — une infobulle qui apparaît si la souris s'attarde ;</li>
+<li><code>hidden</code> — cache complètement l'élément. Booléen, comme <code>controls</code> ;</li>
+<li><code>lang="en"</code> — signale un passage dans une autre langue, pour que la synthèse vocale le prononce correctement ;</li>
+<li><code>data-quelquechose="..."</code> — une information à toi, que le navigateur ignore mais que le JavaScript saura lire.</li>
+</ul>
+<pre class="bloc-code">&lt;p id="intro" class="important" title="Lis-moi d'abord"&gt;
+  Bienvenue sur le site.
+&lt;/p&gt;</pre>
+
+<h2>Afficher un chevron sans ouvrir de balise</h2>
+<p>Un problème se pose dès qu'on veut <em>montrer</em> du code HTML dans une page. Écris <code>&lt;p&gt;</code> dans ton texte et le navigateur l'interprète : il ouvre un paragraphe au lieu d'afficher les caractères.</p>
+<p>La solution s'appelle une <strong>entité</strong> : un code qui commence par <code>&amp;</code> et finit par <code>;</code>. Les plus utiles sont <code>&amp;lt;</code> et <code>&amp;gt;</code> pour les deux chevrons, <code>&amp;amp;</code> pour l'esperluette, <code>&amp;nbsp;</code> pour une espace qui ne se coupe jamais en fin de ligne, et <code>&amp;copy;</code> pour le symbole du copyright.</p>
+<p>C'est exactement ce que fait cette page pour t'afficher des balises sans les exécuter : tout le code que tu lis ici est écrit en entités.</p>
+
+<h2>Pas à pas</h2>
+<p>Deux lectures de la même intention, pour voir où ça bascule :</p>
+<table class="memo-table trace">
+<tr><th>Ce qu'il lit</th><th>Ce qu'il en fait</th></tr>
+<tr><td>&lt;p&gt;La balise</td><td>Un paragraphe s'ouvre, puis du texte.</td></tr>
+<tr><td>&lt;p&gt; (au milieu du texte)</td><td>Il n'affiche rien : il croit qu'un second paragraphe commence.</td></tr>
+<tr><td>&amp;lt;</td><td>Une entité : il la remplace par le caractère, sans l'interpréter.</td></tr>
+<tr><td>p</td><td>Une lettre ordinaire.</td></tr>
+<tr><td>&amp;gt;</td><td>Le second chevron. À l'écran, le visiteur lit enfin la balise.</td></tr>
 </table>
-<div class="info">💬 Toutes les leçons de ce logiciel utilisent ces entités pour te MONTRER du code HTML sans qu'il s'exécute. L'encyclopédie que tu lis est truffée de &amp;lt; !</div>
+
+<h2>Les pièges</h2>
+<p><strong>Réutiliser le même <code>id</code> deux fois.</strong> Un <code>id</code> doit être unique dans la page. Le navigateur ne proteste pas, mais tout ce qui le cherche — une ancre, un <code>label for</code>, du JavaScript — ne trouvera que le <em>premier</em>. Le second est ignoré, en silence. Si tu as besoin de nommer plusieurs éléments pareils, c'est <code>class</code> qu'il te faut.</p>
+<p><strong>Oublier le point-virgule d'une entité.</strong> <code>&amp;lt</code> sans son <code>;</code> peut passer, ou s'afficher tel quel selon le contexte. Écris toujours les deux bouts.</p>
+<p><strong>Croire que <code>hidden</code> protège quelque chose.</strong> L'élément disparaît de l'écran, mais il reste dans le code, visible par qui regarde la source. Ce n'est pas un coffre-fort : c'est un interrupteur d'affichage.</p>
+<p><strong>Inventer un attribut.</strong> <code>couleur="rouge"</code> sur un paragraphe ne fait rien du tout : le navigateur le garde et l'ignore. Pour stocker une information à toi, le nom doit commencer par <code>data-</code> — c'est la seule forme prévue pour ça.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les <code>data-</code> sont partout dans les sites modernes : <code>data-prix</code> sur un article, <code>data-id</code> sur une ligne de tableau. Le JavaScript lit ces valeurs pour savoir sur quoi on vient de cliquer, sans avoir à les redemander au serveur. Tu t'en serviras au module JavaScript avancé.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Les attributs globaux marchent sur <strong>toutes</strong> les balises : <code>id</code>, <code>class</code>, <code>title</code>, <code>hidden</code>, <code>lang</code>, <code>data-</code>.</li>
+<li>Un <code>id</code> est unique dans la page ; une <code>class</code> se partage.</li>
+<li>Les entités (<code>&amp;lt;</code>, <code>&amp;amp;</code>) affichent un caractère que le HTML prendrait sinon pour du code.</li>
+<li>Un attribut inventé est ignoré sans erreur — sauf s'il commence par <code>data-</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi &amp;amp; et pas simplement &amp; ?</summary>
+<p>Parce que l'esperluette ouvre justement une entité. Si tu écris « Dupont &amp; fils » tel quel, le navigateur lit <code>&amp; fils</code> et cherche une entité nommée « fils ». En pratique il se rattrape et affiche l'esperluette, mais le jour où ton texte contient <code>&amp;copy</code> au milieu d'une phrase, tu obtiendras un symbole de copyright surgi de nulle part. Écrire <code>&amp;amp;</code> supprime toute ambiguïté.</p>
+</details>
 `,
   exercices: [
     {
@@ -179,20 +249,59 @@ window.DATA_HTML2 = [
   id: 'html-11',
   titre: 'Formulaires avancés : radio, required, bornes',
   contenu: `
-<h2>Les boutons radio : un seul choix possible</h2>
-<pre class="bloc-code">&lt;input type="radio" name="taille" value="petit"&gt; &lt;label&gt;Petit&lt;/label&gt;
-&lt;input type="radio" name="taille" value="grand"&gt; &lt;label&gt;Grand&lt;/label&gt;</pre>
-<p>Le point crucial : le <strong>même</strong> attribut <code>name</code> sur tout le groupe. C'est lui qui dit au navigateur « ces boutons sont liés : un seul coché à la fois ». Deux <code>name</code> différents = deux groupes indépendants (et là, bug classique : on peut tout cocher !).</p>
-<p><code>value</code> donne la valeur envoyée (et lisible en JavaScript) quand ce bouton est choisi.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un formulaire qui accepte n'importe quoi crée du travail pour tout le monde : une date de naissance en 1850, un champ obligatoire laissé vide, un numéro écrit en lettres. On peut vérifier tout cela après coup, en JavaScript — ou demander au navigateur de le faire, gratuitement, avant même l'envoi.</p>
+<p>C'est le rôle des attributs de cette leçon. Quelques mots dans le HTML, et le formulaire se défend tout seul.</p>
 
-<h2>La validation intégrée : le HTML fait la police</h2>
-<pre class="bloc-code">&lt;input type="text" required&gt;              &lt;!-- champ obligatoire --&gt;
-&lt;input type="number" min="1" max="10"&gt;     &lt;!-- nombre borné --&gt;
-&lt;input type="text" maxlength="20"&gt;         &lt;!-- 20 caractères max --&gt;
-&lt;input type="email"&gt;                       &lt;!-- exige une forme d'email --&gt;</pre>
-<p>Avec ces attributs, le navigateur bloque tout seul les saisies invalides à l'envoi d'un formulaire — sans une ligne de JavaScript. Première ligne de défense de toutes les applications sérieuses.</p>
+<h2>Les boutons radio : un seul choix</h2>
+<pre class="bloc-code">&lt;input type="radio" name="cuisson" value="saignant" id="c1"&gt;
+&lt;label for="c1"&gt;Saignant&lt;/label&gt;
 
-<div class="astuce">✅ Règle d'or de la validation : le HTML filtre d'abord (confort), le serveur vérifie toujours (sécurité). Un utilisateur malin peut contourner le navigateur — jamais le serveur.</div>
+&lt;input type="radio" name="cuisson" value="apoint" id="c2"&gt;
+&lt;label for="c2"&gt;À point&lt;/label&gt;</pre>
+<p>Le point décisif est le <code>name</code>, <strong>identique sur tout le groupe</strong>. C'est lui, et lui seul, qui dit au navigateur « ces boutons vont ensemble : en cocher un décoche l'autre ».</p>
+<p>Et le <code>value</code> ? Le texte du <code>&lt;label&gt;</code> est ce que lit l'humain ; le <code>value</code> est ce qui part vers le serveur. Sans lui, le serveur reçoit un choix sans savoir lequel.</p>
+
+<h2>Borner les saisies</h2>
+<ul>
+<li><code>required</code> — le champ doit être rempli. Booléen ;</li>
+<li><code>min</code> et <code>max</code> — les bornes d'un nombre ou d'une date ;</li>
+<li><code>maxlength</code> — le nombre maximal de caractères ;</li>
+<li><code>pattern="[0-9]{5}"</code> — une forme exacte à respecter, ici cinq chiffres.</li>
+</ul>
+<pre class="bloc-code">&lt;input type="number" name="places" min="1" max="8" required&gt;</pre>
+
+<h2>Pas à pas</h2>
+<p>Ce qui se passe quand on clique sur le second bouton radio, après avoir coché le premier :</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>Clic sur « Saignant »</td><td>Il se coche. Le groupe « cuisson » vaut maintenant « saignant ».</td></tr>
+<tr><td>Clic sur « À point »</td><td>Le navigateur cherche les autres boutons de même <code>name</code>…</td></tr>
+<tr><td>…</td><td>…les décoche tous, puis coche celui-ci.</td></tr>
+<tr><td>Envoi du formulaire</td><td>Un seul couple part : <code>cuisson = apoint</code>.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Un <code>name</code> différent sur chaque bouton radio.</strong> C'est l'erreur qui donne le symptôme le plus déroutant : les boutons se cochent <em>tous</em>, et aucun ne décoche les autres. Rien n'est signalé, puisque chacun est valide tout seul — ils forment simplement trois groupes d'un bouton chacun. Même <code>name</code> partout, <code>value</code> différent : c'est l'inverse de l'intuition, et c'est la règle.</p>
+<p><strong>Confondre case à cocher et bouton radio.</strong> Un <code>checkbox</code> sert à « zéro, un ou plusieurs choix » ; un <code>radio</code> à « exactement un ». Si l'utilisateur doit pouvoir en cocher deux, le radio est le mauvais outil.</p>
+<p><strong>Croire que ces attributs sécurisent quoi que ce soit.</strong> Ils rendent service à l'utilisateur, en l'avertissant tout de suite. Mais ils vivent dans la page, donc ils se contournent en quelques secondes. Un serveur sérieux revérifie <em>tout</em> ce qu'il reçoit. Côté page, c'est du confort ; côté serveur, c'est de la sécurité.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le message rouge « Veuillez renseigner ce champ » que tu as sûrement déjà vu vient de <code>required</code> : c'est le navigateur qui le produit, dans la langue du visiteur, sans une ligne de code. Les bornes <code>min</code> et <code>max</code> sur une date, elles, désactivent directement les jours impossibles dans le calendrier.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Des boutons radio forment un groupe par leur <code>name</code> identique ; leur <code>value</code>, lui, les distingue.</li>
+<li><code>required</code>, <code>min</code>, <code>max</code>, <code>maxlength</code>, <code>pattern</code> : le navigateur vérifie avant l'envoi.</li>
+<li>Case à cocher pour plusieurs choix, radio pour un seul.</li>
+<li>Ces contrôles aident l'utilisateur, ils ne protègent pas le serveur.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ce que dit vraiment pattern</summary>
+<p><code>pattern="[0-9]{5}"</code> est une <strong>expression régulière</strong> : <code>[0-9]</code> veut dire « un chiffre », et <code>{5}</code> « cinq fois ». C'est un petit langage à part entière, qu'on retrouve en JavaScript, en Python et dans à peu près tous les langages. Tu le croiseras plus tard ; retiens pour l'instant qu'un motif décrit une <em>forme</em> de texte, pas un texte précis.</p>
+</details>
 `,
   exercices: [
     {
@@ -265,23 +374,56 @@ window.DATA_HTML2 = [
   id: 'html-12',
   titre: 'Sémantique avancée : article, section, figure',
   contenu: `
-<p>Tu connais header/main/footer. Voici le reste de la famille <strong>sémantique</strong> — les balises qui donnent du SENS au contenu. Visuellement neutres, mais précieuses pour Google, les lecteurs d'écran... et le développeur qui te relira.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais déjà poser les grandes zones d'une page : <code>header</code>, <code>main</code>, <code>footer</code>. Mais à l'intérieur du contenu principal, tout retombe vite en <code>&lt;div&gt;</code> — des boîtes qui ne disent rien de ce qu'elles contiennent.</p>
+<p>Le problème n'est pas esthétique. Un lecteur d'écran, un moteur de recherche, le mode lecture d'un navigateur : tous essaient de deviner quel bloc est l'article et lequel est la décoration. Face à dix <code>&lt;div&gt;</code> identiques, ils ne peuvent que deviner. Les balises de cette leçon leur donnent la réponse.</p>
 
-<h2>Découper le contenu</h2>
+<h2>Article ou section ?</h2>
 <ul>
-<li><code>&lt;article&gt;</code> — un contenu <strong>autonome</strong>, qui aurait du sens tout seul : un article de blog, une annonce, une recette, un commentaire ;</li>
-<li><code>&lt;section&gt;</code> — un <strong>chapitre</strong> thématique d'une page, généralement avec son titre ;</li>
-<li><code>&lt;aside&gt;</code> — un contenu <strong>annexe</strong> : encart « le saviez-vous », publicité, liens connexes.</li>
+<li><code>&lt;article&gt;</code> — un contenu <strong>autonome</strong>, qui garderait du sens si on le sortait de la page : un billet de blog, une fiche produit, un commentaire ;</li>
+<li><code>&lt;section&gt;</code> — un <strong>regroupement thématique</strong> à l'intérieur d'un ensemble, qui n'a pas de sens tout seul : le chapitre « Ingrédients » d'une recette ;</li>
+<li><code>&lt;aside&gt;</code> — ce qui est <strong>à côté</strong> du sujet : un encadré, une publicité, des liens connexes.</li>
 </ul>
+<p>Le test qui tranche presque toujours : <em>est-ce que ce bloc, publié seul dans un flux d'actualités, voudrait encore dire quelque chose ?</em> Si oui, c'est un <code>article</code>. Sinon, une <code>section</code>.</p>
 
-<h2>Les images légendées</h2>
+<h2>Une image avec sa légende</h2>
 <pre class="bloc-code">&lt;figure&gt;
-  &lt;img src="tour-eiffel.jpg" alt="La tour Eiffel au coucher du soleil"&gt;
-  &lt;figcaption&gt;La tour Eiffel, été 2025.&lt;/figcaption&gt;
+  &lt;img src="graphique.png" alt="Ventes en hausse de 12 % sur un an"&gt;
+  &lt;figcaption&gt;Évolution des ventes en 2026&lt;/figcaption&gt;
 &lt;/figure&gt;</pre>
-<p><code>&lt;figure&gt;</code> groupe une illustration et sa légende <code>&lt;figcaption&gt;</code> — le duo officiel pour toute image commentée.</p>
+<p><code>&lt;figure&gt;</code> lie une illustration à sa <code>&lt;figcaption&gt;</code> : les deux forment un bloc, et le lecteur d'écran les annonce ensemble. Attention à ne pas confondre les deux textes — le <code>alt</code> <em>décrit</em> l'image à qui ne la voit pas, la légende la <em>commente</em> pour tout le monde. Ils ne disent pas la même chose, et répéter l'un dans l'autre fait entendre la phrase deux fois.</p>
 
-<div class="info">💬 Comment choisir entre div, section et article ? Pose la question : « ce bloc aurait-il du sens publié tout seul ? » → article. « C'est un chapitre de ma page ? » → section. « Je groupe juste pour le style ? » → div. En cas de doute, div n'est jamais faux — juste moins parlant.</div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'il lit</th><th>Ce qu'un lecteur d'écran en fait</th></tr>
+<tr><td>&lt;article&gt;</td><td>« Article. » La personne sait qu'un contenu autonome commence.</td></tr>
+<tr><td>&lt;h2&gt;Titre&lt;/h2&gt;</td><td>Le titre de cet article, atteignable directement.</td></tr>
+<tr><td>&lt;figure&gt;</td><td>« Figure. » Image et légende seront annoncées ensemble.</td></tr>
+<tr><td>&lt;aside&gt;</td><td>« Complémentaire. » La personne peut choisir de sauter ce bloc.</td></tr>
+<tr><td>&lt;/article&gt;</td><td>Fin de l'article.</td></tr>
+</table>
+<p>Avec des <code>&lt;div&gt;</code> à la place, tout ce tableau disparaît : le lecteur d'écran lit une suite de textes, sans jamais pouvoir annoncer où l'on se trouve.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Prendre <code>&lt;section&gt;</code> pour un <code>&lt;div&gt;</code> plus joli.</strong> Une <code>section</code> doit avoir un titre : si tu n'arrives pas à lui en donner un, c'est qu'elle n'en est pas une, et qu'un <code>div</code> convient mieux. Un <code>div</code> n'est pas une faute — c'est le bon outil quand le bloc n'existe que pour la mise en page.</p>
+<p><strong>Imbriquer <code>&lt;main&gt;</code> plusieurs fois.</strong> Il n'y a qu'un contenu principal par page, donc un seul <code>&lt;main&gt;</code>. C'est lui que vise le raccourci « aller au contenu » des lecteurs d'écran ; en mettre deux brouille ce repère.</p>
+<p><strong>Oublier que <code>&lt;figure&gt;</code> a déjà des marges.</strong> Par défaut, le navigateur lui applique un retrait de 40 pixels à gauche, hérité d'une époque où les figures s'encadraient ainsi. Ta légende paraîtra décalée sans raison apparente — c'est normal, et le CSS le remettra d'aplomb au module suivant.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le mode lecture de ton navigateur — celui qui enlève la publicité et ne garde que le texte — fonctionne en cherchant précisément ces balises. Une page bien balisée s'y affiche parfaitement ; une page en <code>&lt;div&gt;</code> y perd la moitié de son contenu, ou refuse de s'ouvrir.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>&lt;article&gt;</code> si le bloc tient debout tout seul, <code>&lt;section&gt;</code> s'il fait partie d'un ensemble, <code>&lt;aside&gt;</code> s'il est à côté du sujet.</li>
+<li>Une <code>section</code> sans titre possible est probablement un <code>div</code>.</li>
+<li><code>&lt;figure&gt;</code> et <code>&lt;figcaption&gt;</code> lient une illustration à sa légende — qui ne répète pas le <code>alt</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ces balises changent-elles l'apparence ?</summary>
+<p>Presque pas, et c'est voulu. <code>article</code>, <code>section</code> et <code>aside</code> s'affichent exactement comme des <code>div</code> : des blocs empilés. Seule <code>figure</code> se distingue, par ses marges. Tout le bénéfice est invisible — il va aux machines qui lisent ta page. C'est sans doute ce qui rend ces balises si faciles à négliger : rien ne se casse quand on les oublie.</p>
+</details>
 `,
   exercices: [
     {
@@ -347,23 +489,62 @@ window.DATA_HTML2 = [
   id: 'html-13',
   titre: 'Ancres et navigation dans la page',
   contenu: `
-<h2>Sauter à un endroit de la page</h2>
-<p>Un lien peut pointer vers... un autre endroit de la même page. La cible est un élément avec un <code>id</code>, et le lien y accède avec <code>#</code> :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Sur une page longue — une documentation, un article de fond, une FAQ — le visiteur ne cherche pas tout : il cherche <em>un</em> passage. Lui demander de faire défiler trois écrans pour le trouver, c'est le perdre.</p>
+<p>Un lien n'est pas obligé de mener à une autre page. Il peut mener à un endroit précis de celle qu'on lit déjà.</p>
+
+<h2>Le dièse</h2>
 <pre class="bloc-code">&lt;a href="#recettes"&gt;Aller aux recettes&lt;/a&gt;
 
 ... beaucoup de contenu ...
 
 &lt;h2 id="recettes"&gt;Les recettes&lt;/h2&gt;</pre>
-<p>Clic → la page défile jusqu'au titre. C'est le mécanisme des sommaires, des liens « retour en haut », et des menus de pages longues. (Le <code>#nom</code> apparaît aussi dans l'adresse — ce logiciel s'en sert pour retenir la leçon en cours !)</p>
-
-<h2>Ouvrir dans un nouvel onglet</h2>
-<pre class="bloc-code">&lt;a href="https://exemple.com" target="_blank" rel="noopener"&gt;Voir le site&lt;/a&gt;</pre>
+<p>Deux moitiés, qui doivent correspondre exactement :</p>
 <ul>
-<li><code>target="_blank"</code> — ouvre dans un nouvel onglet ;</li>
-<li><code>rel="noopener"</code> — l'accompagnateur de sécurité : il empêche la page ouverte de manipuler la tienne. Les deux vont toujours ensemble, c'est un réflexe.</li>
+<li>la cible porte un <code>id</code> — un nom unique dans la page ;</li>
+<li>le lien reprend ce nom, précédé d'un <strong>dièse</strong>.</li>
 </ul>
+<p>Au clic, la page défile jusqu'à l'élément, et l'adresse dans la barre du navigateur gagne <code>#recettes</code> à la fin. Cette adresse devient partageable : envoyée à quelqu'un, elle ouvre la page <em>à cet endroit</em>.</p>
+<p>Deux cas particuliers méritent d'être connus : <code>href="#"</code> seul remonte en haut de la page, et <code>href="#top"</code> fait la même chose.</p>
 
-<div class="astuce">✅ Bon usage : nouvel onglet pour les sites EXTERNES (le visiteur garde ta page), même onglet pour la navigation INTERNE de ton site.</div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>Clic sur le lien</td><td>Le navigateur lit <code>#recettes</code> et ne charge aucune page.</td></tr>
+<tr><td>Recherche</td><td>Il cherche dans la page un élément dont l'<code>id</code> vaut « recettes ».</td></tr>
+<tr><td>Trouvé</td><td>Il fait défiler jusqu'à lui, qui se retrouve en haut de l'écran.</td></tr>
+<tr><td>Adresse</td><td>La barre affiche maintenant la page suivie de <code>#recettes</code>.</td></tr>
+<tr><td>Introuvable</td><td>Il ne se passe rien. Aucun message, aucune erreur.</td></tr>
+</table>
+
+<h2>Ouvrir ailleurs, et le faire proprement</h2>
+<p>L'attribut <code>target="_blank"</code> ouvre un lien dans un nouvel onglet. Il s'accompagne d'une précaution :</p>
+<pre class="bloc-code">&lt;a href="https://exemple.com" target="_blank" rel="noopener"&gt;
+  Le site d'exemple
+&lt;/a&gt;</pre>
+<p>Sans <code>rel="noopener"</code>, la page ouverte reçoit une poignée vers la tienne et peut, en une ligne de JavaScript, la remplacer par une fausse page de connexion. Le visiteur revient sur son onglet d'origine et ne voit pas la différence. Les navigateurs récents ajoutent la protection d'eux-mêmes, mais l'écrire ne coûte rien et ne dépend de personne.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Mettre le dièse dans l'<code>id</code>.</strong> La cible s'écrit <code>id="recettes"</code>, sans dièse ; seul le lien en porte un. L'erreur inverse est tout aussi fréquente : oublier le dièse dans le <code>href</code>, auquel cas le navigateur cherche un <em>fichier</em> nommé « recettes » et tombe sur une page introuvable.</p>
+<p><strong>Une cible qui n'existe pas.</strong> Un <code>id</code> mal orthographié ne provoque rien : le clic ne fait rien du tout, en silence. Si un lien d'ancre reste sans effet, compare les deux orthographes lettre à lettre — majuscules comprises, car elles comptent ici.</p>
+<p><strong>Abuser de <code>target="_blank"</code>.</strong> Chaque nouvel onglet retire au visiteur son bouton « Retour ». Réserve-le aux cas où quitter la page ferait perdre quelque chose : un formulaire à moitié rempli, une vidéo en cours.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le sommaire d'une page de documentation, les questions cliquables d'une FAQ, le bouton « Retour en haut » d'un long article : tous sont des ancres. C'est aussi ce qui permet de pointer un paragraphe précis dans un message — l'adresse avec son dièse suffit.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une ancre relie un <code>href="#nom"</code> à un élément portant <code>id="nom"</code> — dièse d'un seul côté.</li>
+<li>L'adresse obtenue est partageable : elle rouvre la page au bon endroit.</li>
+<li>Une cible absente ne provoque aucune erreur : le clic ne fait rien.</li>
+<li><code>target="_blank"</code> s'accompagne de <code>rel="noopener"</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le défilement en douceur</summary>
+<p>Par défaut, le saut est instantané — on se retrouve ailleurs sans avoir vu le trajet, ce qui est désorientant sur une page longue. Une seule ligne de CSS, <code>scroll-behavior: smooth</code>, transforme le saut en glissement. Tu la découvriras au module CSS ; retiens surtout que ce confort existe et qu'il tient en un mot.</p>
+</details>
 `,
   exercices: [
     {
@@ -436,26 +617,60 @@ window.DATA_HTML2 = [
   id: 'html-14',
   titre: 'Le head : métadonnées et référencement',
   contenu: `
-<p>La partie invisible d'une page, le <code>&lt;head&gt;</code>, est loin d'être décorative : c'est elle que lisent Google, les réseaux sociaux et le navigateur pour comprendre ta page.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Le <code>&lt;head&gt;</code> ne s'affiche pas, alors il est tentant de le bâcler. C'est pourtant la seule partie de ta page que lisent des <em>machines</em> : le moteur de recherche qui décide à quelle place te mettre, le téléphone qui choisit comment afficher la page, le réseau social qui fabrique l'aperçu quand on colle ton lien.</p>
+<p>Un contenu excellent dans un <code>head</code> vide reste invisible. Ces quelques lignes décident de qui te trouvera.</p>
 
-<h2>Les indispensables</h2>
+<h2>Les quatre lignes indispensables</h2>
 <pre class="bloc-code">&lt;head&gt;
   &lt;meta charset="UTF-8"&gt;
   &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-  &lt;title&gt;Recettes de saison — Le Potager&lt;/title&gt;
-  &lt;meta name="description" content="50 recettes simples avec les légumes du moment."&gt;
+  &lt;title&gt;Recettes de saison — Chez Camille&lt;/title&gt;
+  &lt;meta name="description" content="Trente recettes simples, classées par mois."&gt;
 &lt;/head&gt;</pre>
 <ul>
-<li><code>charset="UTF-8"</code> — l'encodage des caractères. Sans lui, les accents deviennent des hiéroglyphes (Ã©tÃ©...) ;</li>
-<li><code>viewport</code> — dit aux téléphones de ne pas dézoomer la page. OBLIGATOIRE pour le responsive ;</li>
-<li><code>&lt;title&gt;</code> — le texte de l'onglet ET le titre bleu dans les résultats Google ;</li>
-<li><code>meta description</code> — le petit texte gris sous le titre dans Google. Ta vitrine en 150 caractères.</li>
+<li><code>charset</code> — l'alphabet. Sans lui, les accents partent en symboles ;</li>
+<li><code>viewport</code> — dit au téléphone « adapte-toi à ma largeur d'écran » ;</li>
+<li><code>title</code> — le titre de l'onglet, du favori, <strong>et</strong> la ligne bleue cliquable dans les résultats de recherche ;</li>
+<li><code>description</code> — le petit texte gris sous cette ligne bleue.</li>
 </ul>
+<p>Le <code>title</code> est le plus exposé des quatre : c'est, littéralement, ce sur quoi les gens cliquent. Écris-le comme un titre d'article, pas comme un nom de fichier.</p>
 
-<h2>Le référencement (SEO) en deux phrases</h2>
-<p>Google classe les pages selon leur pertinence. Tes armes de base : un <code>&lt;title&gt;</code> précis, une description engageante, UN seul h1, une vraie hiérarchie de titres, des <code>alt</code> remplis, du HTML sémantique. Autrement dit : <strong>tout ce que tu apprends ici depuis le début</strong>.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Qui lit</th><th>Ce qu'il en retient</th></tr>
+<tr><td>Le navigateur</td><td><code>charset</code> pour décoder le texte, <code>title</code> pour l'onglet.</td></tr>
+<tr><td>Le téléphone</td><td><code>viewport</code> : il affiche la page à la largeur de l'écran plutôt que de la miniaturiser.</td></tr>
+<tr><td>Le moteur de recherche</td><td><code>title</code> et <code>description</code> pour composer son résultat.</td></tr>
+<tr><td>Le visiteur</td><td>Rien de tout cela — aucune de ces lignes n'apparaît dans la page.</td></tr>
+</table>
 
-<div class="info">💬 Dans les exercices précédents on omettait le squelette — ici c'est LUI l'exercice : tu écriras des pages complètes, du DOCTYPE à la fermeture.</div>
+<h2>Le viewport, ou la page miniature</h2>
+<p>C'est la ligne dont l'oubli se voit le plus. Sans elle, un téléphone suppose que ta page a été conçue pour un écran d'ordinateur : il l'affiche en entier, miniaturisée, et le visiteur doit zoomer pour lire quoi que ce soit. Avec elle, la page occupe la largeur réelle de l'écran.</p>
+<p>Si l'on te dit un jour « ton site est illisible sur mobile », c'est la première ligne à vérifier — avant même de toucher au CSS.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Confondre <code>&lt;title&gt;</code> et <code>&lt;h1&gt;</code>.</strong> Le premier vit dans le <code>head</code> et nomme l'onglet ; le second vit dans le <code>body</code> et s'affiche. Une page sérieuse a les deux, souvent proches mais rarement identiques : le <code>title</code> peut porter le nom du site en plus, utile dans une liste de résultats.</p>
+<p><strong>Deux <code>&lt;h1&gt;</code> sur la même page.</strong> Le sommaire devient ambigu : quel est le sujet de la page ? Un seul <code>h1</code>, et les sections en <code>h2</code>.</p>
+<p><strong>Une description recopiée sur toutes les pages.</strong> Elle est censée décrire <em>cette</em> page. Identique partout, elle n'aide ni le visiteur à choisir, ni le moteur à distinguer tes pages entre elles.</p>
+<p><strong>Oublier <code>charset</code>.</strong> Le navigateur doit alors deviner l'alphabet, et il devine parfois mal : les accents deviennent des suites de symboles. C'est la première ligne du <code>head</code>, et elle doit le rester.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Tout ce que tu vois dans une page de résultats de recherche — le titre bleu, l'adresse, les deux lignes de description — vient de ces balises. Le travail qui consiste à les soigner porte un nom, le <strong>référencement</strong>, et c'est un métier à part entière. Tu viens d'en voir la base, celle qui compte le plus.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Quatre lignes font le minimum sérieux : <code>charset</code>, <code>viewport</code>, <code>title</code>, <code>description</code>.</li>
+<li>Le <code>title</code> est la ligne cliquable dans les résultats de recherche : il se rédige.</li>
+<li>Sans <code>viewport</code>, un téléphone affiche ta page en miniature.</li>
+<li>Un seul <code>&lt;h1&gt;</code> par page, et une description différente pour chacune.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la balise keywords ne sert plus à rien</summary>
+<p>Tu croiseras encore <code>&lt;meta name="keywords" content="..."&gt;</code> dans de vieux tutoriels. Elle a été massivement truquée dans les années 2000 — on y empilait des mots sans rapport pour capter du trafic — et les moteurs l'ignorent complètement depuis. L'écrire ne nuit pas, mais n'apporte rien. Ce qui compte aujourd'hui est le contenu réel de la page.</p>
+</details>
 `,
   exercices: [
     {
