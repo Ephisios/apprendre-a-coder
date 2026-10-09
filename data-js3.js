@@ -5,13 +5,12 @@ window.DATA_JS3 = [
   id: 'js2-1',
   titre: 'switch et l\'opérateur ternaire',
   contenu: `
-<p>Tu sais tout faire avec if/else... mais parfois, d'autres formes sont plus lisibles. Voici les deux alternatives que tu croiseras dans tout code réel.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais tout faire avec <code>if / else if / else</code>. Vraiment tout — ces deux formes-ci n'ajoutent aucun pouvoir au langage.</p>
+<p>Elles ajoutent de la <strong>lisibilité</strong>, et c'est loin d'être secondaire : du code se lit bien plus souvent qu'il ne s'écrit. Une pile de huit <code>else if</code> qui comparent tous la même variable cache ce qu'elle fait derrière sa longueur. Les deux écritures de cette leçon rendent l'intention visible d'un coup d'œil.</p>
 
 <h2>switch : l'aiguillage</h2>
-<p>Quand on compare UNE variable à plusieurs valeurs précises, le <code>switch</code> est plus clair qu'une pile de else if :</p>
-<pre class="bloc-code">let jour = "samedi";
-
-switch (jour) {
+<pre class="bloc-code">switch (jour) {
   case "samedi":
   case "dimanche":
     console.log("Week-end !");
@@ -20,19 +19,46 @@ switch (jour) {
     console.log("Milieu de semaine");
     break;
   default:
-    console.log("Jour de travail");
+    console.log("Au travail");
 }</pre>
-<ul>
-<li><code>case valeur:</code> — « si la variable vaut ça... » ;</li>
-<li><code>break;</code> — sort du switch. <strong>Sans lui, l'exécution CONTINUE dans le case suivant !</strong> (deux case collés comme samedi/dimanche exploitent justement cet enchaînement) ;</li>
-<li><code>default:</code> — le « else » du switch.</li>
-</ul>
+<p>On compare <strong>une</strong> variable à plusieurs valeurs précises. Deux <code>case</code> collés, comme samedi et dimanche, partagent le même traitement. Le <code>default</code> attrape tout le reste — c'est l'équivalent du <code>else</code> final.</p>
+<p>Le <code>switch</code> compare avec <code>===</code>, donc sans conversion : le texte « 5 » ne correspondra jamais au nombre 5.</p>
 
-<h2>Le ternaire : le if en une ligne</h2>
-<pre class="bloc-code">let age = 20;
-let statut = (age >= 18) ? "majeur" : "mineur";
-//            condition  ? si vrai  : si faux</pre>
-<p>Parfait pour choisir entre DEUX valeurs. Au-delà, reste sur if/else — un ternaire imbriqué est illisible.</p>
+<h2>Le ternaire : un if qui rend une valeur</h2>
+<pre class="bloc-code">let tarif = age &lt; 18 ? 5 : 12;</pre>
+<p>Il se lit comme une phrase : « si l'âge est inférieur à 18, alors 5, sinon 12 ». Sa force est qu'il <em>produit une valeur</em>, et peut donc se ranger dans une variable — ce qu'un <code>if</code> ordinaire ne sait pas faire.</p>
+
+<h2>Pas à pas : le break oublié</h2>
+<p>Voici le piège du <code>switch</code>, mesuré. Avec <code>jour = "samedi"</code> et aucun <code>break</code> :</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td><code>case "samedi"</code></td><td>Correspond : il affiche « week-end ».</td></tr>
+<tr><td>pas de <code>break</code></td><td>Il <strong>continue</strong> dans le cas suivant, sans le tester.</td></tr>
+<tr><td><code>case "lundi"</code></td><td>Il affiche « boulot » — alors qu'on n'est pas lundi.</td></tr>
+</table>
+<p>Résultat affiché : <code>week-end</code> puis <code>boulot</code>. Aucune erreur n'est signalée. Le <code>break</code> ne décore pas : il dit « sors du switch ». Sans lui, l'exécution coule dans tous les cas suivants.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Le <code>break</code> oublié.</strong> C'est l'erreur emblématique de cette leçon, et elle est silencieuse. Si ton switch exécute plusieurs branches, c'est toujours ça.</p>
+<p><strong>Un ternaire imbriqué.</strong> <code>a ? b : c ? d : e</code> est valide et illisible. Dès qu'il y a deux conditions, un <code>if / else if</code> est plus clair — et le but de ces formes est justement la clarté.</p>
+<p><strong>Un ternaire qu'on utilise comme un <code>if</code>.</strong> Il sert à <em>choisir une valeur</em>. Écrire un ternaire dont les deux branches sont des <code>console.log</code> détourne l'outil : c'est un <code>if</code> qu'il fallait.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le <code>switch</code> est partout dans le code qui réagit à des états : un type de message reçu, une touche pressée, une étape d'un formulaire. Le ternaire, lui, s'écrit surtout à l'intérieur de textes — un libellé au singulier ou au pluriel, une couleur selon un seuil.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>switch</code> compare une variable à des valeurs précises, avec <code>===</code> et sans conversion.</li>
+<li>Sans <code>break</code>, l'exécution continue dans les cas suivants — sans les tester, et sans erreur.</li>
+<li>Le ternaire <code>condition ? a : b</code> produit une valeur : il se range dans une variable.</li>
+<li>Deux conditions ou plus : reviens au <code>if</code>, c'est plus lisible.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la chute volontaire</summary>
+<p>Enchaîner deux <code>case</code> sans <code>break</code>, comme samedi et dimanche, s'appelle une « chute » et c'est parfaitement voulu. Le problème n'est pas la chute elle-même mais le fait qu'elle soit <em>invisible</em> : rien ne distingue une chute choisie d'un <code>break</code> oublié. L'usage est d'écrire un commentaire explicite quand on la veut — pour la personne qui relira.</p>
+</details>
 `,
   exercices: [
     {
@@ -105,25 +131,60 @@ let statut = (age >= 18) ? "majeur" : "mineur";
   id: 'js2-2',
   titre: 'Textes avancés : découper, remplacer, nettoyer',
   contenu: `
-<p>Les données du monde réel sont du texte mal fichu : espaces en trop, mauvais séparateurs, morceaux à extraire. Voici la trousse de chirurgie des chaînes.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Les données du monde réel arrivent en vrac : un nom saisi avec des espaces en trop, une liste collée depuis un tableur et séparée par des virgules, une date au mauvais format. Avant de pouvoir s'en servir, il faut les découper, les nettoyer, en extraire des morceaux.</p>
+<p>Ce travail-là occupe une bonne part du métier, et JavaScript fournit une petite trousse d'outils pour le faire.</p>
 
 <h2>Découper et extraire</h2>
 <pre class="bloc-code">let phrase = "le chat dort";
-phrase.split(" ")        // ["le", "chat", "dort"] — texte → tableau !
-phrase.slice(0, 7)       // "le chat" — extrait du caractère 0 à 7 (exclu)
-phrase.slice(3)          // "chat dort" — du 3e à la fin
-phrase[0]                // "l" — un caractère par son index</pre>
-<p><code>split</code> est une passerelle majeure : il transforme un texte en tableau, et d'un coup TOUT ton arsenal de tableaux (boucles, map, filter...) s'applique au texte. L'inverse est <code>join</code>.</p>
 
-<h2>Remplacer et nettoyer</h2>
-<pre class="bloc-code">let texte = "  Bonjour le monde  ";
-texte.trim()                       // "Bonjour le monde" — espaces des bords retirés
-texte.replace("monde", "code")     // remplace la 1re occurrence
-texte.replaceAll("o", "0")         // remplace TOUTES les occurrences
-texte.startsWith("Bon")            // true / false
-texte.includes("jour")             // true / false</pre>
+phrase.split(" ")   // ["le", "chat", "dort"] — un tableau !
+phrase.slice(0, 7)  // "le chat" — du caractere 0 jusqu'au 7 exclu
+phrase.slice(-4)    // "dort" — les quatre derniers</pre>
+<p><code>split</code> transforme un texte en <strong>tableau</strong> : c'est le pont entre les deux mondes, et sans doute la méthode la plus utile de la leçon. <code>slice</code> découpe en comptant les caractères, et accepte des nombres négatifs pour compter depuis la fin.</p>
 
-<div class="astuce">✅ Réflexe pro : TOUJOURS <code>trim()</code> les saisies utilisateur. Un espace invisible tapé par mégarde a fait échouer des millions de connexions (« mot de passe incorrect »... à cause d'un espace).</div>
+<h2>Nettoyer et transformer</h2>
+<ul>
+<li><code>trim()</code> — enlève les espaces au début et à la fin ;</li>
+<li><code>toLowerCase()</code> et <code>toUpperCase()</code> — changent la casse ;</li>
+<li><code>replace("a", "b")</code> — remplace la <strong>première</strong> occurrence ; <code>replaceAll</code> les remplace toutes ;</li>
+<li><code>includes("chat")</code> — rend <code>true</code> ou <code>false</code> ;</li>
+<li><code>indexOf("chat")</code> — la position, ou <code>-1</code> si absent.</li>
+</ul>
+
+<h2>Pas à pas</h2>
+<p>Un nettoyage complet, mesuré sur <code>"  le chat dort  "</code> :</p>
+<table class="memo-table trace">
+<tr><th>Appel</th><th>Résultat</th></tr>
+<tr><td><code>.trim()</code></td><td>« le chat dort » — les espaces des bords ont disparu</td></tr>
+<tr><td><code>.trim().split(" ")</code></td><td><code>["le","chat","dort"]</code></td></tr>
+<tr><td><code>.trim().slice(0, 7)</code></td><td>« le chat »</td></tr>
+<tr><td><code>.trim().slice(-4)</code></td><td>« dort »</td></tr>
+</table>
+<p>Remarque l'enchaînement : chaque méthode rend un texte, sur lequel on peut aussitôt en appeler une autre. On lit de gauche à droite, dans l'ordre des opérations.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Croire qu'une méthode modifie le texte.</strong> C'est le piège central. <code>phrase.trim()</code> ne change pas <code>phrase</code> : il <em>rend</em> un nouveau texte. En JavaScript, les textes ne se modifient jamais. Si tu veux garder le résultat, il faut le ranger : <code>phrase = phrase.trim();</code>.</p>
+<p><strong>Oublier que <code>replace</code> ne remplace qu'une fois.</strong> <code>"a-b-c".replace("-", " ")</code> donne « a b-c ». Pour tout remplacer, c'est <code>replaceAll</code>.</p>
+<p><strong>Confondre <code>split("")</code> et <code>split(" ")</code>.</strong> Le premier, avec un texte vide, découpe caractère par caractère ; le second découpe aux espaces. Une espace d'écart, et un mot devient une liste de lettres.</p>
+<p><strong>Comparer sans normaliser.</strong> « Camille » et « camille » sont deux textes différents pour <code>===</code>. Avant de comparer des saisies, on passe tout en minuscules et on <code>trim</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un champ de recherche nettoie ce qu'on y tape avant de chercher. Un import de fichier découpe chaque ligne aux virgules. Une vérification d'adresse électronique regarde s'il y a bien une arobase. Tout cela, ce sont les cinq méthodes ci-dessus — et pas grand-chose d'autre.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>split</code> transforme un texte en tableau : c'est le pont vers tout ce que tu sais faire sur les tableaux.</li>
+<li>Les méthodes de texte ne modifient jamais l'original : elles rendent un nouveau texte à ranger.</li>
+<li><code>replace</code> ne remplace que la première occurrence ; <code>replaceAll</code> les remplace toutes.</li>
+<li>Avant de comparer des saisies : <code>trim()</code> et <code>toLowerCase()</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi les textes sont-ils immuables ?</summary>
+<p>C'est un choix de conception partagé par la plupart des langages modernes. Un texte qui ne change jamais peut être partagé sans risque entre plusieurs endroits du programme : personne ne peut le modifier sous le nez d'un autre. Le prix à payer est qu'il faut tout réaffecter — et c'est précisément l'oubli le plus fréquent du débutant.</p>
+</details>
 `,
   exercices: [
     {
@@ -187,28 +248,62 @@ texte.includes("jour")             // true / false</pre>
   id: 'js2-3',
   titre: 'Tableaux avancés : sort, reduce, spread',
   contenu: `
-<h2>Trier : sort</h2>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais parcourir un tableau avec une boucle et un accumulateur. Ça marche, et c'est beaucoup de lignes pour des opérations qui reviennent sans cesse : trier, additionner, copier.</p>
+<p>Les méthodes de cette leçon font ces trois choses en une ligne. Et l'une d'elles cache le piège le plus célèbre de JavaScript.</p>
+
+<h2>Trier : le piège légendaire</h2>
 <pre class="bloc-code">let mots = ["poire", "abricot", "melon"];
-mots.sort();                      // ["abricot", "melon", "poire"] — alphabétique
+mots.sort();                    // ordre alphabetique, comme attendu
 
 let nombres = [40, 7, 100];
-nombres.sort();                   // [100, 40, 7] ?! — trié comme du TEXTE !
-nombres.sort((a, b) => a - b);    // [7, 40, 100] ✓ croissant
-nombres.sort((a, b) => b - a);    // [100, 40, 7] ✓ décroissant</pre>
-<div class="attention">⚠️ Le piège légendaire : sans fonction de comparaison, <code>sort</code> trie les nombres par ordre alphabétique ("100" avant "7" car "1" &lt; "7"). Pour les nombres : TOUJOURS <code>(a, b) =&gt; a - b</code>.</div>
+nombres.sort();                 // [100, 40, 7]  ?!
+nombres.sort((a, b) =&gt; a - b);  // [7, 40, 100]  correct</pre>
+<p>Mesuré, et c'est bien ce qui s'affiche : <code>[100,40,7]</code>. Sans fonction de comparaison, <code>sort</code> convertit tout en <strong>texte</strong> et trie alphabétiquement. Or « 100 » vient avant « 40 » dans l'ordre des mots, comme « ab » vient avant « b ».</p>
+<p>La règle est donc sans exception : <strong>pour trier des nombres, on donne toujours un comparateur</strong>. <code>(a, b) =&gt; a - b</code> pour croissant, <code>b - a</code> pour décroissant.</p>
+<p>Attention aussi : <code>sort</code> modifie le tableau d'origine, contrairement à presque tout le reste.</p>
 
-<h2>Tout résumer en une valeur : reduce</h2>
-<pre class="bloc-code">let prix = [10, 24, 8];
-let total = prix.reduce((somme, p) => somme + p, 0);   // 42</pre>
-<p><code>reduce</code> parcourt le tableau en maintenant un accumulateur : la fonction reçoit (accumulateur, élément), le <code>0</code> final est la valeur de départ. C'est le motif accumulateur en une ligne.</p>
+<h2>reduce : réduire à une seule valeur</h2>
+<pre class="bloc-code">let prix = [12, 8, 5];
+let total = prix.reduce((somme, p) =&gt; somme + p, 0);  // 25</pre>
+<p>Deux arguments : une fonction qui reçoit l'accumulateur et l'élément courant, puis la <strong>valeur de départ</strong>. Cette valeur de départ n'est pas facultative en pratique — on y revient.</p>
 
-<h2>Étaler : le spread ...</h2>
+<h2>Le spread : copier au lieu de partager</h2>
 <pre class="bloc-code">let a = [1, 2];
-let b = [3, 4];
-let tout = [...a, ...b];        // [1, 2, 3, 4] — fusion
-let copie = [...a];             // vraie copie indépendante
-let max = Math.max(...tout);    // 4 — étale le tableau en arguments</pre>
-<p>Les trois points « déballent » un tableau. Détail crucial : <code>let c = a;</code> ne copie PAS (les deux noms pointent le même tableau !) — <code>[...a]</code> copie vraiment.</p>
+let b = [...a];   // une vraie copie
+b.push(3);
+console.log(a);   // [1,2] — intacte</pre>
+<p>Les trois points déroulent un tableau dans un autre. Sans eux, <code>let b = a;</code> ne copie rien : les deux noms désignent le <em>même</em> tableau. Mesuré — après un <code>push</code> sur <code>b</code>, <code>a</code> vaut <code>[1,2,3]</code>.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Code</th><th>Ce que vaut a ensuite</th></tr>
+<tr><td><code>let b = a; b.push(3);</code></td><td><code>[1,2,3]</code> — le même tableau</td></tr>
+<tr><td><code>let b = [...a]; b.push(3);</code></td><td><code>[1,2]</code> — a est protégée</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Trier des nombres sans comparateur.</strong> Aucune erreur, et un résultat faux qui paraît plausible sur de petits nombres — le bug reste caché jusqu'à ce qu'un 100 croise un 40.</p>
+<p><strong>Oublier la valeur de départ de <code>reduce</code>.</strong> Sur un tableau vide, le moteur s'arrête net avec <code>Reduce of empty array with no initial value</code>. Avec un <code>0</code> en second argument, le même code rend <code>0</code> tranquillement. Mets toujours la valeur de départ.</p>
+<p><strong>Croire que <code>=</code> copie un tableau.</strong> C'est la source de bugs la plus déroutante du niveau : on modifie une copie, et l'original change aussi. Le spread, ou <code>slice()</code>, font une vraie copie.</p>
+<p><strong>Oublier que <code>sort</code> modifie sur place.</strong> Pour garder l'ordre d'origine, trie une copie : <code>[...liste].sort(...)</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un classement de scores, c'est un <code>sort</code> avec comparateur. Un total de panier, un <code>reduce</code>. Une liste filtrée qu'on ne veut pas abîmer, un spread. Ces trois-là couvrent l'essentiel du traitement de données côté navigateur.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>sort()</code> sans comparateur trie comme du texte : <code>[40,7,100]</code> devient <code>[100,40,7]</code>.</li>
+<li><code>sort</code> modifie le tableau d'origine — trie une copie si tu veux le garder.</li>
+<li><code>reduce</code> prend toujours une valeur de départ, sinon il casse sur un tableau vide.</li>
+<li><code>let b = a</code> ne copie pas : <code>[...a]</code> si.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi sort trie-t-il comme du texte ?</summary>
+<p>Parce qu'un tableau JavaScript peut contenir n'importe quoi — des nombres, des textes, des objets mélangés. Au moment où <code>sort</code> a été normalisé, le seul ordre qui marchait sur tout était l'ordre alphabétique des représentations textuelles. Le comportement est resté, parce que des millions de pages en dépendent. C'est l'une des rares décisions du langage que personne ne défend, et que personne ne peut plus changer.</p>
+</details>
 `,
   exercices: [
     {
@@ -275,35 +370,60 @@ let max = Math.max(...tout);    // 4 — étale le tableau en arguments</pre>
   id: 'js2-4',
   titre: 'Boucles imbriquées et grilles',
   contenu: `
-<p>Une boucle DANS une boucle : c'est l'outil des grilles, des tableaux à deux dimensions, des combinaisons. Vertigineux au début, ultra-courant ensuite.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une boucle parcourt une liste. Mais beaucoup de choses ne sont pas des listes : un plateau de morpion, un calendrier, un damier, une image. Ce sont des <strong>grilles</strong> — des lignes et des colonnes.</p>
+<p>Pour parcourir une grille, une boucle ne suffit pas : il en faut une pour les lignes, et une autre, à l'intérieur, pour les colonnes de chaque ligne.</p>
 
 <h2>Le principe</h2>
-<pre class="bloc-code">for (let ligne = 1; ligne <= 2; ligne++) {
-  for (let colonne = 1; colonne <= 3; colonne++) {
-    console.log(\`ligne \${ligne}, colonne \${colonne}\`);
+<pre class="bloc-code">for (let ligne = 1; ligne &lt;= 2; ligne++) {
+  for (let colonne = 1; colonne &lt;= 3; colonne++) {
+    console.log(ligne + "-" + colonne);
   }
-}
-// ligne 1 colonne 1, 1-2, 1-3, ligne 2 colonne 1, 2-2, 2-3</pre>
-<p>La boucle INTERNE fait tous ses tours à CHAQUE tour de la boucle externe : 2 lignes × 3 colonnes = 6 passages. C'est le balayage d'une grille, case par case, ligne par ligne.</p>
+}</pre>
+<p>La boucle <strong>interne fait tous ses tours à chaque tour</strong> de la boucle externe. Deux lignes fois trois colonnes font donc six passages, dans cet ordre : 1-1, 1-2, 1-3, puis 2-1, 2-2, 2-3.</p>
+<p>C'est exactement la façon dont on lit une page : on balaie la première ligne en entier, puis on revient au début de la suivante.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Tour externe</th><th>Tours internes</th><th>Affiché</th></tr>
+<tr><td>ligne = 1</td><td>colonne 1, 2, 3</td><td>1-1, 1-2, 1-3</td></tr>
+<tr><td>ligne = 2</td><td>colonne 1, 2, 3 — elle repart de 1</td><td>2-1, 2-2, 2-3</td></tr>
+</table>
+<p>Le point à retenir est celui de la seconde ligne : la variable de la boucle interne est <strong>recréée à chaque tour</strong> de l'externe. Elle repart toujours de son point de départ.</p>
 
 <h2>Construire du texte ligne par ligne</h2>
-<pre class="bloc-code">for (let i = 1; i <= 3; i++) {
+<p>Pour dessiner, on n'affiche pas chaque case : on assemble une ligne dans une variable, puis on l'affiche d'un coup à la fin du tour externe.</p>
+<pre class="bloc-code">for (let i = 1; i &lt;= 4; i++) {
   let ligne = "";
-  for (let j = 1; j <= 4; j++) {
-    ligne += "*";
+  for (let j = 1; j &lt;= 6; j++) {
+    ligne = ligne + "*";
   }
-  console.log(ligne);   // ****, trois fois
+  console.log(ligne);
 }</pre>
-<p>Motif classique : une variable texte vidée à chaque ligne, remplie par la boucle interne, affichée à la fin du tour externe.</p>
+<p>Remarque où est déclarée la variable <code>ligne</code> : <em>dans</em> la boucle externe, pour repartir vide à chaque fois, et <em>avant</em> la boucle interne, pour survivre à ses tours.</p>
 
-<h2>Les tableaux de tableaux (2D)</h2>
-<pre class="bloc-code">let morpion = [
-  ["X", "O", "X"],
-  ["O", "X", "O"],
-  ["X", "O", "X"]
-];
-console.log(morpion[1][2]);   // "O" — ligne 1, colonne 2</pre>
-<p>Un tableau dont chaque case est un tableau : la structure des grilles de jeu, des plateaux, des feuilles de calcul.</p>
+<h2>Les pièges</h2>
+<p><strong>Réutiliser le même nom pour les deux compteurs.</strong> Deux <code>i</code> imbriqués, et la boucle interne écrase le compteur de l'externe : on obtient une boucle infinie, ou un nombre de tours absurde. Donne des noms parlants — <code>ligne</code> et <code>colonne</code> valent mieux que <code>i</code> et <code>j</code>.</p>
+<p><strong>Déclarer l'accumulateur au mauvais endroit.</strong> Avant la boucle externe, le texte s'accumule sans jamais se vider : on obtient une seule ligne de 24 étoiles. À l'intérieur de la boucle interne, il se vide à chaque case et il ne reste qu'une étoile. Sa place est entre les deux.</p>
+<p><strong>Oublier de faire avancer un compteur.</strong> Le risque est double ici, puisqu'il y en a deux. Le moteur du cours rattrape le coup et affiche : <em>« ton code tourne sans s'arrêter (boucle infinie ?). Vérifie la condition de ta boucle. »</em></p>
+<p><strong>Imbriquer trois boucles ou plus.</strong> Techniquement possible, pratiquement illisible. Au-delà de deux niveaux, il vaut mieux sortir la boucle interne dans une fonction.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Tout ce qui est grille : un plateau de jeu, un tableau de données affiché en HTML, un calendrier mensuel, le traitement d'une image pixel par pixel. Les boucles imbriquées sont aussi la première occasion de rencontrer la notion de coût : deux boucles de mille tours font un million de passages.</p>
+
+<div class="a-retenir">
+<ul>
+<li>La boucle interne fait tous ses tours à chaque tour de l'externe.</li>
+<li>Son compteur repart de son point de départ à chaque fois.</li>
+<li>Un accumulateur de ligne se déclare entre les deux boucles.</li>
+<li>Des noms parlants (<code>ligne</code>, <code>colonne</code>) évitent l'écrasement de compteurs.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le coût d'une boucle dans une boucle</summary>
+<p>Une boucle sur mille éléments fait mille tours. Deux boucles imbriquées sur les mêmes mille éléments en font un million — mille fois plus, pour une seule ligne de code en plus. C'est la première fois que tu rencontres cette idée, et elle reviendra : en informatique, on classe les algorithmes par la façon dont leur coût grandit avec la taille des données. Une boucle imbriquée est le cas d'école du coût qui explose.</p>
+</details>
 `,
   exercices: [
     {
@@ -371,31 +491,73 @@ console.log(morpion[1][2]);   // "O" — ligne 1, colonne 2</pre>
   id: 'js2-5',
   titre: 'Fonctions avancées : portée, défauts, callbacks',
   contenu: `
+<h2>Pourquoi ça existe</h2>
+<p>Un programme de deux cents fonctions ne peut pas fonctionner si chacune peut lire et modifier les variables des autres. Il faut une règle qui dise où vit une variable, et jusqu'où elle est visible.</p>
+<p>Cette règle s'appelle la <strong>portée</strong>, et c'est l'une des idées les plus importantes de la programmation. Deux autres notions l'accompagnent ici : donner une valeur par défaut à un paramètre, et passer une fonction en argument.</p>
+
 <h2>La portée : chaque fonction a sa bulle</h2>
 <pre class="bloc-code">function calculer() {
-  let secret = 42;        // née DANS la fonction...
-  console.log(secret);    // 42 ✓
+  let secret = 42;
+  console.log(secret);   // 42
 }
+
 calculer();
-console.log(secret);      // ERREUR : secret n'existe pas ici !</pre>
-<p>Une variable créée dans une fonction (ou dans un bloc <code>{ }</code>) n'existe QUE là. C'est une protection : les fonctions ne polluent pas le programme, et 200 fonctions peuvent chacune avoir leur variable <code>total</code> sans conflit. L'inverse marche : une fonction VOIT les variables déclarées au-dessus d'elle.</p>
+console.log(secret);     // erreur</pre>
+<p>Mesuré dans le moteur du cours, la dernière ligne s'arrête net : <em>« secret is not defined »</em> — « secret n'existe pas ». La variable est née dans la fonction, elle meurt avec elle.</p>
+<p>Ce n'est pas une contrainte mais une <strong>protection</strong> : deux cents fonctions peuvent chacune avoir leur variable <code>total</code> sans jamais se marcher dessus. La règle vaut aussi pour les blocs : un <code>let</code> déclaré dans un <code>if</code> ou dans une boucle n'existe pas en dehors.</p>
+<p>L'inverse est vrai : une fonction <em>peut</em> lire les variables déclarées au-dessus d'elle. La visibilité va de l'extérieur vers l'intérieur, jamais le contraire.</p>
 
 <h2>Les paramètres par défaut</h2>
-<pre class="bloc-code">function saluer(nom = "visiteur") {
-  console.log("Bonjour " + nom + " !");
+<pre class="bloc-code">function commander(boisson = "café", taille = "moyen") {
+  return taille + " " + boisson;
 }
-saluer("Léa");    // Bonjour Léa !
-saluer();         // Bonjour visiteur !  (le défaut prend le relais)</pre>
 
-<h2>Les callbacks : passer une fonction à une fonction</h2>
-<p>Tu le fais depuis longtemps sans le nom : la fonction donnée à <code>addEventListener</code>, à <code>map</code>, à <code>filter</code>... s'appelle un <strong>callback</strong> (fonction de rappel). Tu peux en recevoir dans TES fonctions :</p>
-<pre class="bloc-code">function troisFois(action) {
-  action();
-  action();
-  action();
+commander();              // "moyen café"
+commander("thé");         // "moyen thé"</pre>
+<p>Un paramètre non fourni prend sa valeur par défaut. Mesuré : <code>salut()</code> rend bien « bonjour inconnu ». Cela évite une série de tests au début de chaque fonction.</p>
+
+<h2>Les callbacks : une fonction en argument</h2>
+<p>Une fonction peut être rangée dans une variable, et donc passée à une autre fonction. Celle qu'on passe s'appelle un <strong>callback</strong> — « fonction de rappel ».</p>
+<pre class="bloc-code">function repeter(n, action) {
+  for (let i = 1; i &lt;= n; i++) {
+    action(i);
+  }
 }
-troisFois(() => console.log("hop"));   // hop hop hop</pre>
-<p>Une fonction devient une valeur qu'on transporte et qu'on exécute plus tard. C'est LE concept qui rend JavaScript si flexible.</p>
+
+repeter(3, function (numero) {
+  console.log("tour " + numero);
+});</pre>
+<p>Tu en as déjà utilisé sans le savoir : le comparateur de <code>sort</code>, la fonction d'un <code>addEventListener</code>. C'est le mécanisme qui permet de dire « voici <em>quoi</em> faire, décide toi-même <em>quand</em> ».</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>Ce qui se passe</th></tr>
+<tr><td><code>function calculer() {...}</code></td><td>La fonction est rangée. Rien ne s'exécute.</td></tr>
+<tr><td><code>calculer();</code></td><td>La bulle s'ouvre, <code>secret</code> naît, s'affiche, puis la bulle se referme.</td></tr>
+<tr><td><code>console.log(secret)</code></td><td>Plus rien ne porte ce nom : <code>secret is not defined</code>.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Croire qu'une variable de fonction survit à l'appel.</strong> C'est l'erreur de départ. Pour récupérer un résultat, il n'y a qu'un moyen : <code>return</code>.</p>
+<p><strong>Appeler le callback au lieu de le passer.</strong> <code>repeter(3, action())</code> avec les parenthèses <em>exécute</em> la fonction tout de suite et passe son résultat. Sans parenthèses, <code>repeter(3, action)</code> passe la fonction elle-même. Une paire de parenthèses sépare les deux sens.</p>
+<p><strong>Mettre un paramètre par défaut avant un paramètre obligatoire.</strong> <code>function f(a = 1, b)</code> est valide mais inutilisable : on ne peut pas fournir <code>b</code> sans fournir <code>a</code>. Les paramètres à défaut vont à la fin.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La portée est ce qui rend possible le travail à plusieurs sur un même programme : chacun écrit ses fonctions sans craindre d'écraser les variables d'un autre. Les callbacks, eux, sont partout dès qu'il s'agit de réagir — un clic, une réponse de serveur, un minuteur.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une variable déclarée dans une fonction ou un bloc n'existe que là : <code>secret is not defined</code> en dehors.</li>
+<li>La visibilité va de l'extérieur vers l'intérieur, jamais l'inverse.</li>
+<li>Un paramètre par défaut se place en fin de liste.</li>
+<li>Passer une fonction, c'est l'écrire <strong>sans parenthèses</strong>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : une fonction qui se souvient</summary>
+<p>Une fonction définie à l'intérieur d'une autre garde accès aux variables de celle-ci — même après que la fonction extérieure a fini. Cette mémoire s'appelle une <em>fermeture</em>, et c'est ce qui permet de fabriquer un compteur dont la valeur est inaccessible de l'extérieur. C'est l'une des idées les plus puissantes du langage, et tu la retrouveras au module JavaScript avancé.</p>
+</details>
 `,
   exercices: [
     {
@@ -459,27 +621,60 @@ troisFois(() => console.log("hop"));   // hop hop hop</pre>
   id: 'js2-6',
   titre: 'Les dates et le temps',
   contenu: `
-<h2>L'objet Date</h2>
-<pre class="bloc-code">let maintenant = new Date();       // l'instant présent
-maintenant.getFullYear()           // 2026
-maintenant.getMonth()              // 6 ⚠️ = juillet (les mois comptent de 0 !)
-maintenant.getDate()               // le jour du mois (1-31)
-maintenant.getDay()                // le jour de la SEMAINE (0 = dimanche)
-maintenant.getHours()              // l'heure (0-23)
-maintenant.getMinutes()            // les minutes</pre>
-<div class="attention">⚠️ Deux chausse-trappes historiques : <code>getMonth()</code> compte de 0 (janvier = 0, décembre = 11) et <code>getDay()</code> donne le jour de SEMAINE, pas du mois. Tous les développeurs s'y sont fait avoir. Tous.</div>
+<h2>Pourquoi ça existe</h2>
+<p>Une date paraît simple, et ne l'est jamais. Combien de jours en février ? Quel jour de la semaine tombe le 3 mars 2027 ? Que se passe-t-il à minuit, au changement d'heure, au 31 décembre ?</p>
+<p>Personne ne veut recalculer cela à la main. L'objet <code>Date</code> s'en charge — au prix de deux bizarreries historiques qu'il faut connaître avant d'écrire la moindre ligne.</p>
 
-<h2>Programmer dans le futur : setTimeout et setInterval</h2>
-<pre class="bloc-code">setTimeout(() => {
-  console.log("3 secondes plus tard...");
-}, 3000);                        // UNE fois, dans 3000 ms
+<h2>Lire la date</h2>
+<pre class="bloc-code">let maintenant = new Date();
 
-let minuteur = setInterval(() => {
-  console.log("toutes les secondes");
-}, 1000);                        // EN BOUCLE, toutes les 1000 ms
+maintenant.getFullYear()   // 2026
+maintenant.getMonth()      // 0 pour janvier !
+maintenant.getDate()       // le jour du mois, 1 a 31
+maintenant.getDay()        // le jour de la SEMAINE, 0 = dimanche
+maintenant.getHours()      // l'heure, 0 a 23</pre>
+<p>Le mot-clé <code>new</code> est nouveau : il fabrique un objet à partir d'un modèle. Tu le reverras avec les classes.</p>
 
-clearInterval(minuteur);         // stop !</pre>
-<p>Le temps s'exprime en <strong>millisecondes</strong> (1000 = 1 seconde). Ces deux fonctions prennent un callback — encore lui ! — exécuté plus tard. Notifications, horloges, diaporamas, compte à rebours : tout le « différé » du web passe par là.</p>
+<h2>Pas à pas : les deux chausse-trappes</h2>
+<p>Mesuré sur le 15 janvier 2026, créé par <code>new Date(2026, 0, 15)</code> :</p>
+<table class="memo-table trace">
+<tr><th>Appel</th><th>Résultat</th><th>Ce qu'il faut comprendre</th></tr>
+<tr><td><code>getMonth()</code></td><td><strong>0</strong></td><td>janvier est le mois zéro — décembre vaut 11</td></tr>
+<tr><td><code>getDate()</code></td><td>15</td><td>le jour du mois, lui, compte normalement</td></tr>
+<tr><td><code>getDay()</code></td><td>4</td><td>le jour de la <em>semaine</em> : jeudi, dimanche valant 0</td></tr>
+</table>
+<p>Deux pièges dans trois méthodes, dont deux noms qui se ressemblent et ne disent pas la même chose. C'est la leçon où l'on relit deux fois.</p>
+<p>Le remède habituel pour le mois : un tableau de noms, et <code>mois[d.getMonth()]</code>. Comme les tableaux comptent aussi à partir de zéro, les deux décalages s'annulent exactement.</p>
+
+<h2>Le temps qui passe</h2>
+<ul>
+<li><code>setTimeout(fonction, 1000)</code> — exécute <strong>une fois</strong>, dans une seconde ;</li>
+<li><code>setInterval(fonction, 1000)</code> — exécute <strong>toutes</strong> les secondes, sans fin ;</li>
+<li><code>clearInterval(id)</code> — arrête un intervalle, grâce à l'identifiant rendu au départ.</li>
+</ul>
+<p>Pour une horloge, c'est <code>setInterval</code>. Pour un message qui disparaît, <code>setTimeout</code>.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Afficher <code>getMonth()</code> tel quel.</strong> En janvier, l'utilisateur lit « mois 0 ». Si un mois est décalé d'une unité dans ton affichage, c'est toujours ça — et il faut ajouter 1, ou passer par un tableau de noms.</p>
+<p><strong>Confondre <code>getDate</code> et <code>getDay</code>.</strong> Les deux noms se ressemblent, et les deux rendent un petit nombre : l'erreur passe inaperçue tant qu'on est entre le 1er et le 7 du mois.</p>
+<p><strong>Lancer un <code>setInterval</code> sans jamais l'arrêter.</strong> Il tourne tant que la page est ouverte. Si l'utilisateur relance l'horloge trois fois, trois intervalles tournent en parallèle et l'affichage saute. Garde l'identifiant et arrête l'ancien.</p>
+<p><strong>Croire que <code>setTimeout(f, 1000)</code> attend exactement une seconde.</strong> C'est un minimum, pas une promesse : si le navigateur est occupé, l'appel attend son tour. Pour mesurer une durée réelle, on compare deux dates.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un « publié il y a 3 jours », une date d'expiration, un compte à rebours, une horloge. Dès que les fuseaux horaires et les formats régionaux entrent en jeu, les équipes passent à une bibliothèque spécialisée — l'objet <code>Date</code> montre alors ses limites, qui sont connues et anciennes.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>getMonth()</code> compte à partir de 0 : janvier vaut 0, décembre 11.</li>
+<li><code>getDate()</code> donne le jour du mois ; <code>getDay()</code> le jour de la semaine, dimanche valant 0.</li>
+<li><code>setTimeout</code> agit une fois, <code>setInterval</code> en boucle — et un intervalle doit pouvoir être arrêté.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : d'où vient le mois zéro ?</summary>
+<p>De 1995, quand JavaScript a été écrit en dix jours en copiant l'objet Date du langage Java, lui-même inspiré d'une convention du langage C où les mois étaient indexés à partir de zéro pour servir d'indice dans un tableau de noms. Trois décennies plus tard, la bizarrerie est toujours là, parce que la corriger casserait d'innombrables pages. Un remplaçant moderne, <code>Temporal</code>, arrive progressivement dans les navigateurs — et compte les mois à partir de 1.</p>
+</details>
 `,
   exercices: [
     {
@@ -547,28 +742,62 @@ clearInterval(minuteur);         // stop !</pre>
   id: 'js2-7',
   titre: 'Le clavier et les autres événements',
   contenu: `
-<p>Le clic n'est qu'UN événement parmi des dizaines. Voici les autres capteurs qui rendent une page vraiment vivante.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Le clic est l'événement qu'on apprend en premier, et c'est loin d'être le seul. Une page vivante réagit à la frappe au clavier, au survol, à l'envoi d'un formulaire, au défilement, au redimensionnement de la fenêtre.</p>
+<p>Et surtout : jusqu'ici, tes fonctions d'écoute ne recevaient rien. Elles peuvent recevoir une <strong>description de ce qui vient de se passer</strong> — quelle touche, quel élément, où exactement.</p>
 
-<h2>Le clavier : keydown</h2>
+<h2>L'objet événement</h2>
 <pre class="bloc-code">document.addEventListener("keydown", function (evenement) {
-  console.log(evenement.key);   // "a", "Enter", "ArrowRight", "Escape"...
+  console.log(evenement.key);
 });</pre>
-<p>Nouveauté majeure : la fonction reçoit un <strong>objet événement</strong> qui décrit ce qui s'est passé. Sa clé <code>.key</code> donne la touche : lettres telles quelles, touches spéciales par leur nom (<code>"Enter"</code>, <code>"ArrowLeft"</code>, <code>"ArrowRight"</code>, <code>"Escape"</code>, <code>" "</code> pour espace).</p>
-<pre class="bloc-code">if (evenement.key === "ArrowRight") { ... }   // flèche droite !</pre>
-<p>C'est TOUT le secret des jeux au clavier — et des raccourcis type Ctrl+S.</p>
+<p>La fonction reçoit un argument : l'objet événement. Sa propriété <code>.key</code> donne la touche sous forme de texte — <code>"a"</code>, <code>"Enter"</code>, <code>"ArrowRight"</code>, <code>"Escape"</code>. Les lettres arrivent telles quelles, les touches spéciales portent un nom anglais.</p>
+<p>Le nom <code>evenement</code> n'a rien d'obligatoire : c'est un paramètre comme un autre. Beaucoup de code l'appelle simplement <code>e</code>.</p>
 
-<h2>Le reste de la famille</h2>
-<table class="memo-table">
-<tr><th>Événement</th><th>Se déclenche quand...</th></tr>
-<tr><td>"click"</td><td>clic (tu connais !)</td></tr>
-<tr><td>"input"</td><td>chaque caractère tapé dans un champ</td></tr>
-<tr><td>"change"</td><td>un champ/menu change ET perd le focus</td></tr>
-<tr><td>"keydown"</td><td>une touche s'enfonce</td></tr>
-<tr><td>"mouseover" / "mouseout"</td><td>la souris entre / sort (le :hover du JS)</td></tr>
-<tr><td>"submit"</td><td>un formulaire est envoyé</td></tr>
-<tr><td>"dblclick"</td><td>double-clic</td></tr>
+<h2>Les événements utiles</h2>
+<ul>
+<li><code>keydown</code> — une touche est enfoncée ;</li>
+<li><code>input</code> — le contenu d'un champ a changé, à chaque caractère ;</li>
+<li><code>change</code> — le champ a changé <em>et</em> on l'a quitté ;</li>
+<li><code>submit</code> — un formulaire est envoyé ;</li>
+<li><code>mouseover</code> et <code>mouseout</code> — la souris entre, la souris sort.</li>
+</ul>
+<p>Sur quoi écouter ? Un clic s'écoute sur le bouton concerné ; le clavier, en général sur <code>document</code>, puisque la frappe n'appartient à aucun élément en particulier.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>Ce qui se passe</th></tr>
+<tr><td>La page charge</td><td><code>addEventListener</code> s'exécute : il <em>enregistre</em> la fonction. Rien d'autre.</td></tr>
+<tr><td>Le visiteur appuie sur une touche</td><td>Le navigateur fabrique un objet décrivant l'événement.</td></tr>
+<tr><td>Il appelle ta fonction</td><td>En lui passant cet objet en argument.</td></tr>
+<tr><td>Ta fonction s'exécute</td><td>Elle lit <code>evenement.key</code> et agit.</td></tr>
 </table>
-<p>Tous suivent le même schéma : <code>element.addEventListener("nom", (e) =&gt; { ... })</code>. Un seul mécanisme à connaître, des dizaines de déclencheurs.</p>
+<p>C'est le renversement à comprendre : tu n'appelles jamais ta fonction toi-même. Tu la déposes, et c'est le navigateur qui l'appellera — peut-être jamais, peut-être cent fois.</p>
+
+<h2>Empêcher le comportement par défaut</h2>
+<p>Certains événements déclenchent une action du navigateur : un formulaire envoyé recharge la page, une touche fléchée fait défiler. <code>evenement.preventDefault()</code> annule cette action, pour que ton code décide à la place.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier le paramètre.</strong> Sans <code>function (evenement)</code>, impossible de savoir quelle touche a été pressée. L'objet est donné, encore faut-il le recevoir.</p>
+<p><strong>Mettre des parenthèses à la fonction passée.</strong> <code>addEventListener("click", maFonction())</code> exécute la fonction immédiatement et enregistre son résultat. Sans parenthèses, c'est la fonction elle-même qui est déposée. Même piège qu'avec les callbacks.</p>
+<p><strong>Confondre <code>input</code> et <code>change</code>.</strong> Pour une recherche qui filtre pendant la frappe, c'est <code>input</code>. <code>change</code> n'arrive qu'une fois le champ quitté — beaucoup trop tard.</p>
+<p><strong>Enregistrer plusieurs fois le même écouteur.</strong> Si le code qui l'ajoute s'exécute deux fois, la fonction sera appelée deux fois à chaque événement. Les compteurs qui avancent de deux en deux viennent presque toujours de là.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La recherche qui filtre pendant la frappe, le raccourci clavier qui ouvre un panneau, la touche Échap qui ferme une fenêtre, le formulaire qui se vérifie avant l'envoi. Tout ce qui rend une interface agréable tient dans ces quelques événements.</p>
+
+<div class="a-retenir">
+<ul>
+<li>La fonction d'écoute reçoit un objet événement : <code>evenement.key</code> donne la touche.</li>
+<li>On dépose une fonction, le navigateur l'appelle — jamais l'inverse.</li>
+<li><code>input</code> réagit à chaque caractère, <code>change</code> seulement après la sortie du champ.</li>
+<li><code>preventDefault()</code> annule l'action automatique du navigateur.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : l'événement remonte</summary>
+<p>Un clic sur un bouton déclenche aussi les écouteurs de son parent, puis de leur parent, jusqu'au document. On appelle ça la <em>propagation</em>. C'est très utile : plutôt que de poser cent écouteurs sur cent lignes de liste, on en pose un seul sur la liste, et <code>evenement.target</code> dit quelle ligne a été cliquée. Cette technique porte un nom — la délégation d'événements — et elle est partout dans le code professionnel.</p>
+</details>
 `,
   exercices: [
     {
@@ -626,23 +855,62 @@ clearInterval(minuteur);         // stop !</pre>
   id: 'js2-8',
   titre: 'Mini-projet : le nombre mystère',
   contenu: `
-<p>Pour clore ce module, un jeu complet à construire : l'ordinateur choisit un nombre entre 1 et 100, le joueur le devine, le programme guide — « plus grand ! », « plus petit ! » — et compte les essais.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un module se termine mal s'il ne reste qu'une collection d'exercices séparés. Ce mini-projet rassemble presque tout ce que tu viens d'apprendre dans un programme complet et jouable : lire un champ, convertir, comparer, compter, afficher, et savoir s'arrêter.</p>
+<p>C'est aussi la première fois que tu écris quelque chose qui a un <em>état</em> — une mémoire qui évolue entre deux clics.</p>
 
 <h2>Le cahier des charges</h2>
-<ol>
-<li>le nombre secret est déjà tiré (fourni) : <code>window.secret</code>, entre 1 et 100 ;</li>
-<li>au clic sur <code>#deviner</code> : lis le champ <code>#essai</code>, convertis en nombre (le piège éternel !), incrémente le compteur d'essais ;</li>
-<li>compare : trop petit → affiche <code>Plus grand !</code> dans <code>#reponse</code> ; trop grand → <code>Plus petit !</code> ;</li>
-<li>trouvé → <code>Trouvé en X essais !</code></li>
-</ol>
+<ul>
+<li>le nombre secret est déjà tiré, entre 1 et 100 : il t'attend dans <code>window.secret</code> ;</li>
+<li>au clic sur <code>#deviner</code> : lire le champ <code>#essai</code>, le convertir en nombre, incrémenter le compteur d'essais ;</li>
+<li>comparer, puis afficher « Plus grand ! », « Plus petit ! », ou le message de victoire avec le nombre d'essais ;</li>
+<li>à la victoire, désactiver le bouton.</li>
+</ul>
 
-<h2>Rappel des munitions (tout est déjà en toi)</h2>
-<pre class="bloc-code">let essai = Number(document.querySelector("#essai").value);
-if (essai < window.secret) { ... }
-else if (essai > window.secret) { ... }
-else { ... }</pre>
+<h2>Le piège de la conversion</h2>
+<p>Un champ de saisie rend <strong>toujours</strong> du texte, même s'il ne contient que des chiffres. Sans conversion, <code>"50" &lt; 100</code> compare un texte à un nombre, et les résultats deviennent imprévisibles.</p>
+<p>Trois comportements mesurés, qui méritent d'être connus avant d'écrire la ligne :</p>
+<table class="memo-table trace">
+<tr><th>Saisie</th><th><code>Number(...)</code></th><th><code>parseInt(...)</code></th></tr>
+<tr><td>« 42 »</td><td>42</td><td>42</td></tr>
+<tr><td>« 12ans »</td><td><strong>NaN</strong></td><td><strong>12</strong></td></tr>
+<tr><td>champ vide</td><td><strong>0</strong></td><td>NaN</td></tr>
+</table>
+<p>Deux conséquences pratiques. <code>parseInt</code> est tolérant : il lit ce qu'il peut et ignore la suite — pratique, et dangereux si tu veux refuser une saisie fautive. Et <code>Number("")</code> rend <strong>0</strong>, pas <code>NaN</code> : un champ vide devient donc une proposition valide de zéro. C'est l'origine du bug le plus fréquent de ce projet.</p>
+<p><code>isNaN(valeur)</code> permet de tester le résultat avant de s'en servir.</p>
 
-<div class="astuce">✅ Pourquoi <code>window.secret</code> et pas <code>let secret</code> ? Pour que le correcteur puisse tricher un peu et vérifier ton jeu avec un nombre connu ! <code>window</code> est l'objet global de la page — une variable accrochée dessus est visible partout.</div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce que fait ton code</th></tr>
+<tr><td>Clic sur le bouton</td><td>La fonction d'écoute démarre.</td></tr>
+<tr><td>Lire le champ</td><td><code>.value</code> rend du texte, toujours.</td></tr>
+<tr><td>Convertir</td><td>Et vérifier le résultat avant d'aller plus loin.</td></tr>
+<tr><td>Compter</td><td>La variable du compteur vit <strong>en dehors</strong> de l'écouteur.</td></tr>
+<tr><td>Comparer et afficher</td><td>Trois cas : plus grand, plus petit, gagné.</td></tr>
+</table>
+<p>L'avant-dernière ligne est celle qui coûte le plus de temps à tout le monde : un compteur déclaré à l'intérieur de la fonction du clic repart à zéro à chaque essai, et affiche éternellement « trouvé en 1 coup ».</p>
+
+<h2>Les pièges</h2>
+<p><strong>Comparer sans convertir.</strong> Le symptôme est trompeur : ça semble marcher sur certains nombres et pas sur d'autres, puisque la comparaison se fait alors dans l'ordre alphabétique.</p>
+<p><strong>Le compteur dans l'écouteur.</strong> Même piège que le compteur de la leçon <code>js-12</code>. Une variable d'état se crée une seule fois, en dehors.</p>
+<p><strong>Oublier de désactiver le bouton.</strong> Le joueur continue de proposer des nombres après avoir gagné, et le compteur grimpe. Un jeu doit savoir qu'il est fini.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Tu viens d'écrire la boucle de base de n'importe quel jeu : lire une action, la valider, mettre à jour l'état, afficher le résultat, tester la fin de partie. Un jeu du pendu, un quiz, un morpion suivent exactement la même structure — seules les règles changent.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Un champ de saisie rend toujours du texte : il faut convertir avant de comparer.</li>
+<li><code>Number("")</code> vaut <strong>0</strong> et <code>parseInt("12ans")</code> vaut <strong>12</strong> : vérifie le résultat avec <code>isNaN</code>.</li>
+<li>Une variable d'état se crée une seule fois, en dehors de l'écouteur.</li>
+<li>Un jeu doit savoir s'arrêter : désactive le bouton à la victoire.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la meilleure stratégie</summary>
+<p>Couper en deux à chaque coup — proposer 50, puis 25 ou 75 — garantit de trouver n'importe quel nombre entre 1 et 100 en sept essais au maximum. Chaque proposition élimine la moitié des possibilités restantes : 100, puis 50, 25, 13, 7, 4, 2, 1. Cette méthode s'appelle la <em>recherche dichotomique</em>, et c'est l'un des algorithmes les plus utilisés de l'informatique — c'est ainsi qu'une base de données retrouve une ligne parmi des millions sans les parcourir toutes.</p>
+</details>
 `,
   exercices: [
     {

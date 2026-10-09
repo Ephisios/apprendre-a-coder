@@ -6,6 +6,50 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.11.0 — 2026-10-09
+
+La falaise est comblée. Un élève passait de « JavaScript — La logique », à 565 mots de médiane, à
+« La suite » à 114 — le même langage, deux fois moins de cours au moment où il devient difficile.
+
+### Changé
+
+- **Les 8 leçons de « JavaScript — La suite » passent au gabarit.** De 83-156 mots à **471-539**.
+  Aucun exercice n'a été touché.
+
+### Ce que la mesure a établi
+
+Pour la première fois, les comportements ont été relevés **dans le moteur du cours lui-même** —
+`executerJS` de `app.js`, dans un vrai Chrome — et non dans un Node quelconque. Le gabarit l'exige :
+un message d'erreur cité doit être celui que l'élève verra, avec les mots de la maison.
+
+- `[40, 7, 100].sort()` affiche **`[100,40,7]`**. Sans comparateur, `sort` trie comme du texte.
+- Un `switch` sans `break` affiche **les deux branches** : il coule dans les cas suivants sans les
+  tester, et rien ne le signale.
+- `new Date(2026, 0, 15)` : `getMonth()` rend **0**, `getDate()` **15**, `getDay()` **4**. Deux
+  pièges dans trois méthodes aux noms voisins.
+- `Number("")` rend **0** — pas `NaN`. Un champ vide devient donc une proposition valide de zéro,
+  l'origine du bug le plus fréquent du nombre mystère.
+- Une variable née dans une fonction : **`secret is not defined`**.
+- `[].reduce((a, b) => a + b)` sans valeur de départ : **`Reduce of empty array with no initial value`**.
+
+### Corrigé en cours de route
+
+L'outil d'épissure coupait au premier backtick rencontré. Or le contenu de `js2-4` en contenait
+deux, échappés — une leçon qui montre les gabarits de chaîne à l'élève en contient forcément. Le
+fichier s'est retrouvé corrompu, et le harnais l'a signalé au chargement.
+
+> L'outil scanne maintenant en sautant les échappements, vérifie que la fermeture est bien suivie
+> de `, exercices:`, et **relit le fichier avant d'écrire**. Les six épissures précédentes étaient
+> saines : aucun de leurs fichiers ne contenait de backtick échappé, et le harnais passait après
+> chacune.
+
+### Où en est la conversion
+
+**72 leçons sur 168**, contre 64. Quatre pistes complètes : HTML, CSS, « JavaScript — La logique »
+et « La suite ». Reste « JavaScript avancé » (18 leçons non converties), Python, SQL, C, Java.
+
+---
+
 ## 3.10.0 — 2026-10-06
 
 Le CSS est terminé. **Ses 25 leçons sont au gabarit**, de la première règle aux valeurs qui

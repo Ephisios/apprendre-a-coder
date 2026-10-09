@@ -168,7 +168,7 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 147 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
  16 vérifications au navigateur   — 0 échec (Worker, contraste, focus, souris)
 434 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
- 64 leçons au gabarit             — 0 à qui il manque une partie
+ 72 leçons au gabarit             — 0 à qui il manque une partie
  70 QCM                           — 0 sans explication, 0 mauvaise réponse sans aide
 ```
 
