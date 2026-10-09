@@ -171,7 +171,12 @@ const SONDE_MOTEUR = `(async () => {
     ['objet',       'console.log({ a: 1 }); console.log([1, 2]); console.log(null);'],
     ['erreur',      'console.log("avant"); nexistePas();'],
     ['setTimeout',  'console.log("tout de suite"); setTimeout(function () { console.log("plus tard"); }, 120);'],
-    ['setInterval', 'var n = 0; setInterval(function () { console.log("tic" + (++n)); }, 40);']
+    ['setInterval', 'var n = 0; setInterval(function () { console.log("tic" + (++n)); }, 40);'],
+    // Un delai de ZERO est le cas qui se perdait : « attente » ne retenait
+    // que le delai le plus long, et 0 n'est pas superieur a 0. Le moteur
+    // concluait donc avant que le minuteur ne parle, et l'eleve voyait une
+    // ligne de moins sans rien comprendre.
+    ['setTimeout 0', 'console.log("avant"); setTimeout(function () { console.log("minuteur"); }, 0); console.log("apres");']
   ];
   const lancer = (code) => new Promise((r) => window.executerJS(code, r));
   const resume = (x) => ({ logs: x.logs.length, tete: x.logs.slice(0, 2).join('|'), err: x.erreur ? 'oui' : 'non' });
@@ -350,6 +355,13 @@ async function suiteApplication(co) {
   verifie('moteur — le navigateur offre bien un Worker', m.workerDisponible, 'function');
   verifie('moteur — il est rendu après le test du repli', m.workerRetabli, 'function');
   verifie('moteur — aucun écart entre le Worker et le repli', m.ecarts, []);
+
+  // Comparer les deux chemins ne suffit pas : ils peuvent se tromper
+  // ENSEMBLE. Un setTimeout de 0 ms perdait sa ligne des deux côtés, et
+  // l'écart restait nul. On affirme donc le RÉSULTAT, pas seulement l'accord.
+  verifie('moteur — un setTimeout de 0 ms parle quand même (Worker)', m.avec['setTimeout 0'].logs, 3);
+  verifie('moteur — un setTimeout de 0 ms parle quand même (repli)', m.sans['setTimeout 0'].logs, 3);
+  verifie('moteur — et il parle APRÈS le code qui suit', m.avec['setTimeout 0'].tete, 'avant|apres');
   for (const nom of Object.keys(m.avec)) {
     console.log('  ' + nom.padEnd(13) + ' Worker : ' + JSON.stringify(m.avec[nom]));
     console.log('  ' + ' '.repeat(13) + ' repli  : ' + JSON.stringify(m.sans[nom]));

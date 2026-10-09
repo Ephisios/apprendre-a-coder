@@ -6,6 +6,62 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.12.0 — 2026-10-09
+
+**Tout JavaScript est au gabarit** : les 40 leçons des trois modules, de la première ligne de
+`console.log` aux closures et au JSON. C'est la plus longue piste du cours, et la plus suivie.
+
+### Changé
+
+- **Les 18 leçons restantes de « JavaScript avancé » passent au gabarit.** De 87-178 mots à
+  **399-558**. Aucun exercice n'a été touché.
+
+### Corrigé — un défaut du moteur, trouvé en mesurant
+
+En vérifiant ce que `setTimeout` affiche vraiment avant d'écrire `jsav-18`, un cas est ressorti :
+**un `setTimeout(f, 0)` perdait sa ligne**. Avec 10 ms ou 300 ms, tout allait bien ; avec zéro,
+rien.
+
+La cause tenait en un signe. Le moteur retenait le délai le plus long dans une variable `attente`,
+puis concluait `if (attente > 0)`. Or `0 > 0` est faux : il rendait son verdict **avant** que le
+minuteur ne parle. Les deux chemins — le Worker et son repli — avaient le même défaut.
+
+Un élève écrivant `setTimeout(..., 0)`, exactement l'exemple qui démontre l'asynchronie, aurait vu
+une ligne manquer sans comprendre pourquoi. Le moteur retient désormais **qu'un minuteur a été
+programmé**, en plus de son délai.
+
+### Le contrôle qui ne contrôlait rien
+
+Le harnais navigateur comparait le Worker et son repli, et n'affirmait que leur **accord**. Or ils
+se trompaient ensemble : l'écart restait nul, et le défaut invisible.
+
+> Trois affirmations portent maintenant sur le **résultat** — un `setTimeout` de 0 ms doit produire
+> trois lignes, des deux côtés, et dans l'ordre « avant, apres, minuteur ». Éprouvées en remettant
+> le défaut : deux échecs, là où la comparaison restait muette.
+
+### Ce que la mesure a établi
+
+Comme pour la fournée précédente, tout vient du moteur du cours. Six relevés servent d'argument :
+
+- `var` sort de son bloc (il affiche `1`) là où `let` lève **`b is not defined`** ;
+- `const` sur un tableau laisse passer `push` — c'est le **nom** qui est verrouillé, pas le contenu.
+  Le réaffecter donne **`Assignment to constant variable.`** ;
+- `"" == 0` et `[] == false` sont **vrais**, mais `null == 0` est **faux** : il n'y a aucune logique
+  d'ensemble à reconstituer dans `==` ;
+- `slice(1, 3)` laisse `[0,1,2,3,4]` intact ; `splice(1, 2)` laisse **`[0,3,4]`** ;
+- un compteur en closure rend 1, 2 — et une **nouvelle** fabrique repart à 1 ;
+- `JSON.stringify` retire **silencieusement** les fonctions et les `undefined`.
+
+### Où en est la conversion
+
+**90 leçons sur 168**, contre 72. Et un seuil est franchi : la médiane du **cours entier** passe de
+155 mots au départ de la journée à **437**. Les 78 leçons restantes sont toujours à 155.
+
+Cinq pistes complètes : HTML, CSS, et les trois modules JavaScript. Reste C (14), Java (13),
+SQL (17), Python (25), les projets et les deux bouts du parcours.
+
+---
+
 ## 3.11.0 — 2026-10-09
 
 La falaise est comblée. Un élève passait de « JavaScript — La logique », à 565 mots de médiane, à

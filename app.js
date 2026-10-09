@@ -1183,15 +1183,18 @@ function executerJS(code, rappel) {
     const source = 'self.onmessage=function(e){' +
       'var logs=[];' +
       'var fauxConsole={log:function(){var a=[];for(var i=0;i<arguments.length;i++){var v=arguments[i];a.push(typeof v==="object"&&v!==null?JSON.stringify(v):String(v));}logs.push(a.join(" "));}};' +
-      'var attente=0;' +
+      // « attente » retient le délai le plus long ; « minuteurs » retient
+      // qu'il y en a eu un. Sans ce second drapeau, un setTimeout(f, 0)
+      // laissait attente à zéro : on concluait avant qu'il ne parle.
+      'var attente=0;var minuteurs=false;' +
       'var vraiTimeout=self.setTimeout.bind(self);' +
       'var vraiInterval=self.setInterval.bind(self);' +
-      'self.setTimeout=function(f,d){d=Number(d)||0;if(d>attente)attente=d;return vraiTimeout(f,d);};' +
-      'self.setInterval=function(f,d){d=Number(d)||0;var total=Math.min(d*6,1200);if(total>attente)attente=total;return vraiInterval(f,d);};' +
+      'self.setTimeout=function(f,d){d=Number(d)||0;minuteurs=true;if(d>attente)attente=d;return vraiTimeout(f,d);};' +
+      'self.setInterval=function(f,d){d=Number(d)||0;minuteurs=true;var total=Math.min(d*6,1200);if(total>attente)attente=total;return vraiInterval(f,d);};' +
       'var erreur=null;' +
       'try{new Function("console",e.data)(fauxConsole);}catch(err){erreur=err.message;}' +
       'var terminer=function(){self.postMessage({logs:logs,erreur:erreur});};' +
-      'if(attente>0)vraiTimeout(terminer,Math.min(attente+100,1600));else terminer();' +
+      'if(minuteurs)vraiTimeout(terminer,Math.min(attente+100,1600));else terminer();' +
       '};';
     worker = new Worker(URL.createObjectURL(new Blob([source], { type: 'application/javascript' })));
   } catch (e) {
@@ -1215,14 +1218,17 @@ function executerJS(code, rappel) {
     const logs = [];
     const fauxConsole = { log: (...a) => logs.push(a.map(v => typeof v === 'object' && v !== null ? JSON.stringify(v) : String(v)).join(' ')) };
     let attente = 0;
+    let minuteurs = false;   // voir le Worker : un délai de 0 compte aussi
     const programmes = [];
     const monTimeout = (f, d) => {
       d = Number(d) || 0;
+      minuteurs = true;
       if (d > attente) attente = d;
       const id = setTimeout(f, d); programmes.push(['t', id]); return id;
     };
     const monInterval = (f, d) => {
       d = Number(d) || 0;
+      minuteurs = true;
       const total = Math.min(d * 6, 1200);
       if (total > attente) attente = total;
       const id = setInterval(f, d); programmes.push(['i', id]); return id;
@@ -1238,7 +1244,7 @@ function executerJS(code, rappel) {
       for (const [genre, id] of programmes) (genre === 't' ? clearTimeout : clearInterval)(id);
       rappel({ logs, erreur });
     };
-    if (attente > 0) setTimeout(terminer, Math.min(attente + 100, 1600));
+    if (minuteurs) setTimeout(terminer, Math.min(attente + 100, 1600));
     else terminer();
     return;
   }

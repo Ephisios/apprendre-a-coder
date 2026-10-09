@@ -5,24 +5,57 @@ window.DATA_JSAVANCE = [
   id: 'jsav-1',
   titre: 'Boucles et tableaux, version moderne',
   contenu: `
-<p>Tu maîtrises la boucle <code>for</code> classique. Voici maintenant les outils que les développeurs utilisent au quotidien pour travailler plus vite avec les tableaux.</p>
+<h2>Pourquoi ça existe</h2>
+<p>La boucle <code>for</code> classique marche partout, et elle demande trois choses à surveiller : un compteur qui part du bon nombre, une condition qui s'arrête au bon endroit, et un <code>tableau[i]</code> écrit correctement. Trois occasions de se tromper, à chaque boucle.</p>
+<p>Or la plupart du temps, on ne veut pas l'indice : on veut les <em>éléments</em>. Les outils de cette leçon disent cela directement — et ne peuvent donc pas se tromper d'une case.</p>
 
-<h2>La boucle for...of : plus simple, plus lisible</h2>
-<pre class="bloc-code">let fruits = ["pomme", "banane", "cerise"];
+<h2>for...of : chaque élément, directement</h2>
+<pre class="bloc-code">const fruits = ["pomme", "banane", "cerise"];
 
 for (const fruit of fruits) {
   console.log(fruit);
 }</pre>
-<p>Ça se lit : « pour chaque <code>fruit</code> du tableau <code>fruits</code>... ». Plus de compteur <code>i</code>, plus de <code>fruits[i]</code> : la variable <code>fruit</code> prend directement chaque valeur, une par une. Quand tu n'as pas besoin de l'index, c'est la boucle à préférer.</p>
+<p>Ça se lit comme une phrase : « pour chaque fruit du tableau fruits ». Plus de compteur, plus de crochets — la variable prend directement chaque valeur, une par une.</p>
+<p>On la déclare en <code>const</code> : elle est recréée à chaque tour, donc jamais modifiée en cours de route.</p>
 
-<h2>Trois méthodes de tableau très utiles</h2>
-<pre class="bloc-code">let invites = ["Léa", "Tom", "Nina"];
+<h2>Trois méthodes qui répondent à une question</h2>
+<ul>
+<li><code>includes("Tom")</code> — « est-il dans la liste ? » Rend <code>true</code> ou <code>false</code> ;</li>
+<li><code>indexOf("Tom")</code> — « à quelle place ? » Rend l'indice, ou <strong>-1</strong> s'il est absent ;</li>
+<li><code>join(", ")</code> — assemble tout le tableau en un seul texte.</li>
+</ul>
+<p><code>join</code> est la réponse à un réflexe de débutant : afficher une liste avec une boucle alors qu'une ligne suffit.</p>
 
-console.log(invites.includes("Tom"));   // true — est-ce dans la liste ?
-console.log(invites.indexOf("Nina"));   // 2 — à quelle position ? (-1 si absent)
-console.log(invites.join(" et "));      // "Léa et Tom et Nina" — coller en un texte</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'on veut</th><th>Avec for classique</th><th>Avec les nouveaux outils</th></tr>
+<tr><td>parcourir</td><td>trois choses à régler, puis <code>t[i]</code></td><td><code>for (const x of t)</code></td></tr>
+<tr><td>chercher</td><td>une boucle et un drapeau</td><td><code>t.includes(x)</code></td></tr>
+<tr><td>afficher la liste</td><td>une boucle et un accumulateur</td><td><code>t.join(", ")</code></td></tr>
+</table>
 
-<div class="astuce">✅ <code>includes</code> retourne <code>true</code> ou <code>false</code> : c'est un booléen, parfait dans un <code>if</code> : <code>if (invites.includes("Tom")) { ... }</code></div>
+<h2>Les pièges</h2>
+<p><strong>Confondre <code>for...of</code> et <code>for...in</code>.</strong> Deux mots qui se ressemblent, deux comportements différents : <code>of</code> donne les <strong>valeurs</strong>, <code>in</code> donne les <strong>indices</strong> — et sous forme de texte, ce qui réserve des surprises dans les calculs. Sur un tableau, c'est <code>of</code>, toujours.</p>
+<p><strong>Vouloir l'indice dans un <code>for...of</code>.</strong> Il n'y est pas. Si tu en as besoin — pour afficher « 1. », « 2. » — reviens au <code>for</code> classique, ou utilise <code>entries()</code>.</p>
+<p><strong>Tester <code>indexOf</code> avec <code>if (t.indexOf(x))</code>.</strong> Piège classique : quand l'élément est en <strong>première</strong> position, <code>indexOf</code> rend <code>0</code>, que JavaScript considère comme faux. Le test échoue précisément dans le cas où il devrait réussir. Écris <code>!== -1</code>, ou mieux, <code>includes</code>.</p>
+<p><strong>Modifier le tableau pendant qu'on le parcourt.</strong> Ajouter ou retirer des éléments en cours de boucle donne des résultats imprévisibles. On travaille sur une copie, ou on construit un nouveau tableau.</p>
+
+<h2>Dans la vraie vie</h2>
+<p><code>for...of</code> est devenu la boucle par défaut du JavaScript moderne : on ne voit plus guère de <code>for (let i = 0; ...)</code> que là où l'indice compte vraiment. Quant à <code>includes</code>, il a remplacé du jour au lendemain les <code>indexOf(...) !== -1</code> de toute une génération de code.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>for...of</code> donne les valeurs ; <code>for...in</code> donne les indices, en texte.</li>
+<li><code>includes</code> répond par oui ou non ; <code>indexOf</code> rend une position, ou <strong>-1</strong>.</li>
+<li>Tester <code>indexOf</code> sans <code>!== -1</code> échoue sur le premier élément.</li>
+<li><code>join</code> remplace une boucle entière pour afficher une liste.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : récupérer l'indice quand même</summary>
+<p><code>for (const [i, fruit] of fruits.entries())</code> donne les deux à la fois : l'indice et la valeur. La paire entre crochets est de la <em>destructuration</em>, que tu verras plus loin dans ce module. C'est la forme à connaître quand on a besoin des deux, et elle évite de retomber sur le <code>for</code> à trois réglages.</p>
+</details>
 `,
   exercices: [
     {
@@ -378,26 +411,54 @@ let positivesEnFahrenheit = temperatures
   id: 'jsav-3',
   titre: 'Math, hasard et arrondis',
   contenu: `
-<p>JavaScript embarque une boîte à outils mathématique : l'objet <code>Math</code>. En voici le best-of.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un prix à arrondir, un dé à lancer, une position au hasard, un pourcentage à borner : dès qu'un programme calcule, il rencontre ces besoins. JavaScript les regroupe dans un objet unique, <code>Math</code>, qu'on n'a jamais à créer — il est toujours là.</p>
 
-<h2>Arrondir</h2>
-<pre class="bloc-code">Math.round(4.7)   // 5   arrondi classique
-Math.floor(4.7)   // 4   vers le bas (plancher)
-Math.ceil(4.2)    // 5   vers le haut (plafond)
-(3.14159).toFixed(2)   // "3.14"  garde 2 décimales (donne un TEXTE)</pre>
+<h2>Arrondir, de trois façons</h2>
+<pre class="bloc-code">Math.round(4.7)      // 5   au plus proche
+Math.floor(4.7)      // 4   toujours vers le bas
+Math.ceil(4.2)       // 5   toujours vers le haut
+(3.14159).toFixed(2) // "3.14"   deux decimales</pre>
+<p>Attention au dernier : <code>toFixed</code> rend un <strong>texte</strong>, pas un nombre. Mesuré : <code>typeof</code> dit <code>"string"</code>, et <code>"3.14" + 1</code> donne <code>"3.141"</code> — une concaténation, pas une addition. Il sert à <em>afficher</em>, jamais à continuer un calcul.</p>
 
-<h2>Le hasard : Math.random()</h2>
-<pre class="bloc-code">Math.random()     // un nombre au hasard entre 0 et 1 (ex : 0.7264...)</pre>
-<p>Pour obtenir un entier entre 1 et 6 (un dé !), la formule consacrée :</p>
-<pre class="bloc-code">let de = Math.floor(Math.random() * 6) + 1;</pre>
-<p>Décodage : <code>random()</code> donne 0 à 0.999..., fois 6 → 0 à 5.999..., <code>floor</code> → 0 à 5, plus 1 → <strong>1 à 6</strong>. Cette formule sert dans tous les jeux.</p>
+<h2>Le hasard</h2>
+<pre class="bloc-code">Math.random()   // entre 0 et 0.999... jamais 1
 
-<h2>Convertir du texte en nombre</h2>
-<pre class="bloc-code">Number("42")       // 42 — le texte devient un nombre
-Number("3.5")      // 3.5
-"5" + 3            // "53" !! piège : + colle les textes
-Number("5") + 3    // 8   ✓</pre>
-<div class="attention">⚠️ Ce piège est réel : les champs de saisie des pages web donnent toujours du TEXTE. Avant de calculer avec, on convertit avec <code>Number()</code>. Tu vas le vivre dès la leçon 5 !</div>
+const de = Math.floor(Math.random() * 6) + 1;   // 1 a 6</pre>
+<p>Décortiquons la formule, parce qu'elle revient partout :</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Intervalle obtenu</th></tr>
+<tr><td><code>Math.random()</code></td><td>0 à 0,999…</td></tr>
+<tr><td><code>* 6</code></td><td>0 à 5,999…</td></tr>
+<tr><td><code>Math.floor(...)</code></td><td>0, 1, 2, 3, 4 ou 5</td></tr>
+<tr><td><code>+ 1</code></td><td><strong>1 à 6</strong></td></tr>
+</table>
+<p>Vérifié sur 500 lancers : le minimum obtenu est 1, le maximum 6. La forme générale pour un entier entre <code>a</code> et <code>b</code> inclus est <code>Math.floor(Math.random() * (b - a + 1)) + a</code>.</p>
+
+<h2>Les autres utiles</h2>
+<p><code>Math.max(3, 9, 1)</code> et <code>Math.min(...)</code> rendent le plus grand et le plus petit. <code>Math.abs(-5)</code> donne 5. Et <code>Math.min(Math.max(x, 0), 100)</code> borne une valeur entre 0 et 100 — une écriture qu'on croise très souvent.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Croire que <code>toFixed</code> rend un nombre.</strong> Le symptôme est reconnaissable : des additions qui collent au lieu d'additionner. Si tu dois recalculer après, repasse par <code>Number(...)</code>.</p>
+<p><strong>Oublier le <code>+ 1</code> du dé.</strong> On obtient alors 0 à 5 : un dé qui tombe parfois sur zéro, et jamais sur six. Le bug est discret parce que le résultat reste plausible.</p>
+<p><strong>Utiliser <code>Math.round</code> au lieu de <code>Math.floor</code> dans la formule.</strong> <code>round</code> rendrait les deux valeurs extrêmes deux fois moins probables que les autres — un dé pipé, et personne ne s'en aperçoit sans compter.</p>
+<p><strong>Additionner des prix sans y penser.</strong> Mesuré : <code>0.1 + 0.2</code> affiche <code>0.30000000000000004</code>. Ce n'est pas un bug de JavaScript mais la façon dont les ordinateurs stockent les décimaux. Pour de l'argent, le réflexe des professionnels est de compter en <strong>centimes</strong>, avec des entiers, et de diviser seulement à l'affichage.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La formule du hasard sert dans tous les jeux, mais aussi pour choisir une citation du jour, mélanger une playlist, répartir des visiteurs entre deux versions d'une page. Quant aux arrondis de prix, ils sont la cause d'une famille entière de bugs comptables, dans tous les langages.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>Math.floor(Math.random() * n) + 1</code> donne un entier de 1 à n.</li>
+<li><code>toFixed</code> rend un <strong>texte</strong> : bon pour afficher, jamais pour calculer.</li>
+<li><code>0.1 + 0.2</code> ne fait pas exactement 0,3 — pour de l'argent, compte en centimes.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi 0,1 + 0,2 rate</summary>
+<p>Un ordinateur stocke les nombres en binaire. Or un dixième ne s'écrit pas exactement en binaire, pas plus qu'un tiers ne s'écrit exactement en décimal — 0,333… ne finit jamais. La machine garde donc une approximation, et deux approximations additionnées donnent une erreur visible à la quinzième décimale. Tous les langages ont ce comportement ; ceux qui semblent y échapper arrondissent simplement à l'affichage.</p>
+</details>
 `,
   exercices: [
     {
@@ -466,23 +527,56 @@ Number("5") + 3    // 8   ✓</pre>
   id: 'jsav-4',
   titre: 'Créer des éléments : le DOM dynamique',
   contenu: `
-<p>Jusqu'ici, ton JavaScript modifiait des éléments existants. Niveau supérieur : <strong>créer</strong> des éléments de toutes pièces. C'est comme ça qu'une liste de tâches s'allonge ou qu'un fil d'actualité se remplit.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici, ton JavaScript modifiait des éléments déjà écrits dans le HTML. Cela suppose de savoir à l'avance combien il y en aura — ce qui est faux dès qu'une liste s'allonge, qu'un message arrive, qu'un panier se remplit.</p>
+<p>Une application moderne fabrique son HTML au fur et à mesure. C'est ce que fait un fil d'actualité, une liste de tâches, un tableau de résultats de recherche.</p>
 
-<h2>Créer et ajouter</h2>
-<pre class="bloc-code">let li = document.createElement("li");   // fabrique un &lt;li&gt; (en mémoire)
-li.textContent = "Nouvel élément";       // le remplit
-document.querySelector("#liste").appendChild(li);   // l'ajoute DANS la liste</pre>
-<p>Trois temps : <strong>créer</strong> (createElement), <strong>remplir</strong> (textContent), <strong>attacher</strong> (appendChild). Tant qu'il n'est pas attaché, l'élément existe en mémoire mais reste invisible.</p>
+<h2>Trois temps : créer, remplir, attacher</h2>
+<pre class="bloc-code">const li = document.createElement("li");
+li.textContent = "Nouvel element";
+document.querySelector("#liste").appendChild(li);</pre>
+<p>L'ordre compte peu pour les deux premiers, mais le troisième est décisif : <strong>tant qu'il n'est pas attaché, l'élément existe en mémoire et reste invisible</strong>. C'est l'oubli numéro un de cette leçon — le code ne produit aucune erreur, et il ne se passe rien.</p>
+<p>Pour l'habiller, <code>li.classList.add("important")</code> lui pose une classe CSS. Pour le retirer, <code>li.remove()</code>.</p>
 
-<h2>Habiller l'élément créé</h2>
-<pre class="bloc-code">li.classList.add("important");     // ajoute une classe CSS
-li.classList.remove("important");  // la retire
-li.classList.toggle("surligne");   // l'ajoute si absente, la retire si présente
-li.style.color = "red";            // style direct (à petite dose !)</pre>
-<p><code>classList</code> est le pont parfait entre JavaScript et CSS : le JS pose ou enlève des classes, le CSS décrit à quoi elles ressemblent. Chacun son métier.</p>
+<h2>textContent ou innerHTML ?</h2>
+<p>Deux façons de remplir un élément, et le choix n'est pas anodin :</p>
+<ul>
+<li><code>textContent</code> met du <strong>texte</strong>. Si le texte contient des chevrons, ils s'affichent tels quels ;</li>
+<li><code>innerHTML</code> met du <strong>code HTML</strong>, qui sera interprété.</li>
+</ul>
+<p>La règle de sécurité tient en une phrase : <strong>ce qui vient de l'utilisateur va dans <code>textContent</code></strong>. Avec <code>innerHTML</code>, quelqu'un peut écrire une balise de script dans un champ de commentaire et la voir s'exécuter chez tous les visiteurs. C'est l'une des failles les plus courantes du web.</p>
 
-<h2>Vider un conteneur</h2>
-<pre class="bloc-code">document.querySelector("#liste").innerHTML = "";   // supprime tout le contenu</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>Où en est l'élément</th></tr>
+<tr><td><code>createElement("li")</code></td><td>Il existe, en mémoire. Invisible.</td></tr>
+<tr><td><code>li.textContent = "..."</code></td><td>Il a du contenu. Toujours invisible.</td></tr>
+<tr><td><code>li.classList.add("x")</code></td><td>Il a sa classe. Toujours invisible.</td></tr>
+<tr><td><code>appendChild(li)</code></td><td><strong>Il entre dans la page</strong> et s'affiche.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>appendChild</code>.</strong> Rien ne s'affiche, rien ne casse, aucune erreur. Si ton élément créé n'apparaît pas, c'est la première chose à vérifier.</p>
+<p><strong>Attacher au mauvais parent.</strong> L'élément apparaît, mais ailleurs — souvent tout en bas de la page. Vérifie le sélecteur du parent.</p>
+<p><strong>Reconstruire toute la liste à chaque ajout.</strong> Vider un <code>innerHTML</code> puis tout réécrire fonctionne sur dix éléments et devient lent sur mille. Ajouter un seul élément coûte bien moins cher que redessiner l'ensemble.</p>
+<p><strong>Créer des éléments dans une boucle sans précaution.</strong> Mille <code>appendChild</code> font mille recalculs de la page. On peut les regrouper avec un <code>DocumentFragment</code> — mais c'est une optimisation à garder pour le jour où elle sert vraiment.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Tout ce qui apparaît après le chargement d'une page passe par là : un message dans une conversation, une ligne ajoutée à un panier, un résultat de recherche. Les bibliothèques modernes — React et ses cousines — ne font au fond rien d'autre, avec une couche qui décide à ta place quoi créer et quoi retirer.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Créer, remplir, <strong>attacher</strong> : sans le troisième temps, l'élément reste invisible.</li>
+<li><code>textContent</code> pour du texte, <code>innerHTML</code> pour du HTML.</li>
+<li>Ce qui vient de l'utilisateur va toujours dans <code>textContent</code> — c'est une question de sécurité.</li>
+<li><code>classList.add</code> habille, <code>remove()</code> retire.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la faille derrière innerHTML</summary>
+<p>Elle porte un nom — <em>injection de script</em> — et le principe est simple : si un visiteur peut écrire du HTML qui sera rendu tel quel chez les autres, il peut y glisser du code. Ce code s'exécute alors avec les droits de chaque visiteur : lire ses informations, agir en son nom. C'est pour cela que tous les sites sérieux échappent systématiquement ce que les utilisateurs écrivent — et que <code>textContent</code>, qui le fait pour toi, est le bon réflexe par défaut.</p>
+</details>
 `,
   exercices: [
     {
@@ -563,32 +657,62 @@ li.style.color = "red";            // style direct (à petite dose !)</pre>
   id: 'jsav-5',
   titre: 'Lire ce que tape l\'utilisateur',
   contenu: `
-<p>Un programme vraiment utile <strong>écoute</strong> son utilisateur. La porte d'entrée : les champs <code>&lt;input&gt;</code> et leur propriété <code>.value</code>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un programme qui ne fait que parler reste une démonstration. Dès qu'il écoute, il devient un outil : une calculatrice, un formulaire, un jeu. La porte d'entrée est toujours la même — un champ <code>&lt;input&gt;</code> et sa propriété <code>.value</code>.</p>
 
 <h2>Lire un champ</h2>
-<pre class="bloc-code">&lt;input id="pseudo" type="text" placeholder="Ton pseudo"&gt;
-&lt;button id="valider"&gt;OK&lt;/button&gt;
-&lt;p id="salut"&gt;&lt;/p&gt;
+<pre class="bloc-code">document.querySelector("#valider").addEventListener("click", function () {
+  const pseudo = document.querySelector("#pseudo").value;
+  document.querySelector("#salut").textContent = "Salut " + pseudo;
+});</pre>
+<p>Le point décisif : <code>.value</code> donne le contenu <strong>au moment où on le lit</strong>. D'où l'importance de le lire <em>dans</em> l'écouteur, et non une fois pour toutes au chargement de la page — où le champ est encore vide.</p>
 
-&lt;script&gt;
-  document.querySelector("#valider").addEventListener("click", function () {
-    let pseudo = document.querySelector("#pseudo").value;
-    document.querySelector("#salut").textContent = "Salut " + pseudo + " !";
-  });
-&lt;/script&gt;</pre>
-<p><code>.value</code> donne le contenu ACTUEL du champ, au moment où on le lit — d'où l'importance de le lire <em>dans</em> l'écouteur, pas avant.</p>
+<h2>Toujours du texte</h2>
+<p>Un champ rend du texte, même un <code>&lt;input type="number"&gt;</code>. Avant tout calcul, il faut convertir :</p>
+<ul>
+<li><code>Number(valeur)</code> — strict : « 12ans » donne <code>NaN</code> ;</li>
+<li><code>parseInt(valeur)</code> — tolérant : « 12ans » donne <code>12</code> ;</li>
+<li><code>isNaN(resultat)</code> — pour savoir si la conversion a échoué.</li>
+</ul>
+<p>Et le piège mesuré : <code>Number("")</code> rend <strong>0</strong>, pas <code>NaN</code>. Un champ laissé vide passe donc pour un zéro parfaitement valide. Si ton programme doit distinguer « rien saisi » de « zéro saisi », teste d'abord que le champ n'est pas vide.</p>
 
-<h2>Le piège du texte (le revoilà !)</h2>
-<pre class="bloc-code">let age = document.querySelector("#age").value;   // "25" — du TEXTE !
-console.log(age + 5);          // "255" 😱
-console.log(Number(age) + 5);  // 30 ✓</pre>
-<div class="attention">⚠️ <code>.value</code> renvoie TOUJOURS du texte, même pour un <code>type="number"</code>. Avant tout calcul : <code>Number(...)</code>. Ce bug précis a fait transpirer tous les débutants du monde.</div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>Ce que vaut <code>.value</code></th></tr>
+<tr><td>au chargement de la page</td><td>la chaîne vide</td></tr>
+<tr><td>l'utilisateur tape « 42 »</td><td><code>"42"</code> — du texte</td></tr>
+<tr><td>après <code>Number(...)</code></td><td><code>42</code> — un nombre</td></tr>
+<tr><td>il efface tout</td><td>la chaîne vide, que <code>Number</code> transforme en <code>0</code></td></tr>
+</table>
 
 <h2>Réagir pendant la frappe</h2>
+<p>Pour un compteur de caractères ou une recherche qui filtre en direct, on n'attend pas de clic : on écoute <code>input</code>, qui se déclenche à chaque caractère.</p>
 <pre class="bloc-code">champ.addEventListener("input", function () {
-  console.log("Contenu actuel : " + champ.value);
+  compteur.textContent = champ.value.length + " caracteres";
 });</pre>
-<p>L'événement <code>"input"</code> se déclenche à CHAQUE caractère tapé — parfait pour les aperçus en direct et les compteurs de caractères.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Lire <code>.value</code> en dehors de l'écouteur.</strong> La variable garde alors éternellement la valeur du chargement — c'est-à-dire rien. L'erreur est fréquente et le symptôme déroutant : le programme affiche toujours la même chose.</p>
+<p><strong>Oublier la conversion.</strong> Un âge saisi reste un texte : <code>"20" * 7</code> fonctionne par chance, <code>"20" + 7</code> donne « 207 ». Les comparaisons, elles, deviennent alphabétiques.</p>
+<p><strong>Ne pas vérifier une saisie.</strong> Un utilisateur tapera des lettres dans un champ de nombre, ou laissera le champ vide. Un programme sérieux le prévoit — et <code>isNaN</code> suffit.</p>
+<p><strong>Confondre <code>.value</code> et <code>.textContent</code>.</strong> Un champ de formulaire a une <code>value</code> ; un paragraphe a un <code>textContent</code>. Les intervertir donne <code>undefined</code>, sans erreur.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Chaque barre de recherche, chaque formulaire de connexion, chaque champ de commentaire. Et la règle de prudence reste la même qu'au module HTML : ce que vérifie ton JavaScript est un confort pour l'utilisateur — le serveur, lui, revérifie toujours tout.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>.value</code> se lit <strong>dans</strong> l'écouteur, au moment du clic.</li>
+<li>Un champ rend toujours du texte : convertir avant de calculer.</li>
+<li><code>Number("")</code> vaut <code>0</code> — un champ vide ressemble à un zéro.</li>
+<li><code>input</code> réagit à chaque caractère, <code>click</code> seulement à la validation.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : écrire dans un champ</summary>
+<p><code>.value</code> se lit, mais s'écrit aussi : <code>champ.value = "Camille"</code> remplit le champ depuis le code. C'est ainsi qu'on préremplit un formulaire, qu'on le vide après envoi, ou qu'on corrige une saisie à la volée — mettre en majuscules un code postal, par exemple. Attention toutefois : corriger pendant que l'utilisateur tape déplace son curseur, et le résultat est vite désagréable.</p>
+</details>
 `,
   exercices: [
     {
@@ -673,24 +797,56 @@ console.log(Number(age) + 5);  // 30 ✓</pre>
   id: 'jsav-6',
   titre: 'localStorage : sauvegarder des données',
   contenu: `
-<p>Ferme un onglet : tout ce que ton JavaScript avait en mémoire disparaît. Pour qu'une donnée <strong>survive</strong>, le navigateur offre un petit coffre-fort : le <code>localStorage</code>. C'est lui qui sauvegarde ta progression dans ce logiciel !</p>
+<h2>Pourquoi ça existe</h2>
+<p>Ferme un onglet : tout ce que ton JavaScript gardait en mémoire disparaît. Les variables, les tableaux, l'état du jeu — tout. Pour la plupart des programmes, c'est inacceptable : personne ne veut ressaisir sa liste de courses à chaque visite.</p>
+<p>Le navigateur offre pour cela un petit coffre-fort, le <code>localStorage</code>. C'est lui qui garde ta progression dans ce logiciel : ferme la fenêtre, reviens demain, tes exercices réussis sont toujours là.</p>
 
-<h2>Les trois opérations</h2>
-<pre class="bloc-code">localStorage.setItem("pseudo", "Mathéo");   // sauvegarder (clé, valeur)
-let p = localStorage.getItem("pseudo");     // relire → "Mathéo" (ou null si absent)
-localStorage.removeItem("pseudo");          // effacer</pre>
-<p>Une <strong>clé</strong> (le nom de la case) et une <strong>valeur</strong> : comme un objet, mais permanent. Les données restent après fermeture du navigateur, et même après redémarrage du PC.</p>
+<h2>Trois opérations, et c'est tout</h2>
+<pre class="bloc-code">localStorage.setItem("pseudo", "Camille");
+const p = localStorage.getItem("pseudo");   // "Camille", ou null si absent
+localStorage.removeItem("pseudo");</pre>
+<p>Une clé, une valeur — comme un objet, mais permanent. Les données survivent à la fermeture du navigateur, et même au redémarrage de l'ordinateur.</p>
+<p>Une valeur absente rend <strong><code>null</code></strong>, pas <code>undefined</code>. C'est le test à écrire au démarrage : si <code>getItem</code> rend <code>null</code>, c'est la première visite.</p>
 
-<h2>Le détail qui compte : tout est texte</h2>
-<pre class="bloc-code">localStorage.setItem("score", 42);
-let s = localStorage.getItem("score");   // "42" — du TEXTE (encore lui !)
-let score = Number(s);                   // 42 ✓</pre>
+<h2>Le détail qui change tout : seulement du texte</h2>
+<p>Le <code>localStorage</code> ne sait stocker que des chaînes. Un nombre y entre et en ressort en texte ; un tableau ou un objet y entre et en ressort… méconnaissable.</p>
+<pre class="bloc-code">localStorage.setItem("liste", JSON.stringify(mesTaches));
 
-<h2>Et pour les tableaux/objets ? JSON !</h2>
-<pre class="bloc-code">let taches = ["courses", "sport"];
-localStorage.setItem("taches", JSON.stringify(taches));  // objet → texte
-let relu = JSON.parse(localStorage.getItem("taches"));   // texte → objet</pre>
-<p><code>JSON.stringify</code> transforme n'importe quelle structure en texte, <code>JSON.parse</code> fait l'inverse. Ce duo est partout : c'est aussi le format des échanges entre sites web et serveurs.</p>
+const t = JSON.parse(localStorage.getItem("liste") || "[]");</pre>
+<p><code>JSON.stringify</code> transforme un objet en texte, <code>JSON.parse</code> fait le retour. Le <code>|| "[]"</code> est la précaution qui évite de planter à la première visite, quand <code>getItem</code> rend <code>null</code> et que <code>JSON.parse(null)</code> ne donne rien d'utile.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>Première visite</td><td><code>getItem</code> rend <code>null</code> : on part d'une liste vide.</td></tr>
+<tr><td>L'utilisateur ajoute</td><td>On modifie le tableau <em>en mémoire</em>.</td></tr>
+<tr><td>On sauvegarde</td><td><code>setItem</code> avec <code>JSON.stringify</code> : le texte part au coffre.</td></tr>
+<tr><td>Il ferme l'onglet</td><td>La mémoire est perdue. Le coffre, non.</td></tr>
+<tr><td>Il revient</td><td><code>getItem</code> rend le texte ; <code>JSON.parse</code> reconstruit le tableau.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>JSON.stringify</code>.</strong> Stocker un tableau directement le convertit en texte à la va-vite, et au retour on récupère une chaîne inutilisable — souvent <code>"[object Object]"</code> pour un objet. Aucune erreur n'est signalée.</p>
+<p><strong>Oublier <code>JSON.parse</code> au retour.</strong> Le symptôme est reconnaissable : un <code>.length</code> qui donne le nombre de <em>caractères</em> au lieu du nombre d'éléments.</p>
+<p><strong>Ne pas prévoir la première visite.</strong> <code>JSON.parse(null)</code> rend <code>null</code>, et tout ce qui suit casse. Le <code>|| "[]"</code> coûte quatre caractères.</p>
+<p><strong>Croire que c'est un coffre-fort.</strong> Le nom est trompeur : n'importe qui peut lire et modifier le contenu depuis les outils du navigateur. On n'y met jamais de mot de passe, jamais de donnée sensible — c'est un bloc-notes, pas une banque.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le thème sombre que le site retient, le panier qui survit à la fermeture, le brouillon d'un message, la bannière de cookies qu'on n'a accepté qu'une fois. La place est limitée — quelques méga-octets — et le contenu reste sur cette machine et dans ce navigateur : rien ne suit l'utilisateur sur son téléphone.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Trois opérations : <code>setItem</code>, <code>getItem</code>, <code>removeItem</code>.</li>
+<li>Une clé absente rend <strong><code>null</code></strong> — c'est le signe d'une première visite.</li>
+<li>Il ne stocke que du texte : <code>JSON.stringify</code> à l'aller, <code>JSON.parse</code> au retour.</li>
+<li>Rien de sensible : le contenu est lisible et modifiable par qui le veut.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : sessionStorage, son cousin</summary>
+<p>Même interface, exactement les mêmes méthodes — mais le contenu disparaît à la fermeture de l'onglet, et il n'est pas partagé entre deux onglets du même site. C'est le bon choix pour ce qui ne concerne que la visite en cours : une étape de formulaire, un filtre de recherche. Choisir l'un ou l'autre revient à se demander une seule chose : cette donnée doit-elle encore exister demain ?</p>
+</details>
 `,
   exercices: [
     {
@@ -760,35 +916,62 @@ let relu = JSON.parse(localStorage.getItem("taches"));   // texte → objet</pre
   id: 'jsav-7',
   titre: 'Erreurs, typeof et l\'art de déboguer',
   contenu: `
-<p>Dernière leçon avancée, et peut-être la plus précieuse : que faire quand ça ne marche pas — et comment écrire du code qui encaisse les problèmes.</p>
+<h2>Pourquoi ça existe</h2>
+<p>C'est la dernière leçon du module, et peut-être la plus utile de toutes : que faire quand ça ne marche pas. Non pas parce que tu codes mal — mais parce que <strong>personne n'écrit du code juste du premier coup</strong>. La différence entre un débutant et un professionnel n'est pas le nombre de bugs, c'est le temps qu'il met à les trouver.</p>
 
 <h2>typeof : demander son type à une valeur</h2>
-<pre class="bloc-code">typeof 42            // "number"
-typeof "42"          // "string"  (du texte !)
-typeof true          // "boolean"
-typeof maFonction    // "function"
-typeof [1, 2]        // "object"  (les tableaux sont des objets)
-typeof x             // "undefined" si x n'a jamais reçu de valeur</pre>
-<p>Quand un calcul donne n'importe quoi, <code>console.log(typeof maVariable)</code> révèle souvent le coupable (un texte déguisé en nombre, par exemple).</p>
+<pre class="bloc-code">typeof 42        // "number"
+typeof "42"      // "string"   du texte deguise en nombre !
+typeof true      // "boolean"
+typeof [1, 2]    // "object"   les tableaux sont des objets
+typeof null      // "object"   une bizarrerie historique
+typeof undefined // "undefined"</pre>
+<p>Quand un calcul donne n'importe quoi, un <code>console.log(typeof maVariable)</code> révèle souvent le coupable en une seconde — presque toujours un texte là où on attendait un nombre.</p>
+<p>Deux résultats méritent qu'on s'y arrête, et ils sont mesurés. <code>typeof []</code> rend <code>"object"</code> : pour reconnaître un tableau, il faut <code>Array.isArray(x)</code>. Et <code>typeof null</code> rend aussi <code>"object"</code> — une erreur présente depuis 1995, jamais corrigée parce que trop de code en dépend.</p>
 
 <h2>try / catch : essayer sans planter</h2>
 <pre class="bloc-code">try {
-  // code qui PEUT échouer
-  let donnees = JSON.parse(texteRecu);
-  console.log("Données lues !");
+  const donnees = JSON.parse(texte);
+  console.log(donnees.nom);
 } catch (erreur) {
-  // exécuté SEULEMENT si le try a planté
-  console.log("Échec : " + erreur.message);
+  console.log("Donnees illisibles : " + erreur.message);
 }</pre>
-<p>Sans <code>try/catch</code>, une erreur <strong>arrête tout le programme</strong>. Avec, tu la captures et tu décides quoi faire : message à l'utilisateur, valeur par défaut, nouvel essai...</p>
+<p>Le bloc <code>try</code> contient ce qui peut échouer. Si une erreur survient, l'exécution saute immédiatement dans le <code>catch</code>, au lieu de tout arrêter. On s'en sert pour ce qu'on ne contrôle pas : une saisie, un fichier, une réponse de serveur.</p>
+<p>Mesuré : <code>JSON.parse("{pas du json}")</code> produit <code>Expected property name or '}' in JSON at position 1</code>. Sans <code>try</code>, le programme s'arrête là.</p>
 
-<h2>La méthode de débogage universelle</h2>
-<ol>
-<li><strong>Lis le message d'erreur</strong> — nom de l'erreur + ligne. 80% des cas se résolvent là.</li>
-<li><strong>console.log tes variables</strong> aux étapes clés : « qu'est-ce qu'il y a VRAIMENT dedans à ce moment-là ? »</li>
-<li><strong>Réduis le problème</strong> : commente des blocs jusqu'à isoler la ligne fautive.</li>
-<li><strong>Explique le code à voix haute</strong> (au canard en plastique, dit la tradition) — 9 fois sur 10, tu entends l'erreur en la formulant.</li>
-</ol>
+<h2>Pas à pas : la méthode</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qu'on cherche</th></tr>
+<tr><td>1. Lire le message</td><td>Il nomme souvent la variable et la ligne. Ne pas le sauter.</td></tr>
+<tr><td>2. Afficher avant</td><td>Un <code>console.log</code> juste avant la ligne qui casse.</td></tr>
+<tr><td>3. Vérifier les types</td><td><code>typeof</code> sur chaque valeur qui entre dans le calcul.</td></tr>
+<tr><td>4. Couper en deux</td><td>Commenter la moitié du code : le bug est-il toujours là ?</td></tr>
+<tr><td>5. Une correction à la fois</td><td>Deux changements d'un coup brouillent la piste.</td></tr>
+</table>
+<p>L'étape 4 est la plus sous-estimée : en divisant par deux à chaque fois, on localise un bug dans deux cents lignes en sept ou huit essais.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Ne pas lire le message d'erreur.</strong> Il est en anglais et paraît hostile, mais il contient presque toujours la réponse. <code>x is not defined</code> veut dire « ce nom n'existe pas » ; <code>Cannot read properties of undefined</code> veut dire « tu demandes quelque chose à une valeur absente ».</p>
+<p><strong>Attraper une erreur pour l'ignorer.</strong> Un <code>catch</code> vide fait disparaître le problème de l'écran, pas du programme. Affiche au moins quelque chose.</p>
+<p><strong>Entourer tout le programme d'un <code>try</code>.</strong> On ne sait plus alors ce qui a échoué. On entoure l'opération risquée, pas le reste.</p>
+<p><strong>Changer du code au hasard.</strong> Quand ça finit par marcher, on ne sait pas pourquoi — et le bug reviendra sous une autre forme. Comprendre avant de corriger prend cinq minutes et en fait gagner trois heures.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La console du navigateur (touche F12) affiche toutes les erreurs d'une page, avec le fichier et la ligne. C'est le premier endroit où regarde tout développeur quand quelque chose ne marche pas — avant même de relire son code.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>typeof</code> révèle le plus souvent un texte déguisé en nombre.</li>
+<li><code>typeof []</code> et <code>typeof null</code> rendent tous deux <code>"object"</code> : pour un tableau, c'est <code>Array.isArray</code>.</li>
+<li><code>try / catch</code> entoure ce qu'on ne contrôle pas — et le <code>catch</code> doit dire quelque chose.</li>
+<li>Couper le problème en deux localise un bug bien plus vite que le relire.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : lever sa propre erreur</summary>
+<p><code>throw new Error("l'âge doit être positif")</code> interrompt volontairement l'exécution avec un message à toi. C'est utile dans une fonction qui reçoit quelque chose d'impossible : mieux vaut s'arrêter net, avec une explication claire, que continuer sur des valeurs fausses et produire un résultat absurde trois écrans plus loin. Échouer tôt et bruyamment est un principe reconnu du métier.</p>
+</details>
 `,
   exercices: [
     {
