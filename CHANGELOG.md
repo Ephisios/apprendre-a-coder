@@ -6,6 +6,58 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.15.0 — 2026-10-12
+
+**Tout SQL est au gabarit** : les 17 leçons des deux modules, de la première requête au débogage
+d'un résultat faux. Et la mesure préalable a corrigé une règle que le moteur n'appliquait pas.
+
+### Changé
+
+- **Les 17 leçons de SQL passent au gabarit.** De 90-349 mots à **404-546**. Aucun exercice n'a
+  été touché.
+
+### Corrigé — la règle des NULL
+
+En SQL, **comparer quoi que ce soit à NULL ne rend jamais vrai**. C'est toute la raison d'être de
+`IS NULL`, et l'une des règles les plus surprenantes du langage. Le moteur du cours ne l'appliquait
+pas :
+
+| Requête | Le moteur rendait | Une vraie base rend |
+|---|---|---|
+| `WHERE note = NULL` | 1 ligne | **0** |
+| `WHERE note != NULL` | 7 lignes | **0** |
+
+Un élève y aurait appris une requête qui ne marche dans aucune vraie base — et `sql-3` enseigne
+justement `IS NULL`. La correction porte **uniquement** sur `=` et `<>` ; le reste de `comparer()`,
+qui place les NULL en premier, sert à `ORDER BY` et n'est pas touché.
+
+> Trois affirmations entrent au harnais des moteurs, qui en compte **156**. Éprouvées en remettant
+> le défaut : deux échecs. Et les 371 exercices passent toujours — aucun ne dépendait de l'ancien
+> comportement.
+
+### Ce que la mesure a établi
+
+Tous les chiffres des leçons viennent du moteur, sur sa base de cinéma :
+
+- `COUNT(*)` rend **8** et `COUNT(note)` rend **7** — un film n'a pas de note ;
+- `AVG(note)` vaut **7.614286**, calculé sur sept valeurs et non huit ;
+- un `JOIN` rend **8** lignes là où un `LEFT JOIN` en rend **11** : trois films sans séance ;
+- `UNION` rend **4** lignes, `UNION ALL` en rend **5** — un film est à la fois de 2023 et un drame ;
+- un `COUNT()` dans un `WHERE` est refusé avec un message qui renvoie vers `HAVING`.
+
+> Une divergence notée et volontairement non enseignée : ce moteur accepte les guillemets doubles
+> autour d'un texte, là où une vraie base y verrait un nom de colonne. Les leçons n'en font donc
+> pas un piège — on ne montre pas à l'élève une erreur que son interpréteur ne commettra pas.
+
+### Où en est la conversion
+
+**132 leçons sur 168**, contre 115. Huit pistes complètes : HTML, CSS, les trois JavaScript, les
+trois Python et les deux SQL. La médiane du cours atteint **457 mots**.
+
+Reste 36 leçons : C (14), Java (13), les 4 projets et les deux bouts du parcours.
+
+---
+
 ## 3.14.0 — 2026-10-12
 
 **Tout Python est au gabarit** : les 26 leçons des trois modules, de `print` aux générateurs. Et

@@ -6,41 +6,51 @@ window.DATA_SQL2 = [
   id: 'sql-11',
   titre: 'HAVING : filtrer les groupes',
   contenu: `
-<p>Tu sais filtrer des lignes avec <code>WHERE</code>, et regrouper avec <code>GROUP BY</code>. Mais comment garder uniquement les genres qui ont <strong>plus d'un film</strong> ? Le filtre porte cette fois sur le <em>résultat d'un calcul de groupe</em> — et <code>WHERE</code> en est incapable.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais filtrer des lignes avec <code>WHERE</code> et regrouper avec <code>GROUP BY</code>. Mais comment ne garder que les genres qui comptent plus d'un film ?</p>
+<p>Le filtre ne porte plus sur une ligne : il porte sur le <strong>résultat d'un calcul de groupe</strong>. Or au moment du <code>WHERE</code>, les groupes n'existent pas encore. D'où un second mot-clé.</p>
 
-<pre class="bloc-code">-- Ceci ne marche PAS :
-SELECT genre, COUNT(*) FROM films WHERE COUNT(*) > 1 GROUP BY genre;
-
--- Ceci marche :
-SELECT genre, COUNT(*) AS nombre
+<h2>HAVING</h2>
+<pre class="bloc-code">SELECT genre, COUNT(*) AS nombre
 FROM films
 GROUP BY genre
-HAVING COUNT(*) > 1;</pre>
+HAVING COUNT(*) &gt; 1;</pre>
+<p>Mesuré : trois lignes — Thriller, Drame, Comédie. Le genre Aventure, qui n'a qu'un film, a disparu.</p>
+<p><code>HAVING</code> se place <strong>après</strong> le <code>GROUP BY</code>, et peut utiliser les fonctions d'agrégat, ce que <code>WHERE</code> ne peut pas.</p>
 
-<h2>La différence, en une phrase</h2>
+<h2>Pas à pas : les deux filtres</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui est filtré</th></tr>
+<tr><td><code>FROM films</code></td><td>8 lignes</td></tr>
+<tr><td><code>WHERE annee &gt; 2020</code></td><td>des <strong>lignes</strong> sont retirées, avant tout regroupement</td></tr>
+<tr><td><code>GROUP BY genre</code></td><td>ce qui reste se range en paquets</td></tr>
+<tr><td><code>HAVING COUNT(*) &gt; 1</code></td><td>des <strong>paquets</strong> entiers sont retirés</td></tr>
+</table>
+<p>Les deux coexistent très bien dans la même requête, et ils ne font pas la même chose : <code>WHERE</code> décide qui entre dans les paquets, <code>HAVING</code> décide quels paquets sortent.</p>
+<p>Conséquence pratique : quand les deux sont possibles, <strong>préfère <code>WHERE</code></strong>. Filtrer avant le regroupement, c'est regrouper moins de lignes — donc aller plus vite.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Mettre un agrégat dans le <code>WHERE</code>.</strong> Le moteur du cours est explicite : <em>« la fonction <code>COUNT()</code> ne peut pas s'utiliser ici (elle sert à résumer un groupe de lignes, dans SELECT ou HAVING). »</em> Sur une vraie base, le message serait bien plus sec.</p>
+<p><strong>Mettre une condition de ligne dans le <code>HAVING</code>.</strong> <code>HAVING annee &gt; 2020</code> peut fonctionner, et c'est une mauvaise idée : le filtre s'applique trop tard, après avoir regroupé des lignes dont on ne voulait pas.</p>
+<p><strong>Oublier le <code>GROUP BY</code>.</strong> Un <code>HAVING</code> sans regroupement traite tout le résultat comme un seul paquet. Ça ne lève pas d'erreur, et ça ne fait presque jamais ce qu'on voulait.</p>
+<p><strong>Croire qu'on peut utiliser l'alias.</strong> <code>HAVING nombre &gt; 1</code> échoue sur beaucoup de bases : le <code>SELECT</code> s'exécute <em>après</em> le <code>HAVING</code>, donc l'alias n'existe pas encore. On répète <code>COUNT(*)</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>« Les clients ayant passé plus de trois commandes », « les produits vendus au moins dix fois », « les jours où les ventes ont dépassé mille euros » : toutes ces questions sont des <code>HAVING</code>. Dès qu'un énoncé contient « ayant plus de » suivi d'un décompte, c'est le signal.</p>
+
+<div class="a-retenir">
 <ul>
-<li><code>WHERE</code> filtre <strong>les lignes</strong>, avant le regroupement ;</li>
-<li><code>HAVING</code> filtre <strong>les groupes</strong>, après le regroupement et le calcul.</li>
+<li><code>WHERE</code> filtre des <strong>lignes</strong> avant le regroupement ; <code>HAVING</code> filtre des <strong>groupes</strong> après.</li>
+<li>Seul <code>HAVING</code> accepte les fonctions d'agrégat.</li>
+<li>Quand les deux sont possibles, <code>WHERE</code> est plus rapide.</li>
+<li>L'alias du <code>SELECT</code> n'est pas disponible dans le <code>HAVING</code>.</li>
 </ul>
-<p>C'est pour ça que <code>WHERE</code> ne peut pas voir un <code>COUNT()</code> : au moment où il s'exécute, les groupes n'existent pas encore.</p>
+</div>
 
-<h2>L'ordre complet, définitif</h2>
-<pre class="bloc-code">SELECT   colonnes
-FROM     table
-WHERE    filtre sur les LIGNES
-GROUP BY regroupement
-HAVING   filtre sur les GROUPES
-ORDER BY tri
-LIMIT    coupe</pre>
-
-<h2>Les deux ensemble</h2>
-<pre class="bloc-code">SELECT genre, AVG(note) AS moyenne
-FROM films
-WHERE annee >= 2019          -- on ne garde que les films récents…
-GROUP BY genre
-HAVING AVG(note) > 7;        -- …puis que les genres bien notés</pre>
-
-<div class="astuce"><div>Moyen mnémotechnique : si ta condition contient une fonction comme <code>COUNT</code>, <code>SUM</code> ou <code>AVG</code>, c'est forcément un <code>HAVING</code>. Sinon, c'est un <code>WHERE</code> — et il vaut mieux filtrer tôt, car il y a alors moins de lignes à regrouper.</div></div>
+<details class="plus-loin">
+<summary>Aller plus loin : le repère qui tranche</summary>
+<p>Une question simple suffit à choisir : <em>ma condition a-t-elle besoin d'avoir vu plusieurs lignes ?</em> « L'année est supérieure à 2020 » se juge sur une ligne seule — c'est un <code>WHERE</code>. « Il y a plus d'un film » demande de les avoir comptés — c'est un <code>HAVING</code>. Ce test fonctionne à tous les coups.</p>
+</details>
 `,
   exercices: [
     {
@@ -110,28 +120,55 @@ HAVING AVG(note) > 7;        -- …puis que les genres bien notés</pre>
   id: 'sql-12',
   titre: 'Les sous-requêtes',
   contenu: `
-<p>Une <strong>sous-requête</strong> est une requête placée à l'intérieur d'une autre, entre parenthèses. Elle sert quand la valeur qui t'intéresse doit elle-même être calculée.</p>
+<h2>Pourquoi ça existe</h2>
+<p>« Quels films ont une note supérieure à la moyenne ? » Cette question paraît simple, et elle ne l'est pas : pour filtrer, il faut connaître la moyenne — qui se calcule elle-même sur toute la table.</p>
+<p>On pourrait faire deux requêtes : calculer la moyenne, lire le résultat, l'écrire à la main dans la seconde. Ça marche une fois, et c'est faux dès que la table change. Une <strong>sous-requête</strong> fait les deux d'un coup.</p>
 
-<h2>Le problème typique</h2>
-<p>« Quels films ont une note supérieure à la moyenne ? » Tu ne peux pas écrire la moyenne à la main : elle change dès qu'un film est ajouté. Il faut la calculer <em>dans</em> la requête :</p>
+<h2>La forme</h2>
 <pre class="bloc-code">SELECT titre, note
 FROM films
-WHERE note > (SELECT AVG(note) FROM films);</pre>
-<p>La sous-requête <code>(SELECT AVG(note) FROM films)</code> renvoie <strong>une seule valeur</strong>. SQL la calcule d'abord, puis s'en sert comme si tu l'avais écrite toi-même.</p>
+WHERE note &gt; (SELECT AVG(note) FROM films);</pre>
+<p>Mesuré : quatre films. La requête entre parenthèses s'exécute d'abord, rend une valeur unique — 7.614286 — et la requête principale s'en sert comme d'un nombre ordinaire.</p>
 
-<h2>Une sous-requête qui renvoie une liste : IN</h2>
-<pre class="bloc-code">SELECT titre
-FROM films
-WHERE id IN (SELECT film_id FROM seances);</pre>
-<p>Traduction : « les films dont l'identifiant figure dans la liste des films programmés ». La sous-requête renvoie ici plusieurs valeurs, d'où <code>IN</code> et non <code>=</code>.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>la sous-requête</td><td><code>AVG(note)</code> sur les 8 films : <strong>7.614286</strong></td></tr>
+<tr><td>elle est remplacée</td><td>la condition devient <code>note &gt; 7.614286</code></td></tr>
+<tr><td>la requête principale</td><td>garde les 4 films au-dessus</td></tr>
+</table>
+<p>Le point à comprendre : le résultat n'est pas figé. Ajoute un film, et la moyenne change — la requête reste juste, sans qu'on la modifie.</p>
 
-<h2>Et son contraire : NOT IN</h2>
-<pre class="bloc-code">SELECT titre
-FROM films
-WHERE id NOT IN (SELECT film_id FROM seances);</pre>
-<p>Cette fois : les films <strong>jamais programmés</strong>. C'est une question qu'aucune table ne contient — c'est la requête qui la fabrique.</p>
+<h2>Les trois formes</h2>
+<ul>
+<li><strong>Une valeur</strong> — avec <code>=</code>, <code>&gt;</code>, <code>&lt;</code> : la sous-requête doit rendre une seule case ;</li>
+<li><strong>Une liste</strong> — avec <code>IN</code> : <code>WHERE id IN (SELECT film_id FROM seances)</code> ;</li>
+<li><strong>Une existence</strong> — avec <code>EXISTS</code> : « y a-t-il au moins une ligne ? », sans se soucier de laquelle.</li>
+</ul>
+<p>La deuxième forme est très courante : elle répond à « les films qui ont au moins une séance » sans jointure et sans risque de dupliquer des lignes.</p>
 
-<div class="attention"><div>Une sous-requête utilisée avec <code>=</code> doit renvoyer <strong>une seule ligne et une seule colonne</strong>. Si elle en renvoie plusieurs, il faut <code>IN</code>. C'est l'erreur la plus fréquente sur ce sujet.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Rendre plusieurs lignes là où une est attendue.</strong> <code>WHERE note &gt; (SELECT note FROM films)</code> ne peut pas marcher : huit valeurs, et une comparaison qui en attend une. Avec <code>IN</code>, en revanche, plusieurs lignes sont exactement ce qu'il faut.</p>
+<p><strong>Oublier les parenthèses.</strong> Une sous-requête en est toujours entourée, sans exception.</p>
+<p><strong>En empiler trois.</strong> Une sous-requête dans une sous-requête dans une sous-requête est juste, et illisible. Au-delà d'un niveau, une jointure ou une étape intermédiaire dit mieux l'intention.</p>
+<p><strong>Oublier les NULL avec <code>NOT IN</code>.</strong> Si la sous-requête rend ne serait-ce qu'une valeur absente, <code>NOT IN</code> ne rend <strong>aucune ligne</strong> — jamais. C'est la logique à trois valeurs, et c'est l'un des pièges les plus retors du langage.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>« Les commandes supérieures au panier moyen », « les produits jamais vendus », « les clients sans commande ce mois-ci » : toutes ces questions passent par une sous-requête. C'est aussi l'outil qui permet d'écrire une requête <em>auto-adaptative</em> — qui reste juste quand les données changent.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une sous-requête est une requête entre parenthèses, exécutée en premier.</li>
+<li>Une valeur avec <code>=</code> ou <code>&gt;</code> ; une liste avec <code>IN</code> ; une existence avec <code>EXISTS</code>.</li>
+<li>Elle reste juste quand les données changent — contrairement à une valeur écrite à la main.</li>
+<li><code>NOT IN</code> sur une liste contenant un NULL ne rend jamais rien.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la sous-requête corrélée</summary>
+<p>Une sous-requête peut faire référence à la ligne en cours de la requête principale — on l'appelle alors <em>corrélée</em>, et elle est réexécutée pour chaque ligne. C'est très expressif, et très coûteux : sur un million de lignes, c'est un million de requêtes. Les moteurs modernes savent souvent la réécrire en jointure, mais pas toujours. Quand une requête est inexplicablement lente, c'est l'une des premières choses à regarder.</p>
+</details>
 `,
   exercices: [
     {
@@ -199,29 +236,55 @@ WHERE id NOT IN (SELECT film_id FROM seances);</pre>
   id: 'sql-13',
   titre: 'LEFT JOIN : garder ceux qui n\'ont rien',
   contenu: `
-<p>Le <code>JOIN</code> que tu connais ne garde que les lignes qui <strong>trouvent une correspondance</strong>. Un film sans séance disparaît purement et simplement du résultat.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Le <code>JOIN</code> que tu connais ne garde que les lignes qui trouvent une <strong>correspondance</strong>. Un film sans séance disparaît purement et simplement du résultat.</p>
+<p>C'est souvent ce qu'on veut — et parfois exactement l'inverse. « Quels films n'ont jamais été programmés ? » est une question légitime, et le <code>JOIN</code> ordinaire est incapable d'y répondre : les films concernés sont précisément ceux qu'il écarte.</p>
 
+<h2>LEFT JOIN</h2>
 <pre class="bloc-code">SELECT films.titre, seances.jour
 FROM films
-JOIN seances ON films.id = seances.film_id;
--- les films jamais programmés n'apparaissent pas</pre>
+LEFT JOIN seances ON films.id = seances.film_id;</pre>
+<p>Mesuré : <strong>11 lignes</strong>, contre 8 pour le <code>JOIN</code> ordinaire. Trois films sans séance apparaissent, avec <code>NULL</code> dans la colonne <code>jour</code>.</p>
+<p>Le mot « LEFT » désigne la table écrite <em>à gauche</em> du <code>JOIN</code> : toutes ses lignes sont conservées, qu'elles trouvent une correspondance ou non. Celles de droite ne viennent que si elles correspondent.</p>
 
-<h2>LEFT JOIN garde tout le monde à gauche</h2>
-<pre class="bloc-code">SELECT films.titre, seances.jour
-FROM films
-LEFT JOIN seances ON films.id = seances.film_id;
--- TOUS les films apparaissent ; jour vaut NULL s'il n'y a pas de séance</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Cas</th><th>JOIN</th><th>LEFT JOIN</th></tr>
+<tr><td>film avec 2 séances</td><td>2 lignes</td><td>2 lignes</td></tr>
+<tr><td>film avec 1 séance</td><td>1 ligne</td><td>1 ligne</td></tr>
+<tr><td>film <strong>sans</strong> séance</td><td><strong>absent</strong></td><td>1 ligne, <code>jour</code> à NULL</td></tr>
+<tr><td>total mesuré</td><td><strong>8</strong></td><td><strong>11</strong></td></tr>
+</table>
 
-<p>« LEFT » désigne la table écrite <strong>à gauche</strong> du mot JOIN, c'est-à-dire celle du <code>FROM</code>. Toutes ses lignes sont conservées ; quand rien ne correspond à droite, SQL remplit les colonnes manquantes avec <code>NULL</code>.</p>
-
-<h2>L'usage le plus précieux : trouver les absents</h2>
+<h2>Trouver les orphelins</h2>
 <pre class="bloc-code">SELECT films.titre
 FROM films
 LEFT JOIN seances ON films.id = seances.film_id
 WHERE seances.id IS NULL;</pre>
-<p>Astuce à connaître : si la colonne de droite est <code>NULL</code> après un LEFT JOIN, c'est qu'<strong>aucune correspondance n'a été trouvée</strong>. On isole ainsi les orphelins — et c'est souvent exactement ce qu'on cherche : produits jamais commandés, adhérents sans cotisation, machines sans intervention.</p>
+<p>Voilà la réponse à « quels films n'ont jamais été programmés ». L'astuce est élégante : on joint tout, puis on ne garde que les lignes où la table de droite n'a rien apporté — c'est-à-dire là où sa clé est NULL.</p>
+<p>Ce motif a un nom dans le métier : la <em>jointure anti</em>. Il sert partout — clients sans commande, produits sans stock, utilisateurs sans activité.</p>
 
-<div class="info"><div>Il existe aussi <code>RIGHT JOIN</code> (garder tout à droite) et <code>FULL JOIN</code> (garder les deux côtés). En pratique, on utilise presque toujours <code>LEFT JOIN</code> : il suffit de mettre la table importante en premier.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Mettre la condition dans le <code>WHERE</code> au lieu du <code>ON</code>.</strong> C'est le piège sérieux. <code>LEFT JOIN seances ... WHERE seances.jour = 'lundi'</code> élimine les films sans séance, puisque leur <code>jour</code> est NULL : le <code>LEFT JOIN</code> redevient un <code>JOIN</code> ordinaire, sans que rien ne le signale. La condition sur la table de droite va dans le <code>ON</code>.</p>
+<p><strong>Compter après un <code>LEFT JOIN</code>.</strong> <code>COUNT(*)</code> compte aussi les lignes vides. Pour compter les séances réelles, c'est <code>COUNT(seances.id)</code>, qui ignore les NULL — et la distinction vue en <code>sql-6</code> prend ici tout son sens.</p>
+<p><strong>Inverser les tables.</strong> C'est celle de gauche qui est conservée. Écrire <code>FROM seances LEFT JOIN films</code> répond à une tout autre question.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le <code>LEFT JOIN</code> est la jointure la plus utilisée des rapports : on part toujours de la liste complète — tous les clients, tous les produits — et l'on y rattache ce qui existe. Un rapport fait au <code>JOIN</code> ordinaire oublie silencieusement tous ceux qui n'ont rien, et personne ne s'en aperçoit.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>LEFT JOIN</code> garde <strong>toutes</strong> les lignes de la table de gauche.</li>
+<li>Les colonnes de droite valent NULL quand il n'y a pas de correspondance.</li>
+<li><code>WHERE cledroite IS NULL</code> trouve les orphelins.</li>
+<li>Une condition sur la table de droite va dans le <code>ON</code>, pas dans le <code>WHERE</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les autres jointures</summary>
+<p><code>RIGHT JOIN</code> fait l'inverse — on l'écrit rarement, puisqu'il suffit d'intervertir les tables. <code>FULL OUTER JOIN</code> garde les orphelins des deux côtés, utile pour comparer deux sources de données. Et <code>CROSS JOIN</code> apparie chaque ligne avec chaque ligne, ce qui sert à générer des combinaisons — toutes les tailles pour toutes les couleurs, par exemple.</p>
+</details>
 `,
   exercices: [
     {
@@ -291,31 +354,51 @@ WHERE seances.id IS NULL;</pre>
   id: 'sql-14',
   titre: 'UNION : empiler deux résultats',
   contenu: `
-<p>Une jointure met deux tables <strong>côte à côte</strong> (elle ajoute des colonnes). <code>UNION</code> fait tout autre chose : il empile deux résultats <strong>l'un sous l'autre</strong> (il ajoute des lignes).</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une jointure met deux tables <strong>côte à côte</strong> : elle ajoute des colonnes. <code>UNION</code> fait tout autre chose — il <strong>empile</strong> deux résultats l'un sous l'autre, et ajoute donc des lignes.</p>
+<p>On s'en sert quand une même question a deux réponses de nature différente, qu'on veut voir ensemble : les films de 2023 <em>et</em> les drames, les commandes en cours <em>et</em> les commandes archivées.</p>
 
-<pre class="bloc-code">SELECT titre FROM films WHERE annee = 2019
+<h2>La forme</h2>
+<pre class="bloc-code">SELECT titre FROM films WHERE annee = 2023
 UNION
-SELECT titre FROM films WHERE genre = 'Comédie';</pre>
+SELECT titre FROM films WHERE genre = 'Drame';</pre>
+<p>Mesuré : quatre lignes. Deux conditions, un seul résultat.</p>
+<p>Deux règles non négociables : les deux requêtes doivent rendre <strong>le même nombre de colonnes</strong>, et des types compatibles. Les noms de colonnes du résultat sont ceux de la première.</p>
 
-<h2>Les deux règles</h2>
-<ol>
-<li>les deux requêtes doivent renvoyer <strong>le même nombre de colonnes</strong> ;</li>
-<li><code>UNION</code> <strong>supprime les doublons</strong>. Pour tout garder, utilise <code>UNION ALL</code>.</li>
-</ol>
+<h2>Pas à pas : UNION ou UNION ALL ?</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Lignes</th><th>Ce qu'elle fait</th></tr>
+<tr><td><code>UNION</code></td><td><strong>4</strong></td><td>empile, puis <em>retire les doublons</em></td></tr>
+<tr><td><code>UNION ALL</code></td><td><strong>5</strong></td><td>empile, et garde tout</td></tr>
+</table>
+<p>Mesuré. L'écart d'une ligne s'explique : « Sable et Cendres » est à la fois de 2023 et un drame. Il apparaît dans les deux requêtes — <code>UNION</code> n'en garde qu'un, <code>UNION ALL</code> les garde tous les deux.</p>
+<p>Le choix n'est pas cosmétique. Retirer les doublons oblige le moteur à comparer toutes les lignes entre elles, ce qui coûte cher sur de gros volumes. <strong>Quand tu sais qu'il n'y a pas de doublon possible, <code>UNION ALL</code> est nettement plus rapide.</strong></p>
 
-<pre class="bloc-code">SELECT genre FROM films WHERE annee = 2019
-UNION ALL
-SELECT genre FROM films WHERE annee = 2021;
--- ALL conserve les répétitions</pre>
+<h2>Trier le tout</h2>
+<p>Un <code>ORDER BY</code> se place <strong>à la fin</strong>, après la dernière requête, et s'applique à l'ensemble. Le mettre au milieu n'aurait pas de sens : on trierait un morceau avant de l'empiler.</p>
 
-<h2>Quand est-ce vraiment utile ?</h2>
-<p>Le cas typique : <strong>rassembler des données de tables différentes</strong> qui décrivent des choses comparables. Une liste unique de tous les contacts d'une entreprise, par exemple, quand clients et fournisseurs sont dans deux tables séparées :</p>
-<pre class="bloc-code">SELECT nom, 'client' AS type FROM clients
-UNION ALL
-SELECT nom, 'fournisseur' AS type FROM fournisseurs;</pre>
-<p>Astuce du texte constant (<code>'client'</code>) : il permet de savoir d'où vient chaque ligne dans le résultat combiné.</p>
+<h2>Les pièges</h2>
+<p><strong>Un nombre de colonnes différent.</strong> La base refuse net. C'est l'erreur la plus fréquente, et au moins elle est signalée.</p>
+<p><strong>Des colonnes dans le désordre.</strong> Si la première requête rend <code>titre, annee</code> et la seconde <code>annee, titre</code>, le compte est bon — et les données se mélangent. Aucune erreur : des années apparaissent dans la colonne des titres.</p>
+<p><strong>Oublier que <code>UNION</code> dédoublonne.</strong> Un total calculé dessus peut être inférieur à la réalité, sans que rien ne le signale.</p>
+<p><strong>Confondre avec <code>JOIN</code>.</strong> La question à se poser : est-ce que je veux <em>plus de colonnes</em> (jointure) ou <em>plus de lignes</em> (union) ?</p>
 
-<div class="attention"><div>Ne confonds pas : <code>JOIN</code> élargit (plus de colonnes), <code>UNION</code> allonge (plus de lignes). Si tu cherches à croiser des informations, c'est un JOIN ; si tu cherches à concaténer des listes, c'est un UNION.</div></div>
+<h2>Dans la vraie vie</h2>
+<p><code>UNION ALL</code> sert à rassembler des données découpées : des tables mensuelles d'archives, plusieurs sources à consolider. Et pour construire un tableau de bord qui empile des indicateurs hétérogènes, c'est souvent la seule façon d'obtenir un résultat d'un seul tenant.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>JOIN</code> ajoute des colonnes, <code>UNION</code> ajoute des lignes.</li>
+<li>Même nombre de colonnes, types compatibles, et les noms viennent de la première requête.</li>
+<li><code>UNION</code> retire les doublons ; <code>UNION ALL</code> garde tout et va plus vite.</li>
+<li>L'<code>ORDER BY</code> se place à la toute fin.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : INTERSECT et EXCEPT</summary>
+<p>Deux cousins, moins connus et parfois très commodes : <code>INTERSECT</code> ne garde que ce qui figure dans <em>les deux</em> résultats, <code>EXCEPT</code> ne garde que ce qui est dans le premier et pas dans le second. On peut obtenir la même chose avec des jointures ou des sous-requêtes, mais ces deux mots-clés disent l'intention bien plus directement.</p>
+</details>
 `,
   exercices: [
     {
@@ -380,31 +463,52 @@ SELECT nom, 'fournisseur' AS type FROM fournisseurs;</pre>
   id: 'sql-15',
   titre: 'CASE WHEN : des colonnes conditionnelles',
   contenu: `
-<p><code>CASE WHEN</code> est le <code>if / else if / else</code> du SQL. Il permet de fabriquer une colonne dont la valeur <strong>dépend d'une condition</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p><code>CASE WHEN</code> est le <code>if / else if / else</code> du SQL. Il permet de fabriquer une colonne dont la valeur <strong>dépend d'une condition</strong> — une appréciation à partir d'une note, une tranche d'âge à partir d'un âge, un libellé à partir d'un code.</p>
+<p>Sans lui, il faudrait sortir les données brutes et les traiter ailleurs. Avec lui, la base rend directement le tableau qu'on voulait.</p>
 
+<h2>La forme</h2>
 <pre class="bloc-code">SELECT titre, note,
   CASE
-    WHEN note >= 8 THEN 'excellent'
-    WHEN note >= 7 THEN 'bon'
+    WHEN note &gt;= 8 THEN 'excellent'
+    WHEN note &gt;= 7 THEN 'bon'
     ELSE 'moyen'
   END AS avis
 FROM films;</pre>
+<p>Mesuré : huit lignes, une appréciation par film. Le <code>END</code> ferme le bloc, et <code>AS</code> nomme la colonne — sans quoi elle s'appellerait quelque chose d'inexploitable.</p>
 
-<p>La structure se lit dans l'ordre :</p>
+<h2>Pas à pas : le premier vrai l'emporte</h2>
+<table class="memo-table trace">
+<tr><th>Note</th><th>1er WHEN (&gt;= 8)</th><th>2e WHEN (&gt;= 7)</th><th>Résultat</th></tr>
+<tr><td>9.1</td><td><strong>vrai</strong> — on s'arrête</td><td>pas testé</td><td>excellent</td></tr>
+<tr><td>7.8</td><td>faux</td><td><strong>vrai</strong></td><td>bon</td></tr>
+<tr><td>6.4</td><td>faux</td><td>faux</td><td>moyen (ELSE)</td></tr>
+</table>
+<p>Les conditions sont testées <strong>dans l'ordre</strong>, et la première vraie gagne. C'est exactement le comportement d'un <code>elif</code> — et cela implique une règle : <strong>du plus exigeant au moins exigeant</strong>.</p>
+<p>Inverse les deux premières lignes, et tout devient « bon » : une note de 9.1 passe le test <code>&gt;= 7</code> en premier, et « excellent » n'est jamais atteint. Aucune erreur ne le signale.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Mettre les conditions dans le mauvais ordre.</strong> Le piège central, et il est silencieux. Si toutes tes lignes tombent dans la même catégorie, c'est presque toujours ça.</p>
+<p><strong>Oublier le <code>ELSE</code>.</strong> Sans lui, les lignes qui ne correspondent à rien reçoivent <code>NULL</code>. Ce n'est pas une erreur, et c'est rarement ce qu'on voulait — un <code>ELSE 'inconnu'</code> rend le résultat lisible.</p>
+<p><strong>Oublier que NULL ne passe aucun test.</strong> Le film sans note ne vaut ni <code>&gt;= 8</code> ni <code>&gt;= 7</code> : il tombe dans le <code>ELSE</code>. Si tu veux le distinguer, il faut un <code>WHEN note IS NULL</code> — et le placer <strong>en premier</strong>.</p>
+<p><strong>Oublier le <code>END</code>.</strong> Le bloc n'est pas fermé, et la requête entière devient incompréhensible pour le moteur.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Traduire des codes en libellés lisibles, répartir en tranches, marquer des lignes à traiter : <code>CASE WHEN</code> est partout dans les rapports. Il sert aussi dans un <code>ORDER BY</code>, pour imposer un ordre qui n'est ni alphabétique ni numérique — faire remonter les urgences en premier, par exemple.</p>
+
+<div class="a-retenir">
 <ul>
-<li><code>WHEN condition THEN valeur</code> — autant de fois que nécessaire ;</li>
-<li><code>ELSE valeur</code> — le cas par défaut (facultatif ; sans lui, tu obtiens <code>NULL</code>) ;</li>
-<li><code>END</code> — <strong>obligatoire</strong>, il ferme le CASE ;</li>
-<li><code>AS nom</code> — pour donner un titre à cette colonne inventée.</li>
+<li><code>CASE WHEN ... THEN ... ELSE ... END</code>, et <code>AS</code> pour nommer la colonne.</li>
+<li>Les conditions sont testées dans l'ordre : <strong>la première vraie l'emporte</strong>.</li>
+<li>On écrit du plus exigeant au moins exigeant.</li>
+<li>Une valeur NULL ne passe aucun test et tombe dans le <code>ELSE</code>.</li>
 </ul>
-<p>Comme dans un <code>if</code>, <strong>le premier cas vrai gagne</strong> et les suivants sont ignorés. L'ordre des <code>WHEN</code> est donc décisif.</p>
+</div>
 
-<h2>Transformer une valeur pour un rapport</h2>
-<pre class="bloc-code">SELECT titre,
-  CASE WHEN note IS NULL THEN 'pas encore noté' ELSE 'noté' END AS statut
-FROM films;</pre>
-
-<div class="astuce"><div>C'est l'outil qui transforme des données brutes en <strong>information lisible</strong>. Un tableau de bord n'affiche pas « 8.2 » mais « excellent » ; pas « 0 » mais « rupture de stock ». Le CASE WHEN fait ce travail directement dans la requête, sans qu'aucun code applicatif n'ait à s'en mêler.</div></div>
+<details class="plus-loin">
+<summary>Aller plus loin : compter par catégorie en une requête</summary>
+<p>Combiné à <code>SUM</code>, le <code>CASE</code> permet de compter plusieurs catégories sur une seule ligne : <code>SUM(CASE WHEN note &gt;= 8 THEN 1 ELSE 0 END) AS excellents</code>. On obtient ainsi un tableau à plusieurs colonnes là où un <code>GROUP BY</code> donnerait plusieurs lignes. C'est la façon manuelle de faire ce qu'on appelle un tableau croisé — et elle marche sur toutes les bases.</p>
+</details>
 `,
   exercices: [
     {
@@ -483,36 +587,53 @@ FROM films;</pre>
   id: 'sql-16',
   titre: 'Concevoir une base : clés, index, normalisation',
   contenu: `
-<p>Tu sais interroger une base. Cette dernière leçon aborde l'autre moitié du métier : <strong>bien la construire</strong>. Une base mal conçue rend certaines questions impossibles à poser.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais interroger une base. Cette leçon aborde l'autre moitié du métier : bien la <strong>construire</strong>. Et c'est la moitié décisive — une base mal conçue rend certaines questions impossibles à poser, ou leurs réponses fausses.</p>
+<p>Le pire est qu'on ne s'en aperçoit qu'une fois les données accumulées, quand il est coûteux de revenir en arrière.</p>
 
 <h2>La clé primaire</h2>
-<p>C'est la colonne qui identifie chaque ligne de façon unique — presque toujours nommée <code>id</code>. Elle ne peut être ni vide ni répétée. Sans elle, impossible de désigner une ligne précise : imagine deux clients homonymes.</p>
+<p>C'est la colonne qui identifie une ligne de façon <strong>unique et définitive</strong>. Dans <code>films</code>, c'est <code>id</code>. La base garantit alors deux choses : jamais deux fois la même valeur, et jamais de valeur absente.</p>
+<p>Pourquoi un numéro plutôt que le titre ? Parce qu'un titre peut changer, se répéter, contenir une faute. Une clé ne doit <em>jamais</em> porter de sens métier — sinon le jour où le sens change, toutes les références deviennent fausses.</p>
 
 <h2>La clé étrangère</h2>
-<p>C'est une colonne qui <strong>pointe vers la clé primaire d'une autre table</strong>. Dans notre base, <code>seances.film_id</code> pointe vers <code>films.id</code>. C'est ce lien qui rend les jointures possibles — et la base de données peut même refuser une séance qui référencerait un film inexistant.</p>
+<p><code>seances.film_id</code> pointe vers <code>films.id</code>. Déclarée comme clé étrangère, la base refuse alors d'insérer une séance pour un film inexistant, et peut empêcher de supprimer un film encore programmé.</p>
+<p>C'est ce qui garantit qu'une base ne contient jamais de référence dans le vide — une cohérence que le code applicatif, seul, finit toujours par laisser échapper.</p>
 
-<h2>La normalisation : ne jamais répéter une information</h2>
-<p>Imagine qu'on stocke le titre du film directement dans chaque séance :</p>
-<table class="memo-table">
-<tr><th>id</th><th>titre_film</th><th>jour</th></tr>
-<tr><td>1</td><td>Sable et Cendres</td><td>lundi</td></tr>
-<tr><td>2</td><td>Sable et Cendres</td><td>mardi</td></tr>
-<tr><td>3</td><td>Sable et Cendre</td><td>mercredi</td></tr>
+<h2>Ne jamais répéter : la normalisation</h2>
+<table class="memo-table trace">
+<tr><th>Mauvais</th><th>Bon</th></tr>
+<tr><td>le titre du film dans chaque séance</td><td>un <code>film_id</code> qui pointe</td></tr>
+<tr><td>à corriger partout en cas de faute</td><td>à corriger <strong>une fois</strong></td></tr>
+<tr><td>deux lignes peuvent se contredire</td><td>impossible</td></tr>
 </table>
-<p>Trois problèmes surgissent aussitôt :</p>
+<p>La règle tient en une phrase : <strong>une information, un seul endroit</strong>. C'est ce qu'on appelle normaliser, et c'est l'essentiel de la conception.</p>
+
+<h2>Les index</h2>
+<p>Un index est à une colonne ce que l'index d'un livre est à ses pages : au lieu de tout parcourir, le moteur va directement au bon endroit. Sur un million de lignes, la différence se compte en secondes.</p>
+<p>Il n'est pas gratuit : il occupe de la place, et chaque écriture doit le mettre à jour. On en pose sur les colonnes qui servent souvent à filtrer ou à joindre — pas sur toutes.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Prendre une donnée métier comme clé.</strong> Un numéro de téléphone, une adresse électronique : tout cela change. La clé doit être un numéro sans signification.</p>
+<p><strong>Répéter une information « pour aller plus vite ».</strong> La tentation est réelle, et le prix se paie plus tard, en incohérences qu'on ne sait plus démêler.</p>
+<p><strong>Indexer tout.</strong> Chaque index ralentit les écritures. Une table truffée d'index est aussi mal réglée qu'une table sans aucun.</p>
+<p><strong>Tout mettre dans une seule table.</strong> La « grande table qui contient tout » est le premier réflexe du débutant, et la cause la plus fréquente de bases ingérables.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les choix de conception survivent aux applications. Une base mal structurée se traîne pendant des années, avec son cortège de requêtes alambiquées et de données douteuses. C'est pourquoi on prend le temps de dessiner les tables avant d'écrire la première ligne de code.</p>
+
+<div class="a-retenir">
 <ul>
-<li>une faute de frappe crée un « nouveau » film (ligne 3) ;</li>
-<li>corriger le titre oblige à modifier toutes les lignes ;</li>
-<li>on ne peut pas enregistrer un film qui n'a pas encore de séance.</li>
+<li>Une <strong>clé primaire</strong> identifie une ligne, et ne porte jamais de sens métier.</li>
+<li>Une <strong>clé étrangère</strong> pointe vers une autre table, et la base en garantit la validité.</li>
+<li>Une information, <strong>un seul endroit</strong> : c'est la normalisation.</li>
+<li>Un index accélère les lectures et ralentit les écritures : on en pose où l'on filtre.</li>
 </ul>
-<p>La solution — une table <code>films</code> séparée et un simple <code>film_id</code> — s'appelle la <strong>normalisation</strong> : chaque information n'existe qu'à un seul endroit.</p>
+</div>
 
-<h2>Les index : le sommaire de la base</h2>
-<p>Sans index, chercher <code>WHERE titre = 'Echo'</code> oblige la base à lire <strong>toutes</strong> les lignes. Un index est une structure de recherche, comme l'index d'un livre : au lieu de parcourir 500 pages, on regarde le sommaire.</p>
-<pre class="bloc-code">CREATE INDEX idx_titre ON films(titre);</pre>
-<p>Sur une table d'un million de lignes, une recherche peut passer de plusieurs secondes à moins d'une milliseconde. En contrepartie, chaque index ralentit un peu les écritures et occupe de l'espace : on n'en met donc que sur les colonnes réellement utilisées dans les <code>WHERE</code> et les <code>JOIN</code>.</p>
-
-<div class="info"><div>Ces trois notions — clés, normalisation, index — sont ce qui distingue une base qui tient dix ans d'un fichier Excel géant. Elles sont aussi ce qu'on te demandera en entretien pour tout poste touchant aux données.</div></div>
+<details class="plus-loin">
+<summary>Aller plus loin : quand on dénormalise exprès</summary>
+<p>Les très gros systèmes acceptent parfois de répéter une information — stocker le nom du client dans la commande, par exemple — pour éviter une jointure coûteuse sur des milliards de lignes. C'est un choix assumé, documenté, avec un mécanisme pour maintenir la cohérence. Dénormaliser sans le savoir est une faute ; le faire sciemment, après mesure, est de l'ingénierie.</p>
+</details>
 `,
   exercices: [
     {
@@ -580,24 +701,49 @@ FROM films;</pre>
   id: 'sql-17',
   titre: 'Déboguer une requête',
   contenu: `
-<p>Jusqu'ici, quand une requête était fausse, le moteur te le disait. Cette leçon parle du cas inverse, et c'est le plus dangereux : <strong>une requête fausse ne se plaint pas, elle répond</strong>. Elle rend un tableau propre, plausible, et faux.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici, quand une requête était fausse, le moteur te le disait. Cette leçon parle du cas inverse, et c'est le plus dangereux : <strong>une requête fausse ne se plaint pas, elle répond</strong>.</p>
+<p>Elle rend un tableau de chiffres parfaitement plausible, que personne ne pense à vérifier — et c'est ainsi qu'on prend des décisions sur des données qui ne disent pas ce qu'on croit.</p>
 
-<h2>Le filtre posé au mauvais moment</h2>
-<p><code>WHERE</code> filtre les <strong>lignes</strong>, avant tout regroupement. <code>HAVING</code> filtre les <strong>groupes</strong>, après. Écrire l'un pour l'autre ne provoque aucune erreur — seulement un autre résultat.</p>
-<pre class="bloc-code">WHERE note > 8         → on jette des films, PUIS on calcule la moyenne
-HAVING AVG(note) > 8   → on calcule la moyenne, PUIS on juge le genre</pre>
-<p>Avec le <code>WHERE</code>, tout genre qui garde ne serait-ce qu'un film passe le filtre : la moyenne d'un seul film noté au-dessus de 8 est forcément au-dessus de 8.</p>
+<h2>La méthode : retirer les clauses une par une</h2>
+<p>Face à une requête dont le résultat semble douteux, on ne la relit pas : on la <strong>démonte</strong>, en partant de la fin.</p>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qu'on regarde</th></tr>
+<tr><td>retirer le <code>LIMIT</code></td><td>combien de lignes au total ?</td></tr>
+<tr><td>retirer le <code>HAVING</code></td><td>les groupes sont-ils les bons ?</td></tr>
+<tr><td>retirer le <code>GROUP BY</code></td><td>combien de lignes avant regroupement ?</td></tr>
+<tr><td>remplacer le <code>SELECT</code> par <code>*</code></td><td>quelles lignes exactement ?</td></tr>
+<tr><td>retirer le <code>WHERE</code></td><td>combien y en a-t-il en tout ?</td></tr>
+</table>
+<p>Le nombre de lignes à chaque étape est le signal le plus fiable. S'il augmente d'un coup après une jointure, les lignes se sont multipliées ; s'il chute brutalement, un filtre élimine plus qu'il ne devrait.</p>
 
-<h2>Le comptage qui compte autre chose</h2>
-<p><code>COUNT(*)</code> compte les <strong>lignes</strong>. <code>COUNT(colonne)</code> compte les valeurs <strong>présentes</strong> dans cette colonne. Après un <code>LEFT JOIN</code>, un film sans séance produit quand même une ligne — avec des cases vides. <code>COUNT(*)</code> y voit 1, <code>COUNT(seances.id)</code> y voit 0.</p>
+<h2>Les trois erreurs silencieuses</h2>
+<p><strong>Le <code>WHERE</code> mis à la place d'un <code>HAVING</code>.</strong> Celle-là est bruyante — le moteur refuse. Mais l'inverse ne l'est pas : un <code>HAVING</code> qui porte sur une condition de ligne regroupe d'abord des lignes dont on ne voulait pas, et le total est faux sans le moindre avertissement.</p>
+<p><strong>Le <code>COUNT(*)</code> après une jointure.</strong> Il ne compte plus les films mais les correspondances. Un film programmé trois fois compte triple. C'est l'erreur la plus fréquente des rapports faux, et le résultat reste tout à fait crédible.</p>
+<p><strong>Le tri qui ignore les valeurs absentes.</strong> <code>ORDER BY titre LIMIT 3</code> peut présenter comme « meilleur film » un titre qui n'a aucune note. Absurde à l'œil, produit sans la moindre erreur — parce que le tri porte sur le titre, pas sur ce qu'on croyait.</p>
 
-<h2>L'ordre qu'on n'a pas demandé</h2>
-<p><code>LIMIT 3</code> ne garde pas « les trois meilleurs » : il garde les trois premiers <strong>de l'ordre en vigueur</strong>. Avec le mauvais <code>ORDER BY</code>, on obtient trois lignes quelconques présentées comme un palmarès.</p>
+<h2>Les pièges</h2>
+<p><strong>Faire confiance à un ordre de grandeur plausible.</strong> « Environ 200 » n'est pas une vérification. Le seul contrôle sérieux est de recompter autrement : par un autre chemin, sur un sous-ensemble connu.</p>
+<p><strong>Corriger sans comprendre.</strong> Ajouter un <code>DISTINCT</code> parce que « il y a des doublons » masque le symptôme et laisse la cause. Les doublons viennent presque toujours d'une jointure qui multiplie les lignes — et c'est elle qu'il faut regarder.</p>
+<p><strong>Déboguer sur toute la table.</strong> Ajoute un <code>WHERE</code> qui réduit à quelques lignes connues, et vérifie à la main. Sur huit films, on peut compter ; sur un million, on ne peut que croire.</p>
+<p><strong>Changer deux choses à la fois.</strong> Une modification, une exécution, un regard. Deux d'un coup, et l'on ne sait plus laquelle a agi.</p>
 
-<h2>La méthode</h2>
-<p>Devant un résultat suspect, retire les clauses une par une en partant de la fin, et regarde le <strong>nombre de lignes</strong> à chaque étape. Celle qui fait bouger ce nombre de façon inattendue est la coupable.</p>
+<h2>Dans la vraie vie</h2>
+<p>Un rapport faux coûte plus cher qu'un rapport absent : on agit dessus. Les équipes sérieuses recoupent donc systématiquement un chiffre important par deux chemins différents — et quand les deux ne concordent pas, c'est qu'il y a quelque chose à apprendre.</p>
 
-<div class="attention"><div>Compte toujours. Huit lignes là où tu en attendais cinq, c'est un signal. Un résultat « qui a l'air bien » n'en est pas un.</div></div>
+<div class="a-retenir">
+<ul>
+<li>Une requête fausse ne lève aucune erreur : elle <strong>répond</strong>.</li>
+<li>On démonte la requête clause par clause, en surveillant le nombre de lignes.</li>
+<li>Après une jointure, <code>COUNT(*)</code> compte les correspondances, pas les objets.</li>
+<li>Un ordre de grandeur plausible n'est pas une vérification.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : vérifier par un autre chemin</summary>
+<p>La technique la plus fiable consiste à calculer le même chiffre de deux façons indépendantes. Le nombre de séances peut se compter directement dans <code>seances</code>, ou comme la somme des séances par film. Si les deux diffèrent, l'une des requêtes se trompe — et savoir laquelle est souvent plus instructif que le chiffre lui-même.</p>
+</details>
 `,
   exercices: [
     {

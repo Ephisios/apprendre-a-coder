@@ -65,25 +65,51 @@ window.DATA_SQL = [
   id: 'sql-1',
   titre: 'Les bases de données, et pourquoi SQL',
   contenu: `
-<p>Jusqu'ici, tes données vivaient dans des variables et des listes : elles disparaissaient dès qu'on fermait la page. Une <strong>base de données</strong>, c'est l'endroit où les données d'une vraie application sont rangées durablement — les comptes clients d'une banque, les commandes d'un site, les séances d'un cinéma.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici tes données vivaient dans des variables et des listes : elles disparaissaient dès qu'on fermait la page. Une <strong>base de données</strong>, c'est l'endroit où les données d'une vraie application sont rangées pour de bon — et consultées par milliers de requêtes à la seconde.</p>
+<p>SQL est le langage qu'on lui parle. Et il n'est pas comme les autres : tu ne dis pas <em>comment</em> trouver les films de 2023, tu dis <strong>ce que tu veux</strong>. Le moteur décide du chemin. C'est ce qu'on appelle un langage <em>déclaratif</em>, et c'est ce qui le rend si court.</p>
 
-<h2>Un tableur, en beaucoup plus sérieux</h2>
-<p>Une base est faite de <strong>tables</strong>. Une table ressemble à une feuille de tableur :</p>
-<ul>
-<li>les <strong>colonnes</strong> décrivent la nature des informations (titre, année, note…) ;</li>
-<li>chaque <strong>ligne</strong> est un enregistrement (un film, un client, une facture) ;</li>
-<li>la colonne <code>id</code> donne à chaque ligne un numéro unique — c'est sa carte d'identité.</li>
-</ul>
+<h2>Des tables, des lignes, des colonnes</h2>
+<p>Une base est faite de <strong>tables</strong>, qui ressemblent à des feuilles de tableur. Celle de ce cours en a trois : <code>films</code>, <code>salles</code> et <code>seances</code>.</p>
+<p>La table <code>films</code> a six colonnes — <code>id</code>, <code>titre</code>, <code>annee</code>, <code>genre</code>, <code>duree</code>, <code>note</code> — et huit lignes. Chaque ligne est un film ; chaque colonne, une caractéristique.</p>
 
-<h2>SQL : on décrit ce qu'on veut, pas comment l'obtenir</h2>
-<p>C'est la grande différence avec JavaScript et Python. Là-bas, tu écrivais <em>comment</em> faire : parcourir la liste, tester chaque élément, accumuler. En SQL, tu écris seulement <em>ce que tu veux</em>, et le moteur se débrouille :</p>
-<pre class="bloc-code">SELECT titre FROM films;</pre>
-<p>Littéralement : « sélectionne la colonne titre depuis la table films ». Le <code>*</code> est un raccourci qui veut dire « toutes les colonnes » :</p>
+<h2>La première requête</h2>
 <pre class="bloc-code">SELECT * FROM films;</pre>
+<p>« Prends tout, dans la table films. » L'étoile veut dire « toutes les colonnes », et le point-virgule termine la requête.</p>
+<p>Les mots-clés s'écrivent traditionnellement en majuscules — <code>SELECT</code>, <code>FROM</code> — alors que les noms de tables et de colonnes restent en minuscules. Ce n'est pas obligatoire, mais c'est l'usage partout, et ça rend une requête lisible d'un coup d'œil.</p>
 
-<div class="info"><div>SQL a près de <strong>cinquante ans</strong> et reste incontournable : PostgreSQL, MySQL, SQLite, SQL Server… tous le parlent, avec de très légères variantes. Ce que tu apprends ici te servira partout, et probablement toute ta carrière.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Morceau</th><th>Ce qu'il dit</th></tr>
+<tr><td><code>SELECT</code></td><td>« je veux lire »</td></tr>
+<tr><td><code>*</code></td><td>toutes les colonnes</td></tr>
+<tr><td><code>FROM films</code></td><td>dans cette table</td></tr>
+<tr><td><code>;</code></td><td>fin de la requête</td></tr>
+</table>
+<p>L'ordre d'écriture n'est pas celui de l'exécution : le moteur regarde d'abord le <code>FROM</code> — il lui faut une table avant de pouvoir choisir des colonnes. Cette inversion expliquera plus tard certains messages d'erreur.</p>
 
-<div class="astuce"><div>Le point-virgule final marque la fin d'une requête. Ici il est facultatif, mais prends l'habitude : la plupart des outils professionnels l'exigent.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Se tromper de nom de table.</strong> Le moteur du cours ne te laisse pas deviner : <em>« la table <code>acteurs</code> n'existe pas. Tables disponibles : films, salles, seances. »</em></p>
+<p><strong>Se tromper de nom de colonne.</strong> Même service rendu : <em>« la colonne <code>realisateur</code> n'existe pas. Colonnes disponibles : id, titre, annee, genre, duree, note. »</em></p>
+<p><strong>Écorcher un mot-clé.</strong> <code>SELCT</code> donne : <em>« une requête commence par SELECT, INSERT, UPDATE ou DELETE — j'ai trouvé « SELCT ». »</em></p>
+<p><strong>Demander <code>*</code> par habitude.</strong> Ça marche, et c'est une mauvaise habitude : on transporte des colonnes dont on n'a pas besoin, et la requête casse le jour où la table en gagne une. On nomme ce qu'on veut — c'est l'objet de la leçon suivante.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>SQL a été conçu dans les années 1970 et il est toujours là, à peu près inchangé. Banques, sites de commerce, applications mobiles, outils internes : presque tout ce qui stocke des données sérieuses parle SQL. C'est sans doute la compétence informatique la plus durable qu'on puisse apprendre.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une base est faite de <strong>tables</strong> : des lignes et des colonnes.</li>
+<li><code>SELECT ... FROM table;</code> est le squelette de toute lecture.</li>
+<li>On dit <em>ce qu'on veut</em>, pas comment le trouver.</li>
+<li>Le moteur nomme les tables et colonnes disponibles quand on se trompe.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi « relationnelle » ?</summary>
+<p>Le mot ne vient pas des liens entre tables, comme on le croit souvent, mais d'une notion mathématique : une <em>relation</em> est, en théorie des ensembles, exactement ce qu'est une table — un ensemble de lignes partageant la même structure. Le modèle a été formalisé en 1970 par Edgar Codd, et sa solidité théorique explique en partie pourquoi il a survécu à cinquante ans de modes informatiques.</p>
+</details>
 `,
   exercices: [
     {
@@ -148,21 +174,53 @@ window.DATA_SQL = [
   id: 'sql-2',
   titre: 'Choisir ses colonnes',
   contenu: `
-<p>En pratique, on ne demande presque jamais <code>*</code>. On nomme les colonnes voulues, séparées par des virgules — c'est plus lisible, plus rapide, et ça évite de transporter des données inutiles.</p>
+<h2>Pourquoi ça existe</h2>
+<p>L'étoile est commode pour explorer. En pratique, on ne la garde presque jamais : on nomme les colonnes voulues.</p>
+<p>Trois raisons, et elles comptent. C'est plus <strong>lisible</strong> — on sait ce que la requête rapporte sans ouvrir la table. C'est plus <strong>rapide</strong> — on ne transporte pas des données inutiles. Et c'est plus <strong>solide</strong> — le jour où la table gagne une colonne, la requête ne change pas de comportement.</p>
+
+<h2>Nommer ce qu'on veut</h2>
 <pre class="bloc-code">SELECT titre, annee FROM films;</pre>
-<p>L'ordre des colonnes dans le résultat est celui que tu écris : <code>SELECT annee, titre</code> affiche l'année d'abord.</p>
+<p>Les colonnes se séparent par des virgules, et <strong>l'ordre d'écriture est l'ordre d'affichage</strong>. Demander <code>annee, titre</code> donne les mêmes données, dans l'autre sens.</p>
 
-<h2>Renommer une colonne à l'affichage : AS</h2>
+<h2>Renommer : AS</h2>
 <pre class="bloc-code">SELECT titre AS film, annee AS sortie FROM films;</pre>
-<p>Les en-têtes du résultat deviennent « film » et « sortie ». La table, elle, n'est pas modifiée : <code>AS</code> ne change que l'affichage. C'est très utile pour rendre lisible un résultat calculé.</p>
+<p><code>AS</code> change le nom de la colonne <em>dans le résultat</em>, sans rien toucher à la table. C'est utile pour rendre un résultat lisible, et indispensable dès qu'une colonne est le fruit d'un calcul — sans quoi elle s'appelle quelque chose comme <code>COUNT(*)</code>.</p>
 
-<h2>Calculer dans le SELECT</h2>
-<p>Une colonne du résultat peut être un calcul :</p>
+<h2>Calculer au passage</h2>
 <pre class="bloc-code">SELECT titre, duree / 60 AS heures FROM films;</pre>
+<p>Une colonne peut être un calcul. Le résultat n'existe que le temps de la requête : la table n'a pas changé.</p>
 
-<h2>Éviter les doublons : DISTINCT</h2>
-<pre class="bloc-code">SELECT DISTINCT genre FROM films;</pre>
-<p>Sans <code>DISTINCT</code>, tu obtiendrais huit lignes (une par film) avec des genres répétés. Avec, tu obtiens la liste des genres <em>différents</em>.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Requête</th><th>Ce qu'on obtient</th></tr>
+<tr><td><code>SELECT * FROM films</code></td><td>8 lignes, 6 colonnes</td></tr>
+<tr><td><code>SELECT titre FROM films</code></td><td>8 lignes, 1 colonne</td></tr>
+<tr><td><code>SELECT titre, note FROM films</code></td><td>8 lignes, 2 colonnes, dans cet ordre</td></tr>
+</table>
+<p>Remarque ce qui ne change jamais : <strong>le nombre de lignes</strong>. Choisir des colonnes ne filtre rien — c'est le travail du <code>WHERE</code>, à la leçon suivante.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier une virgule.</strong> <code>SELECT titre annee FROM films</code> ne lève pas forcément d'erreur : SQL comprend « la colonne titre, renommée annee ». Tu obtiens une colonne au lieu de deux, sans avertissement. C'est le piège le plus discret de la leçon.</p>
+<p><strong>Mettre une virgule en trop.</strong> <code>SELECT titre, FROM films</code> casse, cette fois pour de bon.</p>
+<p><strong>Croire que <code>AS</code> renomme la table.</strong> Il ne change que l'en-tête du résultat.</p>
+<p><strong>Garder <code>*</code> dans du vrai code.</strong> Ça fonctionne toujours et ça vieillit mal. L'étoile sert à explorer, pas à produire.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Une requête d'application nomme toujours ses colonnes. C'est même l'un des premiers points qu'on regarde en relecture : un <code>SELECT *</code> dans du code qui part en production signale, presque à coup sûr, une requête écrite trop vite.</p>
+
+<div class="a-retenir">
+<ul>
+<li>On nomme les colonnes : plus lisible, plus rapide, plus solide.</li>
+<li>L'ordre des colonnes dans la requête est l'ordre d'affichage.</li>
+<li><code>AS</code> renomme une colonne dans le résultat seulement.</li>
+<li>Choisir des colonnes ne change jamais le nombre de lignes.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : DISTINCT</summary>
+<p><code>SELECT DISTINCT genre FROM films</code> ne garde qu'un exemplaire de chaque valeur — quatre lignes au lieu de huit, puisque la base compte quatre genres. C'est la façon la plus rapide de découvrir les valeurs possibles d'une colonne quand on arrive sur une base inconnue.</p>
+</details>
 `,
   exercices: [
     {
@@ -231,26 +289,54 @@ window.DATA_SQL = [
   id: 'sql-3',
   titre: 'Filtrer avec WHERE',
   contenu: `
-<p>Voici le mot-clé qui rend SQL réellement puissant. <code>WHERE</code> ne garde que les lignes qui remplissent une condition :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une table réelle contient des millions de lignes. Les rapporter toutes pour n'en garder que trois serait absurde. <code>WHERE</code> est le mot-clé qui rend SQL réellement utile : il ne garde que les lignes qui remplissent une condition.</p>
+
+<h2>La forme</h2>
 <pre class="bloc-code">SELECT titre FROM films WHERE annee = 2023;</pre>
+<p>Mesuré : deux lignes, « Sable et Cendres » et « Nuit Polaire ». Le <code>WHERE</code> se place toujours après le <code>FROM</code>.</p>
+<p>Les comparaisons disponibles : <code>=</code>, <code>&lt;&gt;</code> ou <code>!=</code> pour « différent », <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>.</p>
 
 <h2>Un seul signe égal</h2>
-<p>Attention, gros piège quand on vient de JavaScript ou de Python : <strong>en SQL, la comparaison s'écrit avec un seul <code>=</code></strong>. Le <code>==</code> n'existe pas.</p>
+<p>C'est le piège qui attend tous ceux qui viennent de la programmation. En SQL, la comparaison s'écrit avec <strong>un seul</strong> <code>=</code> — il n'y a pas d'affectation dans une requête, donc aucune ambiguïté à lever.</p>
+<p>Le moteur du cours est explicite : <em>« en SQL, la comparaison s'écrit avec UN SEUL signe égal : <code>=</code> (le <code>==</code> vient des langages de programmation). »</em></p>
 
-<h2>Les comparaisons disponibles</h2>
-<table class="memo-table">
-<tr><th>Écriture</th><th>Sens</th></tr>
-<tr><td>=</td><td>égal à</td></tr>
-<tr><td>&lt;&gt; (ou !=)</td><td>différent de</td></tr>
-<tr><td>&lt; &nbsp; &gt; &nbsp; &lt;= &nbsp; &gt;=</td><td>plus petit, plus grand, ou égal</td></tr>
+<h2>Du texte, entre apostrophes</h2>
+<pre class="bloc-code">SELECT titre FROM films WHERE genre = 'Drame';</pre>
+<p>Mesuré : trois lignes. Les valeurs de texte vont entre <strong>apostrophes simples</strong>. C'est la forme standard, celle qui fonctionne sur toutes les bases du monde — prends-en l'habitude dès maintenant.</p>
+<p>Les nombres, eux, s'écrivent nus : <code>annee = 2023</code>, jamais <code>'2023'</code>.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce que fait le moteur</th></tr>
+<tr><td><code>FROM films</code></td><td>il prend les 8 lignes</td></tr>
+<tr><td><code>WHERE annee = 2023</code></td><td>il teste chaque ligne, une par une, et en garde 2</td></tr>
+<tr><td><code>SELECT titre</code></td><td>sur ces 2 lignes, il ne garde que la colonne titre</td></tr>
 </table>
+<p>L'ordre réel est donc <code>FROM</code>, puis <code>WHERE</code>, puis <code>SELECT</code> — l'inverse de l'écriture. C'est ce qui explique qu'on ne puisse pas utiliser un alias défini dans le <code>SELECT</code> à l'intérieur du <code>WHERE</code> : au moment du filtre, il n'existe pas encore.</p>
 
-<h2>Texte ou nombre ?</h2>
-<p>Le texte va entre <strong>apostrophes simples</strong>, les nombres n'en prennent pas :</p>
-<pre class="bloc-code">SELECT titre FROM films WHERE genre = 'Drame';   -- texte : apostrophes
-SELECT titre FROM films WHERE note > 8;          -- nombre : rien</pre>
+<h2>Les pièges</h2>
+<p><strong>Écrire <code>==</code>.</strong> Le réflexe des programmeurs. Le moteur le dit clairement, mais sur une vraie base le message serait bien plus obscur.</p>
+<p><strong>Oublier les apostrophes autour d'un texte.</strong> <code>WHERE genre = Drame</code> fait chercher une <em>colonne</em> nommée Drame.</p>
+<p><strong>Comparer à NULL avec <code>=</code>.</strong> <code>WHERE note = NULL</code> ne rend <strong>aucune ligne</strong> — jamais, même pour les films sans note. C'est la règle du SQL : comparer quoi que ce soit à NULL ne rend jamais vrai. Il faut <code>IS NULL</code>, et c'est précisément pourquoi ce mot-clé existe.</p>
+<p><strong>Oublier que <code>WHERE</code> ne voit pas les calculs de groupe.</strong> On y reviendra avec <code>HAVING</code> ; retiens pour l'instant que <code>WHERE</code> filtre des <em>lignes</em>, une par une.</p>
 
-<div class="attention"><div>L'apostrophe non refermée est l'erreur SQL la plus fréquente au monde. Si le moteur te répond quelque chose d'incompréhensible, compte tes apostrophes avant tout.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>Un <code>WHERE</code> bien écrit est ce qui sépare une requête instantanée d'une requête qui met trente secondes. Sur des millions de lignes, c'est lui qui détermine si le moteur peut utiliser un index — un raccourci dont tu entendras parler à la leçon sur la conception.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>WHERE</code> filtre les lignes, une par une, après le <code>FROM</code>.</li>
+<li>Un <strong>seul</strong> signe égal pour comparer.</li>
+<li>Le texte va entre apostrophes simples ; les nombres, nus.</li>
+<li>Rien ne s'égale à NULL : c'est <code>IS NULL</code> qu'il faut.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la logique à trois valeurs</summary>
+<p>En SQL, une condition ne vaut pas seulement vrai ou faux : elle peut valoir <em>inconnu</em>. C'est ce que produit toute comparaison avec NULL, et c'est logique — si la note est inconnue, on ne peut pas savoir si elle vaut 8. Une ligne n'est gardée que si la condition est <strong>vraie</strong> ; « inconnu » ne suffit pas. Cette règle surprend, et elle est à l'origine d'une bonne part des requêtes qui « oublient » des lignes.</p>
+</details>
 `,
   exercices: [
     {
@@ -316,34 +402,58 @@ SELECT titre FROM films WHERE note > 8;          -- nombre : rien</pre>
   id: 'sql-4',
   titre: 'Filtres combinés : AND, OR, LIKE, IN',
   contenu: `
-<h2>Combiner plusieurs conditions</h2>
-<p>Comme en Python, on assemble avec <code>AND</code> (les deux) et <code>OR</code> (l'un ou l'autre) :</p>
-<pre class="bloc-code">SELECT titre FROM films WHERE genre = 'Drame' AND annee > 2020;
+<h2>Pourquoi ça existe</h2>
+<p>Une seule condition suffit rarement. On veut les drames <em>récents</em>, les films dont le titre <em>commence par</em> L, ceux qui appartiennent à <em>l'un de ces trois genres</em>. SQL fournit pour cela quelques mots-clés qui évitent d'écrire dix conditions à la main.</p>
+
+<h2>Combiner : AND et OR</h2>
+<pre class="bloc-code">SELECT titre FROM films WHERE genre = 'Drame' AND annee &gt; 2020;
+
 SELECT titre FROM films WHERE genre = 'Drame' OR genre = 'Thriller';</pre>
-<p>Quand tu mélanges les deux, mets des parenthèses — sinon <code>AND</code> l'emporte sur <code>OR</code> et le résultat te surprendra :</p>
-<pre class="bloc-code">SELECT titre FROM films
-WHERE (genre = 'Drame' OR genre = 'Thriller') AND annee = 2023;</pre>
+<p><code>AND</code> exige les deux, <code>OR</code> se contente d'une. Comme en Python, <strong><code>AND</code> est prioritaire sur <code>OR</code></strong> — ce qui veut dire qu'en les mélangeant, il faut des parenthèses :</p>
+<pre class="bloc-code">WHERE (genre = 'Drame' OR genre = 'Thriller') AND annee &gt; 2020</pre>
+<p>Sans elles, le moteur comprend tout autre chose, et ne se plaint pas.</p>
 
-<h2>IN : une liste de valeurs acceptées</h2>
+<h2>IN : plusieurs valeurs possibles</h2>
 <pre class="bloc-code">SELECT titre FROM films WHERE genre IN ('Drame', 'Comédie');</pre>
-<p>Bien plus lisible qu'une chaîne de <code>OR</code> quand la liste s'allonge.</p>
-
-<h2>BETWEEN : un intervalle</h2>
-<pre class="bloc-code">SELECT titre FROM films WHERE annee BETWEEN 2019 AND 2021;</pre>
-<p>Les deux bornes sont <strong>incluses</strong> (contrairement au <code>range()</code> de Python !).</p>
+<p>Mesuré : cinq lignes. C'est la forme courte de <code>genre = 'Drame' OR genre = 'Comédie'</code>, et elle reste lisible même avec dix valeurs.</p>
 
 <h2>LIKE : chercher un morceau de texte</h2>
-<p>Deux jokers : <code>%</code> remplace n'importe quel nombre de caractères, <code>_</code> exactement un.</p>
-<pre class="bloc-code">WHERE titre LIKE 'Le %'    -- commence par « Le »
-WHERE titre LIKE '%mer'    -- se termine par « mer »
-WHERE titre LIKE '%uit%'   -- contient « uit »</pre>
+<pre class="bloc-code">SELECT titre FROM films WHERE titre LIKE 'L%';</pre>
+<p>Deux jokers : <code>%</code> remplace <strong>n'importe quel nombre</strong> de caractères, <code>_</code> en remplace <strong>exactement un</strong>.</p>
+<table class="memo-table trace">
+<tr><th>Motif</th><th>Ce qu'il attrape</th></tr>
+<tr><td><code>'L%'</code></td><td>ce qui commence par L</td></tr>
+<tr><td><code>'%train%'</code></td><td>ce qui contient « train »</td></tr>
+<tr><td><code>'%e'</code></td><td>ce qui finit par e</td></tr>
+<tr><td><code>'_a%'</code></td><td>un caractère, puis un a, puis n'importe quoi</td></tr>
+</table>
 
-<h2>NULL : la case vide</h2>
-<p><code>NULL</code> signifie « on ne sait pas ». Ce n'est ni zéro, ni du texte vide — et surtout, <strong>on ne peut pas le comparer avec <code>=</code></strong>. Il faut une écriture spéciale :</p>
-<pre class="bloc-code">SELECT titre FROM films WHERE note IS NULL;
-SELECT titre FROM films WHERE note IS NOT NULL;</pre>
+<h2>Les autres</h2>
+<p><code>BETWEEN 2020 AND 2023</code> couvre un intervalle, <strong>bornes incluses</strong>. <code>NOT</code> inverse une condition. Et <code>IS NULL</code> reste le seul moyen de trouver les valeurs absentes.</p>
+<p>Ces mots-clés ne sont pas du décor : chacun remplace une écriture plus longue et plus facile à rater. Un <code>BETWEEN</code> dit en un mot ce que deux comparaisons disent en six, et il ne risque pas d'inverser ses bornes en chemin.</p>
 
-<div class="attention"><div><code>WHERE note = NULL</code> ne renvoie jamais rien, même s'il y a des cases vides. C'est un classique qui fait perdre des heures : retiens <code>IS NULL</code>.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier les parenthèses en mélangeant <code>AND</code> et <code>OR</code>.</strong> Aucune erreur, un résultat faux. C'est l'erreur la plus coûteuse de cette leçon : <code>A OR B AND C</code> se lit <code>A OR (B AND C)</code>, ce qui est rarement ce qu'on voulait.</p>
+<p><strong>Oublier le <code>%</code> dans un <code>LIKE</code>.</strong> <code>LIKE 'Train'</code> sans joker se comporte comme un <code>=</code> : il faut le mot entier, à l'identique.</p>
+<p><strong>Croire que <code>BETWEEN</code> exclut les bornes.</strong> Il les inclut, des deux côtés — contrairement au <code>range</code> de Python.</p>
+<p><strong>Multiplier les <code>OR</code> au lieu d'un <code>IN</code>.</strong> Ça marche, et six <code>OR</code> alignés deviennent illisibles.</p>
+
+<h2>Dans la vraie vie</h2>
+<p><code>LIKE '%mot%'</code> est le fond de toute barre de recherche simple. Sur de grosses tables il devient lent, parce qu'un joker en début de motif empêche le moteur d'utiliser ses index — les moteurs de recherche sérieux passent alors à des outils spécialisés.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>AND</code> est prioritaire sur <code>OR</code> : des parenthèses dès qu'on les mélange.</li>
+<li><code>IN (...)</code> remplace une série de <code>OR</code>.</li>
+<li><code>LIKE</code> avec <code>%</code> (plusieurs caractères) et <code>_</code> (un seul).</li>
+<li><code>BETWEEN</code> inclut ses deux bornes.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : NOT IN et les NULL</summary>
+<p>Un piège réputé : si la liste d'un <code>NOT IN</code> contient un NULL, la requête ne rend <strong>aucune ligne</strong> — jamais. C'est la logique à trois valeurs qui frappe : « différent d'inconnu » vaut inconnu, donc jamais vrai. C'est l'une des erreurs les plus difficiles à diagnostiquer en SQL, parce que la requête a l'air parfaitement sensée.</p>
+</details>
 `,
   exercices: [
     {
@@ -410,22 +520,55 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
   id: 'sql-5',
   titre: 'Trier et limiter',
   contenu: `
-<h2>ORDER BY : mettre de l'ordre</h2>
+<h2>Pourquoi ça existe</h2>
+<p>Un résultat sans ordre n'est pas vraiment un résultat. « Les meilleurs films » n'a de sens que trié ; « les dix plus récents » suppose un tri <em>et</em> une limite.</p>
+<p>Point important : sans <code>ORDER BY</code>, l'ordre des lignes <strong>n'est pas garanti</strong>. Il paraît stable, puis change le jour où la table grossit ou que le moteur choisit un autre chemin. Si l'ordre compte, il s'écrit.</p>
+
+<h2>ORDER BY</h2>
 <pre class="bloc-code">SELECT titre, note FROM films ORDER BY note DESC;</pre>
 <ul>
-<li><code>ASC</code> : ordre croissant (du plus petit au plus grand, de A à Z). C'est le comportement par défaut, on l'écrit rarement ;</li>
-<li><code>DESC</code> : ordre décroissant. À retenir, c'est celui qu'on veut le plus souvent (meilleures notes d'abord, ventes les plus fortes en tête…).</li>
+<li><code>ASC</code> — croissant, du plus petit au plus grand, de A à Z. C'est le défaut, on l'écrit rarement ;</li>
+<li><code>DESC</code> — décroissant.</li>
 </ul>
+<p>On peut trier sur plusieurs colonnes : <code>ORDER BY genre, note DESC</code> classe par genre, puis par note décroissante <em>à l'intérieur</em> de chaque genre.</p>
 
-<h2>Trier sur plusieurs colonnes</h2>
-<pre class="bloc-code">SELECT titre, annee, note FROM films ORDER BY annee DESC, note DESC;</pre>
-<p>D'abord par année décroissante ; <em>en cas d'égalité</em>, par note décroissante. Le second critère ne départage que les ex æquo.</p>
-
-<h2>LIMIT : ne garder que les premiers</h2>
+<h2>LIMIT</h2>
 <pre class="bloc-code">SELECT titre, note FROM films ORDER BY note DESC LIMIT 3;</pre>
-<p>Le trio gagnant. C'est la recette de tous les classements que tu vois sur le web : trier, puis couper.</p>
+<p>Mesuré : les trois meilleures notes. <code>LIMIT</code> se place en dernier et coupe le résultat.</p>
+<p>Il va presque toujours avec un <code>ORDER BY</code> — sans tri, « les 3 premiers » ne veut rien dire, puisque l'ordre n'est pas garanti.</p>
 
-<div class="astuce"><div>L'ordre des mots-clés n'est pas négociable : <code>SELECT … FROM … WHERE … ORDER BY … LIMIT</code>. Le moteur refuse toute autre disposition. Apprends cette phrase par cœur, elle te servira pour toutes tes requêtes.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Lignes restantes</th></tr>
+<tr><td><code>FROM films</code></td><td>8</td></tr>
+<tr><td><code>WHERE</code> (s'il y en a un)</td><td>les lignes gardées</td></tr>
+<tr><td><code>ORDER BY note DESC</code></td><td>toujours autant, mais rangées</td></tr>
+<tr><td><code>LIMIT 3</code></td><td><strong>3</strong></td></tr>
+</table>
+<p>L'ordre compte : le tri se fait sur tout le résultat, et la coupe vient ensuite. Inverser les deux donnerait trois lignes au hasard, triées entre elles.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>ORDER BY</code> avec un <code>LIMIT</code>.</strong> On obtient trois lignes, mais lesquelles ? Le moteur n'a rien promis. C'est l'erreur qui donne des résultats « qui changent tout seuls ».</p>
+<p><strong>Oublier que les NULL se rangent quelque part.</strong> Un tri sur une colonne qui contient des valeurs absentes les place à une extrémité. Un <code>ORDER BY titre LIMIT 1</code> peut donc présenter comme « meilleur film » un titre qui n'a pas de note du tout — on y revient à la leçon sur le débogage.</p>
+<p><strong>Trier sur une colonne absente du <code>SELECT</code>.</strong> C'est autorisé : <code>SELECT titre FROM films ORDER BY note</code> fonctionne, même si la note ne s'affiche pas. Surprenant, mais pratique.</p>
+<p><strong>Mettre <code>LIMIT</code> ailleurs qu'à la fin.</strong> L'ordre des clauses est fixe : <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>, <code>ORDER BY</code>, <code>LIMIT</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Toute page de résultats repose sur ce couple : trier, puis couper. La pagination ajoute un <code>OFFSET</code> — « saute les 20 premiers » — et l'on obtient la page 2. C'est exactement ce que fait ton site de commerce préféré à chaque clic sur « page suivante ».</p>
+
+<div class="a-retenir">
+<ul>
+<li>Sans <code>ORDER BY</code>, <strong>aucun ordre n'est garanti</strong>.</li>
+<li><code>DESC</code> pour décroissant ; on peut trier sur plusieurs colonnes.</li>
+<li><code>LIMIT</code> vient en dernier, et appelle presque toujours un tri.</li>
+<li>Les valeurs absentes se rangent à une extrémité : attention au premier résultat.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la pagination qui dérive</summary>
+<p><code>LIMIT 20 OFFSET 40</code> donne la page 3 — et pose un problème subtil : si une ligne est ajoutée pendant que l'utilisateur navigue, tout se décale, et il peut voir deux fois le même élément ou en sauter un. Les grandes applications utilisent donc une pagination « par curseur » : au lieu de compter des pages, on demande « ce qui vient après cet élément précis ».</p>
+</details>
 `,
   exercices: [
     {
@@ -503,28 +646,54 @@ SELECT titre FROM films WHERE note IS NOT NULL;</pre>
   id: 'sql-6',
   titre: 'Compter et calculer',
   contenu: `
-<p>Jusqu'ici tu obtenais des lignes. Les <strong>fonctions d'agrégat</strong> font autre chose : elles résument tout un ensemble de lignes en <strong>une seule valeur</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici tu obtenais des <em>lignes</em>. Les fonctions de cette leçon font autre chose : elles <strong>résument</strong> tout un ensemble de lignes en une seule valeur. Combien de films ? Quelle note moyenne ? Quelle durée totale ?</p>
+<p>C'est le passage de « montre-moi les données » à « dis-moi ce qu'elles racontent » — et c'est pour cela que SQL est l'outil des gens qui analysent.</p>
 
-<table class="memo-table">
-<tr><th>Fonction</th><th>Ce qu'elle calcule</th></tr>
-<tr><td>COUNT(*)</td><td>le nombre de lignes</td></tr>
-<tr><td>SUM(colonne)</td><td>la somme</td></tr>
-<tr><td>AVG(colonne)</td><td>la moyenne</td></tr>
-<tr><td>MIN(colonne) / MAX(colonne)</td><td>la plus petite / la plus grande valeur</td></tr>
+<h2>Les cinq fonctions</h2>
+<pre class="bloc-code">SELECT COUNT(*) FROM films;        -- 8
+SELECT SUM(duree) FROM films;      -- 916
+SELECT AVG(note) FROM films;       -- 7.614286
+SELECT MIN(note) FROM films;       -- 5.9
+SELECT MAX(note) FROM films;       -- 9.1</pre>
+<p>Tous mesurés sur la base du cours. Une requête d'agrégat rend <strong>une seule ligne</strong>, quel que soit le nombre de lignes derrière.</p>
+
+<h2>Pas à pas : COUNT(*) ou COUNT(colonne) ?</h2>
+<pre class="bloc-code">SELECT COUNT(*), COUNT(note) FROM films;   -- 8 | 7</pre>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Résultat</th><th>Ce qu'elle compte</th></tr>
+<tr><td><code>COUNT(*)</code></td><td><strong>8</strong></td><td>les <em>lignes</em></td></tr>
+<tr><td><code>COUNT(note)</code></td><td><strong>7</strong></td><td>les <em>valeurs renseignées</em></td></tr>
 </table>
+<p>Mesuré. Un film n'a pas de note : il compte dans les lignes, pas dans les notes. La différence paraît minime et change tout dès qu'on calcule un pourcentage.</p>
+<p>Même logique pour <code>AVG</code> : la moyenne mesurée, 7.614286, est calculée sur <strong>sept</strong> notes, pas huit. Les valeurs absentes sont ignorées, jamais comptées comme zéro — ce qui est le bon comportement, mais il faut le savoir.</p>
 
-<pre class="bloc-code">SELECT COUNT(*) FROM films;              -- 8
-SELECT AVG(note) FROM films;             -- la note moyenne
-SELECT MIN(annee), MAX(annee) FROM films; -- le plus ancien et le plus récent</pre>
+<h2>Nommer le résultat</h2>
+<pre class="bloc-code">SELECT COUNT(*) AS nombre, AVG(note) AS moyenne FROM films;</pre>
+<p>Sans <code>AS</code>, la colonne s'appelle <code>COUNT(*)</code> — correct, et pénible à exploiter. On nomme systématiquement les colonnes calculées.</p>
 
-<h2>Compter avec un filtre</h2>
-<p>Le <code>WHERE</code> s'applique d'abord, l'agrégat ensuite :</p>
-<pre class="bloc-code">SELECT COUNT(*) FROM films WHERE genre = 'Drame';</pre>
+<h2>Les pièges</h2>
+<p><strong>Mélanger un agrégat et une colonne normale.</strong> <code>SELECT titre, COUNT(*) FROM films</code> n'a pas de sens : huit titres, mais un seul compte — quel titre afficher ? C'est le <code>GROUP BY</code> de la leçon suivante qui répond.</p>
+<p><strong>Croire que <code>AVG</code> traite les absents comme des zéros.</strong> Il les ignore. Pour les compter comme zéro, il faut l'écrire explicitement.</p>
+<p><strong>Utiliser <code>COUNT(colonne)</code> en croyant compter les lignes.</strong> Sur une colonne qui contient des absences, le chiffre est plus petit — et l'écart passe inaperçu.</p>
+<p><strong>Oublier que le résultat n'a qu'une ligne.</strong> Un <code>ORDER BY</code> sur un agrégat seul ne sert à rien : il n'y a rien à ranger.</p>
 
-<h2>COUNT(*) ou COUNT(colonne) ?</h2>
-<p><code>COUNT(*)</code> compte toutes les lignes. <code>COUNT(note)</code> ne compte que les lignes où la note <strong>n'est pas vide</strong>. Sur notre table : 8 d'un côté, 7 de l'autre. Cette différence est une source d'erreurs classique dans les rapports.</p>
+<h2>Dans la vraie vie</h2>
+<p>Tout tableau de bord repose là-dessus : chiffre d'affaires du mois, panier moyen, nombre de clients actifs. Et la distinction <code>COUNT(*)</code> contre <code>COUNT(colonne)</code> est l'une des premières questions d'entretien en SQL — précisément parce qu'elle sépare ceux qui ont compris les valeurs absentes des autres.</p>
 
-<div class="astuce"><div>Pense toujours à nommer tes colonnes calculées avec <code>AS</code> : <code>SELECT COUNT(*) AS nombre_films FROM films;</code> — un rapport lisible vaut mieux qu'un en-tête « COUNT(*) ».</div></div>
+<div class="a-retenir">
+<ul>
+<li>Un agrégat résume plusieurs lignes en <strong>une seule</strong> valeur.</li>
+<li><code>COUNT(*)</code> compte les lignes ; <code>COUNT(colonne)</code> compte les valeurs renseignées.</li>
+<li><code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code> ignorent les valeurs absentes.</li>
+<li>On nomme toujours une colonne calculée avec <code>AS</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : compter les valeurs différentes</summary>
+<p><code>COUNT(DISTINCT genre)</code> rend 4 : le nombre de genres <em>différents</em>, et non le nombre de films. C'est la réponse à « combien de clients distincts ont commandé ce mois-ci ? », question où <code>COUNT(*)</code> donnerait le nombre de commandes — un chiffre bien plus flatteur, et faux.</p>
+</details>
 `,
   exercices: [
     {
@@ -592,32 +761,53 @@ SELECT MIN(annee), MAX(annee) FROM films; -- le plus ancien et le plus récent</
   id: 'sql-7',
   titre: 'Regrouper avec GROUP BY',
   contenu: `
-<p>Compter tous les films, c'est bien. Compter les films <strong>par genre</strong>, c'est là que SQL devient impressionnant. <code>GROUP BY</code> fait des paquets de lignes qui partagent une même valeur, puis applique l'agrégat <em>à chaque paquet</em>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Compter tous les films est utile une fois. Compter les films <strong>par genre</strong>, c'est là que SQL devient impressionnant : une ligne de plus, et l'on passe d'un chiffre à un tableau complet.</p>
+<p><code>GROUP BY</code> fait des paquets de lignes qui partagent une même valeur, puis applique l'agrégat à chaque paquet séparément.</p>
 
+<h2>La forme</h2>
 <pre class="bloc-code">SELECT genre, COUNT(*) AS nombre
 FROM films
 GROUP BY genre;</pre>
+<p>Mesuré : quatre lignes — Thriller 2, Drame 3, Comédie 2, Aventure 1. Une ligne par genre, au lieu d'une ligne unique.</p>
+<p>La règle qui gouverne tout : <strong>ce qui est dans le <code>SELECT</code> doit être soit dans le <code>GROUP BY</code>, soit dans un agrégat</strong>. Rien d'autre n'a de sens — pour un paquet de trois films, quel <code>titre</code> afficher ?</p>
 
-<p>Le résultat n'a plus une ligne par film, mais <strong>une ligne par genre</strong> :</p>
-<table class="memo-table">
-<tr><th>genre</th><th>nombre</th></tr>
-<tr><td>Thriller</td><td>2</td></tr>
-<tr><td>Drame</td><td>3</td></tr>
-<tr><td>Comédie</td><td>2</td></tr>
-<tr><td>Aventure</td><td>1</td></tr>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td><code>FROM films</code></td><td>8 lignes</td></tr>
+<tr><td><code>GROUP BY genre</code></td><td>elles se rangent en <strong>4 paquets</strong></td></tr>
+<tr><td><code>COUNT(*)</code></td><td>compté <em>dans chaque paquet</em> : 2, 3, 2, 1</td></tr>
+<tr><td><code>SELECT genre, ...</code></td><td>4 lignes de résultat</td></tr>
 </table>
+<p>Le point à visualiser est le deuxième : après le regroupement, il n'y a plus huit lignes mais quatre groupes. Tout ce qui suit travaille sur des groupes, plus sur des lignes.</p>
 
-<h2>La règle d'or</h2>
-<p>Les colonnes affichées doivent être <strong>soit la colonne de regroupement, soit un agrégat</strong>. Demander <code>SELECT titre, COUNT(*) … GROUP BY genre</code> n'a aucun sens : quel titre afficher, puisque le paquet en contient plusieurs ?</p>
+<h2>Grouper sur plusieurs colonnes</h2>
+<pre class="bloc-code">SELECT genre, annee, COUNT(*) FROM films GROUP BY genre, annee;</pre>
+<p>Un paquet par <em>combinaison</em> de genre et d'année. On obtient logiquement plus de groupes, et moins de lignes dans chacun.</p>
 
-<h2>Trier un regroupement</h2>
-<pre class="bloc-code">SELECT genre, AVG(note) AS moyenne
-FROM films
-GROUP BY genre
-ORDER BY moyenne DESC;</pre>
-<p>On peut trier sur le nom donné par <code>AS</code> — pratique et lisible.</p>
+<h2>Les pièges</h2>
+<p><strong>Mettre une colonne libre dans le <code>SELECT</code>.</strong> <code>SELECT genre, titre, COUNT(*) ... GROUP BY genre</code> est refusé par la plupart des bases — et quand une base l'accepte, elle choisit un titre au hasard dans le paquet. Le résultat est faux sans être signalé.</p>
+<p><strong>Vouloir filtrer les groupes avec <code>WHERE</code>.</strong> Le moteur du cours est net : <em>« la fonction <code>COUNT()</code> ne peut pas s'utiliser ici (elle sert à résumer un groupe de lignes, dans SELECT ou HAVING). »</em> C'est <code>HAVING</code> qu'il faut, à la leçon suivante.</p>
+<p><strong>Confondre « filtrer avant » et « filtrer après ».</strong> <code>WHERE</code> retire des lignes <em>avant</em> le regroupement ; <code>HAVING</code> retire des groupes <em>après</em>. Les deux peuvent coexister dans la même requête, et ils ne font pas la même chose.</p>
+<p><strong>Oublier le tri.</strong> L'ordre des groupes n'est pas garanti : un <code>ORDER BY</code> reste nécessaire.</p>
 
-<div class="info"><div>Combiné à <code>WHERE</code>, l'ordre est : filtrer les lignes (WHERE), faire les paquets (GROUP BY), calculer, puis trier (ORDER BY). C'est cet enchaînement qui produit tous les rapports d'entreprise du monde.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>Ventes par mois, clients par pays, erreurs par type : tout rapport commence par un <code>GROUP BY</code>. C'est aussi ce que fait un tableau croisé dynamique de tableur — en moins souple et plus lentement.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>GROUP BY</code> fait des paquets ; l'agrégat s'applique à <em>chaque</em> paquet.</li>
+<li>Dans le <code>SELECT</code> : soit une colonne du <code>GROUP BY</code>, soit un agrégat.</li>
+<li><code>WHERE</code> filtre avant le regroupement, <code>HAVING</code> après.</li>
+<li>L'ordre des groupes n'est pas garanti.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : l'ordre réel des clauses</summary>
+<p>Le moteur exécute dans cet ordre : <code>FROM</code>, <code>WHERE</code>, <code>GROUP BY</code>, <code>HAVING</code>, <code>SELECT</code>, <code>ORDER BY</code>, <code>LIMIT</code>. Connaître cette liste répond d'un coup à la plupart des questions « pourquoi ça ne marche pas » : un alias défini dans le <code>SELECT</code> n'existe pas encore pour le <code>WHERE</code>, mais il existe pour l'<code>ORDER BY</code>, qui vient après.</p>
+</details>
 `,
   exercices: [
     {
@@ -691,24 +881,55 @@ ORDER BY moyenne DESC;</pre>
   id: 'sql-8',
   titre: 'Modifier les données',
   contenu: `
-<p>Jusqu'ici tu ne faisais que <em>lire</em>. Trois commandes permettent d'écrire — et elles méritent le respect, car elles changent la base pour de bon.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici tu ne faisais que <em>lire</em>. Trois commandes permettent d'écrire — et elles méritent le respect, car elles changent la base pour de bon. Une lecture ratée ne coûte rien ; une écriture ratée peut coûter très cher.</p>
 
 <h2>INSERT : ajouter une ligne</h2>
 <pre class="bloc-code">INSERT INTO films (id, titre, annee, genre, duree, note)
-VALUES (9, 'Aurore', 2024, 'Drame', 101, 7.4);</pre>
-<p>Les colonnes d'un côté, les valeurs de l'autre, <strong>dans le même ordre et en même nombre</strong>.</p>
+VALUES (9, 'Le Silence', 2024, 'Drame', 101, 7.5);</pre>
+<p>On nomme les colonnes, puis on donne les valeurs <strong>dans le même ordre</strong>. Nommer les colonnes n'est pas obligatoire, et c'est fortement conseillé : sans cela, la requête casse dès que la table change.</p>
 
-<h2>UPDATE : modifier des lignes existantes</h2>
-<pre class="bloc-code">UPDATE films
-SET note = 8.5
-WHERE titre = 'Les Voisins';</pre>
+<h2>UPDATE : modifier</h2>
+<pre class="bloc-code">UPDATE films SET note = 8.5 WHERE id = 3;</pre>
+<p><code>SET</code> dit quoi changer, <code>WHERE</code> dit où. On peut modifier plusieurs colonnes d'un coup, séparées par des virgules.</p>
 
-<h2>DELETE : supprimer des lignes</h2>
+<h2>DELETE : supprimer</h2>
 <pre class="bloc-code">DELETE FROM films WHERE id = 9;</pre>
+<p>Pas de <code>SELECT</code>, pas de colonnes : on supprime des <em>lignes</em> entières.</p>
 
-<div class="attention"><div><strong>La règle qui sauve des carrières.</strong> Un <code>UPDATE</code> ou un <code>DELETE</code> sans <code>WHERE</code> s'applique à <strong>toute la table</strong>. <code>DELETE FROM films;</code> vide la table entière, sans confirmation et sans retour en arrière. Le réflexe des professionnels : écrire d'abord la requête en <code>SELECT</code> pour voir quelles lignes seront touchées, puis remplacer <code>SELECT *</code> par <code>DELETE</code>.</div></div>
+<h2>Pas à pas : le WHERE qui sauve</h2>
+<table class="memo-table trace">
+<tr><th>Requête</th><th>Effet</th></tr>
+<tr><td><code>UPDATE films SET note = 10 WHERE id = 3</code></td><td>un film modifié</td></tr>
+<tr><td><code>UPDATE films SET note = 10</code></td><td><strong>les 8 films</strong> passent à 10</td></tr>
+<tr><td><code>DELETE FROM films WHERE id = 9</code></td><td>un film supprimé</td></tr>
+<tr><td><code>DELETE FROM films</code></td><td><strong>la table est vidée</strong></td></tr>
+</table>
+<p>Les lignes 2 et 4 ne provoquent aucune erreur. Elles sont parfaitement valides — et c'est exactement ce qui les rend dangereuses.</p>
+<p>Le réflexe des professionnels tient en une phrase : <strong>on écrit toujours le <code>WHERE</code> avant le reste</strong>. Certains vont plus loin et testent d'abord la condition avec un <code>SELECT</code>, pour voir quelles lignes seraient touchées.</p>
 
-<div class="astuce"><div>Rassure-toi : dans ce logiciel, chaque exercice repart d'une base intacte. Tu peux tout casser sans conséquence — c'est même une bonne façon d'apprendre.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le <code>WHERE</code>.</strong> C'est l'incident classique du métier, celui qu'on raconte en soirée. Aucun moteur ne demande confirmation.</p>
+<p><strong>Croire qu'on peut annuler.</strong> Sans transaction ouverte, une écriture est immédiate et définitive. Il n'y a pas de bouton « annuler » en SQL.</p>
+<p><strong>Oublier une colonne obligatoire dans un <code>INSERT</code>.</strong> La base refuse, et c'est une bonne nouvelle : elle protège sa cohérence.</p>
+<p><strong>Réutiliser un identifiant existant.</strong> La clé primaire doit être unique — la base refusera, et c'est précisément son rôle.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Dans une vraie application, ces trois commandes sont presque toujours entourées d'une <strong>transaction</strong> : un bloc où plusieurs écritures réussissent ensemble, ou échouent ensemble. C'est ce qui garantit qu'un virement ne débite jamais un compte sans créditer l'autre.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>INSERT INTO ... VALUES</code>, <code>UPDATE ... SET ... WHERE</code>, <code>DELETE FROM ... WHERE</code>.</li>
+<li>Sans <code>WHERE</code>, un <code>UPDATE</code> ou un <code>DELETE</code> touche <strong>toute la table</strong>, sans avertir.</li>
+<li>On écrit le <code>WHERE</code> en premier — et on le teste au <code>SELECT</code> avant.</li>
+<li>Une écriture est immédiate : il n'y a pas d'annulation.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la transaction</summary>
+<p><code>BEGIN</code> ouvre une transaction, <code>COMMIT</code> valide tout, <code>ROLLBACK</code> annule tout. Entre les deux, rien n'est visible des autres utilisateurs. C'est la propriété la plus précieuse des bases relationnelles — et la raison pour laquelle les banques les utilisent toujours, cinquante ans après leur invention.</p>
+</details>
 `,
   exercices: [
     {
@@ -785,21 +1006,55 @@ WHERE titre = 'Les Voisins';</pre>
   id: 'sql-9',
   titre: 'Relier deux tables : JOIN',
   contenu: `
-<p>Voici l'idée centrale des bases de données relationnelles. Regarde la table <code>seances</code> : elle ne contient pas le titre du film, mais un <code>film_id</code>. Pourquoi ?</p>
+<h2>Pourquoi ça existe</h2>
+<p>Voici l'idée centrale des bases relationnelles. Regarde la table <code>seances</code> : elle ne contient pas le titre du film, mais un <code>film_id</code>. Pourquoi faire compliqué ?</p>
+<p>Parce que répéter une information est la source de tous les maux. Si chaque séance portait le titre complet, il faudrait le corriger partout le jour d'une faute de frappe — et deux lignes finiraient fatalement par se contredire. On stocke donc l'information <strong>une seule fois</strong>, et on la référence.</p>
 
-<h2>Ne jamais répéter une information</h2>
-<p>Si chaque séance stockait le titre du film, un titre mal orthographié devrait être corrigé à cent endroits. En rangeant les films dans leur propre table et en n'y faisant référence que par un numéro, l'information n'existe qu'<strong>une seule fois</strong>. Ce numéro s'appelle une <strong>clé étrangère</strong>.</p>
+<h2>La jointure</h2>
+<pre class="bloc-code">SELECT films.titre, seances.jour
+FROM films
+JOIN seances ON films.id = seances.film_id;</pre>
+<p>Mesuré : huit lignes. <code>ON</code> dit comment les deux tables se correspondent — ici, l'<code>id</code> d'un film et le <code>film_id</code> d'une séance.</p>
+<p>Quand une colonne existe dans les deux tables, on la préfixe du nom de sa table. Beaucoup de gens le font systématiquement : la requête reste lisible même quand on ne connaît pas le schéma.</p>
 
-<h2>JOIN : recoller les morceaux</h2>
-<pre class="bloc-code">SELECT seances.jour, films.titre, seances.spectateurs
-FROM seances
-JOIN films ON seances.film_id = films.id;</pre>
-<p>Traduction : « pour chaque séance, va chercher la ligne de <code>films</code> dont l'<code>id</code> correspond au <code>film_id</code> de la séance ». Le <code>ON</code> indique <strong>comment</strong> les deux tables se correspondent.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>8 films, 8 séances</td><td>deux tables séparées</td></tr>
+<tr><td><code>JOIN ... ON</code></td><td>chaque séance retrouve son film</td></tr>
+<tr><td>résultat</td><td><strong>8 lignes</strong> — une par séance</td></tr>
+</table>
+<p>Le nombre de lignes du résultat suit les <em>correspondances</em>, pas les tables. Un film qui a trois séances apparaît trois fois ; un film sans séance <strong>disparaît</strong>.</p>
+<p>Cette disparition n'est pas un bug : <code>JOIN</code> ne garde que ce qui s'apparie. Pour garder les orphelins, il existe <code>LEFT JOIN</code> — c'est l'objet d'une leçon du module suivant.</p>
 
-<h2>Préciser la table</h2>
-<p>Quand deux tables ont une colonne du même nom (ici <code>id</code>), on écrit <code>table.colonne</code> pour lever l'ambiguïté. C'est une bonne habitude même quand ce n'est pas obligatoire : la requête devient lisible sans connaître la base par cœur.</p>
+<h2>Les alias</h2>
+<pre class="bloc-code">SELECT f.titre, s.jour
+FROM films f
+JOIN seances s ON f.id = s.film_id;</pre>
+<p>Une lettre après le nom de la table suffit à la renommer pour la requête. Indispensable dès qu'il y a trois tables.</p>
 
-<div class="info"><div>Une jointure peut se combiner avec tout le reste : <code>WHERE</code>, <code>GROUP BY</code>, <code>ORDER BY</code>. C'est ainsi qu'on répond à des questions comme « quel film a attiré le plus de spectateurs cette semaine ? » — exactement le genre de question qu'on pose à une base de cinéma.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le <code>ON</code>.</strong> Sans condition, certaines bases apparient <em>chaque</em> ligne avec <em>chaque</em> ligne : 8 films × 8 séances font 64 lignes. Le résultat paraît plausible, et il est absurde.</p>
+<p><strong>Se tromper de colonnes dans le <code>ON</code>.</strong> <code>ON films.id = seances.id</code> compare deux identifiants qui n'ont rien à voir. La requête fonctionne et rend n'importe quoi.</p>
+<p><strong>Oublier que les lignes se multiplient.</strong> Après une jointure, <code>COUNT(*)</code> ne compte plus les films mais les correspondances. C'est l'une des erreurs les plus fréquentes des rapports faux.</p>
+<p><strong>Oublier le préfixe sur une colonne ambiguë.</strong> Si les deux tables ont une colonne <code>id</code>, le moteur ne peut pas deviner.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Une requête d'application joint couramment trois à six tables : commandes, clients, produits, adresses. C'est ce découpage — ne jamais répéter une information — qui permet à une base de rester cohérente avec des millions de lignes et des centaines d'utilisateurs simultanés.</p>
+
+<div class="a-retenir">
+<ul>
+<li>On stocke une information <strong>une seule fois</strong> et on la référence par son identifiant.</li>
+<li><code>JOIN ... ON</code> dit comment les deux tables se correspondent.</li>
+<li>Le résultat compte les <em>correspondances</em> : un film sans séance disparaît.</li>
+<li>Après une jointure, <code>COUNT(*)</code> ne compte plus ce qu'on croit.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la clé étrangère</summary>
+<p><code>film_id</code> est une <em>clé étrangère</em> : une colonne qui pointe vers la clé primaire d'une autre table. Déclarée comme telle, la base refuse alors d'insérer une séance pour un film inexistant, et peut supprimer automatiquement les séances d'un film supprimé. C'est ce qui garantit qu'une base ne contient jamais de référence dans le vide.</p>
+</details>
 `,
   exercices: [
     {
@@ -869,19 +1124,57 @@ JOIN films ON seances.film_id = films.id;</pre>
   id: 'sql-10',
   titre: 'Mini-projet : le tableau de bord du cinéma',
   contenu: `
-<p>Le directeur du réseau te pose trois questions. À toi d'y répondre en SQL — sans nouvelle notion, uniquement ce que tu sais déjà. C'est exactement ainsi qu'on travaille : on ne réapprend pas, on assemble.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Dernière leçon du module, et pas une notion de plus. Le directeur du réseau te pose trois questions, et tu as déjà tout ce qu'il faut pour y répondre.</p>
+<p>C'est exactement ainsi qu'on travaille : on ne réapprend pas à chaque fois, on <strong>assemble</strong> ce qu'on sait. Et savoir choisir quoi assembler est précisément ce qui distingue quelqu'un qui connaît SQL de quelqu'un qui l'a lu.</p>
 
-<h2>Ton aide-mémoire</h2>
-<pre class="bloc-code">SELECT   colonnes ou calculs
-FROM     table
-JOIN     autre_table ON correspondance
-WHERE    conditions
-GROUP BY colonne de regroupement
-ORDER BY tri
-LIMIT    nombre</pre>
-<p>Cet ordre est immuable. Toute requête, même très longue, suit ce squelette.</p>
+<h2>La méthode, avant les requêtes</h2>
+<p>Face à une question en français, trois réflexes dans cet ordre :</p>
+<ol>
+<li><strong>De quelle table viennent les données ?</strong> Et faut-il en joindre une autre ?</li>
+<li><strong>Faut-il filtrer des lignes ?</strong> C'est le <code>WHERE</code>.</li>
+<li><strong>Faut-il résumer ?</strong> Si la réponse est un chiffre par catégorie, c'est <code>GROUP BY</code>.</li>
+</ol>
+<p>Ces trois questions suffisent à écrire la structure d'à peu près n'importe quelle requête, avant même de se soucier de la syntaxe.</p>
 
-<div class="astuce"><div>Méthode quand une requête résiste : commence par <code>SELECT * FROM table</code>, regarde le résultat, puis ajoute <strong>un seul</strong> morceau à la fois en relançant à chaque étape. Une requête complexe se construit par couches, jamais d'un seul jet.</div></div>
+<h2>Pas à pas</h2>
+<p>« Quel est le genre qui compte le plus de films ? »</p>
+<table class="memo-table trace">
+<tr><th>Question</th><th>Réponse</th><th>Ce que ça donne</th></tr>
+<tr><td>quelle table ?</td><td>films seule</td><td><code>FROM films</code></td></tr>
+<tr><td>filtrer ?</td><td>non</td><td>pas de <code>WHERE</code></td></tr>
+<tr><td>résumer ?</td><td>un compte par genre</td><td><code>GROUP BY genre</code></td></tr>
+<tr><td>et « le plus » ?</td><td>trier et couper</td><td><code>ORDER BY ... DESC LIMIT 1</code></td></tr>
+</table>
+<pre class="bloc-code">SELECT genre, COUNT(*) AS nombre
+FROM films
+GROUP BY genre
+ORDER BY nombre DESC
+LIMIT 1;</pre>
+<p>Remarque qu'on trie sur l'alias <code>nombre</code> : l'<code>ORDER BY</code> s'exécute après le <code>SELECT</code>, donc l'alias existe déjà. Dans un <code>WHERE</code>, il n'existerait pas.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Vouloir tout faire en une requête.</strong> Une question complexe se découpe. Écris d'abord la requête qui rapporte les bonnes lignes, vérifie-la, puis ajoute le regroupement, vérifie encore. Construire par étapes vaut mieux que déboguer d'un bloc.</p>
+<p><strong>Oublier que <code>COUNT(*)</code> change après une jointure.</strong> Si la question mêle films et séances, compter les films après un <code>JOIN</code> compte en réalité les séances.</p>
+<p><strong>Répondre à côté.</strong> « Le genre le plus représenté » demande un genre, pas la liste de tous les genres triés. Le <code>LIMIT 1</code> fait partie de la réponse.</p>
+<p><strong>Faire confiance à un résultat non vérifié.</strong> Une requête fausse ne se plaint pas : elle répond. Un ordre de grandeur plausible n'est pas une preuve — on y revient en fin de module suivant.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>C'est le travail quotidien de milliers de gens qui ne se considèrent pas comme programmeurs : analystes, gestionnaires, chargés d'études. Traduire une question posée en français en une requête juste est une compétence en soi — et elle se transfère à toutes les bases du monde.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Trois questions : quelle table, faut-il filtrer, faut-il résumer ?</li>
+<li>On construit par étapes, en vérifiant à chaque ajout.</li>
+<li>L'<code>ORDER BY</code> peut utiliser un alias du <code>SELECT</code> ; le <code>WHERE</code>, non.</li>
+<li>Une requête fausse ne lève aucune erreur : elle répond.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : lire un plan d'exécution</summary>
+<p><code>EXPLAIN</code> placé devant une requête ne l'exécute pas : il montre le chemin que le moteur compte emprunter — quelle table d'abord, quel index utilisé, combien de lignes examinées. C'est l'outil de base pour comprendre pourquoi une requête met trente secondes, et il révèle souvent qu'un simple index manquant explique tout.</p>
+</details>
 `,
   exercices: [
     {

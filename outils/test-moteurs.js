@@ -96,6 +96,14 @@ verifie('LIKE avec _ pour un seul caractère',
 // La base contient un film sans note : c'est tout l'intérêt pédagogique de NULL.
 verifie('IS NULL trouve la valeur absente',
         lignes('SELECT titre FROM films WHERE note IS NULL'), [['Echo']]);
+
+/* La regle des trois valeurs : comparer quoi que ce soit a NULL ne rend
+   jamais vrai, meme avec « different de ». C'est toute la raison d'etre de
+   IS NULL — et c'est ce qui rendait une ligne ici alors qu'une vraie base
+   n'en rend aucune. */
+verifie('= NULL ne rend jamais rien', lignes('SELECT titre FROM films WHERE note = NULL'), []);
+verifie('!= NULL non plus', lignes('SELECT titre FROM films WHERE note != NULL'), []);
+verifie('IS NOT NULL, lui, repond bien', lignes('SELECT COUNT(*) FROM films WHERE note IS NOT NULL'), [[7]]);
 verifie('IS NOT NULL compte les autres',
         lignes('SELECT COUNT(*) FROM films WHERE note IS NOT NULL'), [[7]]);
 

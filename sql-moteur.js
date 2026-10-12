@@ -335,8 +335,19 @@
         if (op === 'OR') return verite(valeur(noeud.g, ligne, ctx)) || verite(valeur(noeud.d, ligne, ctx));
         const a = valeur(noeud.g, ligne, ctx), b = valeur(noeud.d, ligne, ctx);
         switch (op) {
-          case '=': return comparer(a, b) === 0;
-          case '<>': return comparer(a, b) !== 0;
+          // Comparer quoi que ce soit a NULL ne rend jamais vrai : c'est la
+          // regle du SQL, et c'est la raison d'etre de IS NULL. Sans ce
+          // garde-fou, « WHERE note = NULL » sortait une ligne ici et aucune
+          // dans une vraie base — l'eleve apprenait une requete qui ne marche
+          // nulle part ailleurs. comparer() n'est pas touchee : elle sert
+          // aussi a ORDER BY, ou les NULL doivent bien se ranger quelque part.
+          case '=':
+          case '<>': {
+            const aNul = a === null || a === undefined;
+            const bNul = b === null || b === undefined;
+            if (aNul || bNul) return false;
+            return noeud.op === '=' ? comparer(a, b) === 0 : comparer(a, b) !== 0;
+          }
           case '<': return comparer(a, b) < 0;
           case '>': return comparer(a, b) > 0;
           case '<=': return comparer(a, b) <= 0;
