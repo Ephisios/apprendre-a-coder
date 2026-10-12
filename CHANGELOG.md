@@ -6,6 +6,69 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.16.0 — 2026-10-12
+
+Le module C passe au gabarit. La mesure préalable a trouvé le quatrième défaut moteur de cette
+campagne — et cette fois, c'est la leçon elle-même qui ne pouvait pas tourner.
+
+### Changé
+
+- **Les 14 leçons du module C passent au gabarit.** De 93-304 mots à **386-469**. Aucun exercice
+  n'a été touché.
+
+### Corrigé — une structure ne pouvait pas contenir de tableau
+
+`c-12` enseigne les structures, et son exemple est celui-ci :
+
+```c
+struct Etudiant { char nom[50]; int age; double moyenne; };
+```
+
+Mesuré : le moteur le refusait — *« j'attendais un type mais j'ai trouvé « [ » »*. **L'élève qui
+recopiait le code de son propre cours recevait une erreur de syntaxe**, sans rapport avec ce qu'il
+cherchait à comprendre. Les exercices, eux, contournaient sans le dire : ils n'utilisent que des
+champs numériques.
+
+Le corps d'une classe lisait `type nom` puis attendait `(`, `=` ou `;` — jamais `[`. La
+déclaration locale, elle, savait déjà le faire (`int t[5]`) : on reprend le même motif, et le champ
+reçoit un tableau à la création de l'objet.
+
+> Deux structures entrent au harnais des moteurs, qui en compte **158**. Éprouvées en neutralisant
+> la correction : un échec.
+
+### Rattrapé par le harnais
+
+La réécriture a fait échouer un contrôle d'interface : *« pointeur » ramène du corps de leçon, pas
+qu'un titre*. Mes paragraphes, plus longs que l'ancien texte, se faisaient dépasser au classement
+par les titres de leçon — la recherche pénalise les entrées longues et favorise les lignes de
+tableau.
+
+La leçon a donc retrouvé un **tableau de référence des deux symboles**, utile en soi et court assez
+pour bien se classer. Le contrôle existait précisément pour ça : empêcher qu'une notion phare
+devienne introuvable.
+
+### Ce que la mesure a établi
+
+- `7 / 2` rend **3** et `7 % 2` rend **1** ; `(double) 7 / 2` rend **3.50** ;
+- lire `t[7]` dans un tableau de 3 cases est **signalé ici** — *« tu essaies d'accéder à la case 7
+  d'un tableau qui a 3 cases »* — alors qu'un vrai compilateur lirait n'importe quoi en silence.
+  Les leçons le disent ;
+- un tableau passé à une fonction y est **modifiable** ; un entier, non ;
+- `*p = 9` change bien la variable d'origine ;
+- `strlen("Alex")` rend **4**, mais le tableau occupe **5** cases.
+
+> Divergences notées et volontairement non enseignées : `sizeof` n'existe pas dans ce moteur, une
+> variable non initialisée y vaut zéro au lieu de contenir n'importe quoi, et `%5d` n'aligne pas.
+> Les leçons signalent le cas des bornes de tableau, parce que l'écart profite à l'élève ; elles
+> taisent les autres.
+
+### Où en est la conversion
+
+**146 leçons sur 168**, contre 132. Neuf pistes complètes. Reste 22 leçons : Java (13), les 4
+projets, et les deux bouts du parcours.
+
+---
+
 ## 3.15.0 — 2026-10-12
 
 **Tout SQL est au gabarit** : les 17 leçons des deux modules, de la première requête au débogage

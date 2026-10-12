@@ -6,34 +6,59 @@ window.DATA_C = [
   id: 'c-1',
   titre: 'Le C, et pourquoi il compte encore',
   contenu: `
-<p>Le C a plus de cinquante ans, et pourtant tout ce que tu utilises repose dessus : Windows, Linux, macOS, les moteurs de bases de données, l'intérieur de Python lui-même. C'est le langage des <strong>fondations</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Le C a plus de cinquante ans, et tout ce que tu utilises repose dessus : Windows, Linux, macOS, les moteurs de bases de données, l'intérieur de Python lui-même. C'est le langage des <strong>fondations</strong>.</p>
+<p>Il a été créé pour écrire un système d'exploitation — une tâche où l'on ne peut rien se permettre d'invisible. D'où son trait dominant : <strong>le C ne fait rien dans ton dos</strong>. Pas de ramasse-miettes, pas de conversion automatique, pas de vérification au moment de l'exécution. En échange, tu sais exactement ce que fait la machine.</p>
 
 <h2>Compilé, pas interprété</h2>
-<p>Voilà la grande différence avec tout ce que tu as vu jusqu'ici. Python et JavaScript sont <strong>interprétés</strong> : un programme lit ton code et l'exécute au fur et à mesure. Le C est <strong>compilé</strong> : un outil (le compilateur) traduit d'abord ton fichier entier en instructions machine, et produit un programme autonome.</p>
-<ul>
-<li>Avantage : c'est <strong>très rapide</strong>, et le compilateur repère beaucoup d'erreurs avant même que le programme tourne ;</li>
-<li>Inconvénient : il faut compiler à chaque modification, et le langage ne pardonne rien.</li>
-</ul>
+<p>Python et JavaScript sont lus et exécutés au fil de l'eau. Le C est d'abord <strong>compilé</strong> : un programme traduit l'intégralité de ton code en instructions machine, une fois pour toutes. Le résultat tourne ensuite sans interprète, à pleine vitesse.</p>
+<p>Conséquence directe : beaucoup d'erreurs sont attrapées <em>avant</em> la première exécution. Le compilateur refuse de produire un programme dont il ne comprend pas une ligne.</p>
 
 <h2>Le squelette obligatoire</h2>
 <pre class="bloc-code">#include &lt;stdio.h&gt;
 
 int main() {
-    printf("Bonjour le monde !\\n");
+    printf("Bonjour\n");
     return 0;
 }</pre>
-
-<p>Chaque ligne a un rôle précis :</p>
 <ul>
-<li><code>#include &lt;stdio.h&gt;</code> — charge les outils d'affichage (<em>st</em>andard <em>i</em>nput/<em>o</em>utput). Sans lui, <code>printf</code> n'existe pas ;</li>
-<li><code>int main()</code> — <strong>le point de départ</strong>. Tout programme C commence par cette fonction, jamais ailleurs ;</li>
-<li><code>printf(...)</code> — affiche du texte. Le <code>\\n</code> à la fin signifie « passe à la ligne » : contrairement au <code>print</code> de Python, <code>printf</code> ne le fait pas tout seul ;</li>
-<li><code>return 0;</code> — annonce au système « tout s'est bien passé ». 0 veut dire succès.</li>
+<li><code>#include &lt;stdio.h&gt;</code> — on importe la bibliothèque d'entrées-sorties, sans laquelle <code>printf</code> n'existe pas ;</li>
+<li><code>int main()</code> — le point d'entrée. Tout programme C en a un, et un seul ;</li>
+<li><code>return 0;</code> — on annonce au système que tout s'est bien passé ;</li>
+<li>le <code>\n</code> — le retour à la ligne. <strong>Sans lui, rien ne va à la ligne.</strong></li>
 </ul>
 
-<div class="attention"><div>Le <strong>point-virgule</strong> termine chaque instruction. L'oublier est l'erreur numéro un des débutants en C, et le message du compilateur pointe souvent la ligne <em>suivante</em> — ce qui rend la chasse déroutante au début.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td>tu écris le code</td><td>un fichier texte, rien de plus</td></tr>
+<tr><td>compilation</td><td>traduction en instructions machine — ou refus</td></tr>
+<tr><td>exécution</td><td><code>main</code> est appelée, ligne après ligne</td></tr>
+<tr><td><code>return 0</code></td><td>le programme rend la main</td></tr>
+</table>
 
-<div class="info"><div><strong>Comment ça tourne ici ?</strong> Un interpréteur C est intégré à ce logiciel : il exécute ton code immédiatement, sans étape de compilation. C'est parfait pour apprendre la syntaxe et le raisonnement. Pour compiler pour de vrai, tu installeras <code>gcc</code> (Linux/Mac) ou MinGW (Windows) et tu taperas <code>gcc mon_fichier.c -o mon_programme</code>.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le <code>\n</code>.</strong> Mesuré : deux <code>printf</code> sans retour à la ligne donnent <code>"sans retourcolle"</code>, d'un seul tenant. Rien n'est cassé, et l'affichage est illisible.</p>
+<p><strong>Oublier un point-virgule.</strong> Le cours est précis : <em>« il manque un point-virgule <code>;</code> à la fin de cette instruction — j'ai trouvé « printf » juste après. »</em> Il nomme ce qu'il a rencontré, ce qui situe la ligne fautive immédiatement.</p>
+<p><strong>Oublier une accolade.</strong> <em>« une accolade { n'a jamais été refermée. »</em></p>
+<p><strong>Croire que le C ressemble à Python.</strong> L'indentation n'a aucune valeur ici : ce sont les accolades qui délimitent, et les point-virgules qui terminent. On indente quand même, pour soi.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>On n'écrit plus guère d'application entière en C. On y écrit ce qui doit être rapide ou proche du matériel : noyaux de systèmes, pilotes, moteurs de jeu, systèmes embarqués. Et l'on apprend le C pour comprendre ce que les autres langages font pour nous.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Le C est <strong>compilé</strong> : traduit en entier avant d'être exécuté.</li>
+<li>Tout programme a un <code>int main()</code>, et un seul.</li>
+<li><code>#include &lt;stdio.h&gt;</code> est nécessaire pour <code>printf</code>.</li>
+<li>Sans <code>\n</code>, rien ne va à la ligne.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : que vaut le 0 de return ?</summary>
+<p>C'est le <em>code de sortie</em> du programme, lu par le système : zéro veut dire « réussi », toute autre valeur signale une erreur. C'est ce qui permet d'enchaîner des commandes dans un terminal — « fais ceci, et si ça marche, fais cela ». Une convention vieille d'un demi-siècle, encore utilisée chaque jour par tous les outils d'automatisation.</p>
+</details>
 `,
   exercices: [
     {
@@ -101,39 +126,61 @@ int main() {
   id: 'c-2',
   titre: 'Les types : le C veut tout savoir',
   contenu: `
-<p>En Python tu écrivais <code>age = 30</code>. En C, il faut <strong>annoncer le type</strong> avant le nom :</p>
+<h2>Pourquoi ça existe</h2>
+<p>En Python tu écrivais <code>age = 30</code>. En C, il faut annoncer le type avant le nom :</p>
 <pre class="bloc-code">int age = 30;
 double prix = 19.99;
 char initiale = 'A';</pre>
-
-<p>Pourquoi cette contrainte ? Parce que le C réserve <strong>une place précise en mémoire</strong> : 4 octets pour un <code>int</code>, 8 pour un <code>double</code>, 1 pour un <code>char</code>. Il doit savoir combien réserver avant même que le programme démarre.</p>
+<p>Pourquoi cette contrainte ? Parce que le C réserve une place <strong>précise</strong> en mémoire, et qu'il doit savoir combien. Un <code>int</code> occupe quatre octets, un <code>char</code> un seul. Sans le type, la machine ne saurait ni combien réserver, ni comment relire ce qu'il y a dedans.</p>
+<p>Ce n'est donc pas une formalité administrative : c'est l'information dont le langage a besoin pour travailler sans filet.</p>
 
 <h2>Les types de base</h2>
-<table class="memo-table">
-<tr><th>Type</th><th>Contient</th><th>Exemple</th></tr>
-<tr><td>int</td><td>un nombre entier</td><td>int n = 42;</td></tr>
-<tr><td>double</td><td>un nombre à virgule</td><td>double p = 3.14;</td></tr>
-<tr><td>char</td><td>UN seul caractère</td><td>char c = 'A';</td></tr>
+<ul>
+<li><code>int</code> — un entier ;</li>
+<li><code>double</code> — un nombre à virgule (et <code>float</code>, sa version moins précise) ;</li>
+<li><code>char</code> — un seul caractère, entre apostrophes simples ;</li>
+<li>pas de type « texte » : une chaîne est un tableau de <code>char</code>, et c'est l'objet d'une leçon entière.</li>
+</ul>
+<p>Le C n'a pas non plus de type booléen d'origine : <strong>zéro est faux, tout le reste est vrai</strong>.</p>
+
+<h2>printf et ses formats</h2>
+<pre class="bloc-code">int n = 42;
+double d = 3.14159;
+printf("%d et %.2f\n", n, d);   // 42 et 3.14</pre>
+<p>Mesuré. Chaque <code>%</code> est un trou, rempli dans l'ordre par les valeurs qui suivent :</p>
+<table class="memo-table trace">
+<tr><th>Format</th><th>Pour quoi</th></tr>
+<tr><td><code>%d</code></td><td>un entier</td></tr>
+<tr><td><code>%f</code> ou <code>%.2f</code></td><td>un décimal, avec le nombre de chiffres voulu</td></tr>
+<tr><td><code>%c</code></td><td>un caractère</td></tr>
+<tr><td><code>%s</code></td><td>une chaîne</td></tr>
 </table>
 
-<p>Remarque : le <code>char</code> utilise des <strong>apostrophes simples</strong> <code>'A'</code>, alors que le texte utilise des guillemets doubles <code>"Alex"</code>. Cette distinction n'existait pas en Python — elle est importante en C.</p>
+<h2>Pas à pas</h2>
+<p>Le compilateur fait deux choses que Python ne fait pas : il <strong>vérifie</strong> le type à la compilation, et il <strong>convertit</strong> parfois tout seul. <code>int x = 3.7;</code> ne produit pas 3.7 mais 3 : la partie décimale est coupée, sans erreur.</p>
 
-<h2>Afficher : chaque type a son symbole</h2>
-<p><code>printf</code> ne devine rien. Tu écris un texte avec des <strong>trous</strong>, et tu fournis les valeurs qui vont dedans :</p>
-<pre class="bloc-code">int age = 30;
-double taille = 1.75;
-printf("J'ai %d ans et je mesure %.2f m\\n", age, taille);</pre>
+<h2>Les pièges</h2>
+<p><strong>Utiliser une variable non déclarée.</strong> Le cours est explicite : <em>« la variable <code>inconnu</code> n'existe pas. En C comme en Java, il faut la déclarer avec son type avant de l'utiliser (par exemple <code>int inconnu = 0;</code>). »</em></p>
+<p><strong>Confondre <code>'A'</code> et <code>"A"</code>.</strong> Les apostrophes simples donnent un <code>char</code> ; les guillemets doubles, une chaîne — c'est-à-dire deux cases en mémoire, pas une.</p>
+<p><strong>Oublier le type dans une déclaration.</strong> Le C ne devine rien.</p>
+<p><strong>Croire qu'une variable non initialisée vaut zéro.</strong> Ici, le cours lui donne zéro — mais un vrai compilateur lui laisse ce qui traînait en mémoire, c'est-à-dire n'importe quoi. <strong>On initialise toujours.</strong></p>
 
-<table class="memo-table">
-<tr><th>Symbole</th><th>Pour afficher</th></tr>
-<tr><td>%d</td><td>un entier (int)</td></tr>
-<tr><td>%f</td><td>un nombre à virgule</td></tr>
-<tr><td>%.2f</td><td>un nombre à virgule, 2 décimales</td></tr>
-<tr><td>%s</td><td>du texte</td></tr>
-<tr><td>%c</td><td>un caractère</td></tr>
-</table>
+<h2>Dans la vraie vie</h2>
+<p>Les types servent aussi d'instrument de précision : sur un système embarqué, on choisit un entier sur 8 ou 16 bits selon la mémoire disponible. Un programme C bien écrit dit exactement ce qu'il consomme, ce qu'aucun langage à ramasse-miettes ne permet.</p>
 
-<div class="attention"><div>Les trous et les valeurs doivent se correspondre <strong>en nombre et dans l'ordre</strong>. Deux <code>%d</code> réclament deux valeurs, et la première valeur remplit le premier trou.</div></div>
+<div class="a-retenir">
+<ul>
+<li>Un type devant chaque variable : le C doit savoir combien réserver.</li>
+<li><code>int</code>, <code>double</code>, <code>char</code> — et pas de type texte.</li>
+<li>Chaque <code>%</code> de <code>printf</code> est un trou rempli dans l'ordre.</li>
+<li>On initialise toujours : ailleurs, une variable non initialisée contient n'importe quoi.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : un char est un petit nombre</summary>
+<p>En mémoire, <code>'A'</code> est le nombre 65 — son code dans la table des caractères. C'est pourquoi <code>char c = 65;</code> est valide, et pourquoi on peut écrire <code>c + 1</code> pour obtenir le caractère suivant. Cette confusion volontaire entre caractère et petit entier est typique du C : elle est pratique, et c'est une source d'erreurs dans tous les langages qui l'ont héritée.</p>
+</details>
 `,
   exercices: [
     {
@@ -202,29 +249,54 @@ printf("J'ai %d ans et je mesure %.2f m\\n", age, taille);</pre>
   id: 'c-3',
   titre: 'Calculs et le piège de la division',
   contenu: `
-<p>Les opérateurs sont les mêmes que partout : <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>. Mais le C réserve un piège majeur.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Les opérateurs sont ceux de partout : <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>. Mais le C réserve un piège majeur, et c'est le genre de piège qui ne lève aucune erreur.</p>
 
 <h2>La division entière</h2>
-<pre class="bloc-code">int a = 7;
-int b = 2;
-printf("%d\\n", a / b);      // affiche 3, PAS 3.5 !</pre>
+<pre class="bloc-code">int a = 7, b = 2;
+printf("%d\n", a / b);   // 3, PAS 3.5
+printf("%d\n", a % b);   // 1, le reste</pre>
+<p>Mesuré : <code>3</code> puis <code>1</code>. La raison est simple une fois dite : <code>a</code> et <code>b</code> sont des <code>int</code>, donc le C fait une division <strong>d'entiers</strong>, et le résultat est un entier. La partie décimale est jetée, pas arrondie.</p>
+<p>C'est le type des opérandes qui décide, pas celui de la variable qui reçoit. Écrire <code>double r = a / b;</code> donne <code>3.0</code> : le calcul faux a déjà eu lieu avant l'affectation.</p>
 
-<p>Pourquoi ? Parce que <code>a</code> et <code>b</code> sont des <code>int</code>. Le C se dit : « deux entiers, donc résultat entier », et il <strong>coupe la partie décimale</strong> — il ne l'arrondit même pas, il la jette. 7/2 donne 3, et 9/10 donne 0.</p>
+<h2>Forcer le décimal</h2>
+<pre class="bloc-code">printf("%.2f\n", (double) a / b);   // 3.50</pre>
+<p>Mesuré. Le <code>(double)</code> devant est une <strong>conversion explicite</strong> : il transforme <code>a</code> en décimal <em>avant</em> la division, ce qui suffit à faire basculer tout le calcul. Convertir un seul des deux opérandes suffit.</p>
 
-<h2>Comment obtenir 3.5</h2>
-<p>Il suffit qu'<strong>un seul</strong> des deux nombres soit à virgule :</p>
-<pre class="bloc-code">printf("%.2f\\n", 7.0 / 2);        // 3.50 — le .0 change tout
-printf("%.2f\\n", (double)a / b);   // 3.50 — conversion explicite</pre>
-<p><code>(double)a</code> se lit « traite <code>a</code> comme un double le temps de ce calcul ». C'est une <strong>conversion de type</strong>, un geste très courant en C.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Résultat</th><th>Pourquoi</th></tr>
+<tr><td><code>7 / 2</code></td><td>3</td><td>deux entiers : division entière</td></tr>
+<tr><td><code>7 % 2</code></td><td>1</td><td>le reste</td></tr>
+<tr><td><code>(double) 7 / 2</code></td><td>3.5</td><td>un décimal suffit à tout changer</td></tr>
+<tr><td><code>7.0 / 2</code></td><td>3.5</td><td>même chose, écrit autrement</td></tr>
+</table>
 
 <h2>Les raccourcis</h2>
-<pre class="bloc-code">int n = 10;
-n = n + 5;   // la façon longue
-n += 5;      // exactement pareil
-n++;         // ajoute 1
-n--;         // enlève 1</pre>
+<p><code>x += 5</code>, <code>x -= 2</code>, <code>x *= 3</code> fonctionnent. Et contrairement à Python, <strong><code>x++</code> existe</strong> — c'est même du C qu'il vient, et que tous les autres langages l'ont emprunté.</p>
 
-<div class="attention"><div>Ce piège cause de vrais bugs en production. Un calcul de moyenne <code>total / nombre</code> entre deux <code>int</code> donnera un résultat faux et silencieux : aucune erreur, juste une valeur tronquée. Retiens le réflexe : dès qu'une division doit donner des décimales, passe par des <code>double</code>.</div></div>
+<h2>Les pièges</h2>
+<p><strong>La division entière non voulue.</strong> C'est le bug numéro un du C débutant : une moyenne qui tombe toujours juste, un pourcentage qui vaut 0. Aucune erreur, un résultat faux et plausible.</p>
+<p><strong>Croire que le type de destination suffit.</strong> <code>double moyenne = somme / nombre;</code> avec deux entiers donne un résultat déjà tronqué. La conversion doit avoir lieu <em>dans</em> le calcul.</p>
+<p><strong>Diviser par zéro.</strong> Le cours arrête le programme : <em>« division par zéro : impossible. »</em> Sur une vraie machine, le comportement est pire — le programme s'arrête brutalement, sans explication.</p>
+<p><strong>Oublier que <code>%</code> ne marche qu'entre entiers.</strong> Le reste d'une division de décimaux n'existe pas en C.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La division entière n'est pas un défaut : c'est exactement ce qu'on veut pour répartir des objets en paquets, calculer une page, convertir des secondes en minutes. <code>/</code> et <code>%</code> ensemble donnent le quotient et le reste — le couple le plus utile de toute l'arithmétique du programmeur.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Entre deux entiers, <code>/</code> donne un <strong>entier</strong> : 7 / 2 vaut 3.</li>
+<li>C'est le type des opérandes qui décide, pas celui de la destination.</li>
+<li><code>(double)</code> devant un opérande fait basculer tout le calcul.</li>
+<li><code>%</code> donne le reste, et n'existe qu'entre entiers.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le débordement silencieux</summary>
+<p>Un <code>int</code> tient sur quatre octets, soit un maximum d'environ deux milliards. Le dépasser ne provoque aucune erreur : la valeur « repart » brutalement dans les négatifs. C'est ce qu'on appelle un débordement, et il a causé de vraies catastrophes — dont la perte d'une fusée Ariane en 1996. Python, lui, n'a pas de limite ; le C, si, et il ne te prévient pas.</p>
+</details>
 `,
   exercices: [
     {
@@ -292,37 +364,59 @@ n--;         // enlève 1</pre>
   id: 'c-4',
   titre: 'Les conditions',
   contenu: `
-<p>Bonne nouvelle : la syntaxe du <code>if</code> en C est celle que tu connais déjà par JavaScript.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Bonne nouvelle : la syntaxe du <code>if</code> en C est celle que tu connais déjà par JavaScript. Parenthèses autour de la condition, accolades autour du bloc.</p>
 <pre class="bloc-code">int note = 15;
-
-if (note >= 10) {
-    printf("Reçu\\n");
+if (note &gt;= 10) {
+    printf("Recu\n");
 } else {
-    printf("Recalé\\n");
+    printf("Recale\n");
 }</pre>
-<p>Parenthèses autour de la condition, accolades autour du bloc. Pas de <code>:</code> ni d'indentation obligatoire comme en Python — mais indente quand même, la lisibilité n'est pas négociable.</p>
+<p>Ce n'est pas un hasard : JavaScript, Java, C++ et beaucoup d'autres ont copié la syntaxe du C. L'apprendre ici, c'est l'apprendre pour la moitié des langages du monde.</p>
 
-<h2>Les comparaisons et les combinaisons</h2>
-<pre class="bloc-code">==  égal          !=  différent
-&lt;   &gt;   &lt;=  &gt;=    comparaisons de taille
-&amp;&amp;  ET            ||  OU            !  NON</pre>
+<h2>Les comparaisons</h2>
+<p><code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Et les opérateurs logiques s'écrivent avec des symboles : <code>&amp;&amp;</code> pour « et », <code>||</code> pour « ou », <code>!</code> pour « non ».</p>
 
-<h2>Plusieurs cas : else if</h2>
-<pre class="bloc-code">if (note >= 16) {
-    printf("Très bien\\n");
-} else if (note >= 12) {
-    printf("Bien\\n");
-} else if (note >= 10) {
-    printf("Passable\\n");
-} else {
-    printf("Insuffisant\\n");
-}</pre>
+<h2>Il n'y a pas de booléen</h2>
+<p>C'est la particularité à retenir. En C, <strong>zéro est faux, tout le reste est vrai</strong>. Une condition n'a pas besoin d'être une comparaison :</p>
+<pre class="bloc-code">int n = 5;
+if (n) { ... }   // vrai, puisque n n'est pas zero</pre>
+<p>C'est commode, et c'est à l'origine du piège le plus célèbre du langage.</p>
 
-<h2>Le piège légendaire du C</h2>
-<pre class="bloc-code">if (x = 5) { ... }   // ATTENTION : ceci n'est PAS une comparaison</pre>
-<p>Avec un seul <code>=</code>, tu <strong>ranges</strong> 5 dans x, et le résultat (5) est considéré comme vrai — donc le bloc s'exécute <em>toujours</em>. Le C accepte cette écriture sans broncher, car elle est parfois volontaire. En C, tout ce qui n'est pas zéro est vrai ; zéro est faux.</p>
+<h2>Pas à pas : un seul égal</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Ce qui se passe</th></tr>
+<tr><td><code>if (n == 5)</code></td><td>compare, et la condition vaut vrai ou faux</td></tr>
+<tr><td><code>if (n = 5)</code></td><td>range 5 dans <code>n</code>, puis évalue… <strong>5</strong></td></tr>
+<tr><td>résultat</td><td>5 n'est pas zéro, donc la condition est <strong>toujours vraie</strong></td></tr>
+</table>
+<p>Et <code>n</code> a changé au passage. Deux bugs d'un coup, aucune erreur, exactement comme en JavaScript — sauf qu'ici c'est le langage d'origine. Un compilateur moderne émet un avertissement, mais compile quand même.</p>
 
-<div class="astuce"><div>Astuce des vieux briscards : écrire la constante à gauche, <code>if (5 == x)</code>. Si tu tapes un seul <code>=</code> par erreur, le compilateur refuse — on ne peut rien ranger dans 5. Le bug devient impossible.</div></div>
+<h2>Le switch</h2>
+<p><code>switch</code> existe aussi, avec le même piège qu'ailleurs : sans <code>break</code>, l'exécution coule dans les cas suivants.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Écrire <code>=</code> au lieu de <code>==</code>.</strong> Le piège emblématique du C. Certains développeurs écrivent par prudence <code>if (5 == n)</code> — ainsi, une faute de frappe donne une erreur de compilation au lieu d'un bug silencieux.</p>
+<p><strong>Mettre un point-virgule après le <code>if</code>.</strong> <code>if (n &gt; 3);</code> termine l'instruction sur place : le bloc qui suit s'exécute toujours. Rien ne le signale.</p>
+<p><strong>Omettre les accolades.</strong> Sans elles, seule la <em>première</em> ligne appartient au <code>if</code>. Ajouter une seconde ligne plus tard introduit un bug invisible. Mets-les toujours.</p>
+<p><strong>Comparer des décimaux avec <code>==</code>.</strong> Les calculs à virgule accumulent de minuscules écarts : deux valeurs « égales » peuvent différer à la quinzième décimale. On compare un écart à un seuil.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Le style d'accolades du C — ouverte en fin de ligne, fermée seule — est devenu la norme dans une grande partie du métier. Les querelles à ce sujet ont fait couler beaucoup d'encre ; l'essentiel est de s'en tenir à un seul style par projet.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Même syntaxe qu'en JavaScript : c'est le C qui l'a inventée.</li>
+<li>Pas de booléen : <strong>zéro est faux, tout le reste est vrai</strong>.</li>
+<li><code>if (n = 5)</code> range au lieu de comparer, et la condition est toujours vraie.</li>
+<li>Un point-virgule après le <code>if</code> vide la condition de son effet.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le vrai booléen, quand même</summary>
+<p>Depuis 1999, le C propose <code>#include &lt;stdbool.h&gt;</code>, qui ajoute un type <code>bool</code> et les mots <code>true</code> et <code>false</code>. Ce sont en réalité des entiers déguisés — 1 et 0 — mais le code devient nettement plus lisible. Beaucoup de projets anciens continuent pourtant d'utiliser des <code>int</code>, par habitude autant que par compatibilité.</p>
+</details>
 `,
   exercices: [
     {
@@ -392,37 +486,63 @@ if (note >= 10) {
   id: 'c-5',
   titre: 'Les boucles',
   contenu: `
-<h2>La boucle for, forme complète</h2>
-<pre class="bloc-code">for (int i = 0; i < 5; i++) {
-    printf("%d ", i);      // 0 1 2 3 4
+<h2>Pourquoi ça existe</h2>
+<p>Les boucles du C sont celles que tu connais déjà par JavaScript — et pour la même raison qu'au chapitre précédent : c'est d'ici qu'elles viennent.</p>
+
+<h2>La boucle for</h2>
+<pre class="bloc-code">for (int i = 0; i &lt; 5; i++) {
+    printf("%d\n", i);
 }</pre>
-<p>Trois parties séparées par des points-virgules, dans les parenthèses :</p>
-<ol>
+<p>Trois parties séparées par des points-virgules :</p>
+<ul>
 <li><code>int i = 0</code> — le <strong>départ</strong>, exécuté une seule fois ;</li>
-<li><code>i &lt; 5</code> — la <strong>condition de continuation</strong>, testée avant chaque tour ;</li>
-<li><code>i++</code> — le <strong>pas</strong>, exécuté à la fin de chaque tour.</li>
-</ol>
-<p>C'est exactement la forme que tu as vue en JavaScript. Python la cachait derrière <code>range()</code> ; ici tout est visible.</p>
+<li><code>i &lt; 5</code> — la <strong>condition</strong>, testée avant chaque tour ;</li>
+<li><code>i++</code> — le <strong>pas</strong>, exécuté après chaque tour.</li>
+</ul>
+<p>Mesuré : la boucle affiche 0, 1, 2 — cinq tours pour <code>i &lt; 5</code> en partant de zéro.</p>
 
-<h2>Compter de 1 à 5</h2>
-<pre class="bloc-code">for (int i = 1; i <= 5; i++) {
-    printf("%d ", i);      // 1 2 3 4 5
-}</pre>
-<p>Deux réglages suffisent : partir de 1, et utiliser <code>&lt;=</code> au lieu de <code>&lt;</code>.</p>
+<h2>while et do-while</h2>
+<pre class="bloc-code">int i = 0;
+while (i &lt; 3) { printf("%d\n", i); i++; }
 
-<h2>while et do...while</h2>
-<pre class="bloc-code">int i = 3;
-while (i > 0) {
-    printf("%d\\n", i);
-    i--;
-}</pre>
-<p>Le <code>do...while</code> est une particularité du C : il exécute le bloc <strong>avant</strong> de tester, donc au moins une fois.</p>
-<pre class="bloc-code">int n = 100;
-do {
-    printf("Je passe quand même\\n");
-} while (n < 10);      // faux dès le départ, mais affiché une fois</pre>
+do { printf("au moins une fois\n"); } while (0);</pre>
+<p><code>while</code> teste <em>avant</em> ; <code>do-while</code> teste <em>après</em>, et s'exécute donc toujours au moins une fois. Le second est rare, et c'est précisément pour ce cas qu'il existe : un menu qu'on affiche avant de demander si l'on recommence.</p>
 
-<div class="attention"><div>Oublier le <code>i++</code> dans un <code>while</code> crée une boucle infinie. En C compilé, le programme se fige et il faut le tuer à la main. Ici, l'interpréteur t'arrête au bout de quelques secondes avec un message.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>Ce qui se passe</th></tr>
+<tr><td>avant le 1er tour</td><td><code>int i = 0</code> — une seule fois</td></tr>
+<tr><td>début de chaque tour</td><td>on teste <code>i &lt; 5</code></td></tr>
+<tr><td>fin de chaque tour</td><td><code>i++</code>, puis on reteste</td></tr>
+<tr><td>condition fausse</td><td>on sort, <code>i</code> vaut 5</td></tr>
+</table>
+<p>Retiens l'ordre : le pas s'exécute <strong>après</strong> le corps, pas avant. C'est ce qui explique qu'<code>i</code> vaille 5 à la sortie et non 4.</p>
+
+<h2>break et continue</h2>
+<p><code>break</code> sort immédiatement de la boucle ; <code>continue</code> saute au tour suivant. Les deux servent, et les deux doivent rester rares : une boucle avec trois <code>break</code> est une boucle dont la condition est mal posée.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Le décalage d'un tour.</strong> <code>i &lt;= 5</code> en partant de 0 fait six tours, pas cinq. Sur un tableau de cinq cases, le sixième passage lit une case qui n'existe pas.</p>
+<p><strong>Oublier de faire avancer le compteur.</strong> Le cours arrête le programme : <em>« ton programme tourne sans s'arrêter (boucle infinie ?). Vérifie la condition de ta boucle et que la variable de contrôle évolue bien. »</em> Un vrai programme, lui, fige la machine.</p>
+<p><strong>Mettre un point-virgule après le <code>for</code>.</strong> <code>for (...);</code> fait tourner une boucle vide, puis exécute le bloc une seule fois. Le symptôme est déroutant et la cause invisible.</p>
+<p><strong>Déclarer le compteur hors de la boucle sans raison.</strong> <code>for (int i = ...)</code> limite <code>i</code> à la boucle, ce qui évite de le réutiliser par accident plus loin.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La forme <code>for (int i = 0; i &lt; n; i++)</code> est sans doute la ligne la plus écrite de toute l'histoire de l'informatique. La reconnaître d'un coup d'œil, et savoir dire combien de tours elle fait, fait partie des réflexes de base du métier.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>for (depart; condition; pas)</code> — le pas s'exécute <strong>après</strong> le corps.</li>
+<li><code>while</code> teste avant, <code>do-while</code> après : lui s'exécute au moins une fois.</li>
+<li><code>i &lt; n</code> fait n tours ; <code>i &lt;= n</code> en fait n+1.</li>
+<li>Une boucle dont rien ne fait avancer la condition ne s'arrête jamais.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : i++ ou ++i ?</summary>
+<p>Les deux ajoutent 1. La différence est la valeur <em>rendue</em> : <code>i++</code> rend l'ancienne, <code>++i</code> la nouvelle. Dans un <code>for</code>, cette valeur n'est utilisée par personne, donc les deux sont rigoureusement équivalents — malgré ce qu'on lit parfois. La distinction ne compte que lorsqu'on utilise le résultat dans la même expression, ce qu'il vaut mieux éviter.</p>
+</details>
 `,
   exercices: [
     {
@@ -494,25 +614,56 @@ do {
   id: 'c-6',
   titre: 'Les tableaux',
   contenu: `
-<p>Un tableau en C, c'est une <strong>suite de cases de même type, collées en mémoire</strong>. Sa taille est fixée à la déclaration et ne changera jamais.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un tableau en C, c'est une suite de cases <strong>de même type, collées en mémoire</strong>. Cette contiguïté n'est pas un détail d'implémentation : c'est ce qui rend l'accès instantané, et c'est aussi ce qui explique tout le reste du comportement des tableaux.</p>
+<p>Conséquence directe : <strong>la taille est fixée à la déclaration et ne changera jamais</strong>. Pas de <code>append</code>, pas de liste qui grandit. Le C réserve un bloc, et ce bloc est ce qu'il est.</p>
 
-<pre class="bloc-code">int notes[5];                          // 5 cases vides
+<h2>Déclarer et remplir</h2>
+<pre class="bloc-code">int notes[5];                          // 5 cases, contenu indetermine
 int notes[5] = {12, 15, 9, 18, 14};    // 5 cases remplies
-int notes[] = {12, 15, 9, 18, 14};     // le C compte pour toi : 5</pre>
+int notes[] = {12, 15, 9};             // la taille se deduit : 3
 
-<h2>Accéder aux cases</h2>
-<pre class="bloc-code">printf("%d\\n", notes[0]);   // 12 — la PREMIÈRE case porte le numéro 0
-printf("%d\\n", notes[4]);   // 14 — la dernière d'un tableau de 5
-notes[2] = 10;              // on modifie la troisième case</pre>
+printf("%d\n", notes[0]);              // la premiere
+notes[2] = 20;                          // on remplace</pre>
+<p>Indices à partir de 0, comme partout ailleurs. Et une case se lit comme elle s'écrit.</p>
 
-<h2>Parcourir un tableau</h2>
-<pre class="bloc-code">for (int i = 0; i < 5; i++) {
-    printf("%d ", notes[i]);
-}</pre>
+<h2>Pas à pas : parcourir</h2>
+<pre class="bloc-code">int t[3] = {1, 2, 3};
+for (int i = 0; i &lt; 3; i++) printf("%d ", t[i]);</pre>
+<p>Mesuré : <code>1 2 3</code>. Remarque le <code>3</code> écrit en dur dans la condition — le C ne sait pas dire la longueur d'un tableau. Il faut la connaître, ou la transporter soi-même.</p>
+<table class="memo-table trace">
+<tr><th>Ce qu'on veut</th><th>En C</th></tr>
+<tr><td>la première case</td><td><code>t[0]</code></td></tr>
+<tr><td>la dernière de 5</td><td><code>t[4]</code></td></tr>
+<tr><td>la longueur</td><td><strong>à retenir soi-même</strong></td></tr>
+</table>
 
-<div class="attention"><div><strong>Le C ne vérifie rien.</strong> Écrire <code>notes[10]</code> dans un tableau de 5 cases ne provoque aucune erreur à la compilation : le programme va lire (ou écrire !) de la mémoire qui ne lui appartient pas. Résultat : une valeur aberrante, un plantage, ou pire — une faille de sécurité. C'est la fameuse « erreur de segmentation », et c'est la première cause de vulnérabilités dans les logiciels écrits en C.</div></div>
+<h2>Sortir des bornes</h2>
+<p>Mesuré sur un tableau de trois cases, en lisant <code>t[7]</code> : le cours arrête le programme avec <em>« tu essaies d'accéder à la case 7 d'un tableau qui a 3 cases (numérotées de 0 à 2). »</em></p>
+<p><strong>Un vrai compilateur C ne dirait rien.</strong> Il lirait ce qui se trouve en mémoire juste après le tableau — une autre variable, un morceau de code, n'importe quoi — et continuerait comme si de rien n'était. Le cours te protège ici d'une erreur qui, ailleurs, est à l'origine d'une bonne part des failles de sécurité du monde réel.</p>
 
-<div class="info"><div>Contrairement à Python, il n'existe pas de <code>len()</code> pour un tableau C : la taille n'est pas stockée avec lui. Tu dois la retenir toi-même, généralement dans une constante ou une variable à côté.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Dépasser d'une case.</strong> <code>i &lt;= 5</code> sur un tableau de 5. Le piège est double : ici tu es averti, ailleurs tu ne le seras pas.</p>
+<p><strong>Croire qu'un tableau connaît sa taille.</strong> Il ne la connaît pas. Dès qu'un tableau voyage vers une fonction, il faut lui passer la longueur à côté.</p>
+<p><strong>Vouloir l'agrandir.</strong> Impossible. Il faut en déclarer un plus grand et recopier — ou allouer dynamiquement, ce qui est un autre sujet.</p>
+<p><strong>Oublier d'initialiser.</strong> <code>int t[5];</code> sans valeurs contient ici des zéros, mais ailleurs n'importe quoi.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les dépassements de tableau sont la famille de bugs la plus coûteuse de l'histoire de l'informatique — on parle de <em>débordement de tampon</em>, et c'est le mécanisme de la majorité des grandes failles de sécurité depuis trente ans. Les langages modernes vérifient les bornes à chaque accès ; le C a choisi la vitesse.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Un tableau est une suite de cases <strong>collées</strong>, de taille <strong>fixe</strong>.</li>
+<li>Il ne connaît pas sa longueur : on la transporte à côté.</li>
+<li>Sortir des bornes est signalé ici — et silencieux sur un vrai compilateur.</li>
+<li>On ne peut pas l'agrandir.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le nom d'un tableau est une adresse</summary>
+<p>Écrire <code>t</code> tout seul ne donne pas le tableau mais l'<strong>adresse de sa première case</strong>. C'est pour cela qu'un tableau passé à une fonction peut y être modifié, alors qu'un entier ne le peut pas : on n'a pas copié les cases, on a copié une adresse. Cette équivalence entre tableau et pointeur est l'une des idées centrales du C, et la leçon sur les pointeurs va la rendre limpide.</p>
+</details>
 `,
   exercices: [
     {
@@ -579,35 +730,58 @@ notes[2] = 10;              // on modifie la troisième case</pre>
   id: 'c-7',
   titre: 'Les fonctions',
   contenu: `
-<p>Une fonction C ressemble beaucoup à ce que tu connais, avec une nouveauté : il faut <strong>annoncer le type de ce qu'elle renvoie</strong>.</p>
-
+<h2>Pourquoi ça existe</h2>
+<p>Une fonction C ressemble beaucoup à ce que tu connais, avec une nouveauté : il faut annoncer <strong>le type de ce qu'elle renvoie</strong>.</p>
 <pre class="bloc-code">int carre(int x) {
     return x * x;
 }
 
 int main() {
-    printf("%d\\n", carre(7));   // 49
+    printf("%d\n", carre(7));   // 49
     return 0;
 }</pre>
-
-<p>Décomposons <code>int carre(int x)</code> :</p>
-<ul>
-<li>le premier <code>int</code> — <strong>le type de retour</strong> : cette fonction renvoie un entier ;</li>
-<li><code>carre</code> — son nom ;</li>
-<li><code>(int x)</code> — ses paramètres, chacun avec son type.</li>
-</ul>
-
-<h2>Une fonction qui ne renvoie rien : void</h2>
-<pre class="bloc-code">void saluer(char nom[]) {
-    printf("Bonjour %s !\\n", nom);
-    // pas de return : rien à renvoyer
-}</pre>
-<p><code>void</code> signifie « vide ». C'est aussi pour ça que <code>main</code> est déclaré <code>int</code> : il renvoie un code de sortie au système, d'où le <code>return 0;</code>.</p>
+<p>Mesuré : 49. Le premier <code>int</code> est le type de retour, le second celui du paramètre. Pour une fonction qui ne renvoie rien, on écrit <code>void</code>.</p>
+<p>Cette obligation sert au compilateur : il vérifie, au moment de la compilation, que tu utilises le résultat correctement. C'est une erreur attrapée avant la première exécution.</p>
 
 <h2>L'ordre compte</h2>
-<p>Le C lit ton fichier de haut en bas. Une fonction doit être <strong>définie avant</strong> l'endroit où on l'appelle — sinon le compilateur ne la connaît pas encore. En pratique, on place ses fonctions au-dessus de <code>main</code>.</p>
+<p>Une fonction doit être <strong>connue avant d'être appelée</strong>. On la place donc au-dessus de <code>main</code> — ou l'on déclare sa signature en haut du fichier :</p>
+<pre class="bloc-code">int carre(int x);          // le prototype : on annonce
+int main() { ... }          // on peut l'appeler
+int carre(int x) { ... }    // on definit plus bas</pre>
+<p>Le <strong>prototype</strong> est une particularité du C. Il permet d'organiser le fichier librement, et c'est ce qu'on trouve dans les fichiers d'en-tête — <code>stdio.h</code> n'est rien d'autre qu'une longue liste de prototypes.</p>
 
-<div class="astuce"><div>Dans les vrais projets, on annonce les fonctions en haut du fichier par un <strong>prototype</strong> — <code>int carre(int x);</code> avec un point-virgule et sans corps — puis on écrit leur code plus bas, dans l'ordre qu'on veut. C'est ce que contiennent les fichiers <code>.h</code> comme <code>stdio.h</code>.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td><code>carre(7)</code></td><td>7 est <strong>copié</strong> dans le paramètre <code>x</code></td></tr>
+<tr><td>le corps s'exécute</td><td>avec sa propre copie, isolée</td></tr>
+<tr><td><code>return x * x</code></td><td>la valeur sort, la fonction se termine</td></tr>
+<tr><td>de retour dans main</td><td>la variable d'origine n'a pas bougé</td></tr>
+</table>
+<p>Retiens le premier point : <strong>les arguments sont copiés</strong>. C'est le comportement par défaut du C, sans exception — et c'est précisément le problème que les pointeurs viennent résoudre.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier le type de retour.</strong> Le cours refuse : <em>« je ne comprends pas cette partie du programme. Au premier niveau, on attend des fonctions, des variables globales ou une classe. »</em> Sans type, ce n'est pas une déclaration de fonction valide.</p>
+<p><strong>Oublier le <code>return</code>.</strong> Une fonction annoncée <code>int</code> qui ne renvoie rien produit une valeur imprévisible. Les compilateurs modernes avertissent ; le programme compile quand même.</p>
+<p><strong>Appeler avant de déclarer.</strong> Place la fonction au-dessus, ou écris un prototype.</p>
+<p><strong>Croire qu'une fonction peut modifier son argument.</strong> Elle travaille sur une copie. Modifier <code>x</code> dans <code>carre</code> ne change rien chez l'appelant.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La séparation entre prototype et définition structure tout le C : les <code>.h</code> annoncent ce qui existe, les <code>.c</code> disent comment. C'est ce qui permet de compiler des milliers de fichiers séparément, et de distribuer une bibliothèque sans son code source.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une fonction annonce <strong>le type de ce qu'elle renvoie</strong>, ou <code>void</code>.</li>
+<li>Elle doit être connue avant d'être appelée — d'où le prototype.</li>
+<li>Les arguments sont <strong>copiés</strong> : la fonction ne peut pas modifier l'original.</li>
+<li>Les fichiers <code>.h</code> ne contiennent que des annonces.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi des fichiers d'en-tête ?</summary>
+<p>Parce qu'en 1972, un compilateur ne pouvait pas garder tout un programme en mémoire : il lisait un fichier à la fois, du début à la fin, sans jamais revenir en arrière. Il fallait donc annoncer à l'avance ce qui existait ailleurs. Les machines ont changé, la contrainte a disparu, et le mécanisme est resté — avec un avantage inattendu : il sépare l'<em>interface</em> de l'<em>implémentation</em>, une idée que tous les langages modernes ont reprise sous une forme ou une autre.</p>
+</details>
 `,
   exercices: [
     {
@@ -676,29 +850,49 @@ int main() {
   id: 'c-8',
   titre: 'Les chaînes de caractères',
   contenu: `
-<p>Voici une des grandes singularités du C : <strong>le type « texte » n'existe pas</strong>. Une chaîne est un simple tableau de <code>char</code>.</p>
-
+<h2>Pourquoi ça existe</h2>
+<p>Voici l'une des grandes singularités du C : <strong>le type « texte » n'existe pas</strong>. Une chaîne est un simple tableau de <code>char</code>.</p>
 <pre class="bloc-code">char nom[] = "Alex";</pre>
-
-<p>En mémoire, ce tableau contient cinq cases, pas quatre :</p>
-<table class="memo-table">
+<p>En mémoire, ce tableau contient <strong>cinq</strong> cases, pas quatre :</p>
+<table class="memo-table trace">
 <tr><th>Case</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
-<tr><td>Contenu</td><td>'A'</td><td>'l'</td><td>'e'</td><td>'x'</td><td>'\\0'</td></tr>
+<tr><td>Contenu</td><td>'A'</td><td>'l'</td><td>'e'</td><td>'x'</td><td><strong>'\0'</strong></td></tr>
 </table>
+<p>La dernière case contient le <strong>caractère nul</strong>, écrit <code>'\0'</code>. C'est lui qui marque la fin de la chaîne — et il explique à peu près tout le reste.</p>
 
-<h2>Le caractère invisible qui change tout</h2>
-<p>Le <code>'\\0'</code> final s'appelle le <strong>caractère nul</strong>. C'est lui qui marque la fin du texte. Sans lui, aucune fonction ne saurait où s'arrêter : <code>printf</code> continuerait à afficher la mémoire suivante jusqu'à tomber par hasard sur un zéro. Le C ne stocke pas la longueur — il stocke une <strong>borne</strong>.</p>
+<h2>Pourquoi un marqueur de fin</h2>
+<p>Un tableau ne connaît pas sa longueur. Comment <code>printf</code> saurait-il où s'arrêter d'afficher ? Réponse : il avance case par case jusqu'à rencontrer le zéro. C'est la convention du C, et elle est tenue par toute la bibliothèque standard.</p>
+<p>Conséquence pratique : <strong>il faut toujours prévoir une case de plus</strong> que le nombre de caractères.</p>
 
-<h2>Manipuler du texte</h2>
+<h2>Lire et manipuler</h2>
 <pre class="bloc-code">char nom[] = "Alex";
+printf("%s\n", nom);      // Alex
+printf("%c\n", nom[0]);   // A</pre>
+<p>Mesuré. <code>%s</code> affiche la chaîne entière, <code>%c</code> un caractère. Et avec <code>#include &lt;string.h&gt;</code>, <code>strlen(nom)</code> rend <strong>4</strong> — mesuré aussi : la longueur ne compte pas le zéro final, même s'il occupe une case.</p>
+<p>Les autres outils de la bibliothèque : <code>strcpy</code> pour copier, <code>strcat</code> pour concaténer, <code>strcmp</code> pour comparer.</p>
 
-printf("%s\\n", nom);              // Alex — %s pour une chaîne
-printf("%c\\n", nom[0]);           // A — une seule case, donc %c
-printf("%d\\n", strlen(nom));      // 4 — la longueur, sans le '\\0'</pre>
+<h2>Les pièges</h2>
+<p><strong>Comparer deux chaînes avec <code>==</code>.</strong> C'est l'erreur classique. <code>==</code> compare deux <em>adresses</em>, pas deux contenus : deux chaînes identiques rangées à deux endroits différents ne seront jamais « égales ». Il faut <code>strcmp</code>, qui rend <strong>0</strong> quand les textes sont identiques — une convention contre-intuitive, puisque zéro veut dire « pareil ».</p>
+<p><strong>Oublier la case du zéro final.</strong> <code>char nom[4] = "Alex";</code> ne laisse pas la place au marqueur. L'affichage continue alors au-delà du tableau, jusqu'à rencontrer un zéro par hasard.</p>
+<p><strong>Confondre <code>'A'</code> et <code>"A"</code>.</strong> Le premier est un caractère, le second un tableau de deux cases — le A et son zéro.</p>
+<p><strong>Dépasser la taille en copiant.</strong> <code>strcpy</code> ne vérifie rien : copier une chaîne de 50 caractères dans un tableau de 10 écrase ce qui suit en mémoire.</p>
 
-<p><code>strlen</code> compte les caractères jusqu'au <code>'\\0'</code>. Elle vient de <code>&lt;string.h&gt;</code>, qu'il faut inclure dans un vrai programme.</p>
+<h2>Dans la vraie vie</h2>
+<p>Ce dernier point est à l'origine d'une famille entière de failles de sécurité. <code>strcpy</code> est aujourd'hui déconseillée au profit de versions qui prennent une taille maximale. Les langages modernes ont tous abandonné le marqueur de fin au profit d'une longueur stockée — mais des milliards de lignes de C l'utilisent encore.</p>
 
-<div class="attention"><div>On ne peut <strong>pas</strong> écrire <code>nom = "Bob"</code> après la déclaration, ni coller deux textes avec <code>+</code> comme en Python ou en Java. Un tableau n'est pas une valeur qu'on remplace : il faut copier caractère par caractère (ou utiliser <code>strcpy</code>). Cette rigidité est le prix du contrôle total sur la mémoire.</div></div>
+<div class="a-retenir">
+<ul>
+<li>Une chaîne est un <strong>tableau de <code>char</code></strong> terminé par <code>'\0'</code>.</li>
+<li>Prévois toujours une case de plus que le nombre de caractères.</li>
+<li><code>strlen</code> ne compte pas le zéro final.</li>
+<li>On compare avec <code>strcmp</code>, qui rend <strong>0</strong> si les textes sont identiques.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : l'erreur à un milliard de dollars</summary>
+<p>Le choix du marqueur de fin plutôt que d'une longueur stockée a été critiqué dès les années 1980. Il rend <code>strlen</code> proportionnel à la taille du texte — il faut parcourir pour compter — et surtout il rend impossible toute vérification de borne, puisqu'une chaîne ne sait pas où elle s'arrête tant qu'on ne l'a pas lue. Son auteur l'a défendu par la contrainte de l'époque : chaque octet de mémoire comptait, et une longueur en aurait coûté plusieurs.</p>
+</details>
 `,
   exercices: [
     {
@@ -766,36 +960,63 @@ printf("%d\\n", strlen(nom));      // 4 — la longueur, sans le '\\0'</pre>
   id: 'c-9',
   titre: 'Les pointeurs — le cœur du C',
   contenu: `
-<p>On y est. C'est LA notion qui fait la réputation du C, celle qui bloque tout le monde au début et qui devient limpide une fois qu'on a compris l'image. Prends ton temps sur cette leçon.</p>
+<h2>Pourquoi ça existe</h2>
+<p>On y est. C'est LA notion qui fait la réputation du C, celle qui bloque tout le monde au début et devient limpide une fois qu'on a l'image. Prends ton temps.</p>
+<p>L'idée tient en une phrase : <strong>chaque variable occupe une place en mémoire, et cette place a une adresse</strong>. Un pointeur est une variable qui contient une adresse au lieu d'une valeur.</p>
+<p>L'image qui marche : une variable est une maison, son contenu est ce qu'il y a dedans, et l'adresse est l'adresse postale. Un pointeur, c'est un papier sur lequel on a noté l'adresse.</p>
 
-<h2>L'idée : une variable a une adresse</h2>
-<p>Quand tu écris <code>int age = 30;</code>, le programme réserve une case en mémoire. Cette case contient <strong>30</strong>, et elle se trouve <strong>quelque part</strong> — à une adresse, comme une maison dans une rue.</p>
-<p>Un <strong>pointeur</strong> est une variable qui ne contient pas une valeur, mais <strong>l'adresse d'une autre variable</strong>.</p>
+<h2>Les deux symboles</h2>
+<pre class="bloc-code">int x = 5;
+int *p = &amp;x;        // p recoit l'ADRESSE de x
 
-<pre class="bloc-code">int age = 30;
-int *p = &age;     // p contient l'ADRESSE de age
-
-printf("%d\\n", age);    // 30 — la valeur
-printf("%d\\n", *p);     // 30 — la valeur trouvée À cette adresse</pre>
-
-<h2>Deux symboles à ne pas confondre</h2>
-<table class="memo-table">
-<tr><th>Écriture</th><th>Sens</th></tr>
-<tr><td>&amp;age</td><td>« l'adresse de age » — on prend le numéro de la maison</td></tr>
-<tr><td>*p</td><td>« ce qui se trouve à l'adresse p » — on entre dans la maison</td></tr>
-<tr><td>int *p</td><td>déclaration : « p est un pointeur vers un int »</td></tr>
+printf("%d\n", *p);  // 5  — ce qu'il y a A cette adresse
+*p = 9;
+printf("%d\n", x);   // 9  — x a change !</pre>
+<p>Mesuré : <code>5</code> puis <code>9</code>. Deux symboles, et c'est tout :</p>
+<ul>
+<li><code>&amp;x</code> — « l'adresse de x » ;</li>
+<li><code>*p</code> — « ce qui se trouve à l'adresse p ».</li>
+</ul>
+<p>Le <code>*</code> a deux emplois qu'il faut distinguer : dans <code>int *p</code>, il <em>déclare</em> un pointeur ; dans <code>*p = 9</code>, il <em>suit</em> le pointeur. Même symbole, deux moments. Le tableau de référence, à relire autant de fois qu'il faudra :</p>
+<table class="memo-table trace">
+<tr><th>Ce qu'on veut dire</th><th>Comment ça s'écrit</th></tr>
+<tr><td>pointeur vers un entier</td><td><code>int *p</code></td></tr>
+<tr><td>l'adresse de x</td><td><code>&amp;x</code></td></tr>
+<tr><td>la valeur rangée à l'adresse p</td><td><code>*p</code></td></tr>
+<tr><td>l'adresse elle-même</td><td><code>p</code></td></tr>
 </table>
 
-<h2>Modifier à distance</h2>
-<p>C'est là que ça devient puissant : à travers un pointeur, on peut <strong>changer la variable d'origine</strong>.</p>
-<pre class="bloc-code">int age = 30;
-int *p = &age;
-*p = 31;                  // on écrit À l'adresse pointée
-printf("%d\\n", age);      // 31 — age a changé !</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>x</th><th>p</th></tr>
+<tr><td><code>int x = 5;</code></td><td>5</td><td>n'existe pas</td></tr>
+<tr><td><code>int *p = &amp;x;</code></td><td>5</td><td>l'adresse de x</td></tr>
+<tr><td><code>*p = 9;</code></td><td><strong>9</strong></td><td>inchangé — il pointe toujours au même endroit</td></tr>
+</table>
+<p>Le point décisif est la dernière ligne : on n'a pas touché à <code>x</code> directement, et <code>x</code> a changé. C'est tout l'intérêt, et c'est pourquoi la leçon suivante existe.</p>
 
-<div class="info"><div><strong>L'image à retenir :</strong> <code>age</code> est une maison, <code>&amp;age</code> est son adresse postale, <code>p</code> est un carnet où tu as noté cette adresse, et <code>*p</code> c'est aller à l'adresse notée pour voir ce qu'il y a dedans. Si tu déposes quelque chose à cette adresse, c'est bien dans la vraie maison que ça atterrit.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le <code>&amp;</code>.</strong> <code>int *p = x;</code> met la <em>valeur</em> 5 là où une adresse était attendue. Le cours refuse : <em>« l'étoile * ne s'utilise que sur un pointeur (une variable déclarée avec * et remplie avec &amp;). »</em></p>
+<p><strong>Confondre <code>p</code> et <code>*p</code>.</strong> <code>p</code> est l'adresse, <code>*p</code> est le contenu. Les intervertir donne des nombres absurdes — ou pire, modifie une zone mémoire au hasard.</p>
+<p><strong>Utiliser un pointeur qui ne pointe nulle part.</strong> <code>int *p;</code> sans affectation contient une adresse quelconque. Écrire à travers lui, c'est écrire n'importe où. On initialise à <code>NULL</code> et l'on teste avant usage.</p>
+<p><strong>Croire que c'est compliqué.</strong> Il n'y a que deux symboles. La difficulté est de tenir les deux niveaux en tête — l'adresse et le contenu — et ça vient avec la pratique.</p>
 
-<div class="astuce"><div>Pourquoi s'embêter ? Parce que passer une adresse est <strong>instantané</strong>, même pour une donnée énorme : on transmet un numéro, pas une copie. C'est ce qui rend le C si rapide — et c'est la raison d'être de la leçon suivante.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>Les pointeurs servent à trois choses : modifier une variable depuis une fonction, manipuler de grosses structures sans les copier, et construire des structures de données qui grandissent — listes chaînées, arbres, graphes. Les langages modernes les cachent sous d'autres noms — références, objets — mais le mécanisme sous-jacent est toujours celui-ci.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Un pointeur contient une <strong>adresse</strong>, pas une valeur.</li>
+<li><code>&amp;x</code> donne l'adresse de x ; <code>*p</code> donne ce qui s'y trouve.</li>
+<li>Dans <code>int *p</code> l'étoile déclare ; dans <code>*p = 9</code> elle suit.</li>
+<li>Un pointeur non initialisé pointe n'importe où : <code>NULL</code> par défaut.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi le type du pointeur compte</summary>
+<p>Un <code>int *</code> et un <code>char *</code> contiennent tous deux une adresse — alors pourquoi les distinguer ? Parce que le C doit savoir <em>combien d'octets lire</em> à cette adresse : quatre pour un entier, un pour un caractère. Le type sert aussi à l'arithmétique des pointeurs : <code>p + 1</code> avance d'un <em>élément</em>, pas d'un octet. C'est ce qui fait qu'un tableau se parcourt aussi bien avec des indices qu'avec un pointeur qu'on incrémente.</p>
+</details>
 `,
   exercices: [
     {
@@ -862,43 +1083,68 @@ printf("%d\\n", age);      // 31 — age a changé !</pre>
   id: 'c-10',
   titre: 'Pointeurs et fonctions : modifier pour de vrai',
   contenu: `
+<h2>Pourquoi ça existe</h2>
 <p>Voici le problème que les pointeurs résolvent, et la raison pour laquelle ils existent.</p>
-
-<h2>Par défaut, une fonction reçoit une copie</h2>
 <pre class="bloc-code">void doubler(int n) {
-    n = n * 2;              // modifie la COPIE locale
+    n = n * 2;        // modifie la COPIE
 }
 
 int main() {
     int x = 5;
     doubler(x);
-    printf("%d\\n", x);      // 5 — x n'a pas bougé !
-    return 0;
+    printf("%d\n", x);   // 5 — rien n'a change
 }</pre>
-<p>La fonction a bien doublé quelque chose… mais sa propre copie, qui disparaît à la fin de l'appel. C'est ce qu'on appelle le <strong>passage par valeur</strong>, et c'est le comportement par défaut du C.</p>
+<p>Mesuré : <code>5</code>. La fonction a bien doublé quelque chose — sa copie locale, qui disparaît à la sortie. L'original n'a jamais été touché.</p>
+<p>Ce n'est pas un défaut : c'est une protection. Une fonction ne peut pas abîmer les variables de son appelant par accident. Mais quand on <em>veut</em> modifier, il faut un moyen.</p>
 
-<h2>La solution : passer l'adresse</h2>
+<h2>La solution</h2>
 <pre class="bloc-code">void doubler(int *n) {
-    *n = *n * 2;            // modifie ce qui est À l'adresse
+    *n = *n * 2;      // modifie CE QUI EST a l'adresse
 }
 
 int main() {
     int x = 5;
-    doubler(&x);            // on envoie l'ADRESSE de x
-    printf("%d\\n", x);      // 10 — x a vraiment changé
-    return 0;
+    doubler(&amp;x);      // on passe l'ADRESSE
+    printf("%d\n", x);   // 10
 }</pre>
+<p>Mesuré : <code>10</code>. Trois changements, et trois seulement : une étoile dans le paramètre, une étoile devant chaque usage, et une esperluette à l'appel.</p>
 
-<p>Trois changements, toujours les mêmes :</p>
-<ol>
-<li>le paramètre devient <code>int *n</code> ;</li>
-<li>dans la fonction, on travaille sur <code>*n</code> ;</li>
-<li>à l'appel, on passe <code>&amp;x</code>.</li>
-</ol>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Version</th><th>Ce que reçoit la fonction</th><th>Résultat</th></tr>
+<tr><td><code>doubler(int n)</code></td><td>une copie de la valeur</td><td>x vaut toujours <strong>5</strong></td></tr>
+<tr><td><code>doubler(int *n)</code></td><td>une copie de l'<em>adresse</em></td><td>x vaut <strong>10</strong></td></tr>
+</table>
+<p>Remarque la nuance de la seconde ligne : l'adresse aussi est copiée. Mais une copie d'adresse mène au même endroit — comme deux papiers portant la même adresse postale mènent à la même maison.</p>
 
-<div class="info"><div>Tu utilises ce mécanisme depuis toujours sans le savoir : en Python, modifier une liste dans une fonction affecte la liste d'origine, alors que modifier un nombre ne change rien. Python fait ce choix pour toi, silencieusement. Le C te le met dans les mains — d'où sa réputation d'être à la fois plus difficile et plus honnête.</div></div>
+<h2>Les tableaux, eux, passent déjà par adresse</h2>
+<pre class="bloc-code">void zero(int t[], int n) {
+    for (int i = 0; i &lt; n; i++) t[i] = 0;
+}</pre>
+<p>Mesuré : après l'appel, le tableau de l'appelant vaut bien <code>0 0</code>. Un tableau n'est jamais copié — son nom <em>est</em> une adresse, comme la leçon sur les tableaux l'annonçait. C'est pourquoi une fonction peut le modifier sans qu'on ait rien demandé, et pourquoi il faut lui passer la longueur à côté.</p>
 
-<div class="astuce"><div>Un tableau passé à une fonction est <strong>toujours</strong> transmis par adresse, sans qu'on ait à écrire <code>&amp;</code> : le nom d'un tableau <em>est</em> l'adresse de sa première case. C'est pour ça qu'une fonction peut modifier un tableau reçu en paramètre.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le <code>&amp;</code> à l'appel.</strong> La fonction reçoit une valeur là où elle attend une adresse. Le cours le dit : <em>« l'étoile * ne s'utilise que sur un pointeur. »</em></p>
+<p><strong>Oublier l'étoile dans le corps.</strong> <code>n = n * 2</code> au lieu de <code>*n = *n * 2</code> modifie le pointeur lui-même — il pointe désormais ailleurs — au lieu de ce qu'il désigne. Aucune erreur, et la variable d'origine est intacte.</p>
+<p><strong>Croire qu'il faut un pointeur pour un tableau.</strong> C'en est déjà un. Écrire <code>&amp;t</code> est inutile et déroutant.</p>
+<p><strong>Renvoyer l'adresse d'une variable locale.</strong> Elle disparaît à la fin de la fonction : le pointeur rendu désigne une zone qui n'existe plus. C'est l'une des erreurs les plus difficiles à diagnostiquer du C.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>C'est ainsi qu'une fonction C rend plusieurs valeurs : elle en renvoie une, et remplit les autres à travers des pointeurs qu'on lui passe. Tu reconnaîtras le motif partout dans la bibliothèque standard — une fonction qui rend un code d'erreur et pose le vrai résultat dans un paramètre.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Par défaut, un argument est <strong>copié</strong> : la fonction ne peut pas modifier l'original.</li>
+<li>Passer <code>&amp;x</code> et recevoir <code>int *n</code> permet de modifier pour de bon.</li>
+<li>Un tableau passe toujours par adresse : il est modifiable d'office.</li>
+<li>Ne jamais renvoyer l'adresse d'une variable locale.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ce que les autres langages en ont fait</summary>
+<p>Java et Python ont supprimé les pointeurs explicites — et gardé le mécanisme. Quand tu passes une liste à une fonction Python, tu passes en réalité une référence : la fonction peut la modifier, exactement comme un tableau C. C'est pourquoi le piège de « la liste modifiée par surprise » existe dans les deux langages. Comprendre les pointeurs, c'est comprendre pourquoi.</p>
+</details>
 `,
   exercices: [
     {
@@ -972,30 +1218,61 @@ int main() {
   id: 'c-11',
   titre: 'Les tableaux à deux dimensions',
   contenu: `
-<p>Un tableau de tableaux : c'est ainsi qu'on représente une grille, un plateau de jeu, une image, une feuille de calcul.</p>
-
+<h2>Pourquoi ça existe</h2>
+<p>Un tableau de tableaux : c'est ainsi qu'on représente une grille, un plateau de jeu, une image, une feuille de calcul. Tout ce qui a des lignes et des colonnes.</p>
 <pre class="bloc-code">int grille[3][3] = {
     {1, 2, 3},
     {4, 5, 6},
     {7, 8, 9}
 };
 
-printf("%d\\n", grille[0][0]);   // 1 — première ligne, première colonne
-printf("%d\\n", grille[1][2]);   // 6 — deuxième ligne, troisième colonne</pre>
+printf("%d\n", grille[0][0]);   // 1 — premiere ligne, premiere colonne
+printf("%d\n", grille[1][2]);   // 6 — deuxieme ligne, troisieme colonne</pre>
+<p>Mesuré. L'ordre est toujours le même : <strong>ligne d'abord, colonne ensuite</strong>. Et les deux comptent à partir de zéro.</p>
 
-<p>L'ordre est toujours <strong>[ligne][colonne]</strong>. C'est la convention universelle, et l'inverser est une source d'erreurs classique.</p>
-
-<h2>Parcourir une grille : deux boucles imbriquées</h2>
-<pre class="bloc-code">for (int i = 0; i < 3; i++) {          // chaque ligne
-    for (int j = 0; j < 3; j++) {      // chaque colonne de cette ligne
-        printf("%d ", grille[i][j]);
+<h2>Le parcours</h2>
+<pre class="bloc-code">for (int l = 0; l &lt; 3; l++) {
+    for (int c = 0; c &lt; 3; c++) {
+        printf("%d ", grille[l][c]);
     }
-    printf("\\n");                      // fin de ligne
+    printf("\n");
 }</pre>
+<p>Deux boucles imbriquées, comme en JavaScript et en Python. La boucle intérieure parcourt une ligne entière ; le <code>printf("\n")</code> est <em>après</em> elle, pour passer à la ligne suivante une seule fois par rangée.</p>
 
-<p>La boucle extérieure avance ligne par ligne ; pour chaque ligne, la boucle intérieure parcourt toutes les colonnes. Le <code>printf("\\n")</code> est placé <strong>dans la boucle extérieure</strong>, après la boucle intérieure — c'est ce qui produit l'affichage en grille.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Tour externe</th><th>Tours internes</th><th>Affiché</th></tr>
+<tr><td>l = 0</td><td>c = 0, 1, 2</td><td><code>1 2 3</code> puis un retour</td></tr>
+<tr><td>l = 1</td><td>c repart de 0</td><td><code>4 5 6</code> puis un retour</td></tr>
+</table>
+<p>Le compteur intérieur repart de zéro à chaque tour extérieur — c'est ce qui fait le balayage case par case.</p>
 
-<div class="astuce"><div>Une image numérique n'est rien d'autre qu'un tableau à deux dimensions : chaque case contient une couleur. Les filtres de retouche photo sont des boucles imbriquées qui passent sur chaque pixel — exactement la structure ci-dessus.</div></div>
+<h2>En mémoire, c'est une seule ligne</h2>
+<p>Voici la particularité du C. Une grille 3×3 n'est pas trois tableaux dispersés : ce sont <strong>neuf cases collées</strong>, les unes derrière les autres. <code>grille[1][0]</code> est simplement la quatrième case.</p>
+<p>Ça n'a l'air de rien, et c'est ce qui rend l'accès si rapide — et ce qui explique qu'une grille doive connaître sa largeur pour être passée à une fonction : sans elle, impossible de savoir où commence la ligne suivante.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Inverser ligne et colonne.</strong> Sur une grille carrée, le programme tourne et donne un résultat faux. Sur une grille rectangulaire, on sort des bornes — ici signalé, ailleurs silencieux.</p>
+<p><strong>Mettre le retour à la ligne au mauvais endroit.</strong> À l'intérieur de la boucle interne, on obtient une colonne ; en dehors des deux, une seule ligne de neuf nombres.</p>
+<p><strong>Réutiliser le même compteur.</strong> Deux <code>i</code> imbriqués, et la boucle interne écrase celui de l'externe. Nomme-les <code>l</code> et <code>c</code>, ou <code>ligne</code> et <code>colonne</code>.</p>
+<p><strong>Oublier qu'on ne peut pas redimensionner.</strong> Comme un tableau simple, une grille a une taille fixée pour de bon.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Une image en mémoire est exactement cela : une grille de pixels, rangée en une seule longue ligne. Les traitements d'image, les plateaux de jeu, les matrices du calcul scientifique reposent tous sur cette représentation — et sur le fait qu'elle soit contiguë.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>grille[ligne][colonne]</code> — ligne d'abord, et les deux à partir de 0.</li>
+<li>Deux boucles imbriquées la parcourent ; le retour à la ligne va entre les deux.</li>
+<li>En mémoire, c'est une seule suite de cases collées.</li>
+<li>Passée à une fonction, une grille doit emporter sa largeur.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : l'ordre de parcours change la vitesse</summary>
+<p>Parcourir ligne par ligne est nettement plus rapide que colonne par colonne — parfois d'un facteur dix sur de grandes matrices. La raison tient au matériel : le processeur charge la mémoire par blocs, et lire des cases voisines tombe dans le même bloc. C'est un cas typique d'optimisation où le code « juste » et le code « rapide » diffèrent d'un simple échange de deux boucles.</p>
+</details>
 `,
   exercices: [
     {
@@ -1063,30 +1340,63 @@ printf("%d\\n", grille[1][2]);   // 6 — deuxième ligne, troisième colonne</p
   id: 'c-12',
   titre: 'Les structures',
   contenu: `
-<p>Un tableau range des valeurs <strong>de même nature</strong>. Mais comment décrire un étudiant, avec un nom, un âge et une moyenne ? C'est le rôle de la <strong>structure</strong> : elle regroupe des données de types différents sous un seul nom.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un tableau range des valeurs de <strong>même nature</strong>. Mais comment décrire un étudiant, avec un nom, un âge et une moyenne ? Trois types différents, qui vont ensemble.</p>
+<p>C'est le rôle de la <strong>structure</strong> : elle regroupe des données de types différents sous un seul nom. C'est l'ancêtre direct des objets, et l'idée dont tout le reste découle.</p>
 
+<h2>Déclarer le moule</h2>
 <pre class="bloc-code">struct Etudiant {
     char nom[50];
     int age;
     double moyenne;
 };</pre>
-
-<p>Cette déclaration crée un <strong>nouveau type</strong>. Elle ne réserve aucune mémoire : c'est un moule, pas un objet. Remarque le point-virgule après l'accolade fermante — obligatoire, et souvent oublié.</p>
+<p>Cette déclaration crée un <strong>nouveau type</strong>. Elle ne réserve aucune mémoire : c'est un moule, pas un objet.</p>
+<p>Remarque le point-virgule après l'accolade fermante — obligatoire, et souvent oublié.</p>
 
 <h2>Créer et remplir</h2>
 <pre class="bloc-code">struct Etudiant e;
 e.age = 20;
 e.moyenne = 14.5;
+printf("%d ans, moyenne %.1f\n", e.age, e.moyenne);</pre>
+<p>Mesuré. Le point atteint chaque champ — exactement la notation des objets JavaScript et des dictionnaires Python. En C, on remplit champ par champ.</p>
+<p>Noter la répétition de <code>struct</code> : en C, le mot fait partie du type. <code>struct Etudiant e;</code>, pas <code>Etudiant e;</code>.</p>
 
-printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
-<p>Le <strong>point</strong> permet d'atteindre chaque champ. C'est exactement la notation des objets JavaScript et des dictionnaires Python — mais ici, la liste des champs est figée à la compilation : impossible d'en ajouter un à la volée.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>Ce qui se passe</th></tr>
+<tr><td><code>struct Etudiant { ... };</code></td><td>un type est défini. Zéro octet réservé.</td></tr>
+<tr><td><code>struct Etudiant e;</code></td><td><strong>là</strong> la mémoire est réservée : tous les champs d'un coup</td></tr>
+<tr><td><code>e.age = 20;</code></td><td>un champ reçoit sa valeur</td></tr>
+</table>
+<p>La deuxième ligne est le moment décisif : une structure occupe la somme de ses champs, en un seul bloc contigu. C'est ce qui permet de la copier, de la passer à une fonction, de l'écrire dans un fichier d'un seul tenant.</p>
 
-<h2>Structures et fonctions</h2>
-<pre class="bloc-code">double bonus(struct Etudiant e) {
-    return e.moyenne + 1;
-}</pre>
+<h2>Un tableau de structures</h2>
+<pre class="bloc-code">struct Etudiant promo[30];
+promo[0].age = 20;</pre>
+<p>Trente étudiants, chacun avec ses trois champs. C'est le motif le plus courant : une liste d'enregistrements, qu'on parcourt à la boucle.</p>
 
-<div class="info"><div>La structure est l'ancêtre direct de l'objet. En C++, en Java, en Python, on a ajouté aux structures la possibilité de contenir aussi des <em>fonctions</em> — et l'objet était né. Comprendre <code>struct</code>, c'est comprendre d'où vient la programmation orientée objet.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le point-virgule après l'accolade.</strong> L'erreur la plus fréquente de la leçon, et son message est déroutant — le compilateur se plaint de la ligne <em>suivante</em>.</p>
+<p><strong>Oublier le mot <code>struct</code> à la déclaration d'une variable.</strong> En C, il fait partie du type.</p>
+<p><strong>Copier une structure en croyant partager.</strong> <code>struct Etudiant b = a;</code> copie <em>tous</em> les champs. Modifier <code>b</code> ne touche pas <code>a</code> — contrairement à un tableau, qui lui est partagé.</p>
+<p><strong>Comparer deux structures avec <code>==</code>.</strong> Interdit en C. Il faut comparer champ par champ.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les structures sont partout : une couleur avec ses trois composantes, un point avec ses coordonnées, un en-tête de fichier. Et c'est d'elles que viennent les objets — une classe n'est, à l'origine, qu'une structure à laquelle on a ajouté des fonctions.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une structure regroupe des champs de types <strong>différents</strong> sous un nom.</li>
+<li>Point-virgule après l'accolade fermante, et <code>struct</code> dans le type.</li>
+<li>La déclaration ne réserve rien : c'est la variable qui occupe la mémoire.</li>
+<li>Une structure se <strong>copie</strong> entièrement à l'affectation, contrairement à un tableau.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : typedef, pour s'épargner le mot struct</summary>
+<p><code>typedef struct { ... } Etudiant;</code> crée un alias : on écrit alors <code>Etudiant e;</code> tout court. C'est l'usage dans presque tout le code C moderne, et c'est pourquoi on voit rarement le mot <code>struct</code> dans les bibliothèques. L'apprendre avec le mot complet reste utile : il rappelle qu'il s'agit bien d'un agrégat de champs, et non d'un type magique.</p>
+</details>
 `,
   exercices: [
     {
@@ -1153,34 +1463,59 @@ printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
   id: 'c-13',
   titre: 'La récursion',
   contenu: `
+<h2>Pourquoi ça existe</h2>
 <p>Une fonction <strong>récursive</strong> est une fonction qui s'appelle elle-même. L'idée déroute au début, puis devient un outil élégant pour les problèmes qui se décomposent naturellement.</p>
+<p>Le principe : résoudre un gros problème en le ramenant à un problème <em>plus petit du même genre</em>, jusqu'à tomber sur un cas qu'on sait traiter directement.</p>
 
-<h2>L'exemple canonique : la factorielle</h2>
-<p>La factorielle de 5 s'écrit 5! et vaut 5 × 4 × 3 × 2 × 1 = 120. Remarque la structure : 5! = 5 × 4!, et 4! = 4 × 3!, etc. Le problème se ramène toujours à une version plus petite de lui-même.</p>
+<h2>L'exemple canonique</h2>
+<pre class="bloc-code">int fact(int n) {
+    if (n &lt;= 1) return 1;        // le cas d'arret
+    return n * fact(n - 1);       // le cas recursif
+}
 
-<pre class="bloc-code">int factorielle(int n) {
-    if (n <= 1) {
-        return 1;              // le CAS D'ARRÊT
-    }
-    return n * factorielle(n - 1);   // l'appel récursif
-}</pre>
+printf("%d\n", fact(5));          // 120</pre>
+<p>Mesuré : <code>120</code>. Deux parties, et toujours les deux :</p>
+<ul>
+<li>le <strong>cas d'arrêt</strong> — une situation si simple qu'on répond sans récursion ;</li>
+<li>le <strong>cas récursif</strong> — qui rappelle la fonction sur un problème plus petit.</li>
+</ul>
 
-<h2>Le déroulé</h2>
-<pre class="bloc-code">factorielle(4)
-= 4 * factorielle(3)
-= 4 * (3 * factorielle(2))
-= 4 * (3 * (2 * factorielle(1)))
-= 4 * (3 * (2 * 1))
-= 24</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Appel</th><th>Ce qu'il fait</th></tr>
+<tr><td><code>fact(5)</code></td><td>5 × fact(4) — et il attend</td></tr>
+<tr><td><code>fact(4)</code></td><td>4 × fact(3) — et il attend</td></tr>
+<tr><td><code>fact(2)</code></td><td>2 × fact(1) — et il attend</td></tr>
+<tr><td><code>fact(1)</code></td><td><strong>1</strong> — le cas d'arrêt, enfin</td></tr>
+<tr><td>remontée</td><td>2×1=2, puis 3×2=6, 4×6=24, 5×24=<strong>120</strong></td></tr>
+</table>
+<p>Le point à saisir : rien n'est calculé à la descente. Les appels s'empilent, en attente, et tout se calcule à la remontée — en sens inverse.</p>
 
-<h2>La règle absolue</h2>
-<p>Toute fonction récursive a besoin de deux choses :</p>
-<ol>
-<li>un <strong>cas d'arrêt</strong> qui ne s'appelle pas lui-même (ici <code>n &lt;= 1</code>) ;</li>
-<li>un appel qui <strong>se rapproche</strong> du cas d'arrêt (ici <code>n - 1</code>).</li>
-</ol>
+<h2>Ce que ça coûte</h2>
+<p>Chaque appel en attente occupe une place dans une zone de mémoire appelée la <strong>pile</strong>. Elle n'est pas infinie : si la récursion ne s'arrête jamais, elle déborde. Mesuré, le cours le signale — <em>« Maximum call stack size exceeded »</em> — et un vrai programme s'arrête brutalement.</p>
 
-<div class="attention"><div>Sans cas d'arrêt, la fonction s'appelle indéfiniment jusqu'à saturer la mémoire réservée aux appels : c'est le <strong>débordement de pile</strong> (« stack overflow » — oui, comme le site). En C, le programme plante brutalement.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier le cas d'arrêt.</strong> La fonction s'appelle sans fin et la pile déborde. C'est l'équivalent récursif de la boucle infinie.</p>
+<p><strong>Un cas d'arrêt jamais atteint.</strong> <code>fact(n - 1)</code> avec un <code>n</code> négatif au départ ne rencontrera jamais <code>n &lt;= 1</code>… sauf qu'ici il le rencontre tout de suite. En revanche, oublier le <code>-1</code> boucle à l'infini sur la même valeur.</p>
+<p><strong>Récursionner là où une boucle suffit.</strong> La factorielle s'écrit très bien avec un <code>for</code>, en consommant moins. La récursion se justifie quand le problème est <em>naturellement</em> récursif : parcourir un arbre, explorer un labyrinthe, trier par division.</p>
+<p><strong>Recalculer mille fois la même chose.</strong> Une suite de Fibonacci écrite naïvement recalcule les mêmes valeurs un nombre astronomique de fois. C'est correct, et inutilisable au-delà de quarante.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La récursion brille sur les structures arborescentes : un dossier qui contient des dossiers, une page HTML dont les balises en contiennent d'autres, un menu à sous-menus. Écrire ces parcours avec une boucle demande de gérer une pile à la main — autant laisser le langage le faire.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Toujours deux parties : un <strong>cas d'arrêt</strong> et un cas récursif qui réduit le problème.</li>
+<li>Rien ne se calcule à la descente : tout se calcule à la remontée.</li>
+<li>Chaque appel en attente occupe la pile, qui n'est pas infinie.</li>
+<li>Une boucle suffit souvent ; la récursion est pour ce qui est naturellement imbriqué.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la récursion terminale</summary>
+<p>Quand l'appel récursif est la toute dernière opération — rien à faire au retour — certains compilateurs le transforment automatiquement en boucle, et la pile ne grandit plus. On parle de <em>récursion terminale</em>. Le C n'en donne aucune garantie, contrairement à des langages comme le Scheme où l'optimisation est obligatoire. C'est pourquoi une récursion profonde reste risquée ici.</p>
+</details>
 `,
   exercices: [
     {
@@ -1248,20 +1583,64 @@ printf("%d ans, moyenne %.1f\\n", e.age, e.moyenne);</pre>
   id: 'c-14',
   titre: 'Mini-projet : le carnet de notes',
   contenu: `
-<p>Dernier exercice du module : un programme complet qui rassemble tableaux, boucles, fonctions et calculs. C'est le genre d'utilitaire qu'on écrit vraiment en C.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Dernier exercice du module : un programme complet qui rassemble tableaux, boucles, fonctions et calculs. C'est le genre d'utilitaire qu'on écrit vraiment en C — court, précis, qui fait une chose et la fait vite.</p>
+<p>Et c'est l'occasion de voir comment les notions du module s'emboîtent, ce qu'aucune leçon prise isolément ne montre.</p>
 
 <h2>Ce que tu vas construire</h2>
-<p>À partir d'un tableau de notes, ton programme calculera successivement la moyenne, la meilleure note, et le nombre de reçus. Chaque étape est un exercice.</p>
+<p>À partir d'un tableau de notes : la moyenne, la meilleure, la plus basse, et le nombre de notes au-dessus de la moyenne.</p>
+<pre class="bloc-code">int notes[6] = {12, 15, 8, 17, 10, 13};
+int taille = 6;
 
-<h2>Ton aide-mémoire</h2>
-<pre class="bloc-code">int t[] = {…};                 // tableau
-for (int i = 0; i < n; i++)    // parcours
-somme += t[i];                 // accumulateur
-(double)somme / n              // moyenne SANS perdre les décimales
-if (t[i] > max) max = t[i];    // recherche du maximum
-printf("%.2f\\n", x);           // affichage à 2 décimales</pre>
+int somme = 0;
+for (int i = 0; i &lt; taille; i++) {
+    somme += notes[i];
+}
 
-<div class="astuce"><div>Méthode quand un programme C résiste : ajoute des <code>printf</code> temporaires pour voir la valeur des variables à chaque tour de boucle. C'est rudimentaire, mais c'est encore aujourd'hui la technique de débogage la plus utilisée au monde.</div></div>
+double moyenne = (double) somme / taille;
+printf("Moyenne : %.2f\n", moyenne);</pre>
+<p>Deux détails qui décident de tout : <code>taille</code> transportée à côté du tableau, et le <code>(double)</code> devant la division.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qu'on obtient</th></tr>
+<tr><td>la boucle d'accumulation</td><td>somme = 75</td></tr>
+<tr><td><code>somme / taille</code></td><td><strong>12</strong> — la division entière frappe</td></tr>
+<tr><td><code>(double) somme / taille</code></td><td><strong>12.50</strong> — ce qu'on voulait</td></tr>
+<tr><td>seconde boucle</td><td>compter ceux au-dessus de 12.5</td></tr>
+</table>
+<p>La deuxième ligne est le piège de <code>c-3</code>, et il se présente ici dans son habitat naturel. Sans la conversion, la moyenne est fausse et parfaitement plausible.</p>
+
+<h2>Découper en fonctions</h2>
+<pre class="bloc-code">double moyenne(int t[], int n) {
+    int s = 0;
+    for (int i = 0; i &lt; n; i++) s += t[i];
+    return (double) s / n;
+}</pre>
+<p>Mesuré : un tableau passé à une fonction y est bien lisible, et la longueur voyage en second paramètre. Découper ainsi rend chaque morceau vérifiable séparément — et c'est la seule façon de garder la tête claire au-delà de cinquante lignes.</p>
+
+<h2>Les pièges</h2>
+<p><strong>La division entière.</strong> Le piège central de ce projet. Une moyenne qui tombe toujours juste est un symptôme, pas une coïncidence.</p>
+<p><strong>Déclarer l'accumulateur dans la boucle.</strong> Il repart de zéro à chaque tour, et le résultat vaut la dernière note.</p>
+<p><strong>Oublier de transporter la taille.</strong> Une fonction qui reçoit un tableau ne peut pas la deviner. C'est le point que le C ne pardonne pas.</p>
+<p><strong>Comparer dans la mauvaise boucle.</strong> Compter les notes au-dessus de la moyenne suppose de connaître la moyenne : il faut deux boucles successives, pas une.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Remplace « notes » par des mesures de capteur, des temps de réponse ou des tailles de fichier, et tu as le genre d'utilitaire qu'on écrit en C depuis cinquante ans : lire des données, calculer, afficher. Court, rapide, sans dépendance — et toujours là.</p>
+
+<div class="a-retenir">
+<ul>
+<li>La taille d'un tableau voyage toujours à côté de lui.</li>
+<li><code>(double)</code> dans le calcul, jamais seulement sur la destination.</li>
+<li>L'accumulateur se déclare avant la boucle.</li>
+<li>Deux calculs dépendants demandent deux boucles successives.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi le C reste imbattable ici</summary>
+<p>Un programme comme celui-ci, compilé, s'exécute en quelques microsecondes et n'occupe que quelques kilo-octets. Le même en Python met plusieurs millisecondes et charge un interprète de dizaines de méga-octets. Sur un fichier de dix lignes, personne ne le remarque ; sur un milliard de mesures, ou sur un microcontrôleur avec deux kilo-octets de mémoire, c'est la différence entre possible et impossible.</p>
+</details>
 `,
   exercices: [
     {

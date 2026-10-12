@@ -511,10 +511,18 @@
         const params = this.parametres();
         methodes[nom] = { nom, type, params, corps: this.bloc() };
       } else {
+        // Un champ peut etre un tableau : « char nom[50]; ». Meme motif que
+        // pour une variable locale, qui sait deja lire « int t[5] ».
+        let dims = type.tableau, taille = null;
+        while (this.siOp('[')) {
+          if (!this.estOp(']')) taille = this.expression();
+          this.exigerOp(']');
+          dims++;
+        }
         let init = null;
         if (this.siOp('=')) init = this.expression();
         this.siOp(';');
-        champs.push({ nom, type, init });
+        champs.push({ nom, type, init, dims, taille });
       }
     }
     this.exigerOp('}');
@@ -821,7 +829,21 @@
     const cl = this.prog.classes[base];
     if (cl && cl !== true) {
       const obj = { t: 'objet', classe: base, champs: {}, def: cl };
-      for (const c of cl.champs) obj.champs[c.nom] = defautDe(c.type.base);
+      for (const c of cl.champs) {
+        if (c.dims) {
+          // La taille d'un champ tableau est toujours un nombre ecrit en
+          // clair ; si elle ne l'est pas, on part d'un tableau vide plutot
+          // que de refuser le programme.
+          const n = c.taille && c.taille.k === 'litt' && typeof c.taille.v === 'object'
+            ? Number(c.taille.v.v) : 0;
+          const combien = Number.isFinite(n) && n > 0 && n < 100000 ? n : 0;
+          obj.champs[c.nom] = { t: 'tableau', elem: c.type.base,
+            chaine: c.type.base === 'char',
+            v: new Array(combien).fill(0).map(() => defautDe(c.type.base)) };
+        } else {
+          obj.champs[c.nom] = defautDe(c.type.base);
+        }
+      }
       return obj;
     }
     return defautDe(base);

@@ -211,6 +211,18 @@ verifie('printf affiche une ligne', sortie('c', enC('printf("bonjour\\n");')), [
 verifie('les formats %d %f %c', sortie('c', enC('int a=3; float b=2.5; char c=\'x\'; printf("%d %.1f %c\\n",a,b,c);')),
         ['3 2.5 x']);
 verifie('une boucle for', sortie('c', enC('for (int i=0;i<3;i++) printf("%d\\n", i);')), ['0', '1', '2']);
+
+/* Une structure dont un champ est un tableau : c'est l'exemple meme de la
+   lecon c-12 (« char nom[50] »), et le parseur le refusait. Un eleve qui
+   recopiait le code de son cours recevait une erreur de syntaxe. */
+verifie('une structure avec un champ tableau',
+        sortie('c', '#include <stdio.h>\nstruct Etudiant { char nom[50]; int age; };\n'
+          + 'int main() { struct Etudiant e; e.age = 20; printf("%d\\n", e.age); return 0; }'),
+        ['20']);
+verifie('une structure sans champ tableau marche toujours',
+        sortie('c', '#include <stdio.h>\nstruct P { int x; int y; };\n'
+          + 'int main() { struct P p; p.x = 3; p.y = 4; printf("%d,%d\\n", p.x, p.y); return 0; }'),
+        ['3,4']);
 verifie('une boucle while', sortie('c', enC('int i=0; while(i<2){ printf("%d\\n",i); i++; }')), ['0', '1']);
 verifie('une condition', sortie('c', enC('int n=5; if(n>3) printf("grand\\n"); else printf("petit\\n");')), ['grand']);
 verifie('une fonction avec retour', sortie('c', enC('printf("%d\\n", carre(5));', 'int carre(int n){ return n*n; }\n')), ['25']);
