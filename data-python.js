@@ -6,20 +6,52 @@ window.DATA_PYTHON = [
   id: 'py-1',
   titre: 'Bonjour Python !',
   contenu: `
-<p>Jusqu'ici tu as appris le trio du web : HTML, CSS et JavaScript. <strong>Python</strong>, lui, vit en dehors du navigateur : c'est le langage des scripts, de l'analyse de données, de l'intelligence artificielle, de l'automatisation… C'est aussi le langage le plus recommandé pour débuter, parce qu'il s'écrit presque comme on pense.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu connais le trio du web. Python, lui, vit <em>en dehors</em> du navigateur : il sert à écrire des scripts qui rangent des fichiers, à analyser des données, à entraîner des modèles d'intelligence artificielle, à piloter des machines.</p>
+<p>Et il a été conçu avec une obsession : <strong>être lisible</strong>. Son créateur partait d'un constat simple — un programme est lu bien plus souvent qu'il n'est écrit. Beaucoup de ses choix, y compris ceux qui te surprendront, viennent de là.</p>
 
-<h2>Ta première ligne de Python</h2>
-<pre class="bloc-code">print("Bonjour tout le monde !")</pre>
-<p>C'est tout. <code>print(...)</code> affiche ce qu'on lui donne — c'est l'équivalent du <code>console.log(...)</code> de JavaScript, mais en plus court. Le texte va entre guillemets, doubles <code>"..."</code> ou simples <code>'...'</code>.</p>
+<h2>Afficher</h2>
+<pre class="bloc-code">print("Bonjour Python !")
+print(42)
+print("J'ai", 32, "ans")</pre>
+<p>C'est l'équivalent de <code>console.log</code>. Première différence visible avec JavaScript : <strong>pas de point-virgule</strong> en fin de ligne. Une ligne, une instruction, et c'est tout.</p>
+<p>Avec plusieurs valeurs séparées par des virgules, <code>print</code> insère une espace entre chacune — une commodité qui évite de les coller à la main.</p>
 
 <h2>Les commentaires</h2>
-<p>En Python, une ligne qui commence par <code>#</code> est un <strong>commentaire</strong> : Python l'ignore complètement. C'est l'équivalent du <code>//</code> de JavaScript.</p>
-<pre class="bloc-code"># Ceci est une note pour les humains
-print("Ceci s'affiche")  # on peut aussi commenter en fin de ligne</pre>
+<pre class="bloc-code"># Ceci est un commentaire : Python l'ignore
+print("ceci s'affiche")   # on peut aussi commenter en fin de ligne</pre>
+<p>Le dièse remplace les doubles barres obliques de JavaScript. Un commentaire ne sert pas à redire ce que le code fait déjà — <code># on ajoute 1</code> au-dessus de <code>n += 1</code> n'apprend rien. Il sert à dire <em>pourquoi</em>, ce que le code, lui, ne peut pas raconter.</p>
 
-<div class="info"><div><strong>Comment Python tourne dans ce logiciel ?</strong> Un interpréteur Python est embarqué directement dans l'application (il s'appelle Skulpt). Il couvre tout ce dont tu as besoin pour apprendre les bases. Quand tu voudras aller plus loin, tu installeras le « vrai » Python depuis python.org — tout ce que tu apprends ici fonctionnera pareil.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce que Python lit</th><th>Ce qu'il en fait</th></tr>
+<tr><td><code># un commentaire</code></td><td>Il saute la ligne entière.</td></tr>
+<tr><td><code>print("Bonjour")</code></td><td>Il affiche, puis passe à la ligne suivante.</td></tr>
+<tr><td><code>print("J'ai", 32, "ans")</code></td><td>Il colle les trois valeurs avec une espace entre chacune.</td></tr>
+<tr><td>une erreur</td><td>Il <strong>s'arrête net</strong> : rien de ce qui suit ne s'exécute.</td></tr>
+</table>
 
-<div class="astuce"><div>Remarque ce qui a <em>disparu</em> par rapport à JavaScript : pas de <code>;</code> en fin de ligne, pas d'accolades. Python mise tout sur la simplicité visuelle.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier les parenthèses.</strong> <code>print "Bonjour"</code> fonctionnait dans Python 2, abandonné depuis 2020. Tu le croiseras dans de vieux tutoriels, et il ne marchera pas.</p>
+<p><strong>Mélanger les guillemets.</strong> <code>"Bonjour'</code> n'est jamais refermé. Python répond alors : <em>« il manque une fermeture : une parenthèse, un crochet ou un guillemet a été ouvert sans être refermé. »</em></p>
+<p><strong>Se tromper de casse.</strong> <code>Print</code> avec une majuscule n'existe pas. Le message est explicite : <em>« le nom « Print » est inconnu. Soit tu ne l'as pas encore créé, soit il y a une faute de frappe. »</em> Python distingue les majuscules, toujours.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Python est le langage le plus enseigné au monde, et l'un des plus demandés. On le trouve chez les scientifiques qui n'ont jamais appris à programmer autrement, dans les outils qui automatisent les tâches répétitives d'une entreprise, et derrière la plupart des travaux d'apprentissage automatique.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>print(...)</code> affiche ; les virgules ajoutent une espace entre les valeurs.</li>
+<li>Pas de point-virgule en fin de ligne, et le dièse <code>#</code> pour commenter.</li>
+<li>Python distingue les majuscules : <code>Print</code> n'est pas <code>print</code>.</li>
+<li>À la première erreur, tout s'arrête — et le message dit quoi et où.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi « Python » ?</summary>
+<p>Pas pour le serpent. Son créateur, Guido van Rossum, était amateur de la troupe comique des Monty Python, et cherchait un nom « court, un peu mystérieux et légèrement irrévérencieux ». L'esprit est resté dans la documentation officielle, où les exemples parlent volontiers de fromage et de perroquets — et dans une commande cachée, <code>import this</code>, qui affiche les vingt principes de conception du langage.</p>
+</details>
 `,
   exercices: [
     {
@@ -83,28 +115,57 @@ print("Ceci s'affiche")  # on peut aussi commenter en fin de ligne</pre>
   id: 'py-2',
   titre: 'Les variables, version Python',
   contenu: `
-<p>Tu connais déjà les variables grâce à JavaScript. En Python, c'est encore plus simple : <strong>pas de <code>let</code>, pas de <code>const</code></strong>. On écrit le nom, le signe égal, la valeur — terminé.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu connais déjà les variables. Ce qui change en Python, c'est tout ce qui disparaît : pas de <code>let</code>, pas de <code>const</code>, pas de déclaration de type. On écrit le nom, le signe égal, la valeur.</p>
+<p>Ce dépouillement n'est pas une facilité pour débutants : c'est la marque de fabrique du langage. Moins de cérémonie, plus de lisibilité.</p>
+
+<h2>Créer et typer</h2>
 <pre class="bloc-code">prenom = "Nadia"
 age = 32
-taille = 1.68</pre>
-
-<h2>Les types de base</h2>
+taille = 1.68
+majeur = True</pre>
+<p>Quatre types de base, que Python devine tout seul :</p>
 <ul>
-<li><code>"Nadia"</code> — du texte, appelé <strong>str</strong> (string, comme en JS) ;</li>
-<li><code>32</code> — un nombre entier, appelé <strong>int</strong> ;</li>
-<li><code>1.68</code> — un nombre à virgule, appelé <strong>float</strong> (le point remplace la virgule) ;</li>
-<li><code>True</code> / <code>False</code> — vrai ou faux, avec une majuscule (différence avec JS !).</li>
+<li><code>str</code> — du texte, entre guillemets simples ou doubles, au choix ;</li>
+<li><code>int</code> — un nombre entier ;</li>
+<li><code>float</code> — un nombre à virgule, écrite avec un <strong>point</strong> ;</li>
+<li><code>bool</code> — <code>True</code> ou <code>False</code>, avec une <strong>majuscule</strong>.</li>
 </ul>
+<p><code>type(age)</code> dit le type d'une valeur, et <code>int("42")</code>, <code>str(42)</code>, <code>float("1.5")</code> convertissent de l'un à l'autre.</p>
 
-<h2>Afficher plusieurs choses à la fois</h2>
-<p><code>print()</code> accepte plusieurs valeurs séparées par des virgules, et met tout seul des espaces entre elles :</p>
-<pre class="bloc-code">prenom = "Nadia"
-age = 32
-print("Je m'appelle", prenom, "et j'ai", age, "ans")
-# → Je m'appelle Nadia et j'ai 32 ans</pre>
-<p>Pratique : pas besoin de coller les morceaux avec des <code>+</code> comme en JavaScript (le <code>+</code> existe aussi, mais il refuse de mélanger texte et nombre sans conversion).</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce que Python lit</th><th>Ce qu'il en fait</th></tr>
+<tr><td><code>age = 32</code></td><td>Il crée une boîte nommée <code>age</code> et y range 32.</td></tr>
+<tr><td><code>age = 33</code></td><td>Il remplace le contenu. Aucune déclaration à répéter.</td></tr>
+<tr><td><code>print(age)</code></td><td>Il affiche le contenu : 33.</td></tr>
+<tr><td><code>print("age")</code></td><td>Il affiche le mot. Les guillemets changent tout.</td></tr>
+</table>
+<p>La dernière ligne est la même frontière qu'en JavaScript : avec des guillemets, c'est du texte ; sans, c'est une variable.</p>
 
-<div class="attention"><div>Le nom d'une variable s'écrit sans espaces ni accents : <code>mon_age</code> ✔, <code>mon âge</code> ✘. Python utilise le tiret bas <code>_</code> là où JavaScript préférait <code>monAge</code>.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Additionner du texte et un nombre.</strong> C'est l'erreur la plus fréquente du débutant en Python, et le langage est plus strict que JavaScript : il refuse au lieu de bricoler. <code>print("age : " + age)</code> s'arrête sur <em>« tu mélanges deux types incompatibles — souvent du texte et un nombre. Python refuse « 3 + "3" » : convertis avec str(...) ou int(...). »</em></p>
+<p>Trois solutions : <code>str(age)</code>, les virgules de <code>print</code>, ou les f-strings que tu verras au module suivant.</p>
+<p><strong>Écrire <code>true</code> en minuscules.</strong> Python veut <code>True</code> et <code>False</code> avec une majuscule — l'inverse de JavaScript. Le message est alors : <em>« le nom « true » est inconnu. »</em></p>
+<p><strong>Utiliser une virgule pour un décimal.</strong> <code>1,68</code> n'est pas un nombre pour Python : c'est deux valeurs séparées. Les décimaux s'écrivent avec un point.</p>
+<p><strong>Une faute de frappe dans un nom.</strong> <code>scor</code> au lieu de <code>score</code> donne <em>« le nom « scor » est inconnu »</em>. Python ne corrige jamais, et il rappelle lui-même que les majuscules comptent.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>L'absence de déclaration de type rend Python très rapide à écrire — et c'est aussi sa principale critique : une erreur de type ne se découvre qu'à l'exécution. Les grands projets ajoutent donc des <em>annotations</em> facultatives, <code>age: int = 32</code>, que des outils vérifient avant de lancer le programme.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une variable se crée sans mot-clé : <code>nom = valeur</code>.</li>
+<li>Quatre types de base : <code>str</code>, <code>int</code>, <code>float</code>, <code>bool</code> — et <code>True</code>/<code>False</code> prennent une majuscule.</li>
+<li>Python refuse d'additionner du texte et un nombre : convertis avec <code>str(...)</code>.</li>
+<li>Les décimaux s'écrivent avec un point, jamais une virgule.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : une variable est une étiquette</summary>
+<p>En Python, une variable ne « contient » pas vraiment une valeur : elle lui est <em>attachée</em>, comme une étiquette collée sur un objet. Plusieurs étiquettes peuvent désigner le même objet — c'est ce qui explique le piège de la copie de liste que tu rencontreras bientôt. Pour les nombres et les textes, qui ne se modifient jamais, la distinction reste invisible.</p>
+</details>
 `,
   exercices: [
     {
@@ -170,24 +231,54 @@ print("Je m'appelle", prenom, "et j'ai", age, "ans")
   id: 'py-3',
   titre: 'Python, la calculatrice ultime',
   contenu: `
-<p>Python est né pour calculer — c'est même l'un de ses usages principaux dans la vraie vie (finance, science, statistiques). Les opérateurs de base sont les mêmes qu'en JavaScript :</p>
-<pre class="bloc-code">print(7 + 3)    # 10 — addition
-print(7 - 3)    # 4  — soustraction
-print(7 * 3)    # 21 — multiplication
-print(7 / 2)    # 3.5 — division (toujours à virgule)</pre>
+<h2>Pourquoi ça existe</h2>
+<p>Python est né pour calculer, et c'est encore l'un de ses usages principaux : finance, science, statistiques. Les opérateurs de base ressemblent à ceux de JavaScript — mais il en possède deux de plus, qui règlent des besoins réels et qu'on ne trouve pas partout.</p>
 
-<h2>Les trois opérateurs bonus</h2>
-<pre class="bloc-code">print(17 // 5)  # 3  — division ENTIÈRE : combien de fois 5 rentre dans 17
-print(17 % 5)   # 2  — MODULO : ce qu'il reste après la division
-print(2 ** 10)  # 1024 — PUISSANCE : 2 multiplié par lui-même 10 fois</pre>
-<p>Tu connais déjà le modulo <code>%</code> depuis JavaScript (pair/impair !). Les deux nouveaux : <code>//</code> pour la division sans virgule, et <code>**</code> pour la puissance.</p>
+<h2>Les opérateurs</h2>
+<pre class="bloc-code">print(7 + 3)    # 10
+print(7 - 3)    # 4
+print(7 * 3)    # 21
+print(7 / 2)    # 3.5    toujours un decimal
+print(7 // 2)   # 3      division ENTIERE
+print(7 % 2)    # 1      le reste
+print(2 ** 10)  # 1024   puissance</pre>
+<p>Tous mesurés. Les trois derniers méritent qu'on s'y arrête.</p>
 
-<h2>La priorité des opérations</h2>
-<p>Comme en maths : les multiplications avant les additions, et les parenthèses pour forcer l'ordre.</p>
-<pre class="bloc-code">print(2 + 3 * 4)    # 14, pas 20
-print((2 + 3) * 4)  # 20</pre>
+<h2>Pas à pas : les trois divisions</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Résultat de 7 par 2</th><th>À quoi ça sert</th></tr>
+<tr><td><code>/</code></td><td>3.5</td><td>le calcul exact — <strong>toujours un décimal</strong>, même si ça tombe juste</td></tr>
+<tr><td><code>//</code></td><td>3</td><td>« combien de fois entier » : des pages, des boîtes, des groupes</td></tr>
+<tr><td><code>%</code></td><td>1</td><td>le reste : pair ou impair, répartir, faire tourner</td></tr>
+</table>
+<p>Retiens le premier point : <code>10 / 2</code> donne <code>5.0</code>, pas <code>5</code>. La division normale produit toujours un <code>float</code>. Pour un entier, c'est <code>//</code>.</p>
+<p>Et <code>%</code> est bien plus utile qu'il n'y paraît : <code>n % 2 == 0</code> teste la parité, <code>i % 7</code> fait tourner un compteur sur une semaine.</p>
 
-<div class="astuce"><div>Exemple concret du duo <code>//</code> et <code>%</code> : 17 bonbons à partager entre 5 enfants → <code>17 // 5</code> = 3 bonbons chacun, et <code>17 % 5</code> = 2 bonbons restants pour toi.</div></div>
+<h2>Les raccourcis</h2>
+<p><code>score += 10</code>, <code>score -= 5</code>, <code>score *= 2</code> fonctionnent comme en JavaScript. En revanche <code>score++</code> <strong>n'existe pas</strong> en Python : on écrit <code>score += 1</code>.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Attendre un entier de <code>/</code>.</strong> Un nombre de pages affiché « 5.0 » au lieu de « 5 » vient toujours de là. C'est <code>//</code> qu'il fallait.</p>
+<p><strong>Chercher <code>++</code>.</strong> Il n'existe pas, et son absence est volontaire : le créateur du langage le jugeait source de confusion. <code>+= 1</code> dit la même chose, plus clairement.</p>
+<p><strong>Diviser par zéro.</strong> Python s'arrête, et le cours traduit : <em>« division par zéro impossible. »</em> Rien à comprendre de plus — mais le programme ne continue pas, donc il faut tester le diviseur quand il vient d'ailleurs.</p>
+<p><strong>Oublier les parenthèses.</strong> La priorité est celle des mathématiques : <code>**</code> d'abord, puis <code>*</code> <code>/</code> <code>//</code> <code>%</code>, puis <code>+</code> <code>-</code>. En cas de doute, des parenthèses — elles ne coûtent rien et se relisent.</p>
+
+<h2>Dans la vraie vie</h2>
+<p><code>//</code> et <code>%</code> vont presque toujours ensemble : pour répartir 47 objets dans des boîtes de 10, <code>47 // 10</code> donne 4 boîtes pleines et <code>47 % 10</code> les 7 qui restent. C'est le calcul de la pagination, des horaires, des conversions d'unités.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>/</code> donne toujours un décimal ; <code>//</code> donne l'entier ; <code>%</code> donne le reste.</li>
+<li><code>**</code> élève à la puissance.</li>
+<li><code>++</code> n'existe pas : c'est <code>+= 1</code>.</li>
+<li>Une division par zéro arrête le programme : <em>« division par zéro impossible. »</em></li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les grands nombres</summary>
+<p>Python n'a pas de limite de taille pour les entiers. <code>2 ** 1000</code> donne un nombre de 302 chiffres, exact, sans débordement — là où la plupart des langages abandonnent bien avant. C'est l'une des raisons de sa popularité en cryptographie et en mathématiques, où l'on travaille couramment sur des nombres de plusieurs centaines de chiffres.</p>
+</details>
 `,
   exercices: [
     {
@@ -251,37 +342,61 @@ print((2 + 3) * 4)  # 20</pre>
   id: 'py-4',
   titre: 'Les conditions — et LA règle de Python',
   contenu: `
-<p>Le <code>if</code> existe aussi en Python, mais avec une différence fondamentale qu'il faut comprendre tout de suite. Compare :</p>
-<pre class="bloc-code"># JavaScript : les accolades délimitent le bloc
-if (age >= 18) {
+<h2>Pourquoi ça existe</h2>
+<p>Le <code>if</code> existe partout. Ce qui rend celui de Python particulier, c'est ce qui l'entoure — ou plutôt ce qui ne l'entoure pas.</p>
+<pre class="bloc-code"># JavaScript : les accolades delimitent le bloc
+if (age &gt;= 18) {
   console.log("Majeur");
 }
 
-# Python : PAS d'accolades, pas de parenthèses obligatoires
-if age >= 18:
+# Python : ni parentheses, ni accolades
+if age &gt;= 18:
     print("Majeur")</pre>
+<p>Deux-points en fin de ligne, puis <strong>quatre espaces de décalage</strong>. C'est tout — et ce n'est pas une préférence de style : <strong>l'indentation fait partie du langage</strong>. C'est elle qui dit ce qui est à l'intérieur du bloc.</p>
+<p>Le raisonnement derrière ce choix : dans les autres langages, on indente <em>quand même</em>, par lisibilité, en plus des accolades. Autant garder l'indentation et supprimer les accolades — une chose à écrire au lieu de deux, et il devient impossible que les deux se contredisent.</p>
 
-<h2>L'indentation n'est pas décorative</h2>
-<p>En JavaScript, indenter (décaler le code vers la droite) rendait le code lisible, mais restait optionnel. <strong>En Python, l'indentation EST la structure</strong> : le <code>:</code> en fin de ligne annonce un bloc, et tout ce qui est décalé de 4 espaces en dessous appartient à ce bloc. Pas de décalage = erreur.</p>
-<pre class="bloc-code">note = 15
-
-if note >= 10:
-    print("Reçu !")           # ← dans le if (décalé)
-    print("Félicitations")    # ← dans le if aussi
-print("Fin du programme")     # ← PAS dans le if (pas décalé)</pre>
-
-<h2>else et elif</h2>
-<pre class="bloc-code">if note >= 16:
-    print("Mention très bien")
-elif note >= 12:
-    print("Mention assez bien")
-elif note >= 10:
-    print("Reçu")
+<h2>La chaîne complète</h2>
+<pre class="bloc-code">if note &gt;= 16:
+    print("Tres bien")
+elif note &gt;= 10:
+    print("Admis")
 else:
-    print("Recalé")</pre>
-<p><code>elif</code> est la contraction de « else if » — le <code>else if</code> de JavaScript. Les comparaisons sont identiques : <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Et pour combiner : <code>and</code> et <code>or</code>, en toutes lettres (au lieu de <code>&amp;&amp;</code> et <code>||</code>).</p>
+    print("Recale")</pre>
+<p><code>elif</code> remplace <code>else if</code> — contraction voulue, pour éviter les escaliers. Les comparaisons sont les mêmes qu'ailleurs : <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>.</p>
+<p>En revanche, les opérateurs logiques s'écrivent en toutes lettres : <strong><code>and</code></strong>, <strong><code>or</code></strong>, <strong><code>not</code></strong>, là où JavaScript utilise des symboles.</p>
 
-<div class="attention"><div>L'oubli le plus courant en Python : le <strong><code>:</code></strong> à la fin de la ligne du if. Le second : oublier de décaler la ligne d'en dessous. Tu vas faire ces deux erreurs — c'est normal, et le message d'erreur te le dira.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce que Python lit</th><th>Ce qu'il en déduit</th></tr>
+<tr><td><code>if age &gt;= 18:</code></td><td>Une condition commence ; les deux-points annoncent un bloc.</td></tr>
+<tr><td>une ligne décalée</td><td>Elle est <strong>dans</strong> le bloc.</td></tr>
+<tr><td>une ligne non décalée</td><td>Le bloc est terminé.</td></tr>
+<tr><td><code>elif ...:</code></td><td>Testé seulement si le <code>if</code> était faux.</td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier les deux-points.</strong> Le cours est précis : <em>« il manque le « : » à la fin de la ligne 2. En Python, les lignes qui commencent par if, elif, else, for, while ou def se terminent toujours par deux-points. »</em></p>
+<p><strong>Oublier l'indentation.</strong> Le message est tout aussi guidé : <em>« il manque l'indentation à la ligne 3. La ligne du dessus se termine par « : », donc celle-ci doit être décalée vers la droite de 4 espaces (touche Tab). »</em></p>
+<p><strong>Indenter alors que rien ne l'annonce.</strong> L'erreur inverse, et le conseil est l'<em>opposé</em> : le cours répond que la ligne est décalée sans raison. Lis bien lequel des deux messages tu reçois — ils ne demandent pas la même correction.</p>
+<p><strong>Mélanger espaces et tabulations.</strong> Deux lignes qui semblent alignées à l'écran peuvent ne pas l'être pour Python. Choisis les espaces, et n'en démords pas — la convention officielle est de quatre.</p>
+<p><strong>Écrire <code>&amp;&amp;</code> ou <code>||</code>.</strong> Ils n'existent pas : c'est <code>and</code> et <code>or</code>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>L'indentation obligatoire est ce qui frappe le plus en arrivant d'un autre langage, et ce qu'on finit par apprécier : tout le code Python du monde est indenté de la même façon, parce qu'il ne peut pas en être autrement. Les querelles de style sur le placement des accolades n'ont jamais eu lieu ici.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Deux-points en fin de ligne, puis quatre espaces : l'indentation <strong>fait</strong> le bloc.</li>
+<li><code>elif</code> remplace <code>else if</code>.</li>
+<li>Les opérateurs logiques s'écrivent <code>and</code>, <code>or</code>, <code>not</code>.</li>
+<li>Deux messages opposés existent : indentation manquante, ou indentation en trop. Lis lequel arrive.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ce que Python tient pour faux</summary>
+<p>Un <code>if</code> accepte autre chose qu'une comparaison. Sont considérés comme faux : <code>False</code>, <code>0</code>, la chaîne vide, la liste vide, le dictionnaire vide et <code>None</code>. Tout le reste est vrai. D'où une écriture très courante : <code>if ma_liste:</code> veut dire « si la liste n'est pas vide », et se lit bien mieux que <code>if len(ma_liste) &gt; 0</code>.</p>
+</details>
 `,
   exercices: [
     {
@@ -347,31 +462,62 @@ else:
   id: 'py-5',
   titre: 'Les boucles : for, range et while',
   contenu: `
-<p>Répéter sans se répéter — tu connais le principe depuis JavaScript. La version Python est plus lisible :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Répéter sans se répéter, tu connais le principe. La version Python est plus courte, et surtout plus directe : au lieu de gérer un compteur, on dit ce qu'on veut parcourir.</p>
 <pre class="bloc-code"># JavaScript
-for (let i = 0; i < 5; i++) { console.log(i); }
+for (let i = 0; i &lt; 5; i++) { ... }
 
 # Python
 for i in range(5):
-    print(i)          # affiche 0, 1, 2, 3, 4</pre>
+    print(i)</pre>
+<p>Trois réglages remplacés par un seul mot. C'est la même idée que le <code>for...of</code> de JavaScript, mais c'est ici la boucle <em>normale</em> — pas une alternative.</p>
 
-<h2>Apprivoiser range()</h2>
+<h2>Apprivoiser range</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Ce qu'elle produit</th></tr>
+<tr><td><code>range(5)</code></td><td>0, 1, 2, 3, 4 — cinq valeurs, en partant de 0</td></tr>
+<tr><td><code>range(1, 6)</code></td><td>1, 2, 3, 4, 5 — le second nombre est <strong>exclu</strong></td></tr>
+<tr><td><code>range(0, 10, 2)</code></td><td>0, 2, 4, 6, 8 — de deux en deux</td></tr>
+</table>
+<p>Mesuré. Le point à graver : la borne de fin est toujours exclue. <code>range(1, 6)</code> s'arrête à 5, et c'est voulu — <code>range(n)</code> donne exactement <code>n</code> valeurs.</p>
+
+<h2>Parcourir directement</h2>
+<pre class="bloc-code">courses = ["pain", "pommes", "chocolat"]
+
+for article in courses:
+    print(article)</pre>
+<p>Quand on veut les éléments et non leur rang, on les prend directement. C'est la forme la plus courante, et la plus lisible.</p>
+
+<h2>while, et le motif de l'accumulateur</h2>
+<pre class="bloc-code">total = 0
+for prix in [12, 8, 5]:
+    total += prix
+print(total)   # 25</pre>
+<p>La variable se crée <strong>avant</strong> la boucle, grandit <em>dedans</em>, et s'affiche <em>après</em>. Ce motif revient dans tous les langages.</p>
+<p>Le <code>while</code> existe aussi, pour les cas où le nombre de tours n'est pas connu d'avance : <code>while energie &gt; 0:</code>.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Croire que <code>range(1, 6)</code> va jusqu'à 6.</strong> C'est l'erreur de bord la plus fréquente : un tour de moins que prévu, sans aucun message.</p>
+<p><strong>Déclarer l'accumulateur dans la boucle.</strong> <code>total = 0</code> à l'intérieur remet le compteur à zéro à chaque tour : le résultat vaut toujours le dernier élément.</p>
+<p><strong>Oublier les deux-points ou l'indentation.</strong> Mêmes messages qu'au <code>if</code> — et ils nomment la ligne.</p>
+<p><strong>Une boucle <code>while</code> qui ne s'arrête pas.</strong> Si rien ne rapproche la condition de <code>False</code>, le cours intervient : <em>« ton code tourne sans s'arrêter (boucle infinie ?). Vérifie que la condition de ta boucle finit par devenir fausse. »</em></p>
+
+<h2>Dans la vraie vie</h2>
+<p>En Python, écrire <code>for i in range(len(liste))</code> puis <code>liste[i]</code> est considéré comme une maladresse : on parcourt directement la liste. Quand l'indice est vraiment nécessaire, il existe <code>enumerate</code>, que tu verras au dernier module.</p>
+
+<div class="a-retenir">
 <ul>
-<li><code>range(5)</code> → 0, 1, 2, 3, 4 (cinq valeurs, en partant de 0, 5 exclu) ;</li>
-<li><code>range(1, 6)</code> → 1, 2, 3, 4, 5 (de 1 inclus à 6 exclu) ;</li>
-<li><code>range(0, 20, 5)</code> → 0, 5, 10, 15 (de 5 en 5).</li>
+<li><code>for x in collection:</code> parcourt directement les éléments — c'est la forme normale.</li>
+<li><code>range(n)</code> donne n valeurs à partir de 0 ; la borne de fin est toujours <strong>exclue</strong>.</li>
+<li>L'accumulateur se crée avant la boucle, grandit dedans, s'affiche après.</li>
+<li><code>while</code> quand le nombre de tours est inconnu — et quelque chose doit faire avancer sa condition.</li>
 </ul>
-<p>La borne de fin est toujours <strong>exclue</strong> — comme la fin d'un <code>&lt;</code> en JavaScript. <code>range(1, 6)</code> se lit « de 1 jusqu'à 6 exclu ».</p>
+</div>
 
-<h2>while : tant que</h2>
-<pre class="bloc-code">compteur = 5
-while compteur > 0:
-    print(compteur)
-    compteur = compteur - 1
-print("Partez !")</pre>
-<p>Même logique qu'en JS : la boucle continue tant que la condition est vraie. Et même piège : si tu oublies de faire évoluer <code>compteur</code>, la boucle ne s'arrête jamais (le logiciel la coupera au bout de 3 secondes, comme pour JavaScript).</p>
-
-<div class="astuce"><div>Règle de choix identique à JavaScript : nombre de tours connu d'avance → <code>for</code> ; « je continue jusqu'à ce que quelque chose change » → <code>while</code>.</div></div>
+<details class="plus-loin">
+<summary>Aller plus loin : range ne fabrique rien</summary>
+<p><code>range(1000000)</code> ne crée pas un million de nombres en mémoire : il crée un objet qui sait produire le suivant quand on le lui demande. C'est pourquoi <code>print(range(5))</code> n'affiche pas la liste mais <code>range(0, 5)</code> — et qu'il faut écrire <code>list(range(5))</code> pour la voir. Cette idée de produire à la demande revient dans la leçon sur les générateurs.</p>
+</details>
 `,
   exercices: [
     {
@@ -436,32 +582,66 @@ print("Partez !")</pre>
   id: 'py-6',
   titre: 'Les listes',
   contenu: `
-<p>La liste Python, c'est le tableau JavaScript avec un nom plus naturel. Mêmes crochets, mêmes indices qui commencent à 0 :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une variable range une valeur. Pour en ranger trente — les courses, les notes d'une classe, les lignes d'un fichier — il faut autre chose. La <strong>liste</strong> est l'outil le plus utilisé de Python, et c'est l'équivalent exact du tableau JavaScript.</p>
+
+<h2>Créer, lire, modifier</h2>
 <pre class="bloc-code">courses = ["pain", "pommes", "chocolat"]
 
-print(courses[0])      # pain — le premier
-print(len(courses))    # 3 — le nombre d'éléments
-courses.append("café") # ajoute à la fin</pre>
+print(courses[0])     # pain — le premier
+print(courses[-1])    # chocolat — le DERNIER
+print(len(courses))   # 3
 
-<h2>Les différences avec JavaScript</h2>
+courses.append("lait")     # ajoute a la fin
+courses.remove("pain")     # retire par valeur
+courses[0] = "baguette"    # remplace</pre>
+<p>Mêmes crochets qu'en JavaScript, mêmes indices à partir de 0. Mais Python ajoute quelque chose qui manque ailleurs : les <strong>indices négatifs</strong>. <code>[-1]</code> est le dernier, <code>[-2]</code> l'avant-dernier. Plus besoin de <code>len(t) - 1</code>.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Sur <code>["pain", "pommes", "chocolat"]</code></th></tr>
+<tr><td><code>[0]</code></td><td>pain</td></tr>
+<tr><td><code>[2]</code></td><td>chocolat</td></tr>
+<tr><td><code>[-1]</code></td><td>chocolat, sans avoir à compter</td></tr>
+<tr><td><code>[3]</code></td><td><strong>erreur</strong> : la case n'existe pas</td></tr>
+</table>
+<p>La dernière ligne est une bonne nouvelle. Là où JavaScript rend <code>undefined</code> en silence, Python s'arrête et explique : <em>« tu demandes un élément qui n'existe pas dans la liste. Rappel : le premier est à l'indice 0, donc une liste de 3 éléments va de 0 à 2. »</em></p>
+
+<h2>Le piège de la copie</h2>
+<pre class="bloc-code">a = [1, 2]
+b = a           # PAS une copie
+b.append(3)
+print(a)        # [1, 2, 3]  — a a change aussi
+
+c = a[:]        # une vraie copie
+c.append(9)
+print(a)        # [1, 2, 3]  — intacte</pre>
+<p>Mesuré. <code>b = a</code> ne duplique rien : les deux noms désignent la même liste. Pour copier, <code>a[:]</code> ou <code>list(a)</code>.</p>
+<p>C'est le même piège qu'en JavaScript, et il mord d'autant plus en Python qu'on passe des listes à des fonctions sans y penser.</p>
+<p>La raison tient à ce qu'est vraiment une variable en Python : une étiquette collée sur un objet, pas une boîte qui le contient. Écrire <code>b = a</code> colle une seconde étiquette sur le même objet — il n'y a jamais eu qu'une seule liste.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Croire que <code>=</code> copie.</strong> Le bug apparaît loin de sa cause : une liste modifiée quelque part, et une autre change sans raison apparente.</p>
+<p><strong>Confondre <code>append</code> et <code>+</code>.</strong> <code>append</code> ajoute <em>un</em> élément ; <code>liste + autre</code> colle deux listes. Faire <code>append(["a","b"])</code> ajoute un élément qui est lui-même une liste.</p>
+<p><strong>Retirer pendant qu'on parcourt.</strong> La liste se décale sous la boucle, qui saute des éléments. On construit une nouvelle liste, ou on parcourt une copie.</p>
+<p><strong>Oublier que <code>append</code> ne rend rien.</strong> <code>courses = courses.append("lait")</code> écrase la liste par <code>None</code>. Les méthodes qui modifient en place ne renvoient rien.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les listes sont partout : lignes lues dans un fichier, résultats d'une requête, mesures d'un capteur. Et les indices négatifs sont l'une de ces petites commodités qu'on regrette amèrement en revenant à un autre langage.</p>
+
+<div class="a-retenir">
 <ul>
-<li><code>len(courses)</code> au lieu de <code>courses.length</code> — c'est une fonction, pas une propriété ;</li>
-<li><code>append</code> au lieu de <code>push</code> pour ajouter à la fin ;</li>
-<li>et le bonus Python : <strong>les indices négatifs</strong>. <code>courses[-1]</code> = le dernier élément, <code>courses[-2]</code> = l'avant-dernier. Fini le <code>courses[courses.length - 1]</code> !</li>
+<li>Indices à partir de 0 — et <strong>indices négatifs</strong> pour compter depuis la fin.</li>
+<li>Un indice hors liste arrête le programme avec un message clair.</li>
+<li><code>b = a</code> ne copie pas : <code>a[:]</code> si.</li>
+<li><code>append</code> modifie la liste et ne rend rien.</li>
 </ul>
+</div>
 
-<h2>Parcourir une liste</h2>
-<p>La boucle <code>for</code> de Python parcourt directement les éléments — encore plus simple que <code>for...of</code> :</p>
-<pre class="bloc-code">for produit in courses:
-    print("À acheter :", produit)</pre>
-
-<h2>L'accumulateur, version Python</h2>
-<pre class="bloc-code">notes = [12, 15, 9, 18]
-total = 0
-for n in notes:
-    total = total + n
-print(total)   # 54</pre>
-<p>Le même schéma qu'en JavaScript : on part de 0, on ajoute à chaque tour. Ce motif revient partout.</p>
+<details class="plus-loin">
+<summary>Aller plus loin : la copie ne va qu'à un niveau</summary>
+<p><code>a[:]</code> duplique la liste, mais si elle contient d'autres listes, ce sont les <em>mêmes</em>. Modifier une sous-liste de la copie modifie l'originale. Pour une duplication complète, il faut <code>copy.deepcopy(a)</code>, du module <code>copy</code>. C'est exactement la même limite que le spread en JavaScript.</p>
+</details>
 `,
   exercices: [
     {
@@ -667,29 +847,60 @@ print(resultat)                 # None</pre>
   id: 'py-8',
   titre: 'Les dictionnaires',
   contenu: `
-<p>Le dictionnaire Python, c'est l'objet JavaScript : des paires clé → valeur pour décrire une chose. La syntaxe est quasi identique — seule différence visible, les guillemets obligatoires autour des clés :</p>
+<h2>Pourquoi ça existe</h2>
+<p>Une liste range des choses dans un ordre, et on les retrouve par leur rang. Mais beaucoup d'informations n'ont pas de rang : le nom, la ville et l'âge d'une personne ne forment pas une suite — ce sont des <strong>étiquettes</strong>.</p>
+<p>Le dictionnaire range par nom plutôt que par position. C'est l'objet JavaScript, et c'est l'une des structures les plus utilisées de Python.</p>
+
+<h2>Créer et lire</h2>
 <pre class="bloc-code">contact = {
     "nom": "Nadia Benali",
     "ville": "Lyon",
     "age": 32
 }
 
-print(contact["ville"])       # Lyon — accès par crochets
-contact["email"] = "n@mail.fr"  # ajout d'une nouvelle clé
-contact["age"] = 33             # modification
-print(len(contact))             # 4 — len marche aussi ici !</pre>
+print(contact["nom"])          # Nadia Benali
+contact["age"] = 33            # modifier
+contact["mail"] = "n@ex.fr"    # ajouter</pre>
+<p>Seule différence visible avec JavaScript : les <strong>guillemets autour des clés sont obligatoires</strong>, à l'écriture comme à la lecture. Et on lit avec des crochets, jamais avec un point.</p>
 
-<h2>Attention à la clé inconnue</h2>
-<p>Demander une clé qui n'existe pas provoque une erreur nette : <code>KeyError</code>. C'est différent de JavaScript, qui répondait <code>undefined</code> sans broncher. Python préfère t'arrêter tout de suite — tu sauras exactement où est le problème.</p>
+<h2>Pas à pas : la clé absente</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Si la clé n'existe pas</th></tr>
+<tr><td><code>contact["ville"]</code></td><td><strong>le programme s'arrête</strong></td></tr>
+<tr><td><code>contact.get("ville")</code></td><td><code>None</code>, sans erreur</td></tr>
+<tr><td><code>contact.get("ville", "inconnue")</code></td><td>« inconnue »</td></tr>
+</table>
+<p>Mesuré, le message de la première ligne : <em>« cette clé n'existe pas dans le dictionnaire. Vérifie l'orthographe de la clé. »</em></p>
+<p>C'est une différence importante avec JavaScript, qui rend <code>undefined</code> sans rien dire. Python préfère s'arrêter — et <code>.get()</code> est là pour les cas où l'absence est normale.</p>
 
-<h2>Parcourir un dictionnaire</h2>
+<h2>Parcourir</h2>
 <pre class="bloc-code">for cle in contact:
-    print(cle, ":", contact[cle])
-# nom : Nadia Benali
-# ville : Lyon
-# ...</pre>
+    print(cle, ":", contact[cle])</pre>
+<p>Une boucle sur un dictionnaire donne ses <strong>clés</strong>. Pour les valeurs, <code>contact.values()</code> ; pour les deux à la fois, <code>contact.items()</code> — que tu verras au module suivant.</p>
+<p>Et <code>"ville" in contact</code> répond par <code>True</code> ou <code>False</code> : c'est le test à écrire avant d'aller chercher une clé incertaine.</p>
 
-<div class="info"><div>Liste ou dictionnaire ? Même règle qu'en JavaScript : une <strong>collection</strong> d'éléments semblables → liste. La <strong>description</strong> d'une chose avec ses caractéristiques → dictionnaire. Et le vrai monde combine les deux : une liste de dictionnaires, c'est un carnet de contacts.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Lire une clé avec un point.</strong> <code>contact.nom</code> ne fonctionne pas en Python — c'est <code>contact["nom"]</code>. L'habitude venue de JavaScript est tenace.</p>
+<p><strong>Oublier les guillemets autour d'une clé.</strong> <code>contact[nom]</code> cherche une <em>variable</em> nommée <code>nom</code>, et donne <em>« le nom « nom » est inconnu »</em>.</p>
+<p><strong>Supposer qu'une clé existe.</strong> Dès que la donnée vient d'ailleurs — un fichier, une saisie — il faut <code>.get()</code> ou un test <code>in</code>.</p>
+<p><strong>Croire que l'ordre est garanti.</strong> Depuis Python 3.7 l'ordre d'insertion est conservé, mais s'appuyer dessus reste une mauvaise idée : si l'ordre compte, c'est une liste qu'il faut.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Une liste de dictionnaires est <em>la</em> structure de données la plus courante de Python : chaque élément est une fiche, chaque fiche a les mêmes clés. C'est la forme sous laquelle arrivent les données d'un fichier, d'une base, ou d'un service distant.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Un dictionnaire range par clé, pas par position : <code>{"cle": valeur}</code>.</li>
+<li>Guillemets obligatoires autour des clés, et des crochets pour lire — jamais un point.</li>
+<li>Une clé absente <strong>arrête</strong> le programme ; <code>.get()</code> rend <code>None</code> à la place.</li>
+<li><code>"cle" in dictionnaire</code> teste la présence.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ce qui peut servir de clé</summary>
+<p>Pas n'importe quoi : une clé doit être une valeur qui ne change jamais — un texte, un nombre, un tuple. Une liste est refusée, parce qu'elle pourrait être modifiée après coup et que le dictionnaire ne saurait plus où la ranger. C'est l'une des raisons d'être des tuples, que tu rencontreras au dernier module.</p>
+</details>
 `,
   exercices: [
     {
@@ -752,22 +963,65 @@ print(len(contact))             # 4 — len marche aussi ici !</pre>
   id: 'py-9',
   titre: 'Mini-projet : l\'analyseur de notes',
   contenu: `
-<p>Dernier exercice du module : un vrai petit programme qui combine tout — liste, boucle, condition, calcul. C'est exactement le genre de script qu'on écrit en Python dans la vraie vie (analyser des ventes, des mesures, des résultats…).</p>
+<h2>Pourquoi ça existe</h2>
+<p>Dernière leçon du module, et la première occasion d'assembler tout : une liste, une boucle, une condition, un calcul. C'est exactement le genre de script qu'on écrit en Python dans la vraie vie — analyser des ventes, des mesures, des résultats.</p>
+<p>Un programme utile est rarement une idée nouvelle. C'est presque toujours quatre outils simples, posés dans le bon ordre.</p>
 
 <h2>La mission</h2>
-<p>Un professeur a saisi les notes de sa classe :</p>
-<pre class="bloc-code">notes = [12, 15, 9, 18]</pre>
-<p>Ton programme va calculer, en trois étapes : la <strong>moyenne</strong>, la <strong>meilleure note</strong>, et le <strong>nombre d'élèves reçus</strong> (note ≥ 10).</p>
+<p>À partir d'une liste de notes, produire : la moyenne, la meilleure, la plus basse, et le nombre d'élèves au-dessus de la moyenne.</p>
+<pre class="bloc-code">notes = [12, 15, 8, 17, 10, 13]
 
-<h2>Les outils dont tu disposes</h2>
+total = 0
+for n in notes:
+    total += n
+
+moyenne = total / len(notes)
+print("Moyenne :", moyenne)
+print("Meilleure :", max(notes))
+print("Plus basse :", min(notes))</pre>
+<p><code>max</code>, <code>min</code>, <code>len</code> et <code>sum</code> sont fournis par Python : <code>sum(notes)</code> remplace à lui seul la boucle d'accumulation ci-dessus. Écrire la boucle d'abord, puis découvrir qu'une fonction existe, est une bonne façon d'apprendre — on comprend ce que la fonction fait.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qu'on obtient</th></tr>
+<tr><td><code>total = 0</code></td><td>l'accumulateur, avant la boucle</td></tr>
+<tr><td>la boucle</td><td>total vaut 75 après six tours</td></tr>
+<tr><td><code>total / len(notes)</code></td><td>12.5 — un décimal, puisque <code>/</code> en donne toujours un</td></tr>
+<tr><td>compter au-dessus</td><td>une seconde boucle, avec un <code>if</code> et un compteur</td></tr>
+</table>
+
+<h2>La méthode, plus que le code</h2>
+<p>Un programme de ce genre ne s'écrit pas d'un trait. On procède par petits morceaux vérifiables :</p>
+<ol>
+<li>afficher la liste, pour être sûr de l'avoir ;</li>
+<li>calculer le total, et l'afficher ;</li>
+<li>en tirer la moyenne, et l'afficher ;</li>
+<li>ajouter le comptage.</li>
+</ol>
+<p>À chaque étape, on exécute. Un bug trouvé tout de suite coûte une minute ; le même bug trouvé après quarante lignes en coûte vingt.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Diviser par zéro sur une liste vide.</strong> <code>total / len(notes)</code> s'arrête avec <em>« division par zéro impossible »</em> si la liste est vide. Un programme sérieux teste <code>if notes:</code> avant.</p>
+<p><strong>Déclarer le compteur dans la boucle.</strong> Toujours le même piège : il repart de zéro à chaque tour.</p>
+<p><strong>Comparer dans la mauvaise boucle.</strong> Compter les notes au-dessus de la moyenne demande de connaître la moyenne — donc d'avoir fini la première boucle. Deux boucles successives, pas une seule.</p>
+<p><strong>Afficher un décimal interminable.</strong> Une moyenne peut donner 12.333333333333334. <code>round(moyenne, 2)</code> arrondit à deux décimales pour l'affichage.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Remplace « notes » par des ventes, des températures ou des temps de réponse, et tu as le script que des milliers de gens écrivent chaque jour — souvent sans se considérer comme programmeurs. C'est l'usage le plus répandu de Python, bien avant l'intelligence artificielle.</p>
+
+<div class="a-retenir">
 <ul>
-<li>l'accumulateur (vu en py-6) pour totaliser ;</li>
-<li><code>len(notes)</code> pour compter les élèves ;</li>
-<li>une variable « record » qu'on met à jour dans une boucle avec un <code>if</code> ;</li>
-<li>un compteur qu'on incrémente sous condition.</li>
+<li><code>sum</code>, <code>len</code>, <code>max</code> et <code>min</code> évitent d'écrire une boucle à la main.</li>
+<li>Deux calculs qui dépendent l'un de l'autre demandent deux boucles successives.</li>
+<li>Une liste vide fait diviser par zéro : teste <code>if notes:</code> avant.</li>
+<li>On construit par petits morceaux, en exécutant à chaque étape.</li>
 </ul>
+</div>
 
-<div class="astuce"><div>Python a des fonctions toutes prêtes pour certaines de ces missions (<code>sum()</code>, <code>max()</code>)… mais l'exercice te demande de les construire toi-même : c'est en fabriquant l'outil une fois qu'on comprend ce qu'il fait. Après, tu auras le droit aux raccourcis pour toujours.</div></div>
+<details class="plus-loin">
+<summary>Aller plus loin : la même chose en une ligne</summary>
+<p>Compter les notes au-dessus de la moyenne s'écrit aussi <code>sum(1 for n in notes if n &gt; moyenne)</code>. C'est concis, et c'est une écriture que tu comprendras pleinement après la leçon sur les listes en compréhension. Retiens l'ordre d'apprentissage : la boucle explicite d'abord, parce qu'elle montre ce qui se passe ; la forme courte ensuite, quand on sait déjà ce qu'elle remplace.</p>
+</details>
 `,
   exercices: [
     {

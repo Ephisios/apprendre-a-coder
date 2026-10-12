@@ -165,10 +165,10 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 367 copies sabotées présentées    — 367 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
 247 vérifications d'interface     — 0 échec (aide, éditeur, projets, a11y, câblage, repérage)
-147 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
+151 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
  19 vérifications au navigateur   — 0 échec (Worker, minuteurs, contraste, focus, souris)
 434 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
- 90 leçons au gabarit             — 0 à qui il manque une partie
+ 98 leçons au gabarit             — 0 à qui il manque une partie
  70 QCM                           — 0 sans explication, 0 mauvaise réponse sans aide
 ```
 

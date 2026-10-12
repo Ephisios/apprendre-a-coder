@@ -6,6 +6,60 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.13.0 — 2026-10-12
+
+Le premier module Python passe au gabarit — et la mesure préalable a mis au jour deux messages
+d'erreur qui envoyaient l'élève chercher au mauvais endroit, précisément dans les leçons qui
+enseignent ces cas-là.
+
+### Changé
+
+- **Les 8 leçons restantes du module Python passent au gabarit.** De 111-190 mots à **409-485**.
+  Aucun exercice n'a été touché.
+
+### Corrigé — deux erreurs expliquées de travers
+
+`traduirePython` attrapait `TypeError` en bloc et répondait toujours : *« tu mélanges deux types
+incompatibles — souvent du texte et un nombre »*. Mesuré dans le moteur du cours, ce message est
+**faux** dans deux cas que le cours enseigne :
+
+| Le code de l'élève | L'erreur réelle | Ce qu'il lisait |
+|---|---|---|
+| `p = (3, 4)` puis `p[0] = 9` | un tuple ne se modifie pas | « tu mélanges texte et nombre » |
+| `def crier():` sans `self` | le compte d'arguments | « tu mélanges texte et nombre » |
+
+Le premier est le cœur de `py-20`, le second l'erreur la plus fréquente de `py-16`. Deux cas
+précis passent maintenant **avant** le cas général, qui reste le repli :
+
+- *« cette valeur ne se modifie pas une fois créée — c'est le cas d'un tuple et d'un texte. »*
+- *« le nombre d'arguments ne correspond pas… Dans une classe, la cause la plus fréquente est un
+  « self » oublié en premier paramètre. »*
+
+Les deux fautes entrent au harnais des moteurs, qui en compte désormais **151**. Éprouvées en
+neutralisant la correction : deux échecs.
+
+### Ce que la mesure a établi
+
+Tous les messages cités dans ces leçons ont été relevés dans le moteur du cours, en français :
+
+- l'indentation oubliée et l'indentation en trop donnent des conseils **opposés** — les leçons le
+  disent, pour qu'on lise lequel arrive ;
+- `7 / 2` donne `3.5`, `7 // 2` donne `3`, `2 ** 10` donne `1024` ;
+- `range(1, 6)` produit 1 à 5 : la borne de fin est **exclue** ;
+- `b = a` partage la liste (`[1, 2, 3]` des deux côtés), `a[:]` la copie vraiment ;
+- une clé absente **arrête** le programme, là où JavaScript rendrait `undefined` en silence.
+
+> Une divergence relevée au passage : dans ce moteur, `0.1 + 0.2` affiche `0.3`, là où le vrai
+> Python affiche `0.30000000000000004`. Les leçons Python n'enseignent donc pas ce point comme le
+> fait `jsav-3` côté JavaScript — on ne montre pas à l'élève ce que son interpréteur ne fera pas.
+
+### Où en est la conversion
+
+**98 leçons sur 168**, contre 90. Six pistes complètes : HTML, CSS, les trois modules JavaScript
+et le premier module Python. Reste Python 2 et 3 (17), SQL (17), C (14), Java (13), les projets.
+
+---
+
 ## 3.12.0 — 2026-10-09
 
 **Tout JavaScript est au gabarit** : les 40 leçons des trois modules, de la première ligne de

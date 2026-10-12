@@ -1363,6 +1363,15 @@ function traduirePython(message, code) {
   if (/KeyError/i.test(m)) return 'cette clé n\'existe pas dans le dictionnaire. Vérifie l\'orthographe de la clé — ' + m;
   if (/IndexError|index out of range/i.test(m)) return 'tu demandes un élément qui n\'existe pas dans la liste. Rappel : le premier est à l\'indice 0, donc une liste de 3 éléments va de 0 à 2.';
   if (/division by zero|ZeroDivisionError/i.test(m)) return 'division par zéro impossible.';
+  // Deux TypeError que le cas général expliquait de travers : il annonçait
+  // un mélange texte/nombre là où il s'agit d'autre chose. Ils arrivent
+  // précisément dans les leçons qui enseignent les tuples et les classes.
+  if (/does not support item assignment/i.test(m)) {
+    return 'cette valeur ne se modifie pas une fois créée — c\'est le cas d\'un tuple et d\'un texte. Pour la changer, il faut en fabriquer une nouvelle. (' + m + ')';
+  }
+  if (/takes \d+ positional argument/i.test(m)) {
+    return 'le nombre d\'arguments ne correspond pas à ce que la fonction attend. Dans une classe, la cause la plus fréquente est un « self » oublié en premier paramètre de la méthode. (' + m + ')';
+  }
   if (/unsupported operand|cannot concatenate|TypeError/i.test(m)) return 'tu mélanges deux types incompatibles — souvent du texte et un nombre. Python refuse « 3 + "3" » : convertis avec str(...) ou int(...). (' + m + ')';
   if (/execution time|timed out|TimeLimit/i.test(m)) return 'ton code tourne sans s\'arrêter (boucle infinie ?). Vérifie que la condition de ta boucle finit par devenir fausse.';
   return m;

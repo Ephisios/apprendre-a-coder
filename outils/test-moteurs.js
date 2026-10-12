@@ -353,7 +353,13 @@ if (!Sk) {
     ['un indice hors de la liste', 't = [1, 2, 3]\nprint(t[9])', /premier est à l'indice 0/],
     ['une division par zéro', 'print(1 / 0)', /division par zéro/],
     ['du texte ajouté à un nombre', 'print(3 + "3")', /types incompatibles/],
-    ['une boucle sans fin', 'while True:\n    pass', /sans s'arrêter/]
+    ['une boucle sans fin', 'while True:\n    pass', /sans s'arrêter/],
+    /* Ces deux-là sont des TypeError, et le cas général les expliquait de
+       travers : il annonçait un mélange texte/nombre. Or ils arrivent dans
+       les leçons qui enseignent justement les tuples et les classes, où ce
+       conseil envoie chercher au mauvais endroit. */
+    ['un tuple qu\'on modifie', 'p = (3, 4)\np[0] = 9', /ne se modifie pas une fois créée/],
+    ['un self oublié dans une méthode', 'class C:\n    def crier():\n        return 1\nC().crier()', /« self » oublié/]
   ];
 
   let restesEnAnglais = 0;
