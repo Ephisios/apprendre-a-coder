@@ -6,6 +6,54 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.17.0 — 2026-10-12
+
+Le module Java passe au gabarit. **Les sept langages du cours y sont désormais** : HTML, CSS,
+JavaScript, Python, SQL, C et Java — 159 leçons sur 168.
+
+### Changé
+
+- **Les 13 leçons restantes du module Java passent au gabarit.** De 84-219 mots à **406-480**.
+  Aucun exercice n'a été touché.
+
+### Deux divergences dites à l'élève plutôt que corrigées
+
+Le moteur a été mesuré en mode Java avant l'écriture. Deux écarts avec un vrai compilateur touchent
+le cœur d'une leçon — et, contrairement aux quatre défauts corrigés dans les versions précédentes,
+les combler demanderait une refonte, pas un correctif.
+
+| Ce que fait le moteur | Ce que fait un vrai Java | La leçon concernée |
+|---|---|---|
+| `a == b` sur deux textes rend `true` | rend `false` | `j-8` |
+| `c.solde = -999` sur un champ `private` passe | refus à la compilation | `j-11` |
+
+Le second est le plus gênant : `j-11` présente justement cette ligne comme celle que `private`
+empêche. Les modificateurs sont lus puis **jetés** par le parseur ; les appliquer supposerait de les
+retenir *et* de connaître le contexte d'appel à chaque accès.
+
+> Les deux leçons le disent donc franchement, dans un encart : voilà ce que fait un vrai
+> compilateur, et voilà ce que cet éditeur ne fait pas encore. Un élève qui teste ne tirera pas la
+> mauvaise conclusion — et il écrira le code juste partout ailleurs.
+
+### Ce que la mesure a établi
+
+- `t.length` rend bien la taille, et `new int[3]` donne trois zéros ;
+- sortir des bornes est **signalé**, comme en vrai Java et contrairement au C ;
+- `substring(0, 7)` rend « Bonjour » : début inclus, fin exclue ;
+- héritage et `super` fonctionnent — `Rex Ouaf` ;
+- encapsulation : `deposer(100)` puis `deposer(-5)` laisse bien le solde à **100**, la vérification
+  dans la méthode faisant son travail.
+
+### Où en est la conversion
+
+**159 leçons sur 168**, contre 146. La médiane du cours atteint **464 mots**, contre 155 au départ
+de cette campagne, pour un total de **79 259 mots de cours**.
+
+Reste 9 leçons, et aucune n'est un langage : les 4 projets, les 3 de « Bienvenue » et les 2 de la
+conclusion.
+
+---
+
 ## 3.16.0 — 2026-10-12
 
 Le module C passe au gabarit. La mesure préalable a trouvé le quatrième défaut moteur de cette
