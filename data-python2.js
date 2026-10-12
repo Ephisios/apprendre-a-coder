@@ -6,29 +6,60 @@ window.DATA_PYTHON2 = [
   id: 'py-10',
   titre: 'Le texte en profondeur',
   contenu: `
+<h2>Pourquoi ça existe</h2>
+<p>Les données qu'on reçoit ne sont jamais propres : un pseudo tapé avec des espaces au début, une ligne de fichier séparée par des virgules, un nom saisi tantôt en majuscules tantôt en minuscules. Avant de s'en servir, il faut les nettoyer.</p>
 <p>En Python, le texte n'est pas une matière inerte : il vient avec une boîte à outils. On appelle ces outils des <strong>méthodes</strong> — des fonctions attachées à la valeur, qu'on appelle avec un point.</p>
 
-<pre class="bloc-code">phrase = "  Bonjour Le Monde  "
+<h2>La trousse</h2>
+<pre class="bloc-code">p = "  Bonjour Le Monde  "
 
-print(phrase.strip())          # enlève les espaces au début et à la fin
-print(phrase.lower())          # tout en minuscules
-print(phrase.upper())          # TOUT EN MAJUSCULES
-print(phrase.replace("Monde", "Python"))
-print(len(phrase))             # la longueur (fonction, pas méthode)</pre>
+p.strip()                      # "Bonjour Le Monde"
+p.strip().lower()              # "bonjour le monde"
+p.strip().split(" ")           # ['Bonjour', 'Le', 'Monde']
+p.strip().replace("Monde", "Tous")   # "Bonjour Le Tous"</pre>
+<p>Tous mesurés. Remarque l'<strong>enchaînement</strong> : chaque méthode rend un texte, sur lequel on peut aussitôt en appeler une autre. On lit de gauche à droite, dans l'ordre des opérations.</p>
+<p>Les autres à connaître : <code>upper()</code>, <code>startswith("Bon")</code>, <code>endswith(".txt")</code>, <code>count("o")</code>, <code>find("Le")</code> et <code>join</code>, qui fait l'inverse de <code>split</code>.</p>
 
-<h2>Découper et recoller</h2>
-<pre class="bloc-code">mots = "pain,lait,café".split(",")
-print(mots)                    # ['pain', 'lait', 'café']
+<h2>Pas à pas : le nettoyage d'une saisie</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Valeur</th></tr>
+<tr><td>ce que l'utilisateur tape</td><td><code>"  NaDiA  "</code></td></tr>
+<tr><td><code>.strip()</code></td><td><code>"NaDiA"</code></td></tr>
+<tr><td><code>.lower()</code></td><td><code>"nadia"</code></td></tr>
+<tr><td>comparaison</td><td>elle peut enfin réussir</td></tr>
+</table>
+<p>C'est le réflexe à prendre : avant de comparer deux saisies, on les met dans la même forme. Sans cela, « Nadia » et « nadia » sont deux textes différents.</p>
 
-print("-".join(["a", "b", "c"]))   # a-b-c</pre>
-<p><code>split</code> transforme un texte en liste, <code>join</code> fait l'inverse. Ce duo sert en permanence : lire un fichier CSV, découper une phrase en mots, reconstruire une adresse.</p>
+<h2>Le point à ne jamais oublier</h2>
+<pre class="bloc-code">p = "  Bonjour  "
+p.strip()        # ne change PAS p
+print(p)         # "  Bonjour  " — toujours avec ses espaces
 
-<h2>Chercher dedans</h2>
-<pre class="bloc-code">print("Bonjour".startswith("Bon"))   # True
-print("photo.jpg".endswith(".jpg"))  # True
-print("café" in "j'aime le café")    # True — le mot-clé in marche aussi sur du texte</pre>
+p = p.strip()    # la bonne facon</pre>
+<p>En Python, <strong>un texte ne se modifie jamais</strong>. Une méthode ne transforme pas la valeur : elle en rend une nouvelle. Si tu veux la garder, il faut la ranger.</p>
 
-<div class="attention"><div>Une méthode ne modifie <strong>jamais</strong> le texte d'origine : elle en renvoie un nouveau. <code>phrase.upper()</code> seul ne sert à rien — il faut <code>phrase = phrase.upper()</code> ou utiliser directement le résultat.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Croire qu'une méthode modifie le texte.</strong> C'est le piège central, et son symptôme est trompeur : le programme tourne, et rien n'a changé.</p>
+<p><strong>Oublier les parenthèses.</strong> <code>p.strip</code> sans parenthèses ne fait rien — on désigne la méthode au lieu de l'appeler. Aucune erreur n'est levée.</p>
+<p><strong>Vouloir modifier un caractère.</strong> <code>p[0] = "z"</code> est refusé, et le cours l'explique : <em>« cette valeur ne se modifie pas une fois créée — c'est le cas d'un tuple et d'un texte. Pour la changer, il faut en fabriquer une nouvelle. »</em></p>
+<p><strong>Confondre <code>split()</code> et <code>split(" ")</code>.</strong> Sans argument, <code>split()</code> découpe sur toutes les espaces et ignore les répétitions — bien plus robuste sur du texte réel que de préciser une seule espace.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Lire un fichier ligne par ligne, découper chaque ligne aux virgules, nettoyer chaque morceau : c'est la première moitié de la plupart des scripts Python du monde. Le traitement proprement dit vient après — et il est souvent plus court.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Les méthodes de texte s'appellent avec un point et des parenthèses.</li>
+<li>Un texte ne se modifie jamais : il faut ranger le résultat.</li>
+<li><code>split</code> transforme un texte en liste, <code>join</code> fait l'inverse.</li>
+<li>Avant de comparer des saisies : <code>strip()</code> puis <code>lower()</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi les textes sont figés</summary>
+<p>Un texte qui ne change jamais peut être partagé sans risque entre plusieurs endroits du programme, et servir de clé de dictionnaire — ce qu'une liste ne peut pas faire, justement parce qu'elle est modifiable. C'est le même raisonnement que pour les tuples, que tu verras au module suivant. L'immuabilité n'est pas une contrainte : c'est ce qui rend certaines garanties possibles.</p>
+</details>
 `,
   exercices: [
     {
@@ -95,31 +126,60 @@ print("café" in "j'aime le café")    # True — le mot-clé in marche aussi su
   id: 'py-11',
   titre: 'Les f-strings : afficher proprement',
   contenu: `
-<p>Assembler du texte et des variables avec des virgules fonctionne, mais devient vite pénible. Python offre une écriture bien plus lisible : la <strong>f-string</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Assembler du texte et des variables avec des virgules fonctionne, mais devient vite pénible : on ne contrôle pas les espaces, on ne peut pas formater un nombre, et la ligne devient illisible dès qu'il y a trois valeurs.</p>
+<p>Python offre pour cela une écriture dédiée, et c'est l'une des plus appréciées du langage : la <strong>f-string</strong>.</p>
 
+<h2>L'écriture</h2>
 <pre class="bloc-code">prenom = "Nadia"
 age = 32
 
-# L'ancienne façon
+# l'ancienne facon
 print("Je m'appelle", prenom, "et j'ai", age, "ans")
 
-# La f-string : un f devant les guillemets, les variables entre accolades
+# avec une f-string
 print(f"Je m'appelle {prenom} et j'ai {age} ans")</pre>
+<p>Un <code>f</code> collé devant le guillemet ouvrant, et tout ce qui est entre accolades est remplacé par sa valeur. Le texte se lit comme une phrase, espaces compris.</p>
+<p>Si tu connais les gabarits de chaîne de JavaScript, c'est exactement la même idée — en plus court à écrire. Les guillemets restent ceux de Python, simples ou doubles au choix : il n'y a pas de caractère spécial à aller chercher au clavier, ce qui explique en partie pourquoi l'écriture s'est imposée si vite.</p>
 
-<p>Le <code>f</code> avant le guillemet ouvrant est indispensable. Sans lui, Python affiche littéralement les accolades.</p>
+<h2>Le formatage, qui fait toute la différence</h2>
+<pre class="bloc-code">print(f"{3.14159:.2f}")   # 3.14   deux decimales
+print(f"{42:04d}")        # 0042   complete avec des zeros
+print(f"{'Alex':&gt;8}|")    # "    Alex|"   aligne a droite sur 8
+print(f"{2 + 3}")         # 5      un calcul, pas seulement un nom</pre>
+<p>Tous mesurés. Un deux-points dans les accolades ouvre les instructions de mise en forme — c'est ce qui permet d'aligner une colonne de prix ou d'afficher une moyenne sans quinze décimales.</p>
 
-<h2>On peut calculer dans les accolades</h2>
-<pre class="bloc-code">prix = 19.99
-quantite = 3
-print(f"Total : {prix * quantite} €")</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'on écrit</th><th>Ce qui s'affiche</th></tr>
+<tr><td><code>"Bonjour {prenom}"</code> (sans le f)</td><td><strong>Bonjour {prenom}</strong> — littéralement</td></tr>
+<tr><td><code>f"Bonjour {prenom}"</code></td><td>Bonjour Nadia</td></tr>
+<tr><td><code>f"Total : {prix * 1.2:.2f} euros"</code></td><td>Total : 14.40 euros</td></tr>
+</table>
+<p>La première ligne est le piège : sans le <code>f</code>, rien n'est remplacé, et aucune erreur n'est levée.</p>
 
-<h2>Contrôler les décimales</h2>
-<p>Un calcul donne souvent une avalanche de décimales. On les limite avec <code>:.2f</code> (deux chiffres après la virgule) :</p>
-<pre class="bloc-code">moyenne = 13.666666666
-print(f"Moyenne : {moyenne:.2f}")     # Moyenne : 13.67</pre>
-<p><code>.1f</code> pour une décimale, <code>.0f</code> pour aucune. Python arrondit correctement au passage.</p>
+<h2>Les pièges</h2>
+<p><strong>Oublier le <code>f</code>.</strong> Si tu vois des accolades s'afficher à l'écran, c'est ça. Le symptôme est reconnaissable au premier coup d'œil.</p>
+<p><strong>Mélanger les guillemets.</strong> <code>f"{d["nom"]}"</code> casse : les guillemets doubles à l'intérieur ferment la chaîne. On alterne — <code>f"{d['nom']}"</code>.</p>
+<p><strong>Écrire une accolade littérale.</strong> Pour afficher une accolade, il faut la doubler : <code>f"{{ceci}}"</code> affiche <code>{ceci}</code>.</p>
+<p><strong>Trop en mettre.</strong> Une f-string qui contient trois calculs devient illisible. Calcule avant, affiche après : la ligne de résultat doit se lire comme la phrase qu'elle produit.</p>
 
-<div class="astuce"><div>Si tu as vu du vieux code Python avec des <code>%s</code> ou des <code>.format()</code>, sache que les f-strings les remplacent avantageusement depuis Python 3.6. C'est aujourd'hui la façon normale d'écrire.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>Les f-strings sont arrivées en 2016 et ont remplacé en quelques années trois écritures plus anciennes qu'on croise encore dans du vieux code — <code>%</code>, <code>.format()</code> et la concaténation. Si tu en rencontres, sache qu'elles font la même chose en moins clair.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Un <code>f</code> devant le guillemet, et <code>{variable}</code> dans le texte.</li>
+<li>Sans le <code>f</code>, les accolades s'affichent telles quelles, sans erreur.</li>
+<li>Un deux-points ouvre le formatage : <code>:.2f</code> pour deux décimales, <code>:04d</code> pour des zéros.</li>
+<li>On peut y mettre un calcul, pas seulement un nom de variable.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : afficher le nom et la valeur</summary>
+<p>Un signe égal à la fin des accolades affiche les deux : <code>f"{age=}"</code> donne <code>age=32</code>. C'est une commodité pensée pour le débogage — plus besoin d'écrire <code>print("age :", age)</code> à la main, et le nom affiché reste exact même si on renomme la variable.</p>
+</details>
 `,
   exercices: [
     {
@@ -187,32 +247,57 @@ print(f"Moyenne : {moyenne:.2f}")     # Moyenne : 13.67</pre>
   id: 'py-12',
   titre: 'Les listes en compréhension',
   contenu: `
-<p>Voici une écriture typiquement Python, qu'on ne trouve pas en JavaScript sous cette forme. Elle condense en une ligne ce qui prenait quatre lignes de boucle.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un motif revient sans arrêt : partir d'une liste, en construire une autre — transformée, ou filtrée. Écrit avec une boucle, cela prend quatre lignes dont trois sont de la mécanique.</p>
+<pre class="bloc-code">carres = []
+for n in nombres:
+    carres.append(n * n)</pre>
+<p>Python propose une écriture qui dit la même chose en une ligne, et qui est <em>la</em> marque du langage : la <strong>compréhension de liste</strong>.</p>
 
-<h2>Le problème</h2>
+<h2>L'écriture</h2>
 <pre class="bloc-code">nombres = [1, 2, 3, 4, 5]
 
-# La façon classique
-carres = []
-for n in nombres:
-    carres.append(n * n)
-print(carres)      # [1, 4, 9, 16, 25]</pre>
+print([x * x for x in nombres])              # [1, 4, 9, 16, 25]
+print([x for x in nombres if x % 2 == 0])    # [2, 4]</pre>
+<p>Mesuré. La structure se lit dans cet ordre : <strong>ce qu'on produit</strong>, puis <strong>d'où ça vient</strong>, puis éventuellement <strong>à quelle condition</strong>.</p>
+<p>C'est l'inverse de l'ordre d'écriture d'une boucle, et c'est déroutant au début. Une fois l'habitude prise, on lit la ligne comme une phrase : « les carrés de chaque nombre », « les nombres pairs ».</p>
 
-<h2>La compréhension de liste</h2>
-<pre class="bloc-code">carres = [n * n for n in nombres]</pre>
-<p>Lis-la de droite à gauche : « pour chaque <code>n</code> dans <code>nombres</code> » … « prends <code>n * n</code> ». Le résultat est directement une nouvelle liste.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Morceau</th><th>Rôle</th></tr>
+<tr><td><code>[</code></td><td>on fabrique une liste</td></tr>
+<tr><td><code>x * x</code></td><td>ce qu'on met dedans, à chaque tour</td></tr>
+<tr><td><code>for x in nombres</code></td><td>sur quoi on tourne</td></tr>
+<tr><td><code>if x % 2 == 0</code></td><td>on ne garde que ceux-là</td></tr>
+</table>
+<p>Les deux rôles se combinent : <code>[x * x for x in nombres if x % 2 == 0]</code> transforme <em>et</em> filtre.</p>
 
-<h2>Avec un filtre</h2>
-<pre class="bloc-code">pairs = [n for n in nombres if n % 2 == 0]
-print(pairs)       # [2, 4]</pre>
-<p>Le <code>if</code> à la fin ne garde que les éléments qui remplissent la condition. C'est l'équivalent du <code>filter</code> que tu as vu en JavaScript.</p>
+<h2>Pas seulement pour les listes</h2>
+<pre class="bloc-code">print({x: x * x for x in [1, 2, 3]})   # {1: 1, 2: 4, 3: 9}</pre>
+<p>Mesuré aussi. Avec des accolades et un <code>cle: valeur</code>, on construit un dictionnaire. Même principe, même lecture.</p>
 
-<h2>Et sur du texte</h2>
-<pre class="bloc-code">mots = ["pain", "lait", "café"]
-majuscules = [m.upper() for m in mots]
-courts = [m for m in mots if len(m) <= 4]</pre>
+<h2>Les pièges</h2>
+<p><strong>En faire trop.</strong> C'est le vrai danger de cette écriture. Deux <code>for</code> imbriqués, un <code>if</code> et un calcul dans la même ligne donnent quelque chose que personne ne relit — toi compris, dans un mois. La règle de bon sens : si la ligne ne tient pas dans la largeur de l'écran, reviens à une boucle.</p>
+<p><strong>L'utiliser pour son effet de bord.</strong> <code>[print(x) for x in liste]</code> fonctionne, et construit une liste de <code>None</code> dont personne ne veut. Quand on ne garde pas le résultat, c'est une boucle qu'il faut.</p>
+<p><strong>Oublier que l'ordre n'est pas celui de la boucle.</strong> L'expression vient en premier, le <code>for</code> ensuite. L'erreur de débutant est d'écrire <code>[for x in n: x * x]</code>, que Python refuse avec une erreur de syntaxe.</p>
 
-<div class="attention"><div>La compréhension est élégante tant qu'elle tient sur une ligne lisible. Si tu dois y empiler deux conditions et un calcul compliqué, la bonne vieille boucle reste plus claire — et la clarté prime toujours sur la concision.</div></div>
+<h2>Dans la vraie vie</h2>
+<p>C'est sans doute l'écriture la plus caractéristique de Python : on la croise dans presque tous les programmes, et elle sert de marqueur — du code qui n'en contient aucune a souvent été écrit par quelqu'un qui vient d'un autre langage.</p>
+<p>Son usage le plus fréquent reste le plus simple : extraire un champ d'une liste de dictionnaires, <code>[c["nom"] for c in contacts]</code>.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>[expression for x in collection if condition]</code> — dans cet ordre.</li>
+<li>Elle transforme, filtre, ou les deux à la fois.</li>
+<li>Avec des accolades et <code>cle: valeur</code>, elle construit un dictionnaire.</li>
+<li>Si la ligne devient illisible, la boucle reste le bon choix.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la version qui ne construit rien</summary>
+<p>En remplaçant les crochets par des parenthèses, on obtient une <em>expression génératrice</em> : elle produit les valeurs une par une au lieu de fabriquer la liste entière. Sur un million d'éléments dont on veut seulement la somme, <code>sum(x * x for x in n)</code> n'occupe presque aucune mémoire, là où la version à crochets construirait d'abord un million de carrés. C'est la même idée que les générateurs du dernier module.</p>
+</details>
 `,
   exercices: [
     {
@@ -279,30 +364,59 @@ courts = [m for m in mots if len(m) <= 4]</pre>
   id: 'py-13',
   titre: 'Le hasard et les maths',
   contenu: `
-<p>Python est livré avec une immense bibliothèque de modules prêts à l'emploi. Pour en utiliser un, on l'<strong>importe</strong> en haut du fichier.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Python est livré avec une immense bibliothèque d'outils déjà écrits — des centaines de <strong>modules</strong>, pour le hasard, les mathématiques, les dates, les fichiers, le réseau. On dit souvent que Python arrive « piles incluses ».</p>
+<p>Rien n'est chargé d'office : on prend ce dont on a besoin, en l'<strong>important</strong> en haut du fichier.</p>
 
-<h2>random : le hasard</h2>
+<h2>Le hasard</h2>
 <pre class="bloc-code">import random
 
-de = random.randint(1, 6)          # un entier entre 1 et 6 INCLUS
-print(de)
+de = random.randint(1, 6)              # un entier entre 1 et 6 INCLUS
+couleur = random.choice(["rouge", "vert"])
+random.shuffle(ma_liste)               # melange sur place</pre>
+<p>Mesuré sur 300 lancers : le minimum obtenu est 1, le maximum 6. Note la différence avec JavaScript, où il fallait composer <code>Math.floor(Math.random() * 6) + 1</code> : ici, <strong>les deux bornes sont incluses</strong> et la fonction dit ce qu'elle fait.</p>
 
-couleur = random.choice(["rouge", "vert", "bleu"])   # un élément au hasard
-print(couleur)</pre>
-<p>Attention à la différence avec <code>range()</code> : ici, <strong>les deux bornes sont incluses</strong>. <code>randint(1, 6)</code> peut donner 6.</p>
-
-<h2>math : les outils de calcul</h2>
+<h2>Les mathématiques</h2>
 <pre class="bloc-code">import math
 
-print(math.sqrt(16))     # 4.0 — racine carrée
-print(math.floor(3.7))   # 3 — arrondi vers le bas
-print(math.ceil(3.2))    # 4 — arrondi vers le haut
-print(math.pi)           # 3.14159...</pre>
+math.sqrt(16)     # 4.0   — un decimal, toujours
+math.pi           # 3.141592653589793
+math.floor(4.7)   # 4
+math.ceil(4.2)    # 5
+round(3.14159, 2) # 3.14  — celui-la est integre, sans import</pre>
+<p>Tous mesurés. Attention à <code>sqrt</code> : il rend <code>4.0</code> et non <code>4</code>. Et <code>round</code> fait partie du langage — pas besoin d'importer quoi que ce soit.</p>
 
-<h2>La forme d'un import</h2>
-<p><code>import math</code> charge le module ; ensuite on écrit <code>math.sqrt(...)</code>, avec le nom du module devant. C'est ce point qui indique « cette fonction vient de là ».</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Ce qu'elle permet ensuite</th></tr>
+<tr><td><code>import random</code></td><td><code>random.randint(1, 6)</code> — le nom du module devant</td></tr>
+<tr><td><code>from random import randint</code></td><td><code>randint(1, 6)</code> — directement</td></tr>
+<tr><td><code>import random as r</code></td><td><code>r.randint(1, 6)</code> — sous un surnom</td></tr>
+</table>
+<p>La première forme est la plus sûre : en lisant <code>random.randint</code>, on sait d'où vient la fonction. La deuxième raccourcit, au prix de cette information.</p>
 
-<div class="info"><div>Cette bibliothèque intégrée s'appelle la « bibliothèque standard », et elle est célèbre pour son ampleur : dates, fichiers, réseau, compression, statistiques… La devise de Python est d'ailleurs « batteries included » — les piles sont fournies.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Se tromper de nom de module.</strong> <code>import maths</code> — avec un s — donne : <em>« le module « maths » est introuvable. Vérifie son orthographe — les modules les plus utilisés ici sont random, math et datetime. »</em> C'est <code>math</code>, au singulier.</p>
+<p><strong>Oublier le préfixe.</strong> Après <code>import random</code>, écrire <code>randint(1, 6)</code> donne <em>« le nom « randint » est inconnu »</em>. Le module est importé, mais ses fonctions restent à l'intérieur.</p>
+<p><strong>Croire que <code>randint</code> exclut la borne haute.</strong> Contrairement à <code>range</code>, qui exclut, <code>randint(1, 6)</code> <strong>inclut</strong> le 6. Deux conventions opposées dans le même langage, et c'est une source d'erreur réelle.</p>
+<p><strong>Importer dans une boucle.</strong> L'import se met en haut du fichier, une fois. Le répéter ne casse rien, mais signale qu'on n'a pas compris ce qu'il fait.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>La bibliothèque standard couvre les dates, les fichiers, le JSON, les expressions régulières, les archives. Et au-delà, un dépôt public de centaines de milliers de modules installables — c'est là que se trouvent les outils de calcul scientifique et d'apprentissage automatique qui ont fait la réputation de Python.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>import module</code> en haut du fichier, puis <code>module.fonction()</code>.</li>
+<li><code>random.randint(1, 6)</code> inclut les <strong>deux</strong> bornes — contrairement à <code>range</code>.</li>
+<li><code>math.sqrt</code> rend un décimal ; <code>round</code> n'a besoin d'aucun import.</li>
+<li>Un module mal orthographié est signalé clairement : vérifie le singulier.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : un hasard qui se répète</summary>
+<p><code>random.seed(42)</code> fixe le point de départ du générateur : la même suite de nombres « au hasard » sortira à chaque exécution. C'est indispensable pour tester un programme qui utilise le hasard — sans cela, un bug ne se reproduit jamais deux fois. Ce hasard-là est d'ailleurs calculé, donc prévisible : pour la cryptographie, il existe un autre module, <code>secrets</code>.</p>
+</details>
 `,
   exercices: [
     {
@@ -374,35 +488,62 @@ print(math.pi)           # 3.14159...</pre>
   id: 'py-14',
   titre: 'Dictionnaires avancés',
   contenu: `
-<p>Tu sais lire et écrire une clé. Voyons maintenant comment parcourir un dictionnaire et éviter ses pièges.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais lire et écrire une clé. Restent deux besoins constants : <strong>parcourir</strong> un dictionnaire, et <strong>ne pas planter</strong> sur une clé qui manque. Python a une réponse nette pour chacun.</p>
 
 <h2>Les trois façons de parcourir</h2>
-<pre class="bloc-code">stock = {"pommes": 12, "poires": 5, "cerises": 30}
+<pre class="bloc-code">stock = {"pommes": 12, "poires": 5}
 
-for cle in stock:                  # les clés
+for cle in stock:              # les cles
     print(cle)
 
-for valeur in stock.values():      # les valeurs
+for valeur in stock.values():  # les valeurs
     print(valeur)
 
-for cle, valeur in stock.items():  # LES DEUX à la fois
-    print(cle, ":", valeur)</pre>
-<p><code>.items()</code> est de loin la plus utile : elle donne la clé et la valeur en même temps, dans deux variables.</p>
+for cle, valeur in stock.items():   # les deux
+    print(cle, valeur)</pre>
+<p>Mesuré : la troisième affiche <code>pommes 12</code> puis <code>poires 5</code>. C'est la forme la plus utile, et de loin.</p>
+<p>Les deux noms entre le <code>for</code> et le <code>in</code> ne sont pas une syntaxe spéciale : <code>items()</code> rend des couples, et Python les <em>déballe</em> automatiquement en deux variables. Tu reverras ce mécanisme avec les tuples.</p>
 
-<h2>get() : lire sans risquer l'erreur</h2>
-<p>Tu te souviens que <code>stock["bananes"]</code> provoque un <code>KeyError</code> si la clé n'existe pas. <code>get()</code> répond gentiment à la place :</p>
-<pre class="bloc-code">print(stock.get("bananes"))         # None — pas d'erreur
-print(stock.get("bananes", 0))      # 0 — valeur par défaut au choix</pre>
+<h2>Éviter le plantage</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Si la clé manque</th></tr>
+<tr><td><code>stock["cerises"]</code></td><td>le programme <strong>s'arrête</strong></td></tr>
+<tr><td><code>stock.get("cerises")</code></td><td><code>None</code></td></tr>
+<tr><td><code>stock.get("cerises", 0)</code></td><td><code>0</code></td></tr>
+<tr><td><code>"cerises" in stock</code></td><td><code>False</code></td></tr>
+</table>
+<p>Tous mesurés. Le second argument de <code>.get()</code> est la valeur de repli — et c'est lui qui rend l'écriture vraiment pratique.</p>
 
-<h2>Le compteur : le motif à connaître</h2>
-<pre class="bloc-code">mots = ["chat", "chien", "chat", "oiseau", "chat"]
-compte = {}
+<h2>Le motif du comptage</h2>
+<pre class="bloc-code">compte = {}
+for mot in texte.split():
+    compte[mot] = compte.get(mot, 0) + 1</pre>
+<p>Trois lignes, et le motif le plus utile de toute la leçon. Il marche pour n'importe quoi : des mots, des notes, des erreurs dans un fichier journal, des votes. Dès qu'il s'agit de répondre à « combien de fois chacun ? », c'est cette ligne-là qu'on écrit.</p>
+<p> <code>get(mot, 0)</code> rend zéro la première fois qu'un mot apparaît, puis la valeur accumulée. Sans lui, il faudrait tester l'existence de la clé à chaque tour.</p>
 
-for mot in mots:
-    compte[mot] = compte.get(mot, 0) + 1
+<h2>Les pièges</h2>
+<p><strong>Oublier les parenthèses de <code>items()</code>.</strong> <code>stock.items</code> sans parenthèses désigne la méthode au lieu de l'appeler : la boucle part alors sur quelque chose d'inattendu.</p>
+<p><strong>Modifier le dictionnaire pendant qu'on le parcourt.</strong> Ajouter ou retirer une clé en cours de boucle fait échouer Python. Il faut parcourir une copie des clés : <code>for cle in list(stock):</code>.</p>
+<p><strong>Croire que <code>.get()</code> crée la clé.</strong> Il ne fait que lire : <code>stock.get("cerises", 0)</code> rend 0 sans rien ajouter au dictionnaire.</p>
+<p><strong>Confondre <code>in</code> sur un dictionnaire et sur une liste.</strong> Sur un dictionnaire, <code>in</code> teste les <strong>clés</strong>, jamais les valeurs. Pour chercher une valeur, c'est <code>in stock.values()</code>.</p>
 
-print(compte)    # {'chat': 3, 'chien': 1, 'oiseau': 1}</pre>
-<p>Décortiquons la ligne clé : « prends le compte actuel de ce mot (0 s'il est inconnu), ajoute 1, range le résultat ». Sans <code>get</code>, il aurait fallu un <code>if</code> pour traiter le premier passage. Ce motif compte des mots, des ventes, des visites — tu le réutiliseras souvent.</p>
+<h2>Dans la vraie vie</h2>
+<p>Le motif du comptage sert partout : mots d'un texte, occurrences d'une erreur dans un fichier journal, votes par candidat. Et <code>.get()</code> avec sa valeur de repli est l'outil qui rend un programme robuste face à des données incomplètes — c'est-à-dire face à des données réelles.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>.items()</code> donne les couples clé-valeur, déballés en deux variables.</li>
+<li><code>.get(cle, defaut)</code> ne plante jamais et fournit un repli.</li>
+<li><code>compte[x] = compte.get(x, 0) + 1</code> compte les occurrences en une ligne.</li>
+<li><code>in</code> sur un dictionnaire teste les clés, pas les valeurs.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les compteurs tout faits</summary>
+<p>Le module <code>collections</code> fournit <code>Counter</code>, qui fait le comptage en une seule ligne : <code>Counter(texte.split())</code>. Il sait aussi donner les plus fréquents avec <code>.most_common(3)</code>. Savoir écrire le motif à la main reste utile — c'est lui qui t'apprend ce que <code>Counter</code> fait — mais en vrai projet, on prend l'outil existant.</p>
+</details>
 `,
   exercices: [
     {
@@ -470,32 +611,60 @@ print(compte)    # {'chat': 3, 'chien': 1, 'oiseau': 1}</pre>
   id: 'py-15',
   titre: 'Gérer les erreurs sans planter',
   contenu: `
-<p>Jusqu'ici, une erreur arrêtait net ton programme. Dans une vraie application, c'est inacceptable : un utilisateur qui tape « abc » dans un champ « âge » ne doit pas faire tomber le logiciel. Python propose de <strong>tenter</strong> une opération et de prévoir le cas où elle échoue.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Jusqu'ici, une erreur arrêtait net ton programme. Dans une vraie application, c'est inacceptable : un utilisateur qui tape « abc » dans un champ « âge » ne doit pas faire tomber le logiciel.</p>
+<p>Python propose donc de <strong>tenter</strong> une opération et de prévoir le cas où elle échoue — au lieu de vérifier à l'avance toutes les façons dont elle pourrait rater.</p>
 
+<h2>try et except</h2>
 <pre class="bloc-code">try:
-    nombre = int("abc")
-    print(nombre)
+    age = int(saisie)
+    print("Age :", age)
 except ValueError:
-    print("Ce n'est pas un nombre valide.")
-
-print("Le programme continue !")</pre>
-
+    print("Ce n'est pas un nombre.")</pre>
+<p>Mesuré : avec <code>"abc"</code>, le programme affiche bien le message et <strong>continue</strong>. Le bloc <code>try</code> contient ce qui peut échouer ; dès qu'une erreur survient, l'exécution saute dans le <code>except</code>.</p>
+<p>Le nom après <code>except</code> précise <em>quelle</em> erreur on attrape. Les plus courantes :</p>
 <ul>
-<li><code>try:</code> — « essaie ce bloc » ;</li>
-<li><code>except TypeErreur:</code> — « si CETTE erreur survient, fais plutôt ça » ;</li>
-<li>et le programme <strong>continue</strong> ensuite, au lieu de s'arrêter.</li>
+<li><code>ValueError</code> — la valeur ne convient pas : <code>int("abc")</code> ;</li>
+<li><code>KeyError</code> — une clé absente d'un dictionnaire ;</li>
+<li><code>IndexError</code> — un indice hors de la liste ;</li>
+<li><code>ZeroDivisionError</code> — une division par zéro ;</li>
+<li><code>TypeError</code> — des types incompatibles.</li>
 </ul>
 
-<h2>Attraper la bonne erreur</h2>
-<p>Chaque type d'erreur a un nom, que tu as déjà croisé : <code>ValueError</code> (conversion impossible), <code>ZeroDivisionError</code>, <code>KeyError</code>, <code>IndexError</code>, <code>TypeError</code>. On peut en attraper plusieurs :</p>
-<pre class="bloc-code">try:
-    resultat = 10 / 0
-except ZeroDivisionError:
-    print("Division par zéro impossible")
-except ValueError:
-    print("Valeur incorrecte")</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Saisie</th><th>Ce qui se passe</th></tr>
+<tr><td>« 32 »</td><td><code>int</code> réussit, le <code>except</code> est ignoré</td></tr>
+<tr><td>« abc »</td><td><code>int</code> échoue : saut immédiat dans le <code>except</code></td></tr>
+<tr><td>après</td><td>dans les deux cas, le programme continue</td></tr>
+</table>
+<p>Un point important : la ligne qui suit <code>int(saisie)</code> dans le <code>try</code> n'est <em>pas</em> exécutée en cas d'échec. Tout ce qui dépend du résultat doit rester à l'intérieur.</p>
 
-<div class="attention"><div>Écrire <code>except:</code> tout seul attrape <em>toutes</em> les erreurs, y compris celles que tu n'avais pas prévues — et masque donc tes propres bugs. Nomme toujours l'erreur que tu attends vraiment : c'est la différence entre gérer un cas et cacher la poussière sous le tapis.</div></div>
+<h2>Les deux compléments</h2>
+<p><code>else</code> s'exécute si rien n'a échoué ; <code>finally</code> s'exécute dans tous les cas — c'est là qu'on ferme un fichier, par exemple.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Attraper tout avec un <code>except:</code> nu.</strong> Il capture absolument tout, y compris les fautes de frappe dans ton propre code — qui deviennent alors invisibles. On nomme toujours l'erreur attendue.</p>
+<p><strong>Un <code>except</code> qui ne dit rien.</strong> <code>except ValueError: pass</code> fait disparaître le problème de l'écran, pas du programme. Affiche au moins quelque chose.</p>
+<p><strong>Entourer tout le programme.</strong> On ne sait plus alors ce qui a échoué ni où. Le <code>try</code> entoure l'opération risquée, pas le reste.</p>
+<p><strong>S'en servir au lieu de tester.</strong> Vérifier qu'une liste n'est pas vide avec un <code>if</code> est plus clair que d'attraper une <code>IndexError</code>. Le <code>try</code> sert pour ce qu'on ne peut pas vérifier à l'avance — une saisie, un fichier, un réseau.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Toute lecture de fichier, tout appel réseau, toute conversion de saisie en est entourée. La culture Python a même un dicton pour cela : « il est plus facile de demander pardon que la permission » — on tente, et on gère l'échec, plutôt que de vérifier toutes les conditions au préalable.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>try</code> contient ce qui peut échouer, <code>except</code> ce qu'on fait alors.</li>
+<li>On nomme l'erreur attendue : jamais d'<code>except:</code> nu.</li>
+<li>Après l'erreur, la suite du <code>try</code> n'est pas exécutée.</li>
+<li><code>finally</code> s'exécute dans tous les cas, succès ou échec.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : lever sa propre erreur</summary>
+<p><code>raise ValueError("l'âge doit être positif")</code> interrompt volontairement l'exécution avec un message à toi. C'est utile dans une fonction qui reçoit quelque chose d'impossible : mieux vaut s'arrêter net, avec une explication claire, que continuer sur des valeurs fausses et produire un résultat absurde bien plus loin.</p>
+</details>
 `,
   exercices: [
     {
@@ -561,35 +730,61 @@ except ValueError:
   id: 'py-16',
   titre: 'Les objets : créer ses propres types',
   contenu: `
-<p>Tu as manipulé des textes, des nombres, des listes. Et si tu créais <strong>ton propre type</strong> de donnée ? C'est ce que permet une <strong>classe</strong> : un moule à partir duquel on fabrique des objets.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu as manipulé des textes, des nombres, des listes, des dictionnaires. Tous ces types étaient fournis. Et si tu créais le tien ?</p>
+<p>Un dictionnaire décrit bien un chien — <code>{"nom": "Rex", "age": 3}</code> — mais il ne sait pas <em>aboyer</em>. Une <strong>classe</strong> réunit les deux : les données et ce qu'on peut en faire.</p>
 
+<h2>Le moule</h2>
 <pre class="bloc-code">class Chien:
     def __init__(self, nom, age):
         self.nom = nom
         self.age = age
 
-    def aboyer(self):
-        return f"{self.nom} dit Ouaf !"
+    def crier(self):
+        return self.nom + " dit Ouaf !"
 
 rex = Chien("Rex", 3)
-medor = Chien("Médor", 7)
-
-print(rex.nom)         # Rex
-print(rex.aboyer())    # Rex dit Ouaf !
-print(medor.aboyer())  # Médor dit Ouaf !</pre>
-
-<h2>Décryptage</h2>
+print(rex.crier())     # Rex dit Ouaf !</pre>
+<p>Mesuré. Trois éléments nouveaux :</p>
 <ul>
-<li><code>class Chien:</code> — le moule. Par convention, son nom prend une majuscule ;</li>
-<li><code>__init__</code> — la méthode de construction, appelée automatiquement à chaque <code>Chien(...)</code>. Elle range les données dans l'objet ;</li>
-<li><code>self</code> — l'objet en cours de fabrication. <code>self.nom = nom</code> signifie « garde ce nom dans cet objet précis ». Il est <strong>toujours</strong> le premier paramètre des méthodes ;</li>
-<li><code>rex.aboyer()</code> — l'appel d'une méthode sur un objet, exactement comme <code>"texte".upper()</code>.</li>
+<li><code>class</code> déclare le moule — son nom prend une majuscule, par convention ;</li>
+<li><code>__init__</code> est appelé automatiquement à la création, pour remplir l'objet ;</li>
+<li><code>self</code> désigne l'objet en cours, et c'est <strong>toujours le premier paramètre</strong> d'une méthode.</li>
 </ul>
+<p>Noter aussi ce qui <em>manque</em> par rapport à JavaScript : pas de <code>new</code>. On appelle la classe comme une fonction.</p>
 
-<h2>Pourquoi c'est utile</h2>
-<p>Un dictionnaire décrit des données. Une classe regroupe les données <strong>et</strong> les actions qui vont avec. Quand un programme grossit, ça évite d'avoir vingt fonctions éparpillées qui manipulent toutes le même genre de dictionnaire.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ligne</th><th>Ce qui se passe</th></tr>
+<tr><td><code>class Chien:</code></td><td>Le moule est rangé. Aucun chien n'existe.</td></tr>
+<tr><td><code>Chien("Rex", 3)</code></td><td>Un objet vide est créé, puis <code>__init__</code> le remplit.</td></tr>
+<tr><td><code>self.nom = nom</code></td><td><code>self</code> est ce nouvel objet : il reçoit son attribut.</td></tr>
+<tr><td><code>rex.crier()</code></td><td>La méthode s'exécute avec <code>self</code> valant <code>rex</code>.</td></tr>
+</table>
+<p>Ce dernier point explique pourquoi <code>self</code> ne s'écrit jamais à l'appel : Python le passe tout seul. On écrit <code>rex.crier()</code>, et la méthode reçoit <code>rex</code> en premier argument.</p>
 
-<div class="info"><div>Tu viens de toucher à la « programmation orientée objet ». C'est un vaste sujet — des livres entiers y sont consacrés. Ce qui compte à ton niveau : savoir lire une classe et comprendre que <code>self</code> désigne l'objet lui-même.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>self</code> dans la déclaration.</strong> C'est l'erreur numéro un, et le cours la nomme désormais précisément : <em>« le nombre d'arguments ne correspond pas à ce que la fonction attend. Dans une classe, la cause la plus fréquente est un « self » oublié en premier paramètre de la méthode. »</em></p>
+<p><strong>Oublier <code>self</code> devant un attribut.</strong> Écrire <code>return nom + " dit Ouaf"</code> cherche une variable <code>nom</code> qui n'existe pas : <em>« le nom « nom » est inconnu »</em>. Les attributs s'atteignent toujours par <code>self</code>.</p>
+<p><strong>Écrire <code>new</code>.</strong> Il n'existe pas en Python. <code>Chien("Rex", 3)</code> suffit.</p>
+<p><strong>Confondre attribut et variable locale.</strong> <code>self.total</code> appartient à l'objet et survit entre les appels ; <code>total</code> seul naît et meurt dans la méthode.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les classes servent dès qu'un programme manipule beaucoup de choses semblables, avec un comportement propre. Elles ne sont pas obligatoires — une bonne partie du Python écrit chaque jour n'en contient aucune — mais tu en liras partout, et c'est la forme que prennent la plupart des bibliothèques.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une classe réunit des données et ce qu'on peut en faire.</li>
+<li><code>__init__</code> remplit l'objet au moment de sa création.</li>
+<li><code>self</code> est toujours le premier paramètre d'une méthode, et ne s'écrit jamais à l'appel.</li>
+<li>Pas de <code>new</code> en Python : on appelle la classe directement.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : afficher un objet proprement</summary>
+<p><code>print(rex)</code> affiche par défaut quelque chose d'illisible, du genre <code>&lt;Chien object&gt;</code>. En ajoutant une méthode <code>__str__(self)</code> qui rend un texte, <code>print</code> l'utilise automatiquement. C'est la première d'une famille de méthodes spéciales — toutes encadrées de doubles tirets bas — qui permettent à tes objets de se comporter comme les types natifs du langage.</p>
+</details>
 `,
   exercices: [
     {
@@ -660,24 +855,64 @@ print(medor.aboyer())  # Médor dit Ouaf !</pre>
   id: 'py-17',
   titre: 'Projet : le carnet de contacts',
   contenu: `
-<p>Assemblons tout : listes, dictionnaires, boucles, fonctions et f-strings, dans un programme qui ressemble à ce qu'on écrit vraiment.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Assemblons tout : listes, dictionnaires, boucles, fonctions et f-strings, dans un programme qui ressemble à ce qu'on écrit vraiment. Un carnet de contacts n'a rien de spectaculaire — et c'est exactement la forme que prennent la plupart des données réelles.</p>
 
-<h2>La structure de données</h2>
-<p>Un contact est décrit par un dictionnaire. Le carnet est une <strong>liste de dictionnaires</strong> — c'est LA structure de base de la manipulation de données en Python (et ce que renvoie n'importe quelle base de données, tu le verras avec SQL) :</p>
+<h2>La structure qui compte</h2>
 <pre class="bloc-code">carnet = [
-    {"nom": "Nadia", "ville": "Lyon", "age": 32},
-    {"nom": "Karim", "ville": "Lille", "age": 45},
-    {"nom": "Sophie", "ville": "Lyon", "age": 28}
+    {"nom": "Nadia", "ville": "Lyon", "tel": "06..."},
+    {"nom": "Alex",  "ville": "Paris", "tel": "07..."}
 ]</pre>
+<p>Une <strong>liste de dictionnaires</strong>. Retiens cette forme : c'est <em>la</em> structure de données la plus courante de Python, et celle sous laquelle arrivent presque toujours les données d'un fichier, d'une base ou d'un service distant.</p>
+<p>Chaque élément est une fiche ; toutes les fiches ont les mêmes clés. La liste donne l'ordre, le dictionnaire donne les étiquettes.</p>
 
-<h2>Parcourir</h2>
-<pre class="bloc-code">for contact in carnet:
-    print(f"{contact['nom']} habite à {contact['ville']}")</pre>
-<p>Note l'astuce : dans une f-string écrite avec des guillemets doubles, on utilise des apostrophes simples pour les clés — sinon Python croit que le texte s'arrête.</p>
+<h2>Les quatre opérations</h2>
+<pre class="bloc-code">def ajouter(carnet, nom, ville):
+    carnet.append({"nom": nom, "ville": ville})
 
-<h2>Filtrer</h2>
-<pre class="bloc-code">lyonnais = [c for c in carnet if c["ville"] == "Lyon"]
-print(len(lyonnais))    # 2</pre>
+def chercher(carnet, nom):
+    for c in carnet:
+        if c["nom"] == nom:
+            return c
+    return None
+
+def afficher(carnet):
+    for c in carnet:
+        print(f"{c['nom']} - {c['ville']}")</pre>
+<p>Remarque les guillemets simples à l'intérieur de la f-string : les doubles fermeraient la chaîne. Et le <code>return None</code> final de <code>chercher</code> n'est pas décoratif — il dit explicitement « rien trouvé », ce que l'appelant doit tester.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qui se passe</th></tr>
+<tr><td><code>chercher(carnet, "Nadia")</code></td><td>la boucle parcourt les fiches</td></tr>
+<tr><td>la condition est vraie</td><td><code>return</code> <strong>sort immédiatement</strong> de la fonction</td></tr>
+<tr><td>aucune ne correspond</td><td>la boucle finit, et <code>return None</code> s'exécute</td></tr>
+<tr><td>côté appelant</td><td><code>if resultat:</code> distingue les deux cas</td></tr>
+</table>
+<p>Le <code>return</code> à l'intérieur de la boucle est la bonne façon de faire : inutile de continuer à chercher une fois trouvé.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier le cas « non trouvé ».</strong> Sans <code>return None</code> explicite, la fonction rend quand même <code>None</code> — mais rien ne le dit au lecteur, et l'appelant risque d'oublier de le tester. Ce qui donne alors <em>« tu mélanges deux types incompatibles »</em> quelques lignes plus loin.</p>
+<p><strong>Comparer sans normaliser.</strong> « nadia » ne vaut pas « Nadia ». Avant de comparer des noms saisis, <code>.strip().lower()</code> des deux côtés.</p>
+<p><strong>Modifier la liste pendant qu'on la parcourt.</strong> Pour supprimer un contact, on construit une nouvelle liste — une compréhension avec un <code>if</code> fait cela en une ligne.</p>
+<p><strong>Mélanger les guillemets dans une f-string.</strong> <code>f"{c["nom"]}"</code> casse ; <code>f"{c['nom']}"</code> fonctionne.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Change « contacts » en produits, en commandes ou en mesures, et tu as la structure de la quasi-totalité des petits programmes Python. C'est aussi exactement la forme que prend du JSON une fois chargé — ce qui fait de cette leçon la marche avant la manipulation de données réelles.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Une <strong>liste de dictionnaires</strong> est la structure la plus courante de Python.</li>
+<li>Une fonction de recherche rend l'élément trouvé, ou <code>None</code> — et l'appelant teste.</li>
+<li><code>return</code> sort immédiatement de la fonction, boucle comprise.</li>
+<li>Dans une f-string, alterne les guillemets : doubles dehors, simples dedans.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : chercher en une ligne</summary>
+<p><code>next((c for c in carnet if c["nom"] == nom), None)</code> fait la même chose que la fonction <code>chercher</code> : il parcourt, s'arrête au premier qui correspond, et rend <code>None</code> si aucun ne convient. C'est l'équivalent du <code>find</code> de JavaScript. Écrire la boucle d'abord reste la bonne façon d'apprendre — on comprend ensuite ce que la ligne courte remplace.</p>
+</details>
 `,
   exercices: [
     {
@@ -746,30 +981,62 @@ print(len(lyonnais))    # 2</pre>
   id: 'py-18',
   titre: 'Projet : l\'analyseur de texte',
   contenu: `
-<p>Dernier projet du module : un programme qui analyse un texte, comme le font les outils de statistiques éditoriales. Tout ce dont tu as besoin est déjà dans ta boîte à outils.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Dernier projet du module : analyser un texte, comme le font les outils de statistiques éditoriales. Tout ce dont tu as besoin est déjà dans ta boîte à outils — c'est justement l'intérêt de l'exercice.</p>
+<p>Et le cœur du programme tient en trois lignes, que tu as vues à la leçon sur les dictionnaires avancés.</p>
 
-<h2>Le texte à analyser</h2>
-<pre class="bloc-code">texte = "le chat dort le chien court le chat mange"</pre>
+<h2>Le motif du comptage</h2>
+<pre class="bloc-code">texte = "le chat dort le chien court le chat mange"
 
-<h2>La méthode</h2>
-<ol>
-<li>découper le texte en mots avec <code>.split(" ")</code> ;</li>
-<li>compter les mots avec <code>len()</code> ;</li>
-<li>compter les occurrences de chacun avec le motif <code>compte.get(mot, 0) + 1</code> ;</li>
-<li>trouver le mot le plus fréquent en parcourant le dictionnaire.</li>
-</ol>
+mots = texte.split()
+compte = {}
+for mot in mots:
+    compte[mot] = compte.get(mot, 0) + 1
 
-<h2>Trouver le maximum d'un dictionnaire</h2>
-<p>Même principe que la meilleure note d'une liste, mais avec deux variables à retenir — le mot ET son compte :</p>
-<pre class="bloc-code">meilleur_mot = ""
-meilleur_compte = 0
+print(compte)</pre>
+<p>Trois outils enchaînés : <code>split</code> transforme le texte en liste, le dictionnaire accumule, et <code>get(mot, 0)</code> gère le premier passage de chaque mot. Sans ce dernier, il faudrait tester l'existence de la clé à chaque tour.</p>
 
-for mot, n in compte.items():
-    if n > meilleur_compte:
-        meilleur_compte = n
-        meilleur_mot = mot</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Mot lu</th><th><code>compte.get(mot, 0)</code></th><th>Nouvelle valeur</th></tr>
+<tr><td>le</td><td>0 — jamais vu</td><td>1</td></tr>
+<tr><td>chat</td><td>0</td><td>1</td></tr>
+<tr><td>dort</td><td>0</td><td>1</td></tr>
+<tr><td>le</td><td><strong>1</strong> — déjà compté</td><td>2</td></tr>
+</table>
+<p>Le dictionnaire se remplit au fil de la lecture, sans qu'on ait eu à connaître les mots à l'avance.</p>
 
-<div class="astuce"><div>C'est le dernier exercice du module Python. Si tu le réussis, tu sais faire en Python tout ce que tu savais faire en JavaScript — et tu as en plus les compréhensions, les f-strings et les objets.</div></div>
+<h2>Trier le résultat</h2>
+<pre class="bloc-code">classement = sorted(compte.items(), key=lambda c: c[1], reverse=True)
+print(classement[:3])</pre>
+<p><code>items()</code> donne des couples, <code>key</code> dit sur quoi trier — ici le second élément de chaque couple, c'est-à-dire le nombre — et <code>reverse=True</code> met le plus grand d'abord. Le découpage <code>[:3]</code> garde les trois premiers.</p>
+<p>La <code>lambda</code> est une fonction écrite en une expression. Tu la verras en détail au module suivant ; retiens pour l'instant qu'elle répond à la question « trier selon quoi ? ».</p>
+
+<h2>Les autres mesures</h2>
+<p><code>len(mots)</code> donne le nombre de mots, <code>len(set(mots))</code> le nombre de mots <em>différents</em>, et <code>sum(len(m) for m in mots) / len(mots)</code> la longueur moyenne. Un <code>set</code> est une collection sans doublons — autre chose que tu verras bientôt.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier de normaliser.</strong> « Le » et « le » comptent séparément. Un <code>.lower()</code> sur le texte avant le <code>split</code> règle la question.</p>
+<p><strong>Laisser la ponctuation.</strong> « chat. » et « chat » sont deux mots différents. Il faut la retirer avant de découper — <code>replace</code> pour les cas simples.</p>
+<p><strong>Utiliser <code>split(" ")</code> au lieu de <code>split()</code>.</strong> Sans argument, la méthode gère les espaces multiples et les retours à la ligne. Avec une espace explicite, deux espaces consécutives produisent un mot vide.</p>
+<p><strong>Diviser par zéro sur un texte vide.</strong> La longueur moyenne plante si <code>mots</code> est vide. Teste <code>if mots:</code> avant.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ce programme est l'ancêtre direct de tout le traitement automatique du langage : compter les mots, les normaliser, les classer. Les outils modernes font infiniment plus — mais leur première étape reste un <code>split</code> et un dictionnaire de comptage.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>compte[x] = compte.get(x, 0) + 1</code> compte les occurrences de n'importe quoi.</li>
+<li><code>sorted(..., key=..., reverse=True)</code> classe le résultat.</li>
+<li>Normalise avant de compter : <code>.lower()</code> et la ponctuation retirée.</li>
+<li><code>split()</code> sans argument gère les espaces multiples.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : les mots qui ne comptent pas</summary>
+<p>Dans un vrai analyseur, les mots les plus fréquents sont toujours les mêmes — « le », « de », « et » — et n'apprennent rien sur le texte. On les écarte avec une liste de <em>mots vides</em>, propre à chaque langue. C'est la deuxième étape de tout traitement de texte, juste après le découpage, et elle change complètement la lecture du classement.</p>
+</details>
 `,
   exercices: [
     {

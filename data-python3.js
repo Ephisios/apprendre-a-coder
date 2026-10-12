@@ -6,29 +6,59 @@ window.DATA_PYTHON3 = [
   id: 'py-19',
   titre: 'Le découpage : extraire un morceau',
   contenu: `
-<p>Tu sais lire une case avec <code>t[0]</code>. Python permet aussi d'extraire <strong>une tranche entière</strong> en une seule écriture — c'est l'une de ses fonctionnalités les plus appréciées.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Tu sais lire une case avec <code>t[0]</code>. Mais on veut rarement une seule case : on veut les dix premiers résultats, la deuxième moitié d'une liste, tout sauf le dernier élément.</p>
+<p>Python offre pour cela une écriture qui lui est propre, le <strong>découpage</strong>, et c'est l'une des fonctionnalités que ses utilisateurs regrettent le plus ailleurs.</p>
 
+<h2>L'écriture</h2>
 <pre class="bloc-code">t = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-print(t[2:5])     # [2, 3, 4]  — de l'indice 2 inclus à 5 EXCLU
-print(t[:3])      # [0, 1, 2]  — depuis le début
-print(t[7:])      # [7, 8, 9]  — jusqu'à la fin
-print(t[-3:])     # [7, 8, 9]  — les trois derniers</pre>
+t[2:5]     # [2, 3, 4]   de 2 INCLUS a 5 EXCLU
+t[:3]      # [0, 1, 2]   depuis le debut
+t[-3:]     # [7, 8, 9]   les trois derniers
+t[::-1]    # [9, 8, ..., 0]   a l'envers</pre>
+<p>Tous mesurés. La forme générale est <code>[debut:fin:pas]</code>, et chacun des trois peut être omis.</p>
+<p>La règle qui gouverne tout : <strong>le début est inclus, la fin est exclue</strong>. C'est la même convention que <code>range</code>, et elle a une conséquence pratique — <code>t[:3]</code> et <code>t[3:]</code> découpent la liste en deux morceaux complets, sans chevauchement ni oubli.</p>
 
-<p>La règle est toujours la même : <code>[début:fin]</code>, avec le début <strong>inclus</strong> et la fin <strong>exclue</strong>. C'est exactement la logique du <code>range()</code>, et elle a un avantage pratique : <code>t[0:3]</code> et <code>t[3:6]</code> se suivent sans se chevaucher ni laisser de trou.</p>
-
-<h2>Le troisième nombre : le pas</h2>
-<pre class="bloc-code">print(t[::2])     # [0, 2, 4, 6, 8]  — une case sur deux
-print(t[::-1])    # [9, 8, 7, ..., 0]  — À L'ENVERS !</pre>
-<p><code>[::-1]</code> est l'astuce la plus connue de Python : elle inverse n'importe quelle liste ou chaîne.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Écriture</th><th>Ce qu'on obtient</th><th>À quoi ça sert</th></tr>
+<tr><td><code>t[:n]</code></td><td>les n premiers</td><td>un aperçu, un top 10</td></tr>
+<tr><td><code>t[-n:]</code></td><td>les n derniers</td><td>les plus récents</td></tr>
+<tr><td><code>t[:]</code></td><td>tout</td><td>une <strong>copie</strong> de la liste</td></tr>
+<tr><td><code>t[::-1]</code></td><td>tout, à l'envers</td><td>inverser sans modifier</td></tr>
+</table>
+<p>La troisième ligne, tu la connais déjà : c'est ainsi qu'on copie une liste au lieu de la partager.</p>
 
 <h2>Ça marche aussi sur le texte</h2>
-<pre class="bloc-code">mot = "Bonjour"
-print(mot[0:3])    # Bon
-print(mot[-1])     # r
-print(mot[::-1])   # ruojnoB</pre>
+<pre class="bloc-code">mot = "bonjour"
+mot[:3]     # "bon"
+mot[-3:]    # "our"
+mot[::-1]   # "ruojnob"</pre>
+<p>Un texte est une suite, comme une liste — il se découpe donc pareil. En revanche le résultat est toujours un <em>nouveau</em> texte : on ne modifie jamais l'original.</p>
 
-<div class="astuce"><div>Le découpage ne modifie jamais l'original : il en fabrique une copie. <code>copie = ma_liste[:]</code> est d'ailleurs la façon classique de dupliquer une liste — utile, car <code>copie = ma_liste</code> ne créerait qu'un second nom pour la même liste.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Croire que la fin est incluse.</strong> <code>t[2:5]</code> ne contient pas l'élément 5. C'est l'erreur de bord la plus fréquente, et elle ne lève jamais d'erreur.</p>
+<p><strong>Confondre <code>t[-1]</code> et <code>t[-1:]</code>.</strong> Le premier rend l'<em>élément</em>, le second une <em>liste</em> d'un élément. Deux types différents pour deux caractères d'écart.</p>
+<p><strong>Oublier que le découpage ne plante jamais.</strong> <code>t[5:99]</code> sur une liste de 3 éléments rend une liste vide, sans erreur — alors que <code>t[99]</code> arrête le programme. C'est commode, et ça peut masquer un problème.</p>
+<p><strong>Croire que la copie est profonde.</strong> <code>t[:]</code> duplique la liste, mais si elle contient d'autres listes, ce sont les mêmes. La copie ne va qu'à un niveau.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Paginer des résultats — <code>resultats[20:40]</code> — est l'usage le plus courant. Viennent ensuite retirer un en-tête de fichier avec <code>lignes[1:]</code>, et garder les derniers événements d'un journal avec <code>[-50:]</code>. Trois caractères, là où une boucle prendrait quatre lignes.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>[debut:fin:pas]</code> — début inclus, <strong>fin exclue</strong>.</li>
+<li><code>[:]</code> copie, <code>[::-1]</code> inverse, <code>[-n:]</code> prend les derniers.</li>
+<li>Un découpage hors limites rend une liste vide, sans erreur.</li>
+<li>Ça marche aussi sur le texte, qui est une suite comme une autre.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : un pas négatif</summary>
+<p><code>t[::-1]</code> se lit « du début à la fin, en reculant d'un pas » — d'où l'inversion. On peut combiner : <code>t[8:2:-1]</code> descend de l'indice 8 à l'indice 3. C'est puissant et vite illisible ; au-delà de <code>[::-1]</code>, une fonction nommée dit mieux l'intention.</p>
+</details>
 `,
   exercices: [
     {
@@ -98,37 +128,69 @@ print(mot[::-1])   # ruojnoB</pre>
   id: 'py-20',
   titre: 'Tuples et ensembles',
   contenu: `
-<p>Au-delà des listes et des dictionnaires, Python propose deux autres collections, chacune avec une raison d'être précise.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Au-delà des listes et des dictionnaires, Python propose deux autres collections. Chacune existe pour une raison précise — ce ne sont pas des variantes de la liste, mais des réponses à des besoins différents.</p>
 
-<h2>Le tuple : une liste qu'on ne peut pas modifier</h2>
-<pre class="bloc-code">point = (3, 4)         # parenthèses au lieu de crochets
-print(point[0])        # 3 — la lecture est identique
-# point[0] = 9         # ERREUR : un tuple est figé</pre>
-<p>À quoi bon une liste qu'on ne peut pas changer ? Justement à ça : <strong>garantir</strong> que rien ne bougera. Des coordonnées, une date, une couleur RVB n'ont aucune raison d'être modifiées case par case.</p>
+<h2>Le tuple : figé une fois créé</h2>
+<pre class="bloc-code">point = (3, 4)      # parentheses au lieu de crochets
+print(point[0])     # 3 — la lecture est identique
+point[0] = 9        # refuse</pre>
+<p>Mesuré, le message est précis : <em>« cette valeur ne se modifie pas une fois créée — c'est le cas d'un tuple et d'un texte. Pour la changer, il faut en fabriquer une nouvelle. »</em></p>
+<p>À quoi sert une liste qu'on ne peut pas modifier ? À garantir qu'elle ne le sera pas. Des coordonnées, une date, une couleur RVB forment un tout : les séparer n'aurait pas de sens. Et parce qu'un tuple ne change jamais, il peut servir de <strong>clé de dictionnaire</strong> — ce qu'une liste ne peut pas.</p>
 
-<h2>Le tuple permet le retour multiple</h2>
-<pre class="bloc-code">def extremes(valeurs):
-    return min(valeurs), max(valeurs)    # renvoie un tuple
+<h2>Le déballage</h2>
+<pre class="bloc-code">x, y = (3, 4)
+print(x, y)          # 3 4
 
-petit, grand = extremes([3, 9, 1])       # on le « déballe »
-print(petit, grand)                      # 1 9</pre>
-<p>C'est ce mécanisme qui se cachait derrière l'échange magique <code>a, b = b, a</code> vu au début du module.</p>
+def minmax(t):
+    return min(t), max(t)
 
-<h2>L'ensemble : pas de doublon, pas d'ordre</h2>
-<pre class="bloc-code">nombres = {1, 2, 2, 3, 3, 3}
-print(nombres)           # {1, 2, 3} — les doublons ont disparu
-print(3 in nombres)      # True — un test ultra-rapide
-nombres.add(9)</pre>
+a, b = minmax([5, 1, 9])   # 1 9</pre>
+<p>Mesuré. Une fonction peut donc rendre plusieurs valeurs — elle rend en réalité un tuple, que Python déballe automatiquement. C'est le même mécanisme que dans <code>for cle, valeur in d.items()</code>.</p>
 
-<h2>Les opérations d'ensembles</h2>
-<pre class="bloc-code">a = {1, 2, 3}
+<h2>L'ensemble : pas de doublons</h2>
+<pre class="bloc-code">s = {1, 2, 2, 3}
+print(s)        # {1, 2, 3} — le doublon a disparu
+print(len(s))   # 3
+
+a = {1, 2, 3}
 b = {2, 3, 4}
-print(a &amp; b)    # {2, 3} — l'intersection (dans les deux)
-print(a | b)    # {1, 2, 3, 4} — l'union (dans l'un ou l'autre)
-print(a - b)    # {1} — la différence (dans a mais pas dans b)</pre>
-<p>Ces trois opérations remplacent des boucles imbriquées entières. « Quels clients ont acheté A <em>et</em> B ? » devient une intersection.</p>
+print(a &amp; b)    # {2, 3}       ce qui est dans les deux
+print(a | b)    # {1, 2, 3, 4} tout
+print(a - b)    # {1}          ce qui n'est que dans a</pre>
+<p>Tous mesurés. Un ensemble ne garde jamais deux fois la même valeur, et il n'a pas d'ordre. En contrepartie, tester l'appartenance y est bien plus rapide que dans une liste.</p>
 
-<div class="astuce"><div>Astuce classique pour dédoublonner une liste en gardant l'ordre trié : <code>sorted(set(ma_liste))</code>. On convertit en ensemble (les doublons sautent), puis on retrie.</div></div>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Besoin</th><th>Le bon outil</th></tr>
+<tr><td>une suite ordonnée qu'on modifie</td><td>liste <code>[ ]</code></td></tr>
+<tr><td>un tout qui ne doit pas bouger</td><td>tuple <code>( )</code></td></tr>
+<tr><td>des valeurs uniques, sans ordre</td><td>ensemble <code>{ }</code></td></tr>
+<tr><td>des étiquettes</td><td>dictionnaire <code>{cle: valeur}</code></td></tr>
+</table>
+
+<h2>Les pièges</h2>
+<p><strong>Créer un tuple d'un seul élément.</strong> <code>(5)</code> n'est pas un tuple mais le nombre 5 entre parenthèses. Il faut une virgule : <code>(5,)</code>.</p>
+<p><strong>Confondre ensemble et dictionnaire vides.</strong> <code>{}</code> crée un <em>dictionnaire</em> vide. Pour un ensemble vide, c'est <code>set()</code>.</p>
+<p><strong>Attendre un ordre d'un ensemble.</strong> Il n'en a pas. Si l'ordre compte, c'est une liste.</p>
+<p><strong>Croire qu'un tuple protège son contenu.</strong> Un tuple qui contient une <em>liste</em> ne peut pas changer de liste — mais la liste, elle, reste modifiable. Le verrou porte sur la structure, pas sur ce qu'elle contient.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les tuples servent surtout à rendre plusieurs valeurs d'une fonction, et on les écrit souvent sans parenthèses : <code>return min(t), max(t)</code>. Les ensembles servent à dédoublonner — <code>list(set(mots))</code> est l'idiome le plus court pour retirer les répétitions d'une liste.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Un tuple <code>( )</code> ne se modifie jamais — et peut servir de clé de dictionnaire.</li>
+<li><code>x, y = valeur</code> déballe ; une fonction peut ainsi rendre plusieurs valeurs.</li>
+<li>Un ensemble <code>{ }</code> supprime les doublons et n'a pas d'ordre.</li>
+<li><code>(5,)</code> avec la virgule pour un tuple d'un seul élément ; <code>set()</code> pour un ensemble vide.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi un ensemble est-il si rapide</summary>
+<p>Chercher une valeur dans une liste de dix mille éléments demande de les parcourir. Dans un ensemble, Python calcule directement <em>où</em> la valeur devrait se trouver, et regarde là — une seule opération, quelle que soit la taille. C'est le même mécanisme que pour les clés d'un dictionnaire, et c'est pourquoi les deux refusent les valeurs modifiables : si la valeur changeait, le calcul ne mènerait plus au bon endroit.</p>
+</details>
 `,
   exercices: [
     {
@@ -196,32 +258,59 @@ print(a - b)    # {1} — la différence (dans a mais pas dans b)</pre>
   id: 'py-21',
   titre: 'enumerate et zip',
   contenu: `
-<p>Deux fonctions qui règlent chacune un problème très concret de parcours.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Deux situations reviennent sans cesse dans les boucles, et chacune a sa fonction dédiée. La boucle <code>for</code> de Python donne les valeurs — c'est sa force. Mais parfois on veut aussi le <strong>rang</strong>, ou parcourir <strong>deux listes en parallèle</strong>.</p>
+<p>Sans les outils de cette leçon, on retombe sur des solutions maladroites avec <code>range(len(...))</code>, que tout lecteur de Python reconnaît comme un signe de débutant.</p>
 
-<h2>enumerate : la valeur ET son numéro</h2>
-<p>La boucle <code>for</code> de Python donne les valeurs, pas les indices. Quand tu as besoin des deux, la solution du débutant est maladroite :</p>
-<pre class="bloc-code"># Maladroit
-i = 0
-for nom in noms:
-    print(i, nom)
-    i += 1
+<h2>enumerate : la valeur et son numéro</h2>
+<pre class="bloc-code"># maladroit
+for i in range(len(fruits)):
+    print(i, fruits[i])
 
-# La bonne façon
-for i, nom in enumerate(noms):
-    print(i, nom)</pre>
-<p><code>enumerate</code> fournit à chaque tour un couple (indice, valeur), qu'on déballe directement en deux variables.</p>
-<pre class="bloc-code">for i, nom in enumerate(noms, 1):    # démarrer à 1 plutôt qu'à 0
-    print(i, nom)</pre>
+# avec enumerate
+for i, fruit in enumerate(fruits):
+    print(i, fruit)</pre>
+<p>Mesuré : la seconde affiche <code>0 a</code> puis <code>1 b</code>. On récupère les deux sans jamais écrire de crochets.</p>
+<p>Pour commencer à 1 — un affichage numéroté, par exemple — un second argument suffit : <code>enumerate(fruits, 1)</code>.</p>
 
-<h2>zip : parcourir deux listes en parallèle</h2>
-<pre class="bloc-code">noms = ["Alice", "Bob", "Chloé"]
-ages = [30, 25, 41]
+<h2>zip : deux listes à la fois</h2>
+<pre class="bloc-code">for x, y in zip([1, 2], ["un", "deux"]):
+    print(x, y)        # 1 un   puis   2 deux</pre>
+<p>Mesuré. <code>zip</code> assemble les éléments de même rang, comme les dents d'une fermeture éclair — d'où son nom.</p>
+<p>Le point à connaître : <strong>il s'arrête sur la plus courte</strong>. Deux listes de tailles différentes ne provoquent aucune erreur ; les éléments en trop sont simplement ignorés.</p>
 
-for nom, age in zip(noms, ages):
-    print(nom, "a", age, "ans")</pre>
-<p>Sans <code>zip</code>, il faudrait boucler sur les indices et écrire <code>noms[i]</code> et <code>ages[i]</code> — plus long et plus fragile. Si les listes n'ont pas la même longueur, <code>zip</code> s'arrête à la plus courte.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Ce qu'on veut</th><th>L'outil</th></tr>
+<tr><td>les valeurs</td><td><code>for x in liste</code></td></tr>
+<tr><td>les valeurs et leur rang</td><td><code>for i, x in enumerate(liste)</code></td></tr>
+<tr><td>deux listes en parallèle</td><td><code>for a, b in zip(l1, l2)</code></td></tr>
+<tr><td>les clés et valeurs d'un dictionnaire</td><td><code>for k, v in d.items()</code></td></tr>
+</table>
+<p>Les trois dernières lignes reposent toutes sur le même mécanisme : la fonction rend des couples, et Python les déballe en deux variables.</p>
 
-<div class="astuce"><div>La règle générale de Python : si tu écris <code>for i in range(len(ma_liste))</code>, il existe presque toujours plus élégant. <code>enumerate</code> quand tu veux l'indice, <code>zip</code> quand tu parcours deux listes ensemble, et la boucle simple le reste du temps.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Écrire <code>for i in enumerate(...)</code>.</strong> Avec une seule variable, <code>i</code> reçoit le couple entier, et l'affichage donne <code>(0, 'a')</code>. Il en faut deux.</p>
+<p><strong>Oublier que <code>zip</code> tronque.</strong> Si une liste a trois éléments et l'autre cinq, deux disparaissent en silence. Quand ce n'est pas voulu, il faut vérifier les longueurs avant.</p>
+<p><strong>Vouloir afficher le résultat directement.</strong> <code>print(zip(a, b))</code> n'affiche pas les couples : ces fonctions produisent à la demande. Il faut <code>list(zip(a, b))</code> pour voir.</p>
+<p><strong>Utiliser <code>enumerate</code> quand l'indice ne sert pas.</strong> Si tu n'utilises que la valeur, la boucle simple est plus claire.</p>
+
+<h2>Dans la vraie vie</h2>
+<p><code>enumerate</code> sert dès qu'on numérote un affichage. <code>zip</code> sert à rapprocher deux sources — des noms et des scores, des questions et des réponses — et, combiné à <code>dict()</code>, il construit un dictionnaire en une ligne : <code>dict(zip(cles, valeurs))</code>.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>enumerate(liste)</code> donne le rang <em>et</em> la valeur — jamais <code>range(len(...))</code>.</li>
+<li><code>zip(a, b)</code> parcourt deux listes en parallèle et <strong>s'arrête sur la plus courte</strong>.</li>
+<li>Les deux rendent des couples, à déballer en deux variables.</li>
+<li>Pour voir leur contenu, il faut les passer à <code>list()</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : dézipper</summary>
+<p><code>zip(*couples)</code> fait l'opération inverse : à partir d'une liste de couples, il rend deux listes séparées. L'étoile « étale » la liste en arguments — c'est le même symbole que le <code>*args</code> des fonctions avancées. C'est une écriture dense, qu'on croise surtout pour séparer des coordonnées en deux séries avant de les tracer.</p>
+</details>
 `,
   exercices: [
     {
@@ -289,38 +378,66 @@ for nom, age in zip(noms, ages):
   id: 'py-22',
   titre: 'lambda, map et filter',
   contenu: `
-<p>Une <strong>lambda</strong> est une fonction écrite en une seule expression, sans nom. On l'utilise quand une fonction est si courte que lui donner un nom serait excessif.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Certaines fonctions sont si courtes que leur donner un nom est une formalité inutile : « multiplier par deux », « prendre le second élément ». On les écrit alors sur place, sans nom. C'est une <strong>lambda</strong>.</p>
+<p>Elle n'ajoute aucun pouvoir au langage — tout ce qu'elle fait, un <code>def</code> le ferait. Elle sert à ne pas interrompre la lecture pour une ligne de calcul.</p>
 
-<pre class="bloc-code"># Une fonction ordinaire
+<h2>L'écriture</h2>
+<pre class="bloc-code"># une fonction ordinaire
 def doubler(x):
     return x * 2
 
-# La même en lambda
+# la meme en lambda
 doubler = lambda x: x * 2
 
-print(doubler(5))    # 10</pre>
-<p>La syntaxe : <code>lambda paramètres: expression</code>. Pas de <code>return</code> — le résultat de l'expression est renvoyé automatiquement. Et pas de bloc : une lambda tient forcément sur une ligne.</p>
-
-<h2>Où elles servent vraiment : en argument</h2>
-<pre class="bloc-code">contacts = [{"nom": "Zoé", "age": 30}, {"nom": "Alex", "age": 25}]
-
-# trier par âge
-par_age = sorted(contacts, key=lambda c: c["age"])
-print(par_age[0]["nom"])    # Alex</pre>
-<p>Le paramètre <code>key</code> de <code>sorted</code> attend une fonction qui dit « sur quoi trier ». Écrire une <code>def</code> de trois lignes pour ça serait disproportionné.</p>
+print(doubler(5))   # 10</pre>
+<p>Mesuré. Après les deux-points vient une <strong>expression unique</strong>, dont la valeur est rendue automatiquement — il n'y a pas de <code>return</code> à écrire, et on ne peut pas y mettre plusieurs lignes.</p>
+<p>Ranger une lambda dans une variable, comme ci-dessus, est d'ailleurs considéré comme une maladresse : si la fonction mérite un nom, elle mérite un <code>def</code>. La lambda prend tout son sens passée directement en argument.</p>
 
 <h2>map et filter</h2>
-<pre class="bloc-code">nombres = [1, 2, 3, 4]
+<pre class="bloc-code">n = [1, 2, 3, 4]
 
-print(list(map(lambda x: x * x, nombres)))          # [1, 4, 9, 16]
-print(list(filter(lambda x: x % 2 == 0, nombres)))  # [2, 4]</pre>
+list(map(lambda x: x * 2, n))        # [2, 4, 6, 8]
+list(filter(lambda x: x % 2 == 0, n)) # [2, 4]
+print(map(lambda x: x, n))            # &lt;map object&gt;</pre>
+<p>Mesuré, y compris la dernière ligne : <code>map</code> ne produit pas une liste mais un objet qui fabrique les valeurs à la demande. Sans <code>list()</code> autour, on n'affiche rien d'utile.</p>
+
+<h2>Le tri sur mesure</h2>
+<pre class="bloc-code">gens = [{"n": "A", "age": 30}, {"n": "B", "age": 20}]
+tries = sorted(gens, key=lambda g: g["age"])   # B avant A</pre>
+<p>Mesuré. C'est l'usage le plus fréquent et le plus justifié de la lambda : <code>key</code> demande « trier selon quoi ? », et la réponse tient en une expression.</p>
+
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Besoin</th><th>Écriture Python</th></tr>
+<tr><td>transformer</td><td><code>[x * 2 for x in n]</code> — ou <code>map</code></td></tr>
+<tr><td>filtrer</td><td><code>[x for x in n if ...]</code> — ou <code>filter</code></td></tr>
+<tr><td>trier selon un critère</td><td><code>sorted(l, key=lambda ...)</code></td></tr>
+</table>
+<p>Les deux premières lignes disent l'essentiel : en Python, la compréhension de liste fait la même chose que <code>map</code> et <code>filter</code>, en plus lisible. C'est elle qu'on écrit. <code>map</code> et <code>filter</code> restent utiles à <em>lire</em>, et avec <code>key</code> la lambda garde toute sa place.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>list()</code>.</strong> Afficher un <code>map</code> donne <code>&lt;map object&gt;</code>. La valeur est là, mais pas encore produite.</p>
+<p><strong>Vouloir plusieurs lignes dans une lambda.</strong> Impossible : une expression, pas un bloc. C'est le signal qu'il faut un <code>def</code>.</p>
+<p><strong>Écrire <code>return</code> dedans.</strong> Erreur de syntaxe : la valeur de l'expression est déjà le résultat.</p>
+<p><strong>En abuser.</strong> Une lambda imbriquée dans une autre est illisible. La règle de bon sens : si tu dois t'arrêter pour la comprendre, écris un <code>def</code> avec un nom qui explique.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>En Python, la lambda survit surtout grâce à <code>key</code> — dans <code>sorted</code>, <code>max</code> et <code>min</code>. Pour le reste, les compréhensions l'ont largement remplacée, et c'est un choix assumé de la communauté : le code le plus lisible gagne.</p>
+
+<div class="a-retenir">
 <ul>
-<li><code>map</code> applique une fonction à <strong>chaque</strong> élément (comme le <code>.map()</code> de JavaScript) ;</li>
-<li><code>filter</code> ne garde que ceux qui passent le test.</li>
+<li>Une lambda est une fonction en une <strong>expression</strong>, sans nom et sans <code>return</code>.</li>
+<li>Son usage le plus justifié est <code>key=</code> dans un tri.</li>
+<li><code>map</code> et <code>filter</code> rendent des objets à la demande : <code>list()</code> pour les voir.</li>
+<li>En Python, on leur préfère les compréhensions de liste.</li>
 </ul>
-<p>Le <code>list(...)</code> autour est nécessaire : ces fonctions renvoient un objet paresseux, qui ne calcule que si on le lui demande.</p>
+</div>
 
-<div class="astuce"><div>En pratique, les Pythonistes préfèrent souvent la compréhension de liste : <code>[x*x for x in nombres]</code> se lit mieux que le <code>map</code> équivalent. Mais <code>lambda</code> reste indispensable pour <code>key=</code> dans les tris — c'est là que tu la rencontreras le plus.</div></div>
+<details class="plus-loin">
+<summary>Aller plus loin : trier sur deux critères</summary>
+<p><code>key</code> peut rendre un tuple : <code>sorted(gens, key=lambda g: (g["ville"], g["age"]))</code> trie par ville, puis par âge à l'intérieur de chaque ville. Python compare les tuples élément par élément, ce qui donne exactement le comportement attendu. C'est l'une des écritures les plus utiles du langage, et elle tient en une ligne.</p>
+</details>
 `,
   exercices: [
     {
@@ -387,33 +504,64 @@ print(list(filter(lambda x: x % 2 == 0, nombres)))  # [2, 4]</pre>
   id: 'py-23',
   titre: 'Fonctions avancées',
   contenu: `
+<h2>Pourquoi ça existe</h2>
+<p>Une fonction bien conçue est agréable à appeler : on ne lui donne que ce qui change, et l'ordre des arguments ne se devine pas. Python offre pour cela deux outils — et cache dans le premier l'un de ses pièges les plus célèbres.</p>
+
 <h2>Les valeurs par défaut</h2>
 <pre class="bloc-code">def saluer(nom, salutation="Bonjour"):
     return salutation + " " + nom
 
-print(saluer("Alex"))               # Bonjour Alex
-print(saluer("Alex", "Salut"))      # Salut Alex</pre>
-<p>Un paramètre avec une valeur par défaut devient facultatif. Règle : les paramètres avec défaut se placent <strong>toujours après</strong> ceux qui n'en ont pas.</p>
+saluer("Alex")            # "Bonjour Alex"
+saluer("Alex", "Salut")   # "Salut Alex"</pre>
+<p>Un paramètre avec une valeur par défaut devient facultatif. Règle : <strong>ils se placent après les paramètres obligatoires</strong>, sans quoi Python ne saurait plus quoi associer à quoi.</p>
 
-<h2>Nommer les arguments à l'appel</h2>
+<h2>Les arguments nommés</h2>
 <pre class="bloc-code">def creer(nom, age, ville):
-    return nom + ", " + str(age) + " ans, " + ville
+    ...
 
-print(creer(nom="Alex", ville="Lyon", age=30))   # l'ordre n'importe plus</pre>
-<p>Quand une fonction a beaucoup de paramètres, nommer les arguments rend l'appel bien plus lisible — et immunise contre les erreurs d'ordre.</p>
+creer("Alex", 30, "Lyon")                      # qui est quoi ?
+creer(nom="Alex", ville="Lyon", age=30)        # clair, et l'ordre est libre</pre>
+<p>Nommer les arguments à l'appel rend la ligne lisible sans avoir à ouvrir la fonction. C'est particulièrement précieux dès qu'il y a plus de deux paramètres, ou qu'un booléen traîne — <code>trier(liste, True)</code> ne dit rien, <code>trier(liste, decroissant=True)</code> dit tout.</p>
 
-<h2>*args : un nombre libre d'arguments</h2>
-<pre class="bloc-code">def somme(*nombres):
-    total = 0
-    for n in nombres:
-        total += n
-    return total
+<h2>Pas à pas : le piège du défaut mutable</h2>
+<pre class="bloc-code">def ajoute(x, liste=[]):
+    liste.append(x)
+    return liste
 
-print(somme(1, 2))          # 3
-print(somme(1, 2, 3, 4))    # 10</pre>
-<p>L'étoile signifie « rassemble tous les arguments restants dans un tuple nommé <code>nombres</code> ». C'est exactement ce qui permet à <code>print()</code> d'accepter autant de valeurs qu'on veut.</p>
+print(ajoute(1))   # [1]
+print(ajoute(2))   # [1, 2]   ?!</pre>
+<p>Mesuré : le second appel rend <code>[1, 2]</code>. On attendait <code>[2]</code>.</p>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>Ce qui se passe</th></tr>
+<tr><td>à la <strong>définition</strong></td><td>la liste vide est créée, <strong>une seule fois</strong></td></tr>
+<tr><td>premier appel</td><td>on y ajoute 1</td></tr>
+<tr><td>second appel</td><td>c'est <em>la même liste</em> : elle contient encore 1</td></tr>
+</table>
+<p>La valeur par défaut est évaluée à la définition de la fonction, pas à chaque appel. Avec un nombre ou un texte, qui ne se modifient jamais, cela ne se voit pas. Avec une liste ou un dictionnaire, la mémoire persiste d'un appel à l'autre.</p>
+<p>La parade est toujours la même : <code>def ajoute(x, liste=None):</code> puis <code>if liste is None: liste = []</code> dans le corps.</p>
 
-<div class="attention"><div>Piège célèbre : ne mets <strong>jamais</strong> une liste ou un dictionnaire comme valeur par défaut (<code>def f(items=[])</code>). Cette liste est créée une seule fois et partagée entre tous les appels : elle se remplit d'un appel à l'autre. La bonne pratique est <code>def f(items=None)</code>, puis créer la liste à l'intérieur.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Le défaut mutable.</strong> Celui-ci, mesuré ci-dessus, est le plus célèbre de Python. Il ne lève aucune erreur, et le bug apparaît seulement au second appel — souvent longtemps après l'écriture.</p>
+<p><strong>Un paramètre par défaut avant un obligatoire.</strong> <code>def f(a=1, b)</code> est refusé net par Python.</p>
+<p><strong>Mélanger l'ordre à l'appel.</strong> Les arguments nommés viennent toujours après les positionnels : <code>f(nom="Alex", 30)</code> est une erreur de syntaxe.</p>
+<p><strong>Trop de paramètres.</strong> Au-delà de quatre ou cinq, la fonction fait sans doute deux choses — ou mérite de recevoir un dictionnaire.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Les bibliothèques Python s'appuient énormément sur les arguments nommés : une fonction de tracé de graphique en accepte parfois trente, tous facultatifs. C'est ce qui permet d'écrire <code>tracer(donnees, couleur="rouge")</code> sans se soucier des vingt-neuf autres.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Les paramètres à valeur par défaut se placent <strong>après</strong> les obligatoires.</li>
+<li>Nommer les arguments à l'appel rend la ligne lisible et libère l'ordre.</li>
+<li>Un défaut <strong>mutable</strong> (liste, dictionnaire) est partagé entre tous les appels.</li>
+<li>La parade : <code>=None</code>, puis créer la liste dans le corps.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : un nombre libre d'arguments</summary>
+<p><code>def total(*nombres)</code> rassemble tous les arguments reçus dans un tuple ; <code>def creer(**options)</code> rassemble les arguments nommés dans un dictionnaire. On les croise surtout dans les fonctions qui en enveloppent d'autres et doivent transmettre ce qu'elles reçoivent sans le connaître. C'est le même symbole que le déballage vu avec <code>zip</code>, utilisé dans l'autre sens.</p>
+</details>
 `,
   exercices: [
     {
@@ -482,8 +630,11 @@ print(somme(1, 2, 3, 4))    # 10</pre>
   id: 'py-24',
   titre: 'L\'héritage en Python',
   contenu: `
-<p>Tu as vu l'héritage en Java. Python le propose aussi, en plus léger.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Un chien et un chat partagent beaucoup : un nom, un âge, la capacité de crier. Écrire deux classes complètes reviendrait à recopier tout ce qui est commun — et à le corriger deux fois le jour où il change.</p>
+<p>L'<strong>héritage</strong> permet de dire : « un chien <em>est</em> un animal, avec ceci en plus ».</p>
 
+<h2>Le parent et l'enfant</h2>
 <pre class="bloc-code">class Animal:
     def __init__(self, nom):
         self.nom = nom
@@ -491,35 +642,54 @@ print(somme(1, 2, 3, 4))    # 10</pre>
     def crier(self):
         return "..."
 
-class Chien(Animal):              # entre parenthèses : la classe parente
-    def crier(self):              # on redéfinit la méthode
-        return self.nom + " fait Ouaf !"
+class Chien(Animal):          # entre parentheses : la classe parente
+    def crier(self):          # on redefinit la methode
+        return "Ouaf"
 
-rex = Chien("Rex")
-print(rex.crier())     # Rex fait Ouaf !
-print(rex.nom)         # Rex — hérité d'Animal</pre>
+c = Chien("Rex")
+print(c.nom, c.crier())       # Rex Ouaf
+print(isinstance(c, Animal))  # True</pre>
+<p>Mesuré. <code>Chien</code> n'a pas de <code>__init__</code> : il reprend celui d'<code>Animal</code>. Il redéfinit seulement <code>crier</code>, et c'est bien sa version qui s'exécute.</p>
+<p><code>isinstance(c, Animal)</code> rend <code>True</code> : un chien <em>est</em> un animal. C'est le test à retenir — il accepte aussi les classes filles, contrairement à une comparaison de type exacte.</p>
 
-<p><code>Chien</code> reçoit tout ce que possède <code>Animal</code>, y compris le constructeur. Comme <code>Chien</code> n'en définit pas, celui du parent est utilisé automatiquement.</p>
+<h2>super : compléter au lieu de remplacer</h2>
+<pre class="bloc-code">class Chien(Animal):
+    def __init__(self, nom, race):
+        super().__init__(nom)    # le travail du parent
+        self.race = race         # puis le sien</pre>
+<p><code>super()</code> appelle la méthode du parent. Sans lui, redéfinir <code>__init__</code> écraserait complètement celui d'<code>Animal</code>, et <code>self.nom</code> n'existerait jamais.</p>
 
-<h2>super() : compléter le parent au lieu de le remplacer</h2>
-<pre class="bloc-code">class Chat(Animal):
-    def __init__(self, nom, couleur):
-        super().__init__(nom)      # le parent range le nom
-        self.couleur = couleur     # on ajoute notre propre attribut</pre>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Appel</th><th>Où Python cherche</th></tr>
+<tr><td><code>c.crier()</code></td><td>dans <code>Chien</code> d'abord : trouvé, il s'arrête</td></tr>
+<tr><td><code>c.nom</code></td><td>posé par <code>__init__</code>, hérité d'<code>Animal</code></td></tr>
+<tr><td>une méthode absente des deux</td><td>erreur : <em>l'attribut n'existe pas</em></td></tr>
+</table>
+<p>La règle tient en une phrase : <strong>on cherche d'abord dans l'enfant, puis on remonte</strong>.</p>
 
-<h2>__str__ : décider comment l'objet s'affiche</h2>
-<pre class="bloc-code">class Animal:
-    def __init__(self, nom):
-        self.nom = nom
+<h2>Les pièges</h2>
+<p><strong>Oublier <code>super().__init__()</code>.</strong> L'objet se crée sans erreur, et plante plus tard sur un attribut manquant — loin de la cause.</p>
+<p><strong>Oublier <code>self</code> dans la méthode redéfinie.</strong> Même message que d'habitude, et il nomme la cause : <em>« la cause la plus fréquente est un « self » oublié en premier paramètre. »</em></p>
+<p><strong>Hériter sans raison.</strong> L'héritage n'est justifié que si l'enfant <em>est</em> vraiment un cas particulier du parent. Si la relation est « contient » plutôt que « est », mieux vaut ranger un objet dans un attribut.</p>
+<p><strong>Empiler les niveaux.</strong> Trois ou quatre générations de classes rendent impossible de savoir d'où vient une méthode. L'usage moderne est de rester très plat.</p>
 
-    def __str__(self):
-        return "Animal nommé " + self.nom
+<h2>Dans la vraie vie</h2>
+<p>L'héritage est partout dans les bibliothèques : on hérite d'une classe fournie pour en adapter le comportement. En revanche, dans le code d'application, la tendance actuelle est de l'utiliser avec parcimonie — et de préférer la <em>composition</em>, qui consiste à assembler des objets plutôt qu'à les faire descendre les uns des autres.</p>
 
-a = Animal("Rex")
-print(a)      # Animal nommé Rex</pre>
-<p>Sans <code>__str__</code>, <code>print(a)</code> afficherait quelque chose comme <code>&lt;__main__.Animal object at 0x...&gt;</code> — techniquement exact, mais illisible. C'est l'équivalent exact du <code>toString()</code> de Java.</p>
+<div class="a-retenir">
+<ul>
+<li><code>class Enfant(Parent):</code> reprend tout, et peut redéfinir.</li>
+<li><code>super().__init__(...)</code> appelle le constructeur du parent — à ne pas oublier.</li>
+<li>Python cherche d'abord dans l'enfant, puis remonte.</li>
+<li><code>isinstance(obj, Classe)</code> accepte aussi les classes filles.</li>
+</ul>
+</div>
 
-<div class="info"><div>Les méthodes entourées de doubles tirets bas (<code>__init__</code>, <code>__str__</code>) sont appelées « méthodes spéciales ». Python les appelle tout seul au bon moment : à la création de l'objet, à l'affichage, à la comparaison… Elles permettent à tes classes de se comporter comme les types intégrés.</div></div>
+<details class="plus-loin">
+<summary>Aller plus loin : hériter de plusieurs classes</summary>
+<p>Python l'autorise : <code>class C(A, B)</code>. La plupart des langages l'interdisent, parce que la question « si A et B ont la même méthode, laquelle gagne ? » devient vite inextricable. Python y répond par un ordre de résolution précis et documenté — mais l'usage reste réservé à des cas particuliers, et la plupart des guides de style recommandent de s'en passer.</p>
+</details>
 `,
   exercices: [
     {
@@ -588,37 +758,58 @@ print(a)      # Animal nommé Rex</pre>
   id: 'py-25',
   titre: 'Les générateurs : produire à la demande',
   contenu: `
-<p>Imagine une fonction qui doit renvoyer un million de nombres. Avec une liste, il faut d'abord tout construire en mémoire — et attendre. Un <strong>générateur</strong> les produit <strong>un par un, à la demande</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Imagine une fonction qui doit renvoyer un million de nombres. Avec une liste, il faut d'abord tout construire en mémoire, puis attendre que ce soit fini — avant même de pouvoir regarder le premier.</p>
+<p>Un <strong>générateur</strong> les produit un par un, à la demande. Rien n'est construit d'avance, et le premier résultat arrive tout de suite.</p>
 
+<h2>yield, au lieu de return</h2>
 <pre class="bloc-code">def compter(n):
     i = 1
-    while i <= n:
-        yield i          # yield, pas return !
+    while i &lt;= n:
+        yield i
         i += 1
 
-for x in compter(3):
-    print(x)             # 1, 2, 3</pre>
+print(list(compter(3)))   # [1, 2, 3]
+print(compter(3))         # &lt;generator object compter&gt;</pre>
+<p>Mesuré, y compris la dernière ligne. Un seul mot change tout : <code>yield</code> au lieu de <code>return</code>.</p>
+<p>La différence est de nature. <code>return</code> <strong>termine</strong> la fonction ; <code>yield</code> la met <strong>en pause</strong>, rend une valeur, et reprend exactement là où elle s'était arrêtée au tour suivant — avec toutes ses variables intactes.</p>
 
-<h2>Ce que change yield</h2>
-<p><code>return</code> termine la fonction définitivement. <code>yield</code>, lui, <strong>met la fonction en pause</strong> : elle renvoie une valeur, garde sa place, et reprend exactement là où elle s'était arrêtée au tour suivant.</p>
-<p>Conséquence : à aucun moment la totalité des valeurs n'existe en mémoire. Tu peux écrire un générateur infini sans faire exploser ton ordinateur.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>Ce qui se passe</th></tr>
+<tr><td><code>compter(3)</code></td><td>Rien ne s'exécute. On reçoit un générateur.</td></tr>
+<tr><td>on demande la 1re valeur</td><td>Le corps tourne jusqu'au <code>yield</code> : il rend 1, et <strong>gèle</strong>.</td></tr>
+<tr><td>on demande la 2e</td><td>Il reprend après le <code>yield</code>, avec <code>i</code> valant toujours 1.</td></tr>
+<tr><td>la condition devient fausse</td><td>La fonction se termine : plus rien à produire.</td></tr>
+</table>
+<p>Le point surprenant est le premier : appeler la fonction n'exécute <em>rien</em>. C'est pourquoi <code>print(compter(3))</code> affiche <code>&lt;generator object&gt;</code> et non des nombres.</p>
 
-<h2>Le comparer à une liste</h2>
-<pre class="bloc-code">def carres_liste(n):
-    resultat = []
-    for i in range(n):
-        resultat.append(i * i)
-    return resultat          # tout est construit, puis renvoyé
+<h2>Le bénéfice réel</h2>
+<p>Une liste d'un million de nombres occupe la mémoire d'un million de nombres. Un générateur n'en garde qu'un à la fois, quel que soit le total. Et si l'on s'arrête au dixième, les neuf cent quatre-vingt-dix mille autres ne sont jamais calculés.</p>
+<p>C'est ce qui permet de lire un fichier de dix gigaoctets ligne par ligne sans jamais le charger entièrement.</p>
 
-def carres_gen(n):
-    for i in range(n):
-        yield i * i          # chacun est produit quand on le demande</pre>
-<p>Pour 10 valeurs, aucune différence perceptible. Pour 10 millions, la première version sature la mémoire et la seconde n'en utilise presque aucune.</p>
+<h2>Les pièges</h2>
+<p><strong>Croire qu'on obtient une liste.</strong> Sans <code>list()</code>, on ne voit rien d'utile. C'est le symptôme reconnaissable.</p>
+<p><strong>Le parcourir deux fois.</strong> Un générateur <strong>s'épuise</strong> : une fois parcouru, il est vide. Une seconde boucle ne donne rien, sans aucune erreur. Si tu dois relire, garde une liste.</p>
+<p><strong>Chercher <code>len()</code>.</strong> Il n'en a pas : il ne sait pas combien de valeurs il produira. Il faut le convertir, ce qui annule son intérêt.</p>
+<p><strong>En faire un par réflexe.</strong> Sur dix éléments, la liste est plus simple et plus pratique. Le générateur se justifie quand le volume est grand, ou quand on peut s'arrêter en route.</p>
 
-<h2>Le convertir en liste</h2>
-<pre class="bloc-code">print(list(compter(4)))     # [1, 2, 3, 4]</pre>
+<h2>Dans la vraie vie</h2>
+<p>Tu en utilises depuis le début sans le savoir : <code>range</code>, <code>map</code>, <code>filter</code>, <code>zip</code> et <code>enumerate</code> fonctionnent tous ainsi. C'est pour cela que <code>print(range(5))</code> affiche <code>range(0, 5)</code> au lieu de la liste — Python ne fabrique rien tant qu'on ne demande pas.</p>
 
-<div class="info"><div>Tu utilises déjà des générateurs sans le savoir : <code>range(1000000)</code> ne fabrique pas un million de nombres, il les produit au fur et à mesure. C'est pour ça qu'il est instantané.</div></div>
+<div class="a-retenir">
+<ul>
+<li><code>yield</code> met la fonction en pause et la reprend où elle s'était arrêtée.</li>
+<li>Appeler la fonction n'exécute rien : il faut parcourir ou convertir.</li>
+<li>Un générateur <strong>s'épuise</strong> : on ne le parcourt qu'une fois.</li>
+<li><code>range</code>, <code>map</code>, <code>filter</code> et <code>zip</code> fonctionnent tous de cette façon.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : un générateur sans fin</summary>
+<p><code>while True: yield i; i += 1</code> produit des nombres indéfiniment — et ne bloque pas, puisque rien n'est calculé d'avance. On l'arrête en cessant de demander, ou avec <code>itertools.islice(gen, 10)</code> pour en prendre dix. C'est impossible avec une liste, qu'il faudrait construire en entier : certaines idées ne sont réalisables qu'avec des générateurs.</p>
+</details>
 `,
   exercices: [
     {
@@ -684,35 +875,58 @@ def carres_gen(n):
   id: 'py-26',
   titre: 'Les dates',
   contenu: `
-<p>Manipuler des dates est l'un des besoins les plus fréquents — et l'une des sources de bugs les plus classiques (mois à 30 ou 31 jours, années bissextiles, fuseaux horaires). Python fournit un module dédié : <code>datetime</code>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Manipuler des dates est l'un des besoins les plus fréquents — et l'une des sources de bugs les plus classiques. Combien de jours en février ? Quelle date dans 45 jours ? Quel âge a quelqu'un né le 29 février ?</p>
+<p>Personne ne veut recalculer cela à la main. Python fournit un module dédié, <code>datetime</code>, qui connaît les mois irréguliers et les années bissextiles.</p>
 
+<h2>Créer et lire une date</h2>
 <pre class="bloc-code">import datetime
 
-d = datetime.date(2024, 7, 14)      # année, mois, jour
-print(d)                            # 2024-07-14
-print(d.year, d.month, d.day)       # 2024 7 14
+d = datetime.date(2026, 10, 12)
+print(d)                      # 2026-10-12
+print(d.year, d.month, d.day) # 2026 10 12</pre>
+<p>Mesuré. Première bonne nouvelle par rapport à JavaScript : <strong>les mois comptent à partir de 1</strong>. Octobre est le mois 10, comme on l'écrit partout ailleurs.</p>
+<p>Et <code>print(d)</code> affiche directement <code>2026-10-12</code> — le format international, où l'ordre décroissant permet de trier des dates par simple comparaison de texte.</p>
 
-aujourdhui = datetime.date.today()</pre>
+<h2>Afficher autrement</h2>
+<pre class="bloc-code">print(d.strftime("%d/%m/%Y"))   # 12/10/2026</pre>
+<p>Mesuré. <code>strftime</code> met en forme : <code>%d</code> le jour, <code>%m</code> le mois, <code>%Y</code> l'année sur quatre chiffres. Les codes sont nombreux et se cherchent dans la documentation — personne ne les retient tous.</p>
 
-<h2>Calculer entre deux dates</h2>
-<pre class="bloc-code">debut = datetime.date(2024, 1, 1)
-fin = datetime.date(2024, 3, 1)
-
-ecart = fin - debut
-print(ecart.days)      # 60</pre>
-<p>Soustraire deux dates donne une <strong>durée</strong>, dont <code>.days</code> extrait le nombre de jours. Python gère seul les mois de longueurs différentes et les années bissextiles — c'est précisément pour ça qu'on n'écrit jamais ce calcul à la main.</p>
-
-<h2>Afficher une date au format français</h2>
-<pre class="bloc-code">d = datetime.date(2024, 7, 14)
-print(d.strftime("%d/%m/%Y"))     # 14/07/2024</pre>
-<table class="memo-table">
-<tr><th>Code</th><th>Signifie</th></tr>
-<tr><td>%d</td><td>le jour sur 2 chiffres</td></tr>
-<tr><td>%m</td><td>le mois sur 2 chiffres</td></tr>
-<tr><td>%Y</td><td>l'année sur 4 chiffres</td></tr>
+<h2>Pas à pas : la différence entre deux dates</h2>
+<pre class="bloc-code">d = datetime.date(2026, 10, 12)
+e = datetime.date(2026, 12, 25)
+print((e - d).days)   # 74</pre>
+<table class="memo-table trace">
+<tr><th>Opération</th><th>Ce qu'on obtient</th></tr>
+<tr><td><code>e - d</code></td><td>une <strong>durée</strong>, pas un nombre</td></tr>
+<tr><td><code>(e - d).days</code></td><td>74 — le nombre de jours</td></tr>
+<tr><td><code>d + timedelta(days=30)</code></td><td>une nouvelle date, 30 jours plus tard</td></tr>
 </table>
+<p>Mesuré : 74 jours, mois irréguliers compris. C'est précisément ce qu'on ne veut pas calculer soi-même.</p>
+<p>Deux types cohabitent donc : <code>date</code>, un point dans le temps, et <code>timedelta</code>, une durée. Soustraire deux dates donne une durée ; ajouter une durée à une date donne une date.</p>
 
-<div class="attention"><div>Ne stocke jamais une date sous forme de texte (<code>"14/07/2024"</code>). Tu ne pourras ni la comparer, ni calculer avec, et le tri sera alphabétique — plaçant le 02/01 avant le 14/07 mais aussi avant le 01/12. Toujours un vrai type date.</div></div>
+<h2>Les pièges</h2>
+<p><strong>Croire que <code>e - d</code> donne un nombre.</strong> C'est un <code>timedelta</code>. Il faut <code>.days</code> pour obtenir l'entier.</p>
+<p><strong>Confondre <code>date</code> et <code>datetime</code>.</strong> Le premier est un jour, le second un jour <em>et</em> une heure. Les mélanger dans une soustraction lève une erreur de types.</p>
+<p><strong>Calculer un âge en divisant par 365.</strong> Les années bissextiles faussent le résultat. On compare les années, puis on retire 1 si l'anniversaire n'est pas encore passé.</p>
+<p><strong>Oublier l'import.</strong> <code>datetime.date(...)</code> sans <code>import datetime</code> donne <em>« le nom « datetime » est inconnu »</em>.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Dès que les fuseaux horaires entrent en jeu, les choses se compliquent sérieusement : un même instant n'a pas la même date selon l'endroit, et les changements d'heure créent des heures qui n'existent pas. Les équipes passent alors à des bibliothèques spécialisées — mais pour une date de naissance ou une échéance, <code>datetime</code> suffit largement.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>datetime.date(2026, 10, 12)</code> — et les mois comptent à partir de <strong>1</strong>.</li>
+<li>Soustraire deux dates donne une <strong>durée</strong> : <code>.days</code> pour le nombre de jours.</li>
+<li><code>strftime</code> met en forme ; <code>timedelta</code> permet d'ajouter une durée.</li>
+<li>Un âge ne se calcule jamais en divisant par 365.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : le format qui se trie tout seul</summary>
+<p><code>2026-10-12</code> suit la norme ISO 8601, et son ordre — du plus grand au plus petit — n'est pas arbitraire : un tri alphabétique de ces chaînes donne exactement un tri chronologique. Aucun autre format courant n'a cette propriété. C'est pourquoi on le retrouve dans les bases de données, les noms de fichiers de sauvegarde et les fichiers journaux du monde entier.</p>
+</details>
 `,
   exercices: [
     {

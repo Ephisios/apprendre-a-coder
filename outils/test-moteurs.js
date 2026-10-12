@@ -359,7 +359,8 @@ if (!Sk) {
        les leçons qui enseignent justement les tuples et les classes, où ce
        conseil envoie chercher au mauvais endroit. */
     ['un tuple qu\'on modifie', 'p = (3, 4)\np[0] = 9', /ne se modifie pas une fois créée/],
-    ['un self oublié dans une méthode', 'class C:\n    def crier():\n        return 1\nC().crier()', /« self » oublié/]
+    ['un self oublié dans une méthode', 'class C:\n    def crier():\n        return 1\nC().crier()', /« self » oublié/],
+    ['un module mal orthographié', 'import maths\nprint(maths.pi)', /module « maths » est introuvable/]
   ];
 
   let restesEnAnglais = 0;

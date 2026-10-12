@@ -6,6 +6,51 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.14.0 — 2026-10-12
+
+**Tout Python est au gabarit** : les 26 leçons des trois modules, de `print` aux générateurs. Et
+un seuil discret est franchi — la médiane du cours entier atteint **451 mots**, contre 155 au
+départ de cette campagne.
+
+### Changé
+
+- **Les 17 leçons restantes de Python 2 et 3 passent au gabarit.** De 94-186 mots à **398-468**.
+  Aucun exercice n'a été touché.
+
+### Corrigé — un troisième message laissé en anglais
+
+`import maths` — avec un s — répondait `ImportError: No module named maths`, en anglais brut. Or
+`py-13` enseigne précisément les imports, et c'est la faute de frappe la plus prévisible de la
+leçon. Le cours répond maintenant :
+
+> *« le module « maths » est introuvable. Vérifie son orthographe — les modules les plus utilisés
+> ici sont random, math et datetime. »*
+
+La faute entre au harnais des moteurs, qui en compte **153**.
+
+### Ce que la mesure a établi
+
+Tout vient du moteur du cours, lancé dans un vrai Chrome. Six relevés servent d'argument :
+
+- `random.randint(1, 6)` inclut **les deux bornes**, contrairement à `range` qui exclut la
+  seconde — deux conventions opposées dans le même langage ;
+- le piège du **paramètre par défaut mutable** : `ajoute(1)` rend `[1]`, puis `ajoute(2)` rend
+  **`[1, 2]`**. La liste est créée à la définition, pas à chaque appel ;
+- `print(compter(3))` sur un générateur affiche `<generator object compter>` — appeler la
+  fonction n'exécute rien ;
+- `print(map(...))` affiche `<map object>`, pour la même raison ;
+- `{1, 2, 2, 3}` donne `{1, 2, 3}` : l'ensemble dédoublonne, et `a & b`, `a | b`, `a - b`
+  fonctionnent comme en théorie des ensembles ;
+- `(date(2026,12,25) - date(2026,10,12)).days` donne **74**, mois irréguliers compris.
+
+### Où en est la conversion
+
+**115 leçons sur 168**, contre 98. Sept pistes complètes : HTML, CSS, les trois modules
+JavaScript et les trois modules Python. Les 53 restantes sont toujours à 158 mots de médiane :
+C (14), Java (13), SQL (17), les projets et les deux bouts du parcours.
+
+---
+
 ## 3.13.0 — 2026-10-12
 
 Le premier module Python passe au gabarit — et la mesure préalable a mis au jour deux messages

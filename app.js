@@ -1360,6 +1360,12 @@ function traduirePython(message, code) {
     return diagnostiquerSyntaxe(code, numero) ||
       ('erreur de syntaxe' + (numero ? ' à la ligne ' + numero : '') + ' : Python ne comprend pas cette ligne. Regarde s\'il manque un « : » en fin de ligne, une parenthèse ou un guillemet fermant.');
   }
+  // Un module inconnu : presque toujours une faute de frappe, ou un module
+  // absent de cet interpréteur. L'élève ne doit pas rester sur de l'anglais.
+  if (/ImportError|No module named/i.test(m)) {
+    const mod = (m.match(/No module named ([\w.]+)/) || [])[1];
+    return 'le module « ' + (mod || '?') + ' » est introuvable. Vérifie son orthographe — les modules les plus utilisés ici sont random, math et datetime.';
+  }
   if (/KeyError/i.test(m)) return 'cette clé n\'existe pas dans le dictionnaire. Vérifie l\'orthographe de la clé — ' + m;
   if (/IndexError|index out of range/i.test(m)) return 'tu demandes un élément qui n\'existe pas dans la liste. Rappel : le premier est à l\'indice 0, donc une liste de 3 éléments va de 0 à 2.';
   if (/division by zero|ZeroDivisionError/i.test(m)) return 'division par zéro impossible.';
