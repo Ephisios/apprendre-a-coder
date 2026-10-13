@@ -23,7 +23,7 @@ en français, sans jargon.
 |  |  |
 |---|---|
 | **168 leçons** | progressives, de « c'est quoi coder ? » aux pointeurs et aux classes |
-| **504 exercices** | tous corrigés automatiquement, avec un message d'erreur écrit à la main |
+| **512 exercices** | tous corrigés automatiquement, avec un message d'erreur écrit à la main |
 | **12 modules** | le parcours se suit dans l'ordre, ou se pioche |
 | **7 langages** | HTML, CSS, JavaScript, Python, SQL, C, Java |
 | **13 mémos** | une encyclopédie consultable à tout moment, avec recherche |
@@ -82,7 +82,7 @@ Rien n'est proposé avant d'avoir essayé. Premier échec : un indice, qui dit *
 réponse — et il faut avoir réessayé entre chaque. La solution n'arrive qu'une fois les paliers
 épuisés.
 
-**Les 425 exercices corrigés sont tous à trois paliers**, dans les sept langages. Le premier nomme
+**Les 434 exercices corrigés sont tous à trois paliers**, dans les sept langages. Le premier nomme
 le piège propre à l'exercice — qu'une règle CSS fausse est ignorée en silence, qu'une balise jamais
 refermée met en gras tout ce qui suit, que le premier élément d'une liste Python ne porte pas le
 numéro 1.
@@ -109,7 +109,7 @@ Les refaire ne touche à rien.
 
 ## Comment le contenu est vérifié
 
-504 exercices corrigés automatiquement, c'est 434 correcteurs écrits à la main (les 70 QCM se corrigent, eux, par leur indice de bonne réponse). Un correcteur trop
+512 exercices corrigés automatiquement, c'est 434 correcteurs écrits à la main (les 78 QCM se corrigent, eux, par leur indice de bonne réponse). Un correcteur trop
 permissif est pire qu'absent : il félicite pour une réponse fausse. Deux harnais veillent.
 
 ```bash
@@ -165,11 +165,11 @@ Sans navigateur sur la machine, il le dit en gros et rend la main sans faire éc
 367 copies sabotées présentées    — 367 refusées, 0 non éprouvé
  63 correcteurs de mise en page   — 0 échec, 0 complaisant (navigateur)
 247 vérifications d'interface     — 0 échec (aide, éditeur, projets, a11y, câblage, repérage)
-158 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
+171 vérifications des moteurs     — 0 échec (SQL, C, Java, messages Python)
  19 vérifications au navigateur   — 0 échec (Worker, minuteurs, contraste, focus, souris)
 434 exercices à trois paliers     — 0 palier cassé, doublé ou inversé
 168 leçons au gabarit             — toutes, 0 à qui il manque une partie
- 70 QCM                           — 0 sans explication, 0 mauvaise réponse sans aide
+ 78 QCM                           — 0 sans explication, 0 mauvaise réponse sans aide
 ```
 
 Soit **434 correcteurs sur 434** mis à l'épreuve, et pas seulement exécutés — le tout en une seule
@@ -194,7 +194,7 @@ sql-moteur.js       le moteur SQL et sa base de cinéma
 moteur-cj.js        l'interpréteur C et Java
 skulpt*.js          l'interpréteur Python, chargé au premier code Python
                     seulement (tiers — voir NOTICE.md)
-data-*.js           les 168 leçons et 504 exercices
+data-*.js           les 168 leçons et 512 exercices
 outils/             les harnais de vérification (développement)
   verifier-contenu.js       rejoue les exercices et sabote les copies (Node)
   test-interface.js         l'aide, les genres, la recherche, la sauvegarde (jsdom)

@@ -111,6 +111,24 @@ for (const fruit of fruits) {
         if (!/combat/i.test(ctx.logs.join(' '))) return { ok: false, message: 'Le comptage est bon ! L\'épée est dans l\'inventaire : « Prêt au combat ! » devrait s\'afficher (via <code>includes</code>).' };
         return { ok: true, message: 'Compter selon un critère : LE motif de base de l\'analyse de données. Tu viens de le faire comme un pro.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Le tableau vaut <code>["pomme", "poire"]</code>. Que fait <code>if (fruits.indexOf("pomme")) { … }</code> — sans <code>!== -1</code> ?',
+      choix: [
+        'Le bloc s\'exécute : « pomme » est bien dans le tableau',
+        'JavaScript signale une erreur : indexOf ne s\'utilise pas dans un if',
+        'Le bloc ne s\'exécute pas, alors que « pomme » est bel et bien là',
+        'Le bloc s\'exécute, mais seulement parce que le tableau a deux éléments'
+      ],
+      bonne: 2,
+      explication: '<code>indexOf</code> ne répond pas oui ou non : il rend une <em>position</em>. Et « pomme » est en tête, donc il rend <strong>0</strong> — que JavaScript considère comme faux. Le test échoue ainsi exactement quand l\'élément cherché est le premier, c\'est-à-dire dans le cas le plus banal, et sans le moindre message. D\'où le <code>!== -1</code> — ou mieux, <code>includes</code>, qui répond vraiment par oui ou non.',
+      aides: [
+        'C\'est bien ce qu\'on attendrait, et c\'est justement le piège : <code>indexOf</code> rend la position de « pomme », pas un oui. Quelle est cette position, et comment JavaScript la juge-t-il ?',
+        'Aucune erreur : la ligne est parfaitement autorisée. Le problème n\'est pas la syntaxe, c\'est la <em>valeur</em> que rend <code>indexOf</code>.',
+        '',
+        'Le nombre d\'éléments n\'entre pas en jeu. Ce qui compte, c\'est à quelle position se trouve celui qu\'on cherche — et ici, il est au tout début.'
+      ]
     }
   ]
 },
@@ -264,6 +282,24 @@ prix.sort((a, b) => a - b);</pre>
         if (!ctx.logs.includes('12')) return { ok: false, message: '<code>tripler(4)</code> doit afficher 12.' };
         return { ok: true, message: 'Le piège numéro un des flèches, désamorcé : des accolades, et le return redevient ton travail.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> On écrit <code>const double = n =&gt; { n * 2 };</code> — avec des accolades. Que rend <code>double(5)</code> ?',
+      choix: [
+        'undefined : avec des accolades, il faut écrire le return',
+        '10, exactement comme sans les accolades',
+        'Une erreur de syntaxe : on ne met pas d\'accolades après une flèche',
+        'La fonction elle-même, au lieu de son résultat'
+      ],
+      bonne: 0,
+      explication: 'La flèche a deux formes, et elles ne se comportent pas pareil. <code>n =&gt; n * 2</code> — une seule expression, sans accolades — rend automatiquement le résultat. Dès qu\'on ouvre des accolades, on écrit un <em>corps de fonction</em> ordinaire : le <code>return</code> redevient obligatoire, et sans lui la fonction rend <code>undefined</code>. Aucune erreur ne le signale, ce qui en fait un bug particulièrement discret.',
+      aides: [
+        '',
+        'Ce serait vrai sans les accolades. Avec elles, la flèche n\'offre plus le retour automatique : le corps devient un bloc comme un autre.',
+        'Les accolades sont tout à fait permises après une flèche — c\'est même obligatoire dès qu\'il y a plusieurs instructions. Elles changent seulement ce qui est rendu.',
+        'Une fonction appelée avec des parenthèses s\'exécute bel et bien. La question est ce qu\'elle rend au bout — et ici, rien n\'a été rendu explicitement.'
+      ]
     }
   ]
 },
@@ -403,6 +439,24 @@ let positivesEnFahrenheit = temperatures
         if (!ctx.logs.some(l => l.replace(/\s/g, '').includes('[68,77,50]'))) return { ok: false, message: 'Résultat attendu : [68, 77, 50]. Vérifie l\'ordre (filter d\'abord, sinon tu convertis aussi les négatifs !) et la formule <code>c * 1.8 + 32</code>.' };
         return { ok: true, message: 'Les chaînes filter/map, c\'est le quotidien du traitement de données — de l\'appli météo aux tableaux de bord d\'entreprise.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> On a <code>const nombres = [1, 2, 3];</code> puis, seule sur sa ligne, <code>nombres.map(n =&gt; n * 2);</code>. Qu\'affiche ensuite <code>console.log(nombres)</code> ?',
+      choix: [
+        '2,4,6 — map a doublé le tableau',
+        'undefined — map a consommé le tableau',
+        'Une erreur, parce que le résultat de map n\'a pas été rangé',
+        '1,2,3 — le tableau n\'a pas changé d\'un iota'
+      ],
+      bonne: 3,
+      explication: '<code>map</code> ne touche jamais au tableau d\'origine : il en fabrique un <strong>nouveau</strong> et le rend. Appelé seul sur sa ligne, ce nouveau tableau n\'est rangé nulle part — il est calculé, puis jeté. C\'est pourquoi un <code>map</code> s\'écrit presque toujours à droite d\'un <code>=</code>. Si tu veux agir sur chaque élément sans rien récupérer, c\'est <code>forEach</code> qu\'il faut (lui rend <code>undefined</code>, et c\'est normal).',
+      aides: [
+        'C\'est l\'erreur la plus courante sur <code>map</code>. Il calcule bien 2, 4, 6 — mais où met-il ce résultat ? Certainement pas dans <code>nombres</code>.',
+        'Rien n\'est consommé ni vidé : <code>map</code> lit le tableau sans y toucher. <code>undefined</code> serait la réponse à une autre question — celle de ce que rend <code>forEach</code>.',
+        'Aucune erreur. Ne pas ranger un résultat est parfaitement légal en JavaScript, et c\'est précisément ce qui rend l\'oubli difficile à repérer.',
+        ''
+      ]
     }
   ]
 },
@@ -519,6 +573,24 @@ const de = Math.floor(Math.random() * 6) + 1;   // 1 a 6</pre>
         if (v < 0 || v > 10) return { ok: false, message: 'Ton compte de piles (' + v + ') dépasse les bornes — vérifie que tu n\'incrémentes qu\'une fois par tour.' };
         return { ok: true, message: 'Tu viens d\'écrire une simulation aléatoire — la base des jeux, mais aussi des prévisions météo et des modèles financiers (en beaucoup plus gros).' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> On a <code>const prix = 2.5;</code>. Qu\'affiche <code>console.log(prix.toFixed(2) + 1)</code> ?',
+      choix: [
+        '3.50',
+        '2.501',
+        '3.5',
+        'Une erreur : on n\'additionne pas un arrondi'
+      ],
+      bonne: 1,
+      explication: '<code>toFixed</code> ne rend pas un nombre arrondi : il rend un <strong>texte</strong>, ici <code>"2.50"</code>. Et un <code>+</code> entre un texte et un nombre ne fait pas une addition — il colle. On obtient donc <code>"2.501"</code>, qui ressemble à un prix et n\'en est pas un. La règle : <code>toFixed</code> au tout dernier moment, pour afficher, et jamais au milieu d\'un calcul.',
+      aides: [
+        'Ce serait la réponse si <code>toFixed</code> rendait un nombre. Regarde de quel type est vraiment sa valeur de retour — c\'est là que tout bascule.',
+        '',
+        'L\'arrondi à deux décimales donne bien 2.50, mais ensuite ? Le <code>+ 1</code> ne se comporte pas comme tu l\'attends, parce que son voisin de gauche n\'est pas un nombre.',
+        'Aucune erreur : coller un nombre derrière un texte est autorisé, et le résultat est un texte. C\'est ce silence qui rend le piège coûteux.'
+      ]
     }
   ]
 },
@@ -649,6 +721,24 @@ document.querySelector("#liste").appendChild(li);</pre>
         if (pastilles.length !== 3) return { ok: false, message: 'Après un DEUXIÈME clic, il doit y avoir 3 pastilles (pas 6) : vide la palette avec <code>innerHTML = ""</code> au début de l\'écouteur.' };
         return { ok: true, message: 'Boucle + création + hasard + styles : quatre briques assemblées en un vrai petit outil. Clique encore, chaque palette est unique !' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Tu fais <code>createElement("li")</code>, tu lui donnes un <code>textContent</code>… et tu oublies le <code>appendChild</code>. Que se passe-t-il ?',
+      choix: [
+        'Le texte apparaît tout en haut de la page, hors de la liste',
+        'Un message signale un élément orphelin',
+        'Le texte apparaît dans la liste, mais sans aucun style',
+        'Rien n\'apparaît, et rien ne le signale'
+      ],
+      bonne: 3,
+      explication: 'L\'élément existe pour de bon : il a son texte, et on peut l\'interroger. Mais il flotte en mémoire, sans parent — <code>parentNode</code> vaut <code>null</code> — et la page n\'en sait rien. Les trois temps sont <strong>créer, remplir, attacher</strong>, et le troisième est celui qu\'on oublie, parce que les deux premiers n\'ont rien produit de visible pour le rappeler. Aucune erreur n\'est levée : un élément détaché est une situation parfaitement normale.',
+      aides: [
+        'Pour apparaître où que ce soit, il faudrait d\'abord être attaché à quelque chose. Sans parent, l\'élément n\'est nulle part dans la page.',
+        'Rien ne le signale, et c\'est bien le problème : fabriquer un élément sans l\'attacher est tout à fait légitime — on le fait exprès quand on prépare plusieurs éléments avant de les poser d\'un coup.',
+        'L\'absence de style serait un problème de CSS. Ici, l\'élément n\'est pas dans la page du tout : il n\'y a rien à styler.',
+        ''
+      ]
     }
   ]
 },
@@ -789,6 +879,24 @@ document.querySelector("#liste").appendChild(li);</pre>
         if (compte.classList.contains('depasse')) return { ok: false, message: 'Dernier détail : quand on repasse SOUS la limite, la classe doit être retirée (le else avec classList.remove).' };
         return { ok: true, message: 'Réaction en temps réel à la frappe : ton interface est vivante. Twitter, à un détail près.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Le champ est <strong>vide</strong>, et tu écris <code>const n = Number(champ.value);</code>. Que vaut <code>n</code> ?',
+      choix: [
+        'NaN, puisqu\'un champ vide n\'est pas un nombre',
+        'undefined',
+        '0 — et c\'est tout le problème',
+        'Une chaîne vide, car Number laisse le vide tel quel'
+      ],
+      bonne: 2,
+      explication: '<code>Number("")</code> vaut <strong>0</strong>, et <code>Number(" ")</code> aussi. Un champ qu\'on n\'a pas rempli ressemble donc trait pour trait à un zéro saisi exprès — ton calcul part sans broncher avec une valeur que personne n\'a donnée. C\'est pourquoi on teste le vide <em>avant</em> de convertir, et pas en regardant si le résultat est <code>NaN</code> : il ne le sera pas.',
+      aides: [
+        '<code>NaN</code> est bien ce qu\'on obtient pour <code>Number("abc")</code> — du texte qui n\'est pas un nombre. Mais le vide, lui, est traité autrement, et c\'est précisément ce qui rend le cas sournois.',
+        '<code>undefined</code> viendrait d\'un champ qui n\'existe pas. Ici le champ existe : il contient une chaîne vide, et <code>Number</code> en fait quelque chose de bien précis.',
+        '',
+        '<code>Number</code> convertit toujours, et rend toujours un nombre — jamais un texte. La question est seulement : quel nombre, pour une chaîne vide ?'
+      ]
     }
   ]
 },
@@ -908,6 +1016,24 @@ const t = JSON.parse(localStorage.getItem("liste") || "[]");</pre>
           try { ctx.win.localStorage.removeItem('record'); } catch (e) {}
         }
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Tu ranges un tableau <strong>sans passer par JSON</strong> : <code>localStorage.setItem("notes", [1, 2, 3])</code>. Puis tu relis avec <code>getItem</code> et tu affiches <code>.length</code>. Qu\'obtiens-tu ?',
+      choix: [
+        '5, parce que le tableau est devenu le texte « 1,2,3 »',
+        '3, les trois éléments du tableau',
+        'undefined : le localStorage refuse les tableaux',
+        'Une erreur : ce que rend getItem n\'a pas de length'
+      ],
+      bonne: 0,
+      explication: 'Le <code>localStorage</code> ne sait stocker que du <strong>texte</strong>. Il ne refuse pas ton tableau : il le convertit à la va-vite, et <code>[1, 2, 3]</code> devient la chaîne <code>"1,2,3"</code> — cinq caractères. Tu relis donc du texte qui ressemble à tes données sans en être : <code>length</code> compte des caractères, et le premier élément n\'est plus le nombre 1 mais le caractère « 1 ». D\'où la règle : <code>JSON.stringify</code> à l\'aller, <code>JSON.parse</code> au retour.',
+      aides: [
+        '',
+        'Ce serait le cas si le tableau avait survécu au voyage. Or le <code>localStorage</code> ne garde que du texte — qu\'est devenu <code>[1, 2, 3]</code> en chemin, et combien de caractères cela fait-il ?',
+        'Rien n\'est refusé, et c\'est bien là le piège : la conversion se fait toute seule, sans un mot. <code>undefined</code> serait presque préférable, on verrait le problème tout de suite.',
+        'Aucune erreur : ce que rend <code>getItem</code> a bel et bien un <code>length</code>, puisque c\'est un texte. La surprise est dans sa valeur.'
+      ]
     }
   ]
 },
@@ -1030,6 +1156,24 @@ typeof undefined // "undefined"</pre>
         if (!/60\s*euros/.test(sortie)) return { ok: false, message: 'Le programme doit afficher « Total du panier : 60 euros ». Encore un bug quelque part — console.log(total) avant le if pour enquêter !' };
         return { ok: true, message: '🏆 MODULE AVANCÉ TERMINÉ ! Trois bugs réels, trouvés et corrigés à la méthode. Tu es prêt pour les projets guidés — les vraies applications t\'attendent.' };
       }
+    },
+    {
+      type: 'qcm',
+      consigne: '<strong>Question de contrôle.</strong> Qu\'affiche <code>console.log(typeof [])</code> — le type d\'un tableau ?',
+      choix: [
+        '« array »',
+        '« object » — et <code>typeof null</code> rend la même chose',
+        '« list »',
+        '« undefined », un tableau vide n\'ayant pas encore de type'
+      ],
+      bonne: 1,
+      explication: 'C\'est la grande faiblesse de <code>typeof</code> : il rend <code>"object"</code> pour un tableau, pour <code>null</code>, et pour à peu près tout ce qui n\'est ni un nombre, ni un texte, ni un booléen, ni une fonction. Il est excellent pour démasquer un texte déguisé en nombre, et inutile pour reconnaître un tableau. Pour ça, il existe un outil fait exprès : <code>Array.isArray()</code>, qui rend <code>true</code> pour un tableau et <code>false</code> pour <code>null</code>.',
+      aides: [
+        'Ce serait logique, et JavaScript ne l\'a jamais fait. <code>typeof</code> connaît très peu de catégories, et les tableaux tombent dans la plus vaste d\'entre elles.',
+        '',
+        '« list » n\'existe pas en JavaScript — les tableaux s\'appellent des <em>arrays</em>. Mais même avec le bon mot, <code>typeof</code> ne le dirait pas.',
+        'Un tableau vide est un tableau tout à fait constitué. <code>"undefined"</code> est ce que <code>typeof</code> rend pour une variable qui n\'a jamais reçu de valeur — et, curieusement, aussi pour une variable jamais déclarée, sans lever d\'erreur.'
+      ]
     }
   ]
 },

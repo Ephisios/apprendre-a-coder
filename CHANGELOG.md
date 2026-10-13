@@ -6,6 +6,68 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.20.0 — 2026-10-13
+
+Huit questions de contrôle pour « JavaScript avancé », qui n'en avait aucune. Les trois modules
+JavaScript ont désormais un QCM dans **chacune** de leurs leçons.
+
+### Ajouté
+
+- **Un QCM par leçon de `DATA_JSAVANCE`**, en dernière position : 8 questions, 4 choix chacune,
+  une explication sur la bonne réponse et **une aide écrite à la main sur chaque mauvaise**.
+- Chaque question porte sur la discrimination propre à sa leçon — celle que son « À retenir »
+  annonce — et non sur de la culture générale. Les bonnes réponses occupent les positions
+  2, 0, 3, 1, 3, 2, 0, 1 : chacune des quatre deux fois, pour qu'aucune place ne trahisse.
+
+### Les huit faits, mesurés avant d'être affirmés
+
+Un QCM dont la bonne réponse n'a pas été vue tourner est un pari. Les huit ont donc été lus dans
+le moteur du cours — et comme `executerJS` tourne dans un Worker, sans `document` ni
+`localStorage`, les deux derniers ont dû passer par l'aperçu de leçon, l'iframe :
+
+| Leçon | Ce que la mesure a donné |
+|---|---|
+| `jsav-1` | `indexOf("pomme")` sur `["pomme","poire"]` rend **0** — donc le `if` échoue |
+| `jsav-fleches` | `n => { n * 2 }` rend **undefined** ; `n => n * 2` rend 10 |
+| `jsav-2` | un `map` seul laisse l'original à `1,2,3` ; `forEach` rend `undefined` |
+| `jsav-3` | `(2.5).toFixed(2)` est le **texte** `"2.50"`, donc `+ 1` fait `"2.501"` |
+| `jsav-4` | créé et rempli sans `appendChild` : `parentNode` nul, 0 `<li>`, **aucune erreur** |
+| `jsav-5` | `Number("")` vaut **0**, `Number(" ")` aussi, `Number("abc")` est `NaN` |
+| `jsav-6` | un tableau rangé sans JSON revient en texte `"1,2,3"`, de longueur **5** |
+| `jsav-7` | `typeof []` et `typeof null` rendent tous deux `"object"` |
+
+### Éprouvé
+
+Un QCM mal écrit ne casse rien : il **dégrade en silence**. Les huit ont donc été sabotés de quatre
+façons — aide effacée sur une mauvaise réponse, aide écrite sur la bonne, `bonne` hors des bornes,
+explication vidée — et le harnais a refusé les **quatre**. Puis chacun a été joué dans un vrai
+Chrome, en cliquant les quatre réponses : les 32 messages sont ceux écrits à la main, aucun ne
+retombe sur le « Ce n'est pas la bonne réponse » passe-partout.
+
+### Corrigé — quatre chiffres du README
+
+La vérification des chiffres cités a montré que quatre avaient pris du retard. Ils viennent
+maintenant d'une mesure :
+
+| | disait | dit |
+|---|---|---|
+| exercices | 504 | **512** |
+| exercices à trois paliers | 425 | **434** |
+| vérifications des moteurs | 158 | **171** |
+| QCM | 70 | **78** |
+
+La ligne des moteurs était restée en arrière depuis la 3.19.0, qui avait ajouté cinq contrôles
+sans le dire au relevé. Le compte des correcteurs écrits à la main, lui, ne bouge pas : **434**,
+puisqu'un QCM se corrige par son indice de bonne réponse.
+
+### Ce qui reste
+
+`DATA_PROJETS` n'a aucun QCM, et ses quatre leçons n'ont que 2 exercices : une question y
+tiendrait sans rien bousculer. Ailleurs, les QCM sont épars — 1 sur 10 leçons en SQL, 3 sur 14 en
+C et en Java.
+
+---
+
 ## 3.19.0 — 2026-10-13
 
 **Les 168 leçons du cours sont au gabarit.** « Bienvenue » et la conclusion étaient les cinq
