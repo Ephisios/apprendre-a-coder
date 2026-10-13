@@ -6,6 +6,60 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.18.0 — 2026-10-13
+
+Les quatre projets guidés passent au gabarit. Ce ne sont pas des leçons de notion : le fil y est
+la **méthode** — par où commencer, quoi vérifier avant de continuer, et où vit l'état.
+
+### Changé
+
+- **Les 4 leçons de `DATA_PROJETS` passent au gabarit.** De 159-221 mots à **598-643**. Aucun
+  exercice n'a été touché. `DATA_PROJETS` devient le module au texte le plus dense du cours
+  (3 932 caractères de cours par leçon en moyenne).
+- Le fil des quatre projets est désormais explicite : `proj-1` garde son état **dans le HTML**,
+  et la remarque est posée en « Aller plus loin » ; `proj-2` sort l'état du HTML pour le mettre
+  dans deux variables ; `proj-4` en fait une **source de vérité** dont l'écran n'est qu'un reflet.
+
+### Deux pièges mesurés, qui ne disent rien du tout
+
+Les lectures ont été faites dans un vrai Chrome, par le chemin de l'aperçu de leçon. Deux
+erreurs classiques se révèlent **parfaitement silencieuses** — ni message, ni plantage :
+
+| L'erreur | Ce qui se passe vraiment |
+|---|---|
+| `for (var i …)` pour brancher les 3 boutons du quiz | les trois répondent `3` : le score reste à 0 |
+| `for (var i …)` dans la boucle d'affichage du carnet | cliquer une note **ne retire rien** (`splice(3, 1)`) |
+
+Les deux sont désormais dans « Les pièges » de `proj-2` et `proj-4`, avec le comportement observé
+plutôt qu'une mise en garde abstraite. C'est la différence entre « attention à `var` » et « voilà
+ce que tu verras à l'écran, et pourquoi tu ne verras rien d'autre ».
+
+### Ce que la mesure a établi
+
+- l'aperçu d'une leçon est **same-origin** : son `localStorage` est réel, et `proj-4` persiste
+  pour de bon — ajout **et** suppression traversent un rechargement ;
+- `JSON.parse(null)` rend `null` ; sans le `|| []`, le premier ajout s'arrête sur
+  « Cannot read properties of null » — à la première ouverture, donc chez l'utilisateur ;
+- la formule élégante de `proj-3`, `(i - j + 3) % 3`, est **juste sur les 9 paires** : elle rejoint
+  l'« Aller plus loin », avec la raison de ne pas l'écrire quand même ;
+- `Math.floor(Math.random() * 3)` ne sort bien que 0, 1 et 2, à parts égales sur 60 000 tirages.
+
+### Les noms de la leçon suivent ceux du cahier des charges
+
+Le brouillon disait `index`, `coups`, la clé `"notes"` et `JSON.parse(x || "[]")`. Les exercices,
+eux, disent `indexQuestion`, `choix`, la clé `"carnet"` et `JSON.parse(x) || []`. Une leçon qui
+nomme autrement que son propre exercice fait chercher l'élève pour rien : tout a été réaligné,
+y compris l'ordre **modifier → sauver → afficher**, qui est celui de la solution.
+
+### Où en est la conversion
+
+**163 leçons sur 168**, contre 159. La médiane du cours atteint **468 mots**, contre 155 au départ
+de cette campagne, pour un total de **80 942 mots de cours**.
+
+Reste 5 leçons : les 3 de « Bienvenue » et les 2 de la conclusion.
+
+---
+
 ## 3.17.0 — 2026-10-12
 
 Le module Java passe au gabarit. **Les sept langages du cours y sont désormais** : HTML, CSS,

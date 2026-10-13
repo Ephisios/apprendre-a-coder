@@ -5,28 +5,58 @@ window.DATA_PROJETS = [
   id: 'proj-1',
   titre: 'Projet : la liste de tâches',
   contenu: `
-<p>LE projet initiatique de tout développeur web : la <em>to-do list</em>. Petit en apparence, il combine tout ce que tu sais : saisie, événements, création d'éléments, conditions.</p>
+<h2>Pourquoi ça existe</h2>
+<p>C'est le projet initiatique de tout développeur web : la liste de tâches. Petit en apparence, et il combine tout ce que tu sais — saisie, événements, création d'éléments, conditions.</p>
+<p>S'il est devenu un passage obligé, c'est qu'il contient en miniature la structure de n'importe quelle application : l'utilisateur agit, quelque chose change, l'affichage suit. Tout le reste n'est qu'une question d'échelle.</p>
 
 <h2>Le cahier des charges</h2>
-<ol>
-<li>L'utilisateur tape une tâche dans le champ et clique sur « Ajouter » ;</li>
+<ul>
+<li>l'utilisateur tape une tâche et clique sur « Ajouter » ;</li>
 <li>la tâche apparaît dans la liste ;</li>
 <li>le champ se vide, prêt pour la suivante ;</li>
-<li>si le champ est vide, on n'ajoute rien (pas de tâche fantôme !) ;</li>
-<li>cliquer sur une tâche de la liste la supprime (tâche terminée).</li>
-</ol>
-
-<h2>Les outils dont tu auras besoin (tous déjà vus !)</h2>
-<ul>
-<li>lire le champ : <code>champ.value</code> — et le vider : <code>champ.value = "";</code></li>
-<li>ignorer le vide : <code>if (texte === "") { return; }</code> — un <code>return</code> seul quitte la fonction immédiatement ;</li>
-<li>créer la ligne : <code>createElement</code>, <code>textContent</code>, <code>appendChild</code> ;</li>
-<li>supprimer un élément : <code>element.remove()</code> — nouvelle méthode, la seule de ce projet !</li>
+<li>si le champ est vide, on n'ajoute rien — pas de tâche fantôme ;</li>
+<li>cliquer sur une tâche la supprime.</li>
 </ul>
+<p>Lis-le deux fois avant d'écrire une ligne. Un cahier des charges est aussi une liste de contrôle : à la fin, chaque point se vérifie à la main, dans l'aperçu.</p>
 
-<div class="astuce">✅ L'astuce élégante pour la suppression : au moment où tu CRÉES un <code>li</code>, attache-lui tout de suite son écouteur de clic : <code>li.addEventListener("click", function () { li.remove(); });</code> — chaque tâche sait s'auto-détruire.</div>
+<h2>Les outils, tous déjà vus</h2>
+<p><code>querySelector</code> pour attraper le champ et le bouton, <code>addEventListener</code> pour le clic, <code>.value</code> pour lire la saisie, <code>createElement</code> et <code>appendChild</code> pour ajouter, <code>.remove()</code> pour supprimer — la seule méthode nouvelle du projet.</p>
+<p>Aucune notion neuve, donc. C'est précisément l'exercice : reconnaître lequel de tes outils répond à chaque ligne du cahier des charges.</p>
 
-<p>Construis étape par étape : d'abord l'ajout qui marche, exécute et teste, PUIS le champ qui se vide, PUIS le blocage du vide, PUIS la suppression. Jamais tout d'un coup !</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Étape</th><th>Ce qu'on vérifie avant de passer à la suite</th></tr>
+<tr><td>écouter le clic</td><td>un <code>console.log</code> s'affiche : l'écouteur est bien branché</td></tr>
+<tr><td>lire le champ</td><td>le texte tapé apparaît dans la console</td></tr>
+<tr><td>créer la ligne</td><td>la tâche s'affiche dans la liste</td></tr>
+<tr><td>vider le champ</td><td>on peut enchaîner deux ajouts sans rien effacer</td></tr>
+<tr><td>ignorer le vide</td><td>cliquer sans rien taper n'ajoute rien</td></tr>
+<tr><td>supprimer au clic</td><td>une tâche cliquée disparaît, les autres restent</td></tr>
+</table>
+<p>Six étapes, six vérifications. C'est la vraie leçon de ce projet : on n'écrit jamais tout d'un trait. Un défaut trouvé à la troisième étape coûte une minute ; le même cherché après la sixième en coûte vingt, parce qu'il faut d'abord deviner lequel des six morceaux le cause.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Lire <code>.value</code> en dehors de l'écouteur.</strong> La variable garde alors la valeur qu'avait le champ au chargement — c'est-à-dire rien. Le symptôme déroute : le programme ajoute toujours une tâche vide, quoi qu'on tape. <code>.value</code> se lit <em>au moment du clic</em>.</p>
+<p><strong>Tester le vide après avoir créé la ligne.</strong> L'ordre compte : on refuse d'abord, on fabrique ensuite. Un <code>return</code> seul, en début d'écouteur, quitte la fonction sans rien faire d'autre.</p>
+<p><strong>Attendre la fin pour brancher la suppression.</strong> Le bon moment pour donner à une tâche son écouteur de clic est celui où on la crée — elle a son <code>li</code> sous la main, et sait donc qui supprimer. Chercher après coup quelle ligne a été cliquée est un détour.</p>
+<p><strong>Dupliquer le calcul du compteur.</strong> Dans l'amélioration, le nombre de tâches change à l'ajout <em>et</em> à la suppression. Écrire le calcul deux fois, c'est se garantir d'en oublier un le jour où il évolue : une fonction appelée aux deux endroits règle la question.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ce projet est si universel qu'il sert d'étalon pour comparer les outils du métier : un site entier réécrit la même liste de tâches dans des dizaines de bibliothèques, pour qu'on puisse les comparer à vue. Tu viens d'en écrire la version sans aucun outil — celle qui permet de comprendre ce que les autres font à ta place.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Le cahier des charges est aussi la liste de contrôle finale.</li>
+<li>On construit par étapes, en vérifiant chacune avant la suivante.</li>
+<li><code>.value</code> se lit <strong>dans</strong> l'écouteur, au moment du clic.</li>
+<li>On refuse la saisie vide <em>avant</em> de créer quoi que ce soit.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : où vit cette liste</summary>
+<p>Ferme l'onglet et tout disparaît : les tâches n'existent nulle part ailleurs que dans les <code>&lt;li&gt;</code> de la page. L'état de l'application <em>est</em> le HTML. C'est tenable ici, parce que rien n'a besoin de le relire — et c'est exactement ce qui deviendra intenable au projet 4, où il faudra sauvegarder. Garde la remarque en tête : c'est elle qui justifiera l'architecture du carnet.</p>
+</details>
 `,
   exercices: [
     {
@@ -96,32 +126,58 @@ window.DATA_PROJETS = [
   id: 'proj-2',
   titre: 'Projet : le quiz',
   contenu: `
-<p>Deuxième projet : un quiz de culture générale avec score. Nouveau défi : gérer un <strong>état qui avance</strong> (la question courante) et des <strong>données structurées</strong> (le tableau de questions).</p>
+<h2>Pourquoi ça existe</h2>
+<p>Deuxième projet : un quiz avec score. Le défi est neuf — il ne s'agit plus seulement de réagir à un clic, mais de gérer un <strong>état qui avance</strong> : quelle question en est-on, combien de points.</p>
+<p>C'est le premier programme où la question « où vit l'information ? » se pose vraiment. Et la réponse décide de tout le reste.</p>
 
 <h2>Le cahier des charges</h2>
-<ol>
-<li>les questions sont dans un tableau d'objets (fourni — ne le modifie pas, la correction s'appuie dessus !) ;</li>
-<li>la question courante s'affiche dans <code>#question</code>, ses 3 réponses sur les boutons <code>#r0</code>, <code>#r1</code>, <code>#r2</code> ;</li>
-<li>au clic sur une réponse : si c'est la bonne, +1 au score ; dans tous les cas, on passe à la question suivante ;</li>
-<li>après la dernière question : affiche <code>Fini ! Score : X / 3</code> dans <code>#question</code>.</li>
-</ol>
+<ul>
+<li>les questions sont dans un tableau d'objets, fourni — ne le modifie pas, la correction s'appuie dessus ;</li>
+<li>la question courante s'affiche dans <code>#question</code>, ses trois réponses sur <code>#r0</code>, <code>#r1</code> et <code>#r2</code> ;</li>
+<li>au clic : si c'est la bonne, un point de plus ; dans tous les cas, on passe à la suivante ;</li>
+<li>après la dernière, <code>#question</code> affiche le score final.</li>
+</ul>
 
-<h2>La mécanique de l'état</h2>
-<p>Deux variables pilotent tout : <code>indexQuestion</code> (où en est-on ?) et <code>score</code>. Et une fonction <code>afficherQuestion()</code> qui remplit l'écran selon l'état courant — appelée au démarrage, puis après chaque réponse :</p>
-<pre class="bloc-code">function afficherQuestion() {
-  let q = questions[indexQuestion];
-  document.querySelector("#question").textContent = q.texte;
-  document.querySelector("#r0").textContent = q.reponses[0];
-  // ... r1, r2
-}</pre>
+<h2>Deux variables, et c'est tout</h2>
+<p>Toute la mécanique tient dans <code>indexQuestion</code> — où en est-on — et <code>score</code>. Ces deux variables sont l'<strong>état</strong> du quiz : elles se créent <em>une seule fois</em>, en dehors des écouteurs, et évoluent à chaque réponse.</p>
+<p>Le tableau de questions, lui, ne change jamais : c'est la donnée. Distinguer ce qui bouge de ce qui ne bouge pas est l'une des habitudes les plus utiles qu'on puisse prendre tôt — et le reste du projet en découle.</p>
 
-<h2>Astuce pour les 3 boutons sans copier-coller</h2>
-<pre class="bloc-code">for (let i = 0; i < 3; i++) {
-  document.querySelector("#r" + i).addEventListener("click", function () {
-    repondre(i);   // chaque bouton connaît son numéro !
-  });
-}</pre>
-<p>La fonction <code>repondre(i)</code> compare <code>i</code> à <code>questions[indexQuestion].bonne</code>, met à jour le score, avance l'index, et soit réaffiche, soit termine.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Moment</th><th>indexQuestion</th><th>score</th><th>Ce qui s'affiche</th></tr>
+<tr><td>au départ</td><td>0</td><td>0</td><td>la question 0</td></tr>
+<tr><td>bonne réponse</td><td>devient 1</td><td>devient 1</td><td>la question 1</td></tr>
+<tr><td>mauvaise réponse</td><td>devient 2</td><td>reste 1</td><td>la question 2</td></tr>
+<tr><td>après la dernière</td><td>vaut 3</td><td>—</td><td>le score final</td></tr>
+</table>
+<p>La dernière ligne est celle qu'on oublie. Quand l'index atteint la taille du tableau, il n'y a plus de question à aller chercher : il faut le tester <em>avant</em> d'afficher, sinon on demande son titre à une question qui n'existe pas et le programme s'arrête là.</p>
+
+<h2>Deux fonctions, deux rôles</h2>
+<p><code>afficherQuestion()</code> met la page à jour depuis l'état. <code>repondre(i)</code> modifie l'état — comparer, compter, avancer — puis rappelle la première.</p>
+<p>Ce découpage n'est pas cosmétique : il garantit qu'il n'existe <strong>qu'un seul endroit</strong> qui touche à l'affichage. Le jour où tu veux ajouter « question 2 sur 3 » à l'écran, tu sais exactement où l'écrire, et une seule fois.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Déclarer <code>indexQuestion</code> ou <code>score</code> dans l'écouteur.</strong> Ils repartent de zéro à chaque clic : le quiz reste bloqué sur la première question et le score ne dépasse jamais 1. C'est le piège du compteur, revu une dernière fois.</p>
+<p><strong>Avancer avant de comparer.</strong> L'ordre compte : on compare la réponse à celle de la question <em>courante</em>, puis on avance. Dans l'autre sens, chaque réponse est jugée sur la question suivante.</p>
+<p><strong>Brancher les trois boutons avec <code>var</code>.</strong> Le piège le plus fourbe du projet. Dans <code>for (var i = 0; i &lt; 3; i++)</code>, les trois écouteurs partagent la même variable <code>i</code> — et quand le premier clic arrive, la boucle est finie depuis longtemps : <code>i</code> vaut 3. Les trois boutons répondent donc <code>3</code>, une réponse qui n'existe pas, et le score reste désespérément à zéro. Avec <code>let</code>, chaque tour a son propre <code>i</code>, et chaque bouton garde le sien.</p>
+<p><strong>Mettre à jour la page à deux endroits.</strong> Dès qu'il y a deux fonctions qui écrivent dans <code>#question</code>, les deux finissent par se contredire.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>« L'état d'un côté, l'affichage qui le reflète » est l'idée centrale de toutes les bibliothèques d'interface actuelles. Elles automatisent le rappel d'<code>afficherQuestion()</code> — c'est à peu près tout ce qu'elles font de plus que ce que tu viens d'écrire à la main.</p>
+
+<div class="a-retenir">
+<ul>
+<li>L'<strong>état</strong> se crée une fois, en dehors des écouteurs.</li>
+<li>Une fonction modifie l'état, une autre met l'affichage à jour — et elle seule.</li>
+<li>On compare la réponse <em>avant</em> d'avancer l'index.</li>
+<li>Dans une boucle qui crée des écouteurs, <code>let</code> et non <code>var</code>.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : pourquoi un tableau d'objets</summary>
+<p>Les questions auraient pu tenir dans trois tableaux parallèles — un pour les énoncés, un pour les réponses, un pour les bonnes. Ça marche, et ça casse au premier décalage : ajouter une question en oubliant l'un des trois donne un quiz incohérent, sans la moindre erreur. Un tableau d'objets garde chaque question d'un seul tenant, et c'est la même raison qui a fait inventer les structures du langage C.</p>
+</details>
 `,
   exercices: [
     {
@@ -185,35 +241,57 @@ window.DATA_PROJETS = [
   id: 'proj-3',
   titre: 'Projet : pierre-feuille-ciseaux',
   contenu: `
-<p>Troisième projet : un jeu contre l'ordinateur. Au programme : le hasard, une logique de victoire à trois cas, et un score qui persiste entre les manches.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Troisième projet : un jeu contre l'ordinateur. Au programme, trois choses ensemble pour la première fois — le hasard, une logique de victoire à plusieurs cas, et un score qui survit aux manches.</p>
+<p>C'est aussi le premier programme où la partie difficile n'est pas le code mais la <strong>logique</strong> : comment décider qui gagne sans écrire neuf conditions ?</p>
 
 <h2>Le cahier des charges</h2>
-<ol>
+<ul>
 <li>trois boutons : <code>#pierre</code>, <code>#feuille</code>, <code>#ciseaux</code> ;</li>
 <li>au clic, l'ordinateur choisit au hasard parmi les trois ;</li>
-<li>le résultat s'affiche dans <code>#resultat</code>, par exemple : <code>pierre contre ciseaux : gagné !</code> (le mot <strong>gagné</strong>, <strong>perdu</strong> ou <strong>égalité</strong> doit apparaître) ;</li>
-<li>le score cumulé s'affiche dans <code>#score</code> au format <code>Toi 3 - 1 Ordi</code>.</li>
-</ol>
+<li><code>#resultat</code> annonce la manche, et contient le mot gagné, perdu ou égalité ;</li>
+<li><code>#score</code> affiche le cumul au format <code>Toi 3 - 1 Ordi</code>.</li>
+</ul>
 
-<h2>Les règles en code</h2>
-<p>Trois cas seulement, une fois l'égalité écartée :</p>
-<pre class="bloc-code">if (joueur === ordi) {
-  // égalité
-} else if (
-  (joueur === "pierre" && ordi === "ciseaux") ||
-  (joueur === "feuille" && ordi === "pierre") ||
-  (joueur === "ciseaux" && ordi === "feuille")
-) {
-  // gagné !
-} else {
-  // tous les autres cas : perdu
-}</pre>
-<p>Remarque la puissance du <code>||</code> : les trois situations gagnantes tiennent dans UNE condition. Et le <code>else</code> final attrape tout le reste sans rien lister.</p>
+<h2>Le hasard, appliqué à un tableau</h2>
+<p>Avec <code>choix</code> qui contient les trois coups, <code>Math.random() * 3</code> donne un nombre entre 0 et 2,999…, et <code>Math.floor</code> en fait 0, 1 ou 2 — exactement les indices du tableau. Pas de <code>+ 1</code> ici, justement parce qu'on vise des indices et non un dé.</p>
+<p>Le tirage doit se faire <em>dans</em> la fonction appelée au clic. Fait une fois pour toutes au chargement, l'ordinateur jouerait le même coup toute la partie.</p>
 
-<h2>Le choix aléatoire de l'ordinateur</h2>
-<pre class="bloc-code">let choix = ["pierre", "feuille", "ciseaux"];
-let ordi = choix[Math.floor(Math.random() * 3)];</pre>
-<p>Un index au hasard entre 0 et 2, et le tableau fait le reste — le motif « tirage dans une liste » ressert dans tous les jeux.</p>
+<h2>Pas à pas</h2>
+<p>La tentation est d'écrire une condition par combinaison. Il y en a neuf. La bonne façon en demande trois :</p>
+<table class="memo-table trace">
+<tr><th>Test</th><th>Ce qu'il règle</th></tr>
+<tr><td>les deux coups sont identiques</td><td>c'est nul : trois cas sur neuf, en une ligne</td></tr>
+<tr><td>une des trois victoires</td><td>pierre bat ciseaux, feuille bat pierre, ciseaux battent feuille</td></tr>
+<tr><td>tout le reste</td><td>c'est perdu : les trois derniers cas, sans rien écrire</td></tr>
+</table>
+<p>Neuf cas réduits à trois tests, parce que chaque test en absorbe trois d'un coup. C'est le genre de simplification qui distingue un programme qu'on peut relire d'un programme qu'on subit — et elle se trouve en cherchant la structure sous l'énumération, pas en codant plus vite.</p>
+
+<h2>Le score entre les manches</h2>
+<p>Deux compteurs, <code>victoires</code> et <code>defaites</code>, déclarés <strong>en dehors</strong> de la fonction de jeu. Ce sont eux la mémoire de la partie, et ils doivent survivre d'un clic au suivant. Les égalités, elles, ne comptent dans aucun des deux.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Déclarer le score dans la fonction du clic.</strong> Il repart à zéro à chaque manche, et l'affichage reste éternellement à « Toi 1 - 0 Ordi » ou « Toi 0 - 1 Ordi ». Même piège que le compteur, dernier rappel.</p>
+<p><strong>Oublier le cas de l'égalité.</strong> Sans lui, deux coups identiques tombent dans le <code>else</code> et comptent comme une défaite. Aucune erreur ne s'affiche, et le jeu est simplement injuste — c'est le genre de défaut qu'on ne trouve qu'en jouant.</p>
+<p><strong>Écrire les neuf conditions.</strong> Ça marche. C'est illisible, et une faute de frappe dans la septième passe inaperçue : elle ne se manifestera que sur une combinaison rare.</p>
+<p><strong>Couper une comparaison en deux.</strong> <code>joueur === "pierre" &amp;&amp; ordi === "ciseaux" || "feuille"</code> est toujours vrai, parce que le texte « feuille » est vrai tout seul. Chaque branche d'un <code>||</code> doit être une comparaison complète.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Ramener neuf cas à trois est exactement le travail qu'on fait sur une règle métier : une tarification, un calcul de droits, l'attribution d'un badge. On commence toujours par lister les cas, puis on cherche ce qui se regroupe — et c'est ce second temps qui décide si le code sera maintenable.</p>
+
+<div class="a-retenir">
+<ul>
+<li><code>choix[Math.floor(Math.random() * 3)]</code> tire un élément au hasard — sans <code>+ 1</code>, puisque ce sont des indices.</li>
+<li>Le tirage va dans la fonction du clic, pas au chargement.</li>
+<li>Traiter l'égalité en premier élimine un tiers des cas.</li>
+<li>Le score vit en dehors de la fonction, pour survivre aux manches.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : la victoire sans aucune condition</summary>
+<p>Dans le tableau <code>["pierre", "feuille", "ciseaux"]</code>, chaque coup bat celui qui le précède, en bouclant. En comparant les indices du joueur et de l'ordinateur, une seule expression suffit donc : <code>(i - j + 3) % 3</code> vaut 0 pour une égalité, 1 pour une victoire, 2 pour une défaite — et c'est juste sur les neuf combinaisons. C'est élégant, et c'est incompréhensible pour qui relit six mois plus tard, toi compris. Les trois tests explicites sont souvent le meilleur choix : l'astuce n'est pas toujours la qualité.</p>
+</details>
 `,
   exercices: [
     {
@@ -288,24 +366,51 @@ let ordi = choix[Math.floor(Math.random() * 3)];</pre>
   id: 'proj-4',
   titre: 'Projet final : le carnet qui n\'oublie rien',
   contenu: `
-<p>Le projet de synthèse : une liste de notes <strong>persistante</strong>. Ferme la page, rouvre-la : tes notes sont toujours là. C'est la combinaison de TOUT : DOM dynamique, événements, tableaux, JSON, localStorage.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Le projet de synthèse : une liste de notes <strong>persistante</strong>. Ferme la page, rouvre-la : tes notes sont toujours là.</p>
+<p>C'est la combinaison de tout — DOM dynamique, événements, tableaux, JSON, <code>localStorage</code>. Et surtout, c'est le projet où une décision d'architecture devient obligatoire, là où les trois premiers pouvaient s'en passer.</p>
 
-<h2>Le cahier des charges</h2>
-<ol>
-<li>un tableau <code>notes</code> est la <strong>source de vérité</strong> : c'est LUI qu'on modifie, jamais le HTML directement ;</li>
-<li>une fonction <code>afficher()</code> reconstruit toute la liste depuis le tableau (vider avec <code>innerHTML = ""</code>, puis une boucle de <code>createElement</code>) ;</li>
-<li>une fonction <code>sauver()</code> écrit le tableau dans le localStorage (clé <code>"carnet"</code>, via <code>JSON.stringify</code>) ;</li>
-<li>ajouter une note = pousser dans le tableau → sauver → afficher ;</li>
-<li>cliquer sur une note = la retirer du tableau (<code>notes.splice(i, 1)</code> retire l'élément d'index i) → sauver → afficher ;</li>
-<li>au démarrage : relire le localStorage (<code>JSON.parse</code>, ou tableau vide si rien) et afficher.</li>
-</ol>
+<h2>La décision : où vit la vérité</h2>
+<p>Dans la liste de tâches, l'état vivait dans le HTML : les tâches n'existaient que dans les <code>&lt;li&gt;</code>. Ça tenait, parce que rien n'avait besoin de les relire.</p>
+<p>Ici, il faut les sauvegarder. Relire le HTML pour reconstituer la liste serait pénible et fragile. D'où la règle qui structure tout le projet :</p>
+<div class="info">Le tableau <code>notes</code> est la <strong>source de vérité</strong>. C'est lui qu'on modifie, jamais le HTML directement. L'affichage n'en est qu'un reflet, refabriqué à partir du tableau.</div>
 
-<h2>Pourquoi cette architecture ?</h2>
-<div class="info">💬 « Les données d'abord, l'affichage suit » : c'est LE principe des frameworks modernes (React, Vue...). Ton tableau <code>notes</code> est l'état ; l'écran n'en est que le reflet, reconstruit par <code>afficher()</code>. En comprenant ça ici, tu comprends d'avance la philosophie des outils professionnels.</div>
+<h2>Trois rôles bien séparés</h2>
+<p><code>afficher()</code> vide la liste puis la reconstruit depuis le tableau. <code>sauver()</code> écrit le tableau dans le <code>localStorage</code>, sous la clé <code>"carnet"</code>, converti en texte par <code>JSON.stringify</code>. Les écouteurs, eux, ne font que modifier le tableau avant d'appeler les deux autres.</p>
+<p>Au démarrage, la lecture tient en une ligne : <code>JSON.parse</code> de ce que rend le <code>localStorage</code>, suivi d'un <code>|| []</code> qui prend le relais à la première visite — car il n'y a alors rien à lire.</p>
 
-<h2>Le seul outil nouveau</h2>
-<pre class="bloc-code">notes.splice(2, 1);   // retire 1 élément à partir de l'index 2</pre>
-<p>Et pour connaître l'index dans la boucle d'affichage, utilise un <code>for</code> classique avec <code>i</code> — chaque <code>li</code> retient ainsi quel index il doit supprimer.</p>
+<h2>Pas à pas</h2>
+<table class="memo-table trace">
+<tr><th>Action</th><th>Ce qui se passe, dans l'ordre</th></tr>
+<tr><td>ouverture de la page</td><td>on relit le stockage, puis <code>afficher()</code></td></tr>
+<tr><td>ajout d'une note</td><td>on pousse dans le tableau, puis <code>sauver()</code>, puis <code>afficher()</code></td></tr>
+<tr><td>clic sur une note</td><td>on la retire du tableau, puis <code>sauver()</code>, puis <code>afficher()</code></td></tr>
+<tr><td>fermeture</td><td>rien à faire : tout est déjà écrit</td></tr>
+</table>
+<p>Le même trio revient à chaque action : <strong>modifier, sauver, afficher</strong>. Dès qu'une action s'en écarte, quelque chose se désynchronise — et c'est toujours la sauvegarde qui perd.</p>
+
+<h2>Les pièges</h2>
+<p><strong>Modifier le HTML sans modifier le tableau.</strong> L'écran est juste, la sauvegarde est fausse, et l'on ne s'en aperçoit qu'au rechargement suivant. C'est exactement le défaut que la règle de la source de vérité empêche.</p>
+<p><strong>Oublier <code>sauver()</code> après une suppression.</strong> La note supprimée revient à la prochaine ouverture. L'ajout, lui, est rarement oublié : c'est la suppression qui passe à la trappe, parce qu'on la code en dernier et qu'on la teste moins.</p>
+<p><strong>Boucler avec <code>var</code> dans <code>afficher()</code>.</strong> Les lignes partagent alors le même <code>i</code>, qui vaut la taille du tableau une fois la boucle finie : <code>splice</code> est appelé sur un indice qui n'existe pas et <strong>ne retire rien du tout</strong>. Aucune erreur, aucun message — on clique, et rien ne se passe. Avec <code>let</code>, chaque ligne garde l'indice de son tour.</p>
+<p><strong>Ne pas prévoir la première visite.</strong> Le <code>localStorage</code> rend <code>null</code> pour une clé absente, et <code>JSON.parse(null)</code> rend <code>null</code> à son tour. Sans le <code>|| []</code>, le premier ajout essaie de pousser dans rien, et le programme s'arrête sur <code>Cannot read properties of null</code> — chez ton utilisateur, à sa toute première ouverture.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>« Une source de vérité, un affichage qui la reflète » est le principe sur lequel reposent toutes les interfaces modernes. Les bibliothèques automatisent l'appel à <code>afficher()</code> — elles le déclenchent elles-mêmes quand les données changent, et ne redessinent que ce qui a bougé. Le principe, lui, est exactement celui que tu viens d'appliquer à la main.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Le tableau est la <strong>source de vérité</strong> ; le HTML n'en est qu'un reflet.</li>
+<li>À chaque action : <strong>modifier, sauver, afficher</strong>.</li>
+<li><code>JSON.stringify</code> à l'écriture, <code>JSON.parse</code> à la lecture, <code>|| []</code> pour la première visite.</li>
+<li>Dans la boucle d'affichage, <code>let</code> : avec <code>var</code>, la suppression ne retire rien.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ce que tu viens de construire</summary>
+<p>Une application qui garde son état entre deux visites, avec une architecture explicite : des données, un affichage dérivé, des actions qui modifient les données. C'est la structure d'un vrai logiciel. Il n'y manque qu'un serveur pour que tes notes te suivent d'un appareil à l'autre — le <code>localStorage</code>, lui, ne quitte jamais le navigateur où il a été écrit. Tout ce que tu croiseras ensuite, quelle que soit la bibliothèque, sera une variation sur ces trois mots : données, affichage, actions.</p>
+</details>
 `,
   exercices: [
     {
