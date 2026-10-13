@@ -532,6 +532,8 @@
   A.parametres = function () {
     this.exigerOp('(');
     const params = [];
+    // « (void) » en C : aucun parametre, pas un parametre nomme « void ».
+    if (this.langage === 'c' && this.estNom('void') && this.estOp(')', 1)) this.i++;
     if (!this.estOp(')')) {
       do {
         const type = this.lireType();

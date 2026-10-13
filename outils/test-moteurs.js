@@ -223,6 +223,20 @@ verifie('une structure sans champ tableau marche toujours',
         sortie('c', '#include <stdio.h>\nstruct P { int x; int y; };\n'
           + 'int main() { struct P p; p.x = 3; p.y = 4; printf("%d,%d\\n", p.x, p.y); return 0; }'),
         ['3,4']);
+/* « int main(void) » est la forme canonique en C — celle de la plupart des
+   livres, « int main() » signifiant historiquement « parametres non
+   specifies ». Le parseur ne la connaissait pas et repondait « j'attendais
+   un nom de parametre », ce qui n'aide personne a comprendre. */
+verifie('int main(void) : aucun paramètre, pas un paramètre nommé void',
+        sortie('c', '#include <stdio.h>\nint main(void) { printf("%d\\n", 42); return 0; }'),
+        ['42']);
+verifie('(void) sur une autre fonction que main',
+        sortie('c', '#include <stdio.h>\nvoid saluer(void) { printf("bonjour\\n"); }\n'
+          + 'int main(void) { saluer(); return 0; }'),
+        ['bonjour']);
+verifie('void reste un type de retour',
+        sortie('c', '#include <stdio.h>\nvoid dire(int n) { printf("n=%d\\n", n); }\nint main() { dire(5); return 0; }'),
+        ['n=5']);
 verifie('une boucle while', sortie('c', enC('int i=0; while(i<2){ printf("%d\\n",i); i++; }')), ['0', '1']);
 verifie('une condition', sortie('c', enC('int n=5; if(n>3) printf("grand\\n"); else printf("petit\\n");')), ['grand']);
 verifie('une fonction avec retour', sortie('c', enC('printf("%d\\n", carre(5));', 'int carre(int n){ return n*n; }\n')), ['25']);
@@ -252,9 +266,14 @@ const REFUS_CJ = [
   ['c', 'sans main', '#include <stdio.h>\nint f(){ return 1; }', /main/],
   ['c', 'parenthèse manquante', '#include <stdio.h>\nint main(){ printf("x" return 0; }', /\)/],
   ['c', 'division par zéro', enC('int a = 1/0; printf("%d\\n", a);'), /z.ro/i],
+  // « (void) » ne doit pas avoir ouvert la porte aux types sans nom.
+  ['c', 'un type de paramètre sans nom', '#include <stdio.h>\nint f(int) { return 0; }\nint main() { return 0; }', /nom de param/i],
   ['c', 'boucle infinie', enC('while (1) {}'), /arr.ter|infinie/i],
   ['java', 'sans point de départ', 'public class Main { static int f(){ return 1; } }', /d.part|main/i],
   ['java', 'accolade manquante', 'public class Main { public static void main(String[] a){ System.out.println("x" } }', /\)/],
+  // En Java « (void) » est bel et bien invalide : le correctif ne vaut qu'en C.
+  ['java', '(void) en paramètre, invalide en Java',
+   'public class Main { public static void main(String[] a){ f(); } static int f(void){ return 1; } }', /nom de param/i],
   ['java', 'case hors du tableau', enJava('int[] t={1}; System.out.println(t[5]);'), /case|tableau/i]
 ];
 for (const [langage, nom, source, attendu] of REFUS_CJ) {

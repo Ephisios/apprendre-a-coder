@@ -5,10 +5,12 @@ window.DATA_FIN = [
   id: 'fin-1',
   titre: 'Le tour des autres langages',
   contenu: `
-<p>Félicitations pour être arrivé jusqu'ici ! Tu maîtrises les bases du trio du web. Maintenant, élargissons l'horizon : voici les autres grands langages, et surtout — la démonstration que <strong>tu peux déjà presque les lire</strong>.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Félicitations pour être arrivé jusqu'ici. Maintenant, élargissons l'horizon — et surtout, voici la démonstration que <strong>tu peux déjà presque lire les autres langages</strong>.</p>
+<p>Cette leçon existe parce que la peur du langage suivant est le principal frein après un premier parcours. On croit avoir appris « le JavaScript ». On a en réalité appris la programmation, et c'est beaucoup plus transférable qu'il n'y paraît.</p>
 
-<h2>La preuve : le même programme en 4 langages</h2>
-<p>Une fonction qui dit bonjour à chaque personne d'une liste. D'abord en JavaScript, que tu connais :</p>
+<h2>La preuve : le même programme en quatre langages</h2>
+<p>Une boucle qui dit bonjour à chaque personne d'une liste. D'abord en JavaScript, que tu connais :</p>
 <pre class="bloc-code">// JavaScript
 let invites = ["Léa", "Tom"];
 for (const personne of invites) {
@@ -25,25 +27,57 @@ $invites = ["Léa", "Tom"];
 foreach ($invites as $personne) {
     echo "Bonjour " . $personne;
 }</pre>
-<p>En <strong>Java</strong> :</p>
+<p>Et en <strong>Java</strong> :</p>
 <pre class="bloc-code">// Java
 String[] invites = {"Léa", "Tom"};
 for (String personne : invites) {
     System.out.println("Bonjour " + personne);
 }</pre>
-<p>Tu vois ? <strong>Une liste, une boucle, un affichage</strong> — partout. Seule la ponctuation change. C'est ça, le secret : tu n'as pas appris « le JavaScript », tu as appris <em>la programmation</em>.</p>
 
-<h2>Qui fait quoi ?</h2>
+<h2>Pas à pas</h2>
+<p>Mets-les côte à côte, idée par idée, et le vernis tombe :</p>
+<table class="memo-table trace">
+<tr><th>L'idée</th><th>JavaScript</th><th>Python</th><th>Java</th></tr>
+<tr><td>une liste</td><td>crochets</td><td>crochets</td><td>accolades, et le type dit</td></tr>
+<tr><td>parcourir</td><td><code>for … of</code></td><td><code>for … in</code></td><td><code>for ( … : … )</code></td></tr>
+<tr><td>afficher</td><td><code>console.log</code></td><td><code>print</code></td><td><code>System.out.println</code></td></tr>
+<tr><td>coller du texte</td><td><code>+</code></td><td><code>+</code></td><td><code>+</code></td></tr>
+</table>
+<p>Une liste, une boucle, un affichage : partout les mêmes trois idées. Seuls la ponctuation et les noms changent. C'est ça, le secret — tu n'as pas appris « le JavaScript », tu as appris <em>la programmation</em>.</p>
+<p>Et ce n'est pas une figure de style : les versions Python et Java ci-dessus tournent telles quelles dans l'éditeur de ce logiciel, et affichent les deux mêmes lignes que la version JavaScript. Les modules Python et Java sont là pour ça — essaie, c'est plus convaincant que n'importe quel paragraphe.</p>
+
+<h2>Qui fait quoi</h2>
 <ul>
-<li><strong>Python</strong> — le couteau suisse : données, IA, scripts, automatisation. Réputé le plus simple à lire. Excellent 2e langage.</li>
-<li><strong>SQL</strong> — interroger les bases de données (<code>SELECT * FROM films WHERE annee > 2000</code>). Indispensable dès qu'une application stocke des données. Tes apps l'utilisent déjà !</li>
-<li><strong>PHP</strong> — fait tourner une énorme partie du web côté serveur (WordPress, Wikipédia...).</li>
-<li><strong>Java / C#</strong> — les poids lourds des grandes entreprises et des applications Android / Windows.</li>
-<li><strong>C / C++</strong> — les langages « proches de la machine » : systèmes d'exploitation, jeux vidéo, objets connectés. Puissants et exigeants.</li>
-<li><strong>TypeScript</strong> — un JavaScript renforcé, très demandé en entreprise. Quand tu seras à l'aise en JS, c'est une évolution naturelle.</li>
+<li><strong>Python</strong> — le couteau suisse : données, intelligence artificielle, scripts, automatisation. Réputé le plus simple à lire, et un excellent deuxième langage.</li>
+<li><strong>SQL</strong> — interroger les bases de données. Indispensable dès qu'une application stocke quelque chose, et apprenable en quelques jours.</li>
+<li><strong>PHP</strong> — fait tourner une part énorme du web côté serveur, WordPress et Wikipédia compris.</li>
+<li><strong>Java</strong> et <strong>C#</strong> — les poids lourds des grandes entreprises, d'Android et de Windows.</li>
+<li><strong>C</strong> et <strong>C++</strong> — proches de la machine : systèmes d'exploitation, jeux vidéo, objets connectés. Puissants et exigeants.</li>
+<li><strong>TypeScript</strong> — un JavaScript renforcé, très demandé. Une évolution naturelle quand le JS est à l'aise.</li>
 </ul>
 
-<div class="astuce">✅ Le bon plan de route : consolider le JavaScript → apprendre SQL (quelques jours !) → puis Python. Avec ces trois-là, tu peux presque tout faire. L'encyclopédie (bouton 📚) contient un panorama détaillé avec des exemples de Python et de SQL.</div>
+<h2>Les pièges</h2>
+<p><strong>Croire qu'il faut tout réapprendre.</strong> Ce qui change d'un langage à l'autre, c'est la syntaxe et la bibliothèque standard — quelques jours de travail. Les notions, elles, sont déjà acquises.</p>
+<p><strong>Collectionner les langages.</strong> Trois langages survolés valent bien moins qu'un seul maîtrisé. Mieux vaut consolider, puis élargir.</p>
+<p><strong>Choisir selon la mode.</strong> Choisis selon ce que tu veux construire : un site, un script d'automatisation, une analyse de données. Le besoin désigne le langage mieux que n'importe quel classement.</p>
+<p><strong>Confondre le langage et son écosystème.</strong> Apprendre Python prend des semaines ; apprendre les outils qui vont autour prend bien plus. C'est normal, et c'est vrai pour tout le monde.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Un développeur expérimenté lit couramment des langages qu'il n'écrit pas. C'est cette lecture qui permet de reprendre un projet existant, de comprendre un exemple trouvé en ligne ou de discuter avec une équipe qui travaille autrement. Tu viens d'acquérir le début de cette compétence — bien plus utile, au quotidien, que la maîtrise d'un langage de plus.</p>
+
+<div class="a-retenir">
+<ul>
+<li>Les notions se transposent : seules la syntaxe et les bibliothèques changent.</li>
+<li>Une liste, une boucle, un affichage — les mêmes idées dans les quatre langages.</li>
+<li>Bon plan de route : consolider le JavaScript, puis SQL, puis Python.</li>
+<li>Choisis un langage pour ce que tu veux construire, pas pour sa popularité.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : ce qui change vraiment d'un langage à l'autre</summary>
+<p>Au-delà de la ponctuation, deux différences comptent. Le <strong>typage</strong> : Java exige que tu annonces le type de chaque variable et refuse de compiler sinon, là où JavaScript et Python te laissent faire et ne protestent qu'à l'exécution. Et la <strong>gestion de la mémoire</strong> : en C, c'est toi qui réserves et libères, tandis que les autres s'en chargent pour toi. Les modules Java et C de ce logiciel te font goûter aux deux — et ce sont ces deux points, pas la syntaxe, qui donnent à chaque langage son caractère.</p>
+</details>
 `,
   exercices: [
     {
@@ -89,38 +123,56 @@ for (String personne : invites) {
   id: 'fin-2',
   titre: 'Continuer à apprendre en autonomie',
   contenu: `
-<p>Dernière leçon — la plus importante peut-être. Ce logiciel t'a donné les fondations ; voici comment construire dessus, seul.</p>
+<h2>Pourquoi ça existe</h2>
+<p>Dernière leçon, et peut-être la plus importante. Ce logiciel t'a donné des fondations ; il lui reste à te rendre capable de t'en passer.</p>
+<p>Car le vrai risque, après un parcours comme celui-ci, n'est pas de manquer de connaissances : c'est de ne jamais oser construire quelque chose sans consigne. Voici donc comment on continue, seul.</p>
 
 <h2>La règle d'or : des projets, pas des cours</h2>
-<p>On n'apprend pas à coder en accumulant des leçons, mais en <strong>construisant des choses</strong>. Le cycle vertueux : choisir un petit projet qui te fait envie → se retrouver bloqué → chercher → débloquer → recommencer. Chaque blocage résolu est une compétence gagnée.</p>
-<p>Idées de premiers projets en solo (dans l'ordre de difficulté) :</p>
-<ol>
-<li>ta page de profil personnelle (HTML/CSS pur) ;</li>
-<li>un pendu ou un morpion (tu as toutes les briques !) ;</li>
-<li>un tracker d'habitudes avec localStorage ;</li>
-<li>une calculatrice complète ;</li>
-<li>refaire de zéro, sans aide, la to-do list — puis la comparer à celle des projets guidés.</li>
-</ol>
+<p>On n'apprend pas à coder en accumulant des leçons, mais en <strong>construisant des choses</strong>. Le cycle est toujours le même : choisir un petit projet qui fait envie, se retrouver bloqué, chercher, débloquer, recommencer. Chaque blocage résolu est une compétence gagnée — et elle tient, parce qu'elle a coûté quelque chose.</p>
+<p>Des idées, par difficulté croissante : ta page de profil en HTML et CSS, un pendu ou un morpion, un suivi d'habitudes avec le <code>localStorage</code>, une calculatrice complète. Et pour finir, l'exercice le plus instructif de tous : refaire la liste de tâches de zéro, sans aide, puis la comparer à celle des projets guidés.</p>
 
 <h2>Ta boîte à outils pour la suite</h2>
 <ul>
-<li><strong>Un vrai éditeur de code</strong> : installe <strong>Visual Studio Code</strong> (gratuit). Crée un fichier <code>index.html</code>, ouvre-le dans ton navigateur : te voilà équipé comme un pro.</li>
-<li><strong>La console du navigateur</strong> : appuie sur <kbd>F12</kbd> sur n'importe quel site → c'est la même console que dans nos exercices, en plus puissant. Les erreurs de tes pages s'y affichent.</li>
-<li><strong>MDN Web Docs</strong> (developer.mozilla.org) — LA référence du web, en français. Chaque balise, chaque propriété CSS, chaque fonction JavaScript y est documentée.</li>
-<li><strong>freeCodeCamp, OpenClassrooms, Grafikart</strong> — des cours gratuits en ligne pour approfondir, avec exercices.</li>
-<li><strong>L'encyclopédie de ce logiciel</strong> (bouton 📚) — glossaire, panorama des outils (Git, terminal, VS Code), mémos des langages : elle est faite pour être consultée pendant des années.</li>
+<li><strong>Un vrai éditeur de code</strong> : installe Visual Studio Code, gratuit. Crée un fichier <code>index.html</code>, ouvre-le dans ton navigateur : te voilà équipé comme un professionnel.</li>
+<li><strong>La console du navigateur</strong> : la touche <kbd>F12</kbd> sur n'importe quel site ouvre la même console que dans nos exercices, en plus puissant. Les erreurs de tes pages s'y affichent.</li>
+<li><strong>MDN Web Docs</strong> — la référence du web, en français : chaque balise, chaque propriété CSS, chaque fonction JavaScript y est documentée.</li>
+<li><strong>L'encyclopédie de ce logiciel</strong> — glossaire, panorama des outils, mémos des langages. Elle est faite pour être consultée pendant des années.</li>
 </ul>
 
-<h2>Lire les messages d'erreur (le vrai superpouvoir)</h2>
-<p>Ce qui distingue un débutant qui progresse d'un débutant qui abandonne : sa réaction face à une erreur. La méthode :</p>
-<ol>
-<li><strong>lis le message en entier</strong> — il contient presque toujours la ligne et la cause ;</li>
-<li>va voir cette ligne, cherche la faute de frappe, la parenthèse ou l'accolade manquante ;</li>
-<li>toujours bloqué ? Copie le message dans un moteur de recherche : quelqu'un a eu la même erreur avant toi, garanti ;</li>
-<li>et bien sûr : une IA comme celle qui a construit ce logiciel peut t'expliquer une erreur — mais demande-lui d'<em>expliquer</em>, pas de faire à ta place. C'est toi qui apprends.</li>
-</ol>
+<h2>Pas à pas : lire un message d'erreur</h2>
+<p>Ce qui distingue un débutant qui progresse d'un débutant qui abandonne, c'est sa réaction devant une erreur. La méthode tient en quatre temps :</p>
+<table class="memo-table trace">
+<tr><th>Temps</th><th>Ce que tu fais</th><th>Ce que ça donne presque toujours</th></tr>
+<tr><td>1</td><td>lire le message en entier</td><td>le type d'erreur, et la ligne</td></tr>
+<tr><td>2</td><td>aller voir cette ligne</td><td>la faute de frappe, la parenthèse ou l'accolade</td></tr>
+<tr><td>3</td><td>chercher le message en ligne</td><td>quelqu'un a eu la même, et l'a racontée</td></tr>
+<tr><td>4</td><td>demander une explication</td><td>de quoi corriger seul la prochaine fois</td></tr>
+</table>
+<p>Neuf fois sur dix, on s'arrête au deuxième temps. Et le quatrième mérite une précision : demande à une intelligence artificielle d'<em>expliquer</em> ton erreur, pas de réécrire ton code. La différence entre les deux demandes décide de ce que tu sauras faire dans six mois.</p>
 
-<div class="astuce">🎓 Tu es arrivé au bout. Retiens ceci : personne ne « connaît tout » en programmation — les professionnels cherchent dans la documentation tous les jours. Ce qui compte, c'est ce que tu as maintenant : les concepts, la méthode, et la certitude que tu peux apprendre le reste. Bonne route, codeur.</div>
+<h2>Les pièges</h2>
+<p><strong>Le tutoriel sans fin.</strong> Enchaîner les cours donne le sentiment d'avancer sans jamais rien construire. Dès que tu peux coder une chose par toi-même, arrête de lire et code-la.</p>
+<p><strong>Attendre de se sentir prêt.</strong> Ce moment n'arrive pas. On devient prêt en commençant, et personne ne commence sans appréhension.</p>
+<p><strong>Coder au hasard jusqu'à ce que ça marche.</strong> Changer des choses sans comprendre finit parfois par fonctionner — et l'on refera la même erreur demain, sans savoir pourquoi la première fois s'est arrangée.</p>
+<p><strong>Comparer son code à celui des autres.</strong> Les projets qu'on voit en ligne sont finis, relus, réécrits. Le tien est en cours. Comparer un brouillon à une version publiée est le plus sûr moyen de s'arrêter.</p>
+
+<h2>Dans la vraie vie</h2>
+<p>Personne ne « connaît tout » en programmation. Les professionnels cherchent dans la documentation tous les jours, oublient la syntaxe exacte d'une fonction utilisée la semaine passée, et copient leurs propres anciens projets. Ce qui fait la différence n'est pas ce qu'ils savent par cœur : c'est qu'ils savent où chercher, et qu'ils ne s'arrêtent pas devant un message d'erreur.</p>
+
+<div class="a-retenir">
+<ul>
+<li>On apprend en construisant : des projets, pas des cours.</li>
+<li>Devant une erreur : lire le message en entier, puis aller à la ligne indiquée.</li>
+<li>Demande qu'on t'<strong>explique</strong> une erreur, jamais qu'on la corrige à ta place.</li>
+<li>Personne ne connaît tout — on sait chercher, et ça suffit.</li>
+</ul>
+</div>
+
+<details class="plus-loin">
+<summary>Aller plus loin : tu es arrivé au bout</summary>
+<p>Regarde en arrière un instant : tu as écrit des pages web, des programmes qui décident et qui répètent, des requêtes de base de données, et quatre applications complètes dont une qui garde ses données. Tu as lu du Python, du Java et du C. Rien de tout cela n'était évident il y a quelques semaines.</p>
+<p>Ce qui te reste n'est pas une liste de notions à apprendre, c'est une habitude à garder : écrire, exécuter, lire ce qui ne va pas, corriger. Tout le métier tient dans cette boucle, et tu la connais maintenant. Bonne route.</p>
+</details>
 `,
   exercices: [
     {

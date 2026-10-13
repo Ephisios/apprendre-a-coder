@@ -719,7 +719,7 @@ Math.random()    // entre 0 et 1</div>
 <h2 style="margin-bottom:10px">Et une application comme celles de ton PC ?</h2>
 <p>Le même principe s'étend : une application web « installée » localement (comme ce logiciel, ou une app avec sa base de données) fait tourner un <strong>mini-serveur sur ta propre machine</strong> — d'où les adresses en <code>localhost</code> que tu croiseras : « localhost » signifie « cet ordinateur-ci ». Le navigateur reste le client ; le serveur est juste à 2 centimètres.</p>
 
-<div class="astuce">✅ À retenir : le web n'est QUE ça — des clients qui demandent, des serveurs qui répondent, et des fichiers HTML/CSS/JS qui voyagent. Tout le reste est de la variation sur ce thème.</div>
+<div class="astuce">À retenir : le web n'est QUE ça — des clients qui demandent, des serveurs qui répondent, et des fichiers HTML/CSS/JS qui voyagent. Tout le reste est de la variation sur ce thème.</div>
 `
 },
 

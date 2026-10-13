@@ -6,6 +6,67 @@ deuxième quand il gagne quelque chose, le troisième quand on répare.
 
 ---
 
+## 3.19.0 — 2026-10-13
+
+**Les 168 leçons du cours sont au gabarit.** « Bienvenue » et la conclusion étaient les cinq
+dernières ; la campagne ouverte avec le gabarit à la 3.6.0 est terminée.
+
+### Changé
+
+- **Les 5 leçons des deux bords passent au gabarit.** De 272-425 mots à **575-700**. Aucun
+  exercice n'a été touché.
+- Ces leçons ne parlent pas d'une notion : « la notion » y est **apprendre à coder**. Leurs
+  « pièges » sont donc ceux de l'apprentissage — copier-coller, ouvrir la solution au premier
+  blocage, le tutoriel sans fin, attendre de se sentir prêt, comparer son brouillon à du code
+  publié. Ils sont aussi réels qu'une boucle mal écrite, et nettement moins souvent dits.
+- `fin-1` gagne un tableau qui met les quatre langages côte à côte **idée par idée** (la liste, le
+  parcours, l'affichage, la concaténation) : c'est là que le vernis syntaxique tombe.
+- Le dernier encart à émoji doublé du dépôt disparaît (`data-memo.js`) : le CSS en pose déjà un.
+
+### Corrigé — le moteur C acceptait mal `int main(void)`
+
+Sixième défaut moteur trouvé en mesurant avant d'écrire. En voulant savoir si une colonne C
+tiendrait dans le tableau de `fin-1`, le programme a été refusé :
+
+> j'attendais un nom de paramètre mais j'ai trouvé « ) ». (ligne 2)
+
+`int main(void)` est la forme **canonique** en C — celle de la plupart des livres, `int main()`
+signifiant historiquement « paramètres non spécifiés ». Le cours n'écrit que `int main()`
+(96 fois, jamais l'autre), donc rien n'était cassé *ici* ; mais tout élève qui suit un livre à
+côté tape l'autre forme et reçoit un message qui ne l'aide en rien.
+
+Le parseur accepte désormais `(void)` comme liste vide, **en C seulement** : en Java la forme est
+bel et bien invalide, et le moteur continue de la refuser. Cinq contrôles au harnais, dont les
+deux refus qui devaient survivre (`int f(int)` en C, `(void)` en Java) ; sans le correctif, le
+harnais tombe à 2 échecs.
+
+### Ce que la mesure a établi
+
+- les versions **Python et Java** du programme de `fin-1` tournent telles quelles dans les moteurs
+  du cours, accents compris, et affichent les deux mêmes lignes que la version JavaScript. La leçon
+  ne se contente donc plus de l'affirmer : elle invite l'élève à le vérifier dans l'éditeur.
+
+### La campagne, de bout en bout
+
+Mesuré au commit `93f1752` — le dernier avant le gabarit — puis aujourd'hui :
+
+| | avant | aujourd'hui |
+|---|---|---|
+| leçons au gabarit | 0 sur 166 | **168 sur 168** |
+| médiane | 152 mots | **471 mots** |
+| la plus courte | 76 mots | **386 mots** |
+| total | 26 071 mots | **82 487 mots** |
+| encarts à émoji doublé | 55 sur 163 | **0 sur 16** |
+
+Deux leçons ont été ajoutées en chemin, là où une seule n'arrivait pas à porter sa notion.
+
+Et six défauts de moteur trouvés en route, chacun parce qu'une leçon allait affirmer quelque
+chose : le minuteur à 0 ms, deux `TypeError` Python mal traduites, l'`ImportError` muette, le
+`= NULL` en SQL, le champ tableau d'une structure C — celui-là empêchait l'exemple de `c-12` de
+tourner — et `int main(void)`.
+
+---
+
 ## 3.18.0 — 2026-10-13
 
 Les quatre projets guidés passent au gabarit. Ce ne sont pas des leçons de notion : le fil y est
